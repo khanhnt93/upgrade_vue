@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import navSpAdminConfig from '@/navSpAdmin'
@@ -109,17 +109,19 @@ const authStore = useAuthStore()
 const navCusNotLogin = navCusNotLoginConfig.items
 const navSpAdmin = navSpAdminConfig.items
 const activePushedMenu = ref(false)
-const sidebarCollapsed = ref(false)
-const sidebarVisible = ref(true)
+const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
+const sidebarVisible = ref(localStorage.getItem('sidebarVisible') !== 'false')
 
 // Toggle sidebar visibility (show/hide)
 const toggleSidebarVisibility = () => {
   sidebarVisible.value = !sidebarVisible.value
+  localStorage.setItem('sidebarVisible', sidebarVisible.value.toString())
 }
 
 // Toggle sidebar collapsed state (expand/collapse)
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString())
 }
 
 // Watch route changes

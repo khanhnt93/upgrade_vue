@@ -416,3 +416,69 @@ fieldset[disabled] .multiselect{
     }
 }
 
+// Global utility classes for success and danger text
+.text-success {
+    color: #28a745 !important;
+    font-weight: 500;
+}
+
+a.text-success:hover,
+a.text-success:focus {
+    color: #1e7e34 !important;
+    text-decoration: none;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: 500;
+}
+
+a.text-danger:hover,
+a.text-danger:focus {
+    color: #bd2130 !important;
+    text-decoration: none;
+}
+
+// Additional color utilities
+.text-warning {
+    color: #ffc107 !important;
+    font-weight: 500;
+}
+
+.text-info {
+    color: #17a2b8 !important;
+    font-weight: 500;
+}
+
+.text-primary {
+    color: #007bff !important;
+    font-weight: 500;
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}
+
+// Background variants
+.bg-success-light {
+    background-color: #d4edda !important;
+    color: #155724;
+}
+
+.bg-danger-light {
+    background-color: #f8d7da !important;
+    color: #721c24;
+}
+
+// Text size variations with colors
+.text-success-lg {
+    color: #28a745 !important;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.text-danger-lg {
+    color: #dc3545 !important;
+    font-size: 1.25rem;
+    font-weight: 600;
+}

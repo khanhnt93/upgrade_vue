@@ -183,12 +183,19 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
   components: {
     GChart,
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { formatCurrency } = useFormatters()
+    return {
+      formatCurrency
+    }
   },
   data () {
     return {
@@ -379,19 +386,6 @@ export default {
         let errorMess = commonFunc.handleStaffError(err)
         this.popToast('danger', errorMess)
       })
-    },
-    currencyFormat(num) {
-      console.log('currencyFormat input:', num)
-      let result = null
-
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num === 0) {
-          return 0
-        }
-      }
-      return result
     },
     getRowStyle(name) {
       if (name.includes('Tổng thu')) {

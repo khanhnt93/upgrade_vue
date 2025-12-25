@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import { useFormatters } from './composables/useFormatters'
 
 console.log('🚀 Starting Vue application...')
 
@@ -63,6 +64,15 @@ app.use(Toast, {
 })
 
 console.log('✅ Plugins registered (Router, Pinia, Toast)')
+
+// Add global formatters
+const { formatCurrency, formatNumber, formatDate, capitalize } = useFormatters()
+app.config.globalProperties.$formatCurrency = formatCurrency
+app.config.globalProperties.$formatNumber = formatNumber
+app.config.globalProperties.$formatDate = formatDate
+app.config.globalProperties.$capitalize = capitalize
+
+console.log('✅ Global formatters registered')
 
 // Mount app
 app.mount('#app')

@@ -88,7 +88,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'close'])
 
 const route = useRoute()
 const openMenus = ref({})
@@ -146,10 +146,11 @@ const toggleMenu = (title) => {
   openMenus.value[title] = !openMenus.value[title]
 }
 
-// Handle menu click - close sidebar
+// Handle menu click - close sidebar on mobile
 const handleMenuClick = () => {
-  if (!props.collapsed) {
-    emit('toggle')
+  // Check if on mobile/tablet (screen width < 992px)
+  if (window.innerWidth < 992 && props.visible) {
+    emit('close')
   }
 }
 

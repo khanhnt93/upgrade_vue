@@ -7,7 +7,7 @@
 
           <div class="grid grid-cols-1 gap-4 mt-4">
             <div class="w-full">
-              <h1 :class="fund_class" class="text-center">{{fund | format_currency}}đ</h1>
+              <h1 :class="fund_class" class="text-center">{{ formatCurrency(fund) }}đ</h1>
             </div>
           </div>
           
@@ -19,7 +19,7 @@
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4" v-show="ei_books.length > 1">
             <div class="w-full" v-for="(ei_book) in ei_books" :key="ei_book.name">
-              <p> - {{ei_book.name}}: <b>{{ei_book.amount | format_currency}}đ</b>
+              <p> - {{ei_book.name}}: <b>{{ formatCurrency(ei_book.amount) }}đ</b>
                 <span class="ml-2"><i class="fa fa-info-circle" title="Xem lịch sử sổ chi tiêu"
                                       @click="showModalEIBookHis(ei_book)"/></span>
               </p>
@@ -70,10 +70,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
           <div class="w-full md:col-span-4">
-            <p>- Tổng thu: <span class="text-success">{{total_plus | format_currency}}đ</span></p>
+            <p>- Tổng thu: <span class="text-success">{{ formatCurrency(total_plus) }}đ</span></p>
           </div>
           <div class="w-full md:col-span-4">
-            <p>- Tổng chi: <span class="text-danger">{{total_minus | format_currency}}đ</span></p>
+            <p>- Tổng chi: <span class="text-danger">{{ formatCurrency(total_minus) }}đ</span></p>
           </div>
         </div>
 
@@ -97,10 +97,10 @@
                       <td>{{item.stt}}</td>
                       <td>{{item.created_at}}</td>
                       <td>{{item.type_str}}</td>
-                      <td class="text-right">{{item.amount | format_currency}}đ</td>
+                      <td class="text-right">{{ formatCurrency(item.amount) }}đ</td>
                       <td>{{item.ei_book_name}}</td>
                       <td>{{item.note}}</td>
-                      <td class="text-right">{{item.fund_amount | format_currency}}đ</td>
+                      <td class="text-right">{{ formatCurrency(item.fund_amount) }}đ</td>
                     </tr>
                   </tbody>
                 </table>
@@ -184,7 +184,7 @@
         </div>
         <div class="grid grid-cols-1 gap-4 mt-2">
           <div class="w-full">
-            <p> - Sổ [<b>{{current_ei.name}}</b>]: <b class="text-header">{{current_ei.amount | format_currency}}đ</b></p>
+            <p> - Sổ [<b>{{current_ei.name}}</b>]: <b class="text-header">{{ formatCurrency(current_ei.amount) }}đ</b></p>
           </div>
         </div>
         <hr>
@@ -205,9 +205,9 @@
                 <tr v-for="item in eiBookHisItems" :key="item.stt" class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap text-sm">{{ item.stt }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">{{ item.type_str }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ currencyFormat(item.amount) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatCurrency(item.amount) }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">{{ item.note }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ currencyFormat(item.ei_book_amount) }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">{{ formatCurrency(item.ei_book_amount) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -234,11 +234,18 @@ import fundAPI from "@/api/fund"
 import commonFunc from "@/common/commonFunc"
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { useFormatters } from '@/composables/useFormatters'
 
 
 export default {
   components: {
     Datepicker
+  },
+  setup() {
+    const { formatCurrency } = useFormatters()
+    return {
+      formatCurrency
+    }
   },
   data() {
     return {
@@ -407,20 +414,6 @@ export default {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
-    },
-
-      /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-        if(num == 0) {
-            return "0"
-        }
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
     },
     
     showModalTransferMoney() {

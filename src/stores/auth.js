@@ -10,9 +10,27 @@ const STAFF_MENU = Constant.STAFF_MENU
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: Cookies.get(APP_USR) ? JSON.parse(Cookies.get(APP_USR)) : null,
-    token: Cookies.get(TOKEN_NAME) ? Cookies.get(TOKEN_NAME) : null,
-    menu: localStorage.getItem(STAFF_MENU) ? JSON.parse(localStorage.getItem(STAFF_MENU)) : null,
+    user: (() => {
+      const userCookie = Cookies.get(APP_USR)
+      if (!userCookie) return null
+      try {
+        return typeof userCookie === 'string' ? JSON.parse(userCookie) : userCookie
+      } catch (e) {
+        console.warn('Failed to parse user cookie:', e)
+        return null
+      }
+    })(),
+    token: Cookies.get(TOKEN_NAME) || null,
+    menu: (() => {
+      const menuData = localStorage.getItem(STAFF_MENU)
+      if (!menuData) return null
+      try {
+        return JSON.parse(menuData)
+      } catch (e) {
+        console.warn('Failed to parse menu data:', e)
+        return null
+      }
+    })(),
   }),
 
   getters: {
@@ -24,8 +42,9 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     updateUser(user) {
-      Cookies.set(APP_USR, user, { expires: 365 })
-      this.user = user
+      const userString = typeof user === 'string' ? user : JSON.stringify(user)
+      Cookies.set(APP_USR, userString, { expires: 365 })
+      this.user = typeof user === 'string' ? JSON.parse(user) : user
     },
 
     updateToken(token) {
