@@ -6,13 +6,13 @@
           <div class="p-4">
 
               <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div class="w-full md:col-span-6">
-                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+              <div class="w-full md:col-span-6 flex justify-center md:justify-start">
+                <button class="btn btn-outline-secondary w-[120px]" @click="back">
                   Quay lại
                 </button>
               </div>
-              <div class="w-full md:col-span-6">
-                <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
+              <div class="w-full md:col-span-6 flex justify-center md:justify-end">
+                <button class="btn btn-outline-success w-[120px]" @click="save" :disabled="saving">
                     Lưu
                 </button>
               </div>
