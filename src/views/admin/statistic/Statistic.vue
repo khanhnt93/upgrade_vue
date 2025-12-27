@@ -194,7 +194,7 @@ export default {
   setup() {
     const { formatCurrency } = useFormatters()
     return {
-      formatCurrency
+      currencyFormat: formatCurrency
     }
   },
   data () {
