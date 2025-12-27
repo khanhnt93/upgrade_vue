@@ -182,9 +182,16 @@ import expendApi from '@/api/expend'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from 'vue-toastification'
 
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const toast = useToast()
+    return { authStore, toast }
+  },
   components: {
     Datepicker
   },
@@ -241,7 +248,19 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      console.log(`Toast: [${variant}] ${content}`)
+      switch(variant) {
+        case 'success':
+          this.toast.success(content)
+          break
+        case 'danger':
+          this.toast.error(content)
+          break
+        case 'warning':
+          this.toast.warning(content)
+          break
+        default:
+          this.toast.info(content)
+      }
     },
 
     /**
@@ -306,8 +325,8 @@ export default {
         })
       } else {
         this.prefix_text = 'Thêm Mới '
-        if (this.$store.state.user && this.$store.state.user.id) {
-          this.expend.staff_id = this.$store.state.user.id
+        if (this.authStore.user && this.authStore.user.id) {
+          this.expend.staff_id = this.authStore.user.id
         }
       }
     },

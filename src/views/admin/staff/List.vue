@@ -93,9 +93,7 @@
                     <button class="px-3 py-2 hover:bg-gray-100" title="Delete" @click="deleted(item.id, item.name, item.stt)">
                       <i class="fa fa-trash" />
                     </button>
-                  </div>
-                  <div class="flex gap-2" v-if="isRoot">
-                    <button class="px-3 py-2 hover:bg-gray-100" title="Reset password" @click="showModalConfirmResetPass(item)">
+                    <button v-if="isRoot" class="px-3 py-2 hover:bg-gray-100" title="Reset password" @click="showModalConfirmResetPass(item)">
                       <i class="fa fa-refresh" />
                     </button>
                   </div>
@@ -150,9 +148,16 @@ import adminAPI from '@/api/admin'
 import staffAPI from '@/api/staff'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from 'vue-toastification'
 
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const toast = useToast()
+    return { authStore, toast }
+  },
   data () {
     return {
       roleOptions:[],
@@ -210,7 +215,8 @@ export default {
     }
   },
   mounted() {
-    if(this.$store.state && this.$store.state.user && this.$store.state.user.is_root) {
+    // Check if user is root
+    if(this.authStore.user && this.authStore.user.is_root) {
       this.isRoot = true
     }
     
@@ -218,14 +224,31 @@ export default {
     this.getRoleOption()
 
     window.addEventListener('scroll', this.onScroll)
+    
+    // Call search to load initial data
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
-     /**
-   * Make toast without title
-   */
+    /**
+     * Make toast without title
+     */
     popToast(variant, content) {
-      console.log(`Toast: [${variant}] ${content}`)
+      switch(variant) {
+        case 'success':
+          this.toast.success(content)
+          break
+        case 'danger':
+          this.toast.error(content)
+          break
+        case 'warning':
+          this.toast.warning(content)
+          break
+        default:
+          this.toast.info(content)
+      }
     },
 
     /**
@@ -323,11 +346,19 @@ export default {
       this.onSearch = true
       this.loading = true
 
+      // Check if user exists
+      if (!this.authStore.user || !this.authStore.user.store_id) {
+        this.popToast('danger', 'Không tìm thấy thông tin người dùng')
+        this.onSearch = false
+        this.loading = false
+        return
+      }
+
       let req = {
         "name": this.inputs.name,
         "phone_number": this.inputs.phone,
         "role_id": this.inputs.role,
-        "store_name": "store ".concat(this.$store.state.user.store_id),
+        "store_name": "store ".concat(this.authStore.user.store_id),
         "limit": this.pageLimit,
         "offset": this.offset
       }
