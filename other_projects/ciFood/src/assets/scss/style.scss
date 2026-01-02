@@ -1,0 +1,35 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+// @import "coreui_dark";
+
+// ie fixes
+@import "ie-fix";
+
+.input-date {
+    width: 100%;
+    border: 0px;
+}
+
+.loading-more {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+}
+
+// Slide image in home page
+.slider-entertainment {
+height: 175px;
+width: 300px;
+background: #FFF;
+  img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  }
+}
+

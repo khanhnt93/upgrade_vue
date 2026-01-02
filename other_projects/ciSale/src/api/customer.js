@@ -1,0 +1,82 @@
+import session from './session'
+import { RootAPI } from './index'
+
+export default {
+
+  /**
+   * Get list customer by store
+   */
+  getCustomerByStore(params) {
+    return session.post(RootAPI + "customer/list-by-store", params)
+  },
+
+  /**
+   * Customer login
+   */
+  importCustomerFromExcelFile(req) {
+    return session.post(RootAPI + 'customer/import-from-excel', req)
+  },
+
+  /**
+   * Get customer detail by store
+   */
+  getCustomerDetailByStore(id) {
+    return session.post(RootAPI + "customer/detail/" + id)
+  },
+
+  /**
+   * Update customer by store
+   */
+  updateCustomerByStore(params) {
+    return session.post(RootAPI + "customer/update-by-store", params)
+  },
+
+  /**
+   * Add customer by store
+   */
+  addCustomerByStore(params) {
+    return session.post(RootAPI + "customer/add-by-store", params)
+  },
+
+  /**
+   * Save member config
+   */
+  saveMemberConfig(req) {
+    return session.post(RootAPI + 'sys-config/add-update-member-config', req)
+  },
+
+  /**
+   * Get member config
+   */
+  getMemberConfig() {
+    return session.get(RootAPI + 'sys-config/member-detail')
+  },
+
+  /**
+   * Get customer history
+   */
+  getCustomerHistory(params) {
+    return session.post(RootAPI + "customer/get-customer-history", params)
+  },
+
+  /**
+   * Get customer option
+   */
+  getCustomerOption() {
+    return session.get(RootAPI + 'customer/get-customer-option')
+  },
+
+  /**
+   * Get all customer
+   */
+  getAllCustomer() {
+    return session.get(RootAPI + 'customer/get-all-customer')
+  },
+
+  /**
+   * Update customer by store
+   */
+  updateCustomer(params) {
+    return session.post(RootAPI + "customer/update-customer-from-trade", params)
+  },
+}
