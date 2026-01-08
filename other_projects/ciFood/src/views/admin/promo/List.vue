@@ -1,432 +1,371 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-end mb-4">
+          <button 
+            class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px]"
+            @click="goToAdd">
+            Thêm
+          </button>
+        </div>
 
-           <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Khuyến Mãi</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12">
+            <h4 class="mt-2 text-center text-2xl font-semibold">Danh Sách Khuyến Mãi</h4>
+          </div>
+        </div>
+        <hr class="my-4"/>
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên </label>
-              <input
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2 font-medium">Tên</label>
+            <input
               id="name"
               type="text"
               autocomplete="new-password"
-              class="form-control"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               v-model="inputs.name">
-            </b-col>
+          </div>
 
-            <b-col md="3">
-              <label> Giá </label>
-              <input
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2 font-medium">Giá</label>
+            <input
               id="price"
               type="text"
               autocomplete="new-password"
-              class="form-control"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               v-model="inputs.price"
               maxlength="11"
               @keyup="integerOnly($event.target)">
-            </b-col>
+          </div>
 
-            <b-col md="3">
-              <label> Loại </label>
-              <b-form-select
-              :options="typeOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2 font-medium">Loại</label>
+            <select
+              id="type"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="inputs.type">
+              <option v-for="option in typeOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
 
-            <b-col md="3">
-              <label> Hiệu lực </label>
-              <b-form-select
-              :options="expireOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.expire"></b-form-select>
-            </b-col>
-          </b-row>
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2 font-medium">Hiệu lực</label>
+            <select
+              id="expire"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="inputs.expire">
+              <option v-for="option in expireOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+        <div class="mt-4 mb-4 flex justify-end">
+          <button 
+            class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="onSearch" 
+            @click="prepareToSearch">
+            Tìm Kiếm
+          </button>
+        </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+        <div class="mb-4">
+          <span class="font-medium">Số kết quả: {{totalRow}}</span>
+        </div>
 
-          <b-row>
-            <b-col md="12">
-                <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-                <template v-slot:cell(method)="data">{{ formatMethod(data.item.method) }}</template>
-                <template v-slot:cell(actions)="dataId">
-                  <b-list-group horizontal>
-                    <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 border">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">STT</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Mã</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Tên</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Giá(điểm)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Loại</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">% giảm giá</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Giảm giá tối đa</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Trên tổng giá</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Giá trị voucher</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Item free</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Số lượng</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Còn lại</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Ngày hiệu lực</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Ngày Hết Hạn</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.stt}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.code}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.name}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.price}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.type_name}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.discount_percent}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.max_discount}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.discount_on_amount}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.value_of_voucher}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.item_free}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.quantity}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.remaining}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.expired_date_from}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.expired_date_to}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm border">
+                  <div class="flex space-x-2">
+                    <button 
+                      class="p-2 text-yellow-600 hover:text-yellow-800"
+                      @click="edit(item.id)"
+                      title="Edit">
                       <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Delete"
-                                      @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt, dataId.item.method)">
+                    </button>
+                    <button 
+                      class="p-2 text-red-600 hover:text-red-800"
+                      @click="deleted(item.id, item.name, item.stt, item.method)"
+                      title="Delete">
                       <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-                </b-table>
-            </b-col>
-          </b-row>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="flex justify-center items-center py-4">
+          <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        
+        <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
+        <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
+          <i class="fa fa-angle-double-down text-2xl"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
-import Mapper from '@/mapper/promotion'
 import commonFunc from '@/common/commonFunc'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
+import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const { showToast } = useToast()
 
-export default {
-  data () {
-    return {
-      inputs: {
-        name: null,
-        price: null,
-        method: null,
-        type: null,
-        expire: null
-      },
-      pageLimit: Constant.PAGE_LIMIT,
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'code',
-          label: 'Mã'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'price',
-          label: 'Giá(điểm)'
-        },
-        // {
-        //   key: 'method',
-        //   label: 'Hình thức phát hành'
-        // },
-        {
-          key: 'type_name',
-          label: 'Loại'
-        },
+const inputs = ref({
+  name: null,
+  price: null,
+  method: null,
+  type: null,
+  expire: null
+})
 
-        {
-          key: 'discount_percent',
-          label: '% giảm giá'
-        },
-        {
-          key: 'max_discount',
-          label: 'Giảm giá tối đa'
-        },
-        {
-          key: 'discount_on_amount',
-          label: 'Trên tổng giá'
-        },
-        {
-          key: 'value_of_voucher',
-          label: 'Giá trị voucher'
-        },
-        {
-          key: 'item_free',
-          label: 'Item free'
-        },
-        {
-          key: 'quantity',
-          label: 'Số lượng'
-        },
-        {
-          key: 'remaining',
-          label: 'Còn lại'
-        },
-        {
-          key: 'expired_date_from',
-          label: 'Ngày hiệu lực'
-        },
-        {
-          key: 'expired_date_to',
-          label: 'Ngày Hết Hạn'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      listIdDeleted: [],
-      offset: 0,
-      hasNext: true,
-      onSearch: false,
-      loadByScroll: false,
-      loading: false,
-      expireOptions: [
-        {value: null, text: ''},
-        {value: 'true', text: 'Còn'},
-        {value: 'false', text: 'Hết'}
-      ],
-      typeOptions: [{value: null, text: ''}],
-      methodOptions: [
-        {value: null, text: ''},
-        {value: 'trade_point', text: 'Đổi điểm'},
-        {value: 'other', text: 'Khác'}
-      ],
-      totalRow: 0
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const items = ref([])
+const listIdDeleted = ref([])
+const offset = ref(0)
+const hasNext = ref(true)
+const onSearch = ref(false)
+const loadByScroll = ref(false)
+const loading = ref(false)
+
+const expireOptions = ref([
+  {value: null, text: ''},
+  {value: 'true', text: 'Còn'},
+  {value: 'false', text: 'Hết'}
+])
+
+const typeOptions = ref([{value: null, text: ''}])
+const methodOptions = ref([
+  {value: null, text: ''},
+  {value: 'trade_point', text: 'Đổi điểm'},
+  {value: 'other', text: 'Khác'}
+])
+
+const totalRow = ref(0)
+
+const rows = computed(() => items.value.length)
+
+/**
+ * Processing on scroll: use for paging
+ */
+const onScroll = (event) => {
+  if (onSearch.value) {
+    return
+  }
+  event.preventDefault()
+  const body = document.body
+  const html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if (hasNext.value) {
+      offset.value = offset.value + pageLimit.value
+      loadByScroll.value = true
+      getPromoList()
     }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-
-    window.addEventListener('resize', this.delete)
-
-    // Load list option promotion type
-    this.getPromotionTypeList()
-
-    // Get list promotion
-    this.getPromoList()
-
-  },
-  methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     *  Processing on scroll: use for paging
-     */
-    onScroll (event) {
-      if(this.onSearch) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + this.pageLimit
-          this.loadByScroll = true
-          this.getPromoList ()
-        }
-      }
-    },
-
-    /**
-     * Delete
-     */
-    deleted (id, name, rowIndex, method) {
-      if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            let dataPost = {
-              "id": id,
-              "method": method
-            }
-            adminAPI.deletePromo(dataPost).then(res => {
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
-
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-            })
-          }
-        })
-      }
-    },
-
-    /**
-     * Load list option promotion type
-     */
-    getPromotionTypeList () {
-      adminAPI.getListPromotionType().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.typeOptions = this.typeOptions.concat(res.data.data)
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/promo/index/' + id)
-    },
-
-    /**
-     * Go to add
-     */
-    goToAdd () {
-      this.$router.push('/promo/index/')
-    },
-
-    /**
-     * Format method
-     */
-    formatMethod(method) {
-      let result = "Khác"
-      if(method == 'trade_point') {
-        result = "Đổi điểm"
-      }
-      return result
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-
-      this.getPromoList()
-    },
-
-    /**
-     * Get list
-     */
-    getPromoList () {
-      if (this.loading) { return }
-
-      this.onSearch = true
-      this.loading = true
-      // Define params
-      let param = {
-        "name": this.inputs.name,
-        "price": this.inputs.price,
-        "method": this.inputs.method,
-        "type": this.inputs.type,
-        "expire": this.inputs.expire,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      adminAPI.getPromoList(param).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let it = res.data.data.promotions //Mapper.mapPromoModelToDto(res.data.data.promotions, this.offset)
-          this.totalRow = res.data.data.total_row
-
-          // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
-          }
-        } else {
-          this.items = []
-        }
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
   }
 }
+
+/**
+ * Delete
+ */
+const deleted = async (id, name, rowIndex, method) => {
+  if (id && name) {
+    const confirmed = confirm('Xóa ' + name + ". Bạn có chắc không?")
+    if (confirmed) {
+      try {
+        const dataPost = {
+          id: id,
+          method: method
+        }
+        await adminAPI.deletePromo(dataPost)
+        
+        // Remove item in list
+        const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+        items.value.splice(indexTemp, 1)
+        listIdDeleted.value.push(rowIndex - 1)
+        
+        totalRow.value = totalRow.value - 1
+      } catch (err) {
+        const errorMess = commonFunc.handleStaffError(err)
+        showToast(errorMess, 'danger')
+      }
+    }
+  }
+}
+
+/**
+ * Load list option promotion type
+ */
+const getPromotionTypeList = async () => {
+  try {
+    const res = await adminAPI.getListPromotionType()
+    if (res != null && res.data != null && res.data.data != null) {
+      typeOptions.value = typeOptions.value.concat(res.data.data)
+    }
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+/**
+ * Go to edit
+ */
+const edit = (id) => {
+  router.push('/promo/index/' + id)
+}
+
+/**
+ * Go to add
+ */
+const goToAdd = () => {
+  router.push('/promo/index/')
+}
+
+/**
+ * Format method
+ */
+const formatMethod = (method) => {
+  let result = "Khác"
+  if (method == 'trade_point') {
+    result = "Đổi điểm"
+  }
+  return result
+}
+
+/**
+ * Prepare to search
+ */
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+  getPromoList()
+}
+
+/**
+ * Get list
+ */
+const getPromoList = async () => {
+  if (loading.value) { return }
+
+  onSearch.value = true
+  loading.value = true
+  
+  // Define params
+  const param = {
+    name: inputs.value.name,
+    price: inputs.value.price,
+    method: inputs.value.method,
+    type: inputs.value.type,
+    expire: inputs.value.expire,
+    limit: pageLimit.value,
+    offset: offset.value
+  }
+
+  try {
+    const res = await adminAPI.getPromoList(param)
+    if (res != null && res.data != null && res.data.data != null) {
+      const it = res.data.data.promotions
+      totalRow.value = res.data.data.total_row
+
+      // Update items
+      if (loadByScroll.value) {
+        const temp = items.value
+        const newArray = temp.concat(it)
+        items.value = newArray
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      // Check has next
+      if (offset.value + pageLimit.value >= res.data.data.total_row) {
+        hasNext.value = false
+      }
+    } else {
+      items.value = []
+    }
+    onSearch.value = false
+    loading.value = false
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+    onSearch.value = false
+    loading.value = false
+  }
+}
+
+/**
+ * Only input integer
+ */
+const integerOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+  window.addEventListener('resize', deleted)
+  
+  // Load list option promotion type
+  getPromotionTypeList()
+  
+  // Get list promotion
+  getPromoList()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', deleted)
+})
 </script>

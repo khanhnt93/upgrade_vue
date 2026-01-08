@@ -1,275 +1,238 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header Row -->
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors duration-200">
+            Quay lại
+          </button>
+          <button
+            @click="save"
+            :disabled="saving"
+            class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <!-- Title -->
+        <h4 class="text-xl font-semibold text-center mb-4">Nợ Công</h4>
+        <hr class="mb-4">
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Nợ Công</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
+        <!-- Form -->
+        <div class="space-y-4">
+          <!-- Customer Name -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Tên khách hàng<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="debt.customer_name"
+                type="text"
+                autocomplete="new-password"
+                maxlength="50"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }">
+              <p v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên khách hàng</p>
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Tên khách hàng </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="customer_name"
-                  type="text"
-                  class="form-control"
-                  v-model="debt.customer_name"
-                  autocomplete="new-password"
-                  maxlength="50">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                  Vui lòng nhập tên khách hàng
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+          <!-- Phone Number -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Số điện thoại<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="debt.customer_phone_number"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                @keyup="integerOnly($event.target)"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorPhone }">
+              <p v-if="errorPhone" class="text-red-500 text-sm mt-1">Vui lòng nhập số điện thoại</p>
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Số điện thoại </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="customer_phone_number"
-                  type="text"
-                  class="form-control"
-                  v-model="debt.customer_phone_number"
-                  autocomplete="new-password"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="100">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                  Vui lòng nhập số điện thoại
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+          <!-- Address -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">Địa chỉ</label>
+            <div class="md:col-span-9">
+              <input
+                v-model="debt.customer_address"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Địa chỉ</label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="customer_address"
-                  type="text"
-                  class="form-control"
-                  v-model="debt.customer_address"
-                  autocomplete="new-password"
-                  maxlength="100">
-              </b-col>
-            </b-row>
+          <!-- Description -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">Mô tả</label>
+            <div class="md:col-span-9">
+              <input
+                v-model="debt.description"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Mô tả</label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="description"
-                  type="text"
-                  class="form-control"
-                  v-model="debt.description"
-                  autocomplete="new-password"
-                  maxlength="100">
-              </b-col>
-            </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Số tiền</label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="amount"
-                  type="text"
-                  class="form-control"
-                  v-model="debt.total"
-                  autocomplete="new-password"
-                  maxlength="100"
-                  @keyup="integerOnly($event.target)"
-                  :disabled="isEdit">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorTotal">
-                  Vui lòng nhập số tiền
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Total Amount -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Số tiền<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="debt.total"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                @keyup="integerOnly($event.target)"
+                :disabled="isEdit"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                :class="{ 'border-red-500': errorTotal }">
+              <p v-if="errorTotal" class="text-red-500 text-sm mt-1">Vui lòng nhập số tiền</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  data() {
-    return {
-      debt: {
-        customer_name: null,
-        customer_phone_number: null,
-        customer_address: null,
-        description: null,
-        total: null,
-        order_id: null,
-        customer_id: null
-      },
-      click: false,
-      saving: false,
-      loading: false,
-      isEdit: false
-    }
-  },
-  mounted() {
-    // Get sale channel detail
-    this.getDeptDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.debt.customer_name)
-    },
-    errorPhone: function () {
-      return this.checkInfo(this.debt.customer_phone_number)
-    },
-    errorTotal: function () {
-      return this.checkInfo(this.debt.total)
-    }
-  },
-  methods: {
+// Data
+const debt = ref({
+  customer_name: null,
+  customer_phone_number: null,
+  customer_address: null,
+  description: null,
+  total: null,
+  order_id: null,
+  customer_id: null
+})
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+const isEdit = ref(false)
 
-    checkInfo(info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate() {
-      return !(this.errorName || this.errorPhone || this.errorTotal)
-    },
+// Computed
+const errorName = computed(() => {
+  return checkInfo(debt.value.customer_name)
+})
 
-    /**
-     *  Get detail
-     */
-    getDeptDetail() {
-      let id = this.$route.params.id
-      if (id) {
-        this.loading = true
-        this.isEdit = true;
-        adminAPI.getPublicDeptDetail(id).then(res => {
-          if (res != null && res.data != null && res.data.data != null) {
-            this.debt = res.data.data
-          }
+const errorPhone = computed(() => {
+  return checkInfo(debt.value.customer_phone_number)
+})
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+const errorTotal = computed(() => {
+  return checkInfo(debt.value.total)
+})
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+// Methods
+const checkInfo = (info) => {
+  return click.value && (info == null || info.length <= 0)
+}
+
+const checkValidate = () => {
+  return !(errorName.value || errorPhone.value || errorTotal.value)
+}
+
+const getDeptDetail = () => {
+  const id = route.params.id
+  if (id) {
+    loading.value = true
+    isEdit.value = true
+    adminAPI.getPublicDeptDetail(id).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        debt.value = res.data.data
       }
-    },
-
-    /**
-     *  Save
-     */
-    save() {
-      this.click = true
-
-      let checkValidate = this.checkValidate()
-      if (!checkValidate) {
-        return
-      }
-
-      this.saving = true
-
-      let id = this.$route.params.id
-      if (id) {
-        // Edit
-        this.debt.id = id
-        adminAPI.updatePublicDept(this.debt).then(res => {
-          this.saving = false
-          if (res != null && res.data != null) {
-            if (res.data.status == 200) {
-              // show popup success
-              this.popToast('success', 'Cập nhật thành công!!! ')
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addPublicDept(this.debt).then(res => {
-          this.saving = false
-          if (res != null && res.data != null) {
-
-            if (res.data.status == 200) {
-              this.$router.push("/public-debt/list")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-      /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/public-debt/list")
-    }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+const save = () => {
+  click.value = true
+
+  if (!checkValidate()) {
+    return
+  }
+
+  saving.value = true
+
+  const id = route.params.id
+  if (id) {
+    // Edit
+    debt.value.id = id
+    adminAPI.updatePublicDept(debt.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          popToast('success', 'Cập nhật thành công!!! ')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    // Add
+    adminAPI.addPublicDept(debt.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          router.push('/public-debt/list')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+const integerOnly = (item) => {
+  const result = commonFunc.intergerOnly(item.value)
+  item.value = result
+}
+
+const back = () => {
+  router.push('/public-debt/list')
+}
+
+// Lifecycle
+onMounted(() => {
+  getDeptDetail()
+})
 </script>

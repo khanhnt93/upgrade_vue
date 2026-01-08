@@ -1,212 +1,188 @@
 <template>
-  <div class="app flex-row align-items-center is-fixed-page">
-    <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card no-body>
-              <b-card-body>
-                <b-form @submit.prevent="logIn">
-                  <!--<h1 class="text-center">-->
-                    <!--ciFood-->
-                  <!--</h1>-->
-                  <b-row>
-                    <b-col class="text-center">
-                      <img src="/static/img/project/logo.png" alt="logo" class="logo-login" />
-                    </b-col>
-                  </b-row>
+  <div class="app flex items-center justify-center is-fixed-page bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-center">
+        <div class="w-full">
+          <div class="bg-white rounded-lg shadow-lg">
+            <div class="p-6">
+              <form @submit.prevent="logIn">
+                <div class="text-center mb-6">
+                  <img src="/static/img/project/logo.png" alt="logo" class="logo-login mx-auto" />
+                </div>
 
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="errorFlag">
-                      {{errorMess}}
-                  </b-form-invalid-feedback>
-                  <div class="form-group">
-                    <label>Số Điện Thoại</label><span class="error-sybol"></span>
-                    <input
-                      id="phone"
-                      v-model="inputs.phone_number"
-                      type="text"
-                      maxlength="20"
-                      autocomplete="new-password"
-                      class="form-control"
-                      placeholder="Nhập số điện thoại" phoneNumberCheck
-                      @keyup="intergerOnly($event.target)"
-                      v-on:change="checkPhoneNumberFormat($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="phoneNumberCheckFlag">
-                      Số điện thoại không đúng
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>Mật Khẩu</label><span class="error-sybol"></span>
-                    <input
-                      id="password"
-                      v-model="inputs.password"
-                      type="password"
-                      class="form-control"
-                      placeholder="Nhập mật khẩu">
-                  </div>
+                <div v-if="!errorFlag" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                  {{ errorMess }}
+                </div>
 
-                  <b-row>
-                    <b-col
-                      cols="12"
-                      class="mb-2 text-center">
-                      <b-button
-                        variant="primary"
-                        class="px-4 default-btn-bg"
-                        @click.prevent="logIn"
+                <div class="form-group mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Số Điện Thoại<span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="phone"
+                    v-model="inputs.phone_number"
+                    type="text"
+                    maxlength="20"
+                    autocomplete="new-password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Nhập số điện thoại"
+                    @keyup="intergerOnly($event.target)"
+                    @change="checkPhoneNumberFormat($event.target)">
+                  <div v-if="!phoneNumberCheckFlag" class="text-red-600 text-sm mt-1">
+                    Số điện thoại không đúng
+                  </div>
+                </div>
+
+                <div class="form-group mb-6">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Mật Khẩu<span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="password"
+                    v-model="inputs.password"
+                    type="password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Nhập mật khẩu">
+                </div>
+
+                <div class="mb-4">
+                  <div class="text-center">
+                    <button
+                      type="button"
+                      class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                      @click.prevent="logIn"
                       :disabled="onLogin">
-                        {{ onLogin ? 'Đăng Nhập...' : 'Đăng Nhập' }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
+                      {{ onLogin ? 'Đăng Nhập...' : 'Đăng Nhập' }}
+                    </button>
+                  </div>
+                </div>
 
-                  <b-row>
-                    <b-col
-                      cols="12"
-                      class="mb-2">
-                      <!-- <a href="/staff-forgetpass" class="pull-left mt-2">Quên Mật Khẩu</a> -->
-                      <button @click.prevent="forgetpass" class="forget-pass">
-                        Quên Mật Khẩu
-                      </button>
-                    </b-col>
-                  </b-row>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+                <div>
+                  <button @click.prevent="forgetpass" class="text-blue-600 hover:text-blue-800 underline text-sm">
+                    Quên Mật Khẩu
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
+import { useToast } from '@/composables/useToast'
 import StaffMapper from '@/mapper/staff'
 import Staff from '@/api/staff'
-import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-export default {
-  name: 'Login',
-  data () {
-    return {
-      inputs: {
-        phone_number: '',
-        password: '',
-        fromWhere: "web",
-      },
-      code: '',
-      onLogin: false,
-      selected: '',
-      phoneNumberCheckFlag: true,
-      errorFlag: true,
-      errorMess: ""
-    }
-  },
-  methods: {
-    /**
-     *  Login
-     */
-     logIn () {
-       if(this.phoneNumberCheckFlag) {
-         this.onLogin = true
-         this.errorMess = null
-         Staff.logIn(this.inputs).then(res => {
+const router = useRouter()
+const authStore = useAuthStore()
+const toast = useToast()
 
-          // Store token
-          this.$store.commit('updateToken', res.data.data.token)
+const inputs = ref({
+  phone_number: '',
+  password: '',
+  fromWhere: 'web'
+})
 
-          // Store menu
-          let menu = res.data.data.menu
-          this.$store.commit('updateMenu', menu)
+const onLogin = ref(false)
+const phoneNumberCheckFlag = ref(true)
+const errorFlag = ref(true)
+const errorMess = ref('')
 
-          // Store staff info
-          const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
-          this.$store.commit('updateUser', usr)
-
-          this.$router.push("/")
-
-          this.onLogin = false
-         }).catch(err => {
-           let message = ""
-            if(err.response.data.status == 500) {
-              message = "Lỗi hệ thống"
-            } else {
-              message = err.response.data.mess
-            }
-            this.errorFlag = false
-            this.errorMess = message
-            this.onLogin = false
-         })
-       }
-
-     },
-
-    /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item.value
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      } else {
-        this.phoneNumberCheckFlag = true
-      }
-    },
-
-    /**
-     * Only input integer
-     */
-     intergerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-
-      if(valueInput.length == 10) {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      }
-    },
-
-    forgetpass() {
-      let message = "Hãy liên hệ với admin của bạn để được reset lại mật khẩu. Nếu bạn là chủ kinh doanh, hãy liên hệ với chúng tôi (ciinTech) theo thông tin ở màn hình “Liên hệ”. Xin chân thành cảm ơn!"
-      this.$bvModal.msgBoxOk(message, {
-        title: "Quên Mật Khẩu",
-        centered: true,
-        size: 'sm',
-        headerClass: 'bg-success',
-      }).then(res => {
-        if(res) {
-          this.$router.push('/staff-login')
-        }
-      })
-    },
+onMounted(() => {
+  if (authStore.token) {
+    router.push('/')
   }
+})
+
+/**
+ * Login
+ */
+function logIn() {
+  if (phoneNumberCheckFlag.value) {
+    onLogin.value = true
+    errorMess.value = null
+
+    Staff.logIn(inputs.value).then(res => {
+      // Store token
+      authStore.updateToken(res.data.data.token)
+
+      // Store menu
+      let menu = res.data.data.menu
+      authStore.updateMenu(menu)
+
+      // Store staff info
+      const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
+      authStore.updateUser(usr)
+
+      toast.success('Đăng nhập thành công!')
+      router.push('/')
+
+      onLogin.value = false
+    }).catch(err => {
+      let message = ''
+      if (err.response.data.status == 500) {
+        message = 'Lỗi hệ thống'
+      } else {
+        message = err.response.data.mess
+      }
+      errorFlag.value = false
+      errorMess.value = message
+      onLogin.value = false
+      toast.error(message)
+    })
+  }
+}
+
+/**
+ * Check phone number
+ */
+function checkPhoneNumberFormat(item) {
+  let valueInput = item.value
+  if (valueInput != null && valueInput != '') {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  } else {
+    phoneNumberCheckFlag.value = true
+  }
+}
+
+/**
+ * Only input integer
+ */
+function intergerOnly(item) {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+
+  if (valueInput.length == 10) {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  }
+}
+
+function forgetpass() {
+  let message = 'Hãy liên hệ với admin của bạn để được reset lại mật khẩu. Nếu bạn là chủ kinh doanh, hãy liên hệ với chúng tôi (ciinTech) theo thông tin ở màn hình "Liên hệ". Xin chân thành cảm ơn!'
+  alert(message)
 }
 </script>
 
 <style lang="scss">
-  .logo-login {
-    width: 32%;
-    height: auto;
-    text-align: center;
-  }
-
-  .forget-pass {
-    background: none!important;
-    border: none;
-    padding: 0!important;
-    /*optional*/
-    font-family: arial, sans-serif;
-    /*input has OS specific font-family*/
-    color: #069;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
+.logo-login {
+  width: 32%;
+  height: auto;
+  text-align: center;
+}
 </style>

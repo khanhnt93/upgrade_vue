@@ -1,940 +1,781 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-end mb-4">
+          <button 
+            class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="saving" 
+            @click="save">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12">
+            <h4 class="mt-2 text-center text-2xl font-semibold">Khuyến Mãi</h4>
+          </div>
+        </div>
+        <hr class="my-4"/>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading Overlay -->
+        <div v-if="loading" class="flex justify-center items-center py-12">
+          <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Khuyến Mãi</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+        <div v-else>
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Phương thức <span class="text-red-600">*</span></label>
+              <select
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorMethod ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.method">
+                <option value="other" @click="setMethodIsOther">Khác</option>
+                <option value="trade_point" @click="setMethodIsTradePoint">Đổi điểm</option>
+              </select>
+              <p v-if="errorMethod" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Mã</label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="promo.code">
+            </div>
 
-              <!--<b-row class="form-row">-->
-                <!--<b-col md="3" class="mt-2">-->
-                  <!--<label> Hình thức phát hành </label><span class="error-sybol"></span>-->
-                <!--</b-col>-->
-                <!--<b-col md="9">-->
-                  <!--<input type="radio" id="trade_point" value="trade_point" v-model="promo.method" @click="setMethodIsTradePoint">-->
-                  <!--<label for="trade_point">Đổi điểm</label>-->
-                  <!--<input type="radio" id="other" value="other" v-model="promo.method" @click="setMethodIsOther">-->
-                  <!--<label for="other">Khác</label>-->
-                  <!--<b-form-invalid-feedback  class="invalid-feedback" :state="!errorMethod">-->
-                    <!--Vui lòng chọn hình thức phát hành-->
-                  <!--</b-form-invalid-feedback>-->
-                <!--</b-col>-->
-              <!--</b-row>-->
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Tên <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorName ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.name">
+              <p v-if="errorName" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="promo.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Loại <span class="text-red-600">*</span></label>
+              <select
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorType ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.type">
+                <option v-for="option in typeOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+              </select>
+              <p v-if="errorType" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
-                    <label> Code </label>
-                  </b-col>
-                  <b-col md="9">
+            <!-- Discount percent (for discount types) -->
+            <div v-if="promo.type === 'discount' || promo.type === 'discount_with_max_value' || promo.type === 'discount_on_item'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">% giảm giá <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorPercentDiscount ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.discount_percent"
+                maxlength="3"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorPercentDiscount" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Max discount (for discount_with_max_value) -->
+            <div v-if="promo.type === 'discount_with_max_value'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Giảm giá tối đa <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorMaxDiscount ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.max_discount"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorMaxDiscount" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Discount on amount (for discount_with_max_value) -->
+            <div v-if="promo.type === 'discount_with_max_value'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Trên tổng giá <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorDiscountOnAmount ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.discount_on_amount"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorDiscountOnAmount" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Value of voucher (for voucher type) -->
+            <div v-if="promo.type === 'voucher'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Giá trị voucher <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorValueOfVoucher ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.value_of_voucher"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorValueOfVoucher" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Free item (for free_item type) -->
+            <div v-if="promo.type === 'free_item'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Item free <span class="text-red-600">*</span></label>
+              <select
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorFreeItem ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.item_free">
+                <option v-for="option in itemFreeOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+              </select>
+              <p v-if="errorFreeItem" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Cost (for trade_point method) -->
+            <div v-if="promo.method === 'trade_point'" class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Giá(điểm) <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorCost ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.cost"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorCost" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Date range -->
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Ngày bắt đầu hiệu lực <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                placeholder="DD-MM-YYYY"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorExpiredDateFrom ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.expired_date_from"
+                maxlength="10"
+                @keyup="inputDateOnly($event.target)">
+              <p v-if="errorExpiredDateFrom" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin (DD-MM-YYYY)</p>
+            </div>
+
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Ngày hết hiệu lực <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                placeholder="DD-MM-YYYY"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorExpiredDateTo ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.expired_date_to"
+                maxlength="10"
+                @keyup="inputDateOnly($event.target)">
+              <p v-if="errorExpiredDateTo" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin (DD-MM-YYYY)</p>
+            </div>
+
+            <!-- Quantity -->
+            <div class="col-span-12 md:col-span-6">
+              <label class="block mb-2 font-medium">Số lượng <span class="text-red-600">*</span></label>
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorQuantity ? 'border-red-500' : 'border-gray-300'"
+                v-model="promo.quantity"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+              <p v-if="errorQuantity" class="mt-1 text-sm text-red-600">Vui lòng nhập thông tin</p>
+            </div>
+
+            <!-- Auto apply section (only for method='other') -->
+            <template v-if="promo.method === 'other'">
+              <div class="col-span-12">
+                <hr class="my-4"/>
+                <h5 class="text-lg font-semibold mb-4">Tự động áp dụng</h5>
+              </div>
+
+              <div class="col-span-12 md:col-span-6">
+                <label class="block mb-2 font-medium">Tự động áp dụng</label>
+                <div class="flex items-center space-x-4">
+                  <label class="inline-flex items-center">
                     <input
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.code"
-                    maxlength="50">
-                  </b-col>
-                </b-row>
-
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
-                    <label> Loại </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="typeOptions"
-                    id="status"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.type"></b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorType">
-                      Vui lòng nhập loại
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'discount' || promo.type == 'discount_with_max_value' || promo.type == 'discount_on_item'">
-                  <b-col md="3" class="mt-2">
-                    <label> Phần trăm giảm giá (%) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                      type="radio"
+                      class="form-radio h-4 w-4 text-blue-600"
+                      :value="true"
+                      v-model="promo.auto_apply">
+                    <span class="ml-2">Có</span>
+                  </label>
+                  <label class="inline-flex items-center">
                     <input
-                    id="discount_percent"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.discount_percent"
-                    maxlength="3"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPercentDiscount">
-                      Vui lòng nhập phần trăm giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
-                    <label> Giảm giá tối đa </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <input
-                    id="max_discount"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.max_discount"
-                    maxlength="20"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMaxDiscount">
-                      Vui lòng nhập giảm giá tối đa
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
-                    <label> Trên tổng giá </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <input
-                    id="discount_on_amount"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.discount_on_amount"
-                    maxlength="20"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDiscountOnAmount">
-                      Vui lòng nhập trên tổng giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'voucher'">
-                  <b-col md="3" class="mt-2">
-                    <label> Giá trị voucher </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <input
-                    id="value_of_voucher"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.value_of_voucher"
-                    maxlength="20"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorValueOfVoucher">
-                      Vui lòng nhập giá trị voucher
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'free_item'">
-                  <b-col md="3" class="mt-2">
-                    <label> Item free </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="itemFreeOptions"
-                    id="item_free"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.item_free">
-                    </b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFreeItem">
-                      Vui lòng nhập item free
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-if="promo.type == 'discount_on_item'">
-                  <b-col md="3" class="mt-2">
-                    <label> Giảm giá trên món </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-row>
-                      <b-col md="6" v-for="item in itemFood" :key="item.value">
-                        <input :id="item.value" type="checkbox" v-model="promo.on_items" name="discountOnItem" :value="item.value">
-                        <label :for="item.value">{{ item.text }}</label>
-                      </b-col>
-                    </b-row>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFreeItem">
-                      Vui lòng món muốn giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" v-show="promo.method == 'trade_point'">
-                  <b-col md="3" class="mt-2">
-                    <label> Giá mua(điểm) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <input
-                    id="price"
-                    type="text"
-                    maxlength="100"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.cost"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorCost">
-                      Vui lòng nhập giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
-                    <label> Hiệu lực từ </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <div class="input-group">
-                    <input
-                    id="expiredDateFrom"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.expired_date_from"
-                    maxlength="10"
-                    @keyup="inputDateOnly($event.target)">
-                    </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateFrom">
-                      Ngày bắt đầu hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
-                    <label> Hiệu lực đến </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <div class="input-group">
-                    <input
-                    id="expiredDateTo"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.expired_date_to"
-                    maxlength="10"
-                    @keyup="inputDateOnly($event.target)">
-                    </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateTo">
-                      Ngày hết hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
-                    <label> Số Lượng </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <input
-                    id="number"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    maxlength="100"
-                    v-model="promo.quantity"
-                    @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
-                      Vui lòng nhập số lượng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-
-                <b-row v-show="promo.method == 'other'">
-                  <b-col>
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
-                        <label> Khung giờ tự động áp dụng </label>
-                      </b-col>
-                      <b-col md="9">
-                        <input type="radio" id="auto_apply_yes" value="true" v-model="promo.auto_apply">
-                        <label for="auto_apply_yes">Có</label>
-                        <input type="radio" id="auto_apply_no" value="false" v-model="promo.auto_apply">
-                        <label for="auto_apply_no">Không</label>
-                      </b-col>
-                    </b-row>
-
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
-                        <label> Các ngày trong tuần </label>
-                      </b-col>
-                      <b-col md="9">
-                        <input type="checkbox" id="t2" value="1" v-model="promo.day_of_week">
-                        <label for="t2">Thứ 2</label>
-                        <input type="checkbox" id="t3" value="2" v-model="promo.day_of_week">
-                        <label for="t3">Thứ 3</label>
-                        <input type="checkbox" id="t4" value="3" v-model="promo.day_of_week">
-                        <label for="t4">Thứ 4</label>
-                        <input type="checkbox" id="t5" value="4" v-model="promo.day_of_week">
-                        <label for="t5">Thứ 5</label>
-                        <input type="checkbox" id="t6" value="5" v-model="promo.day_of_week">
-                        <label for="t6">Thứ 6</label>
-                        <input type="checkbox" id="t7" value="6" v-model="promo.day_of_week">
-                        <label for="t7">Thứ 7</label>
-                        <input type="checkbox" id="cn" value="7" v-model="promo.day_of_week">
-                        <label for="cn">Chủ nhật</label>
-                      </b-col>
-                    </b-row>
-
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
-                        <label> Khung giờ </label>
-                      </b-col>
-                      <b-col md="9">
-                        <div class="form-inline">
-                          <input
-                            id="start_time"
-                            v-model="promo.start_time"
-                            type="text"
-                            autocomplete="new-password"
-                            class="form-control input-width-100"
-                            @keyup="integerTimeOnly($event.target)"
-                            maxlength="5"
-                            > :
-                          <input
-                            id="end_time"
-                            v-model="promo.end_time"
-                            type="text"
-                            autocomplete="new-password"
-                            class="form-control input-width-100"
-                            @keyup="integerTimeOnly($event.target)"
-                            maxlength="5"
-                            >
-                        </div>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
-                    <label> Mô tả </label>
-                  </b-col>
-                  <b-col md="9">
-                    <div class="form-inline">
-                      <b-form-textarea
-                        id="description"
-                        style="width:100%;"
-                        rows="3"
-                        v-model="promo.description"
-                      ></b-form-textarea>
-                    </div>
-                  </b-col>
-                </b-row>
-
-
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Hình ảnh </label>
-                </b-col>
-                <b-col md="9">
-                  <b-input-group @click="$refs.file.click()" append="Browse" class="pointer">
-                    <b-input v-model="promo.image"></b-input>
-                  </b-input-group>
-                  <input class="d-none" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <div v-if="promo.image_preview" class="preview-box text-center"  :style="{height: computedWidth, width: '100%'}">
-                    <vue-cropper
-                      ref="cropper"
-                      :guides="true"
-                      :view-mode="2"
-                      :center="true"
-                      drag-mode="crop"
-                      :auto-crop-area="1"
-                      :background="true"
-                      :rotatable="true"
-                      :src="promo.image_preview"
-                      :initialAspectRatio="1/1"
-                      :aspectRatio="1/1"
-                      alt="Source Image"
-                      :style="computedImg"
-                      :crop="cropImage"
-                    >
-                    </vue-cropper>
+                      type="radio"
+                      class="form-radio h-4 w-4 text-blue-600"
+                      :value="false"
+                      v-model="promo.auto_apply">
+                    <span class="ml-2">Không</span>
+                  </label>
                 </div>
-              </b-row>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+              <!-- Day of week checkboxes (only if auto_apply is true) -->
+              <div v-if="promo.auto_apply" class="col-span-12">
+                <label class="block mb-2 font-medium">Ngày trong tuần</label>
+                <div class="flex flex-wrap gap-4">
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="1" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 2</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="2" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 3</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="3" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 4</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="4" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 5</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="5" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 6</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="6" v-model="promo.day_of_week">
+                    <span class="ml-2">Thứ 7</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="7" v-model="promo.day_of_week">
+                    <span class="ml-2">Chủ nhật</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Time range (only if auto_apply is true) -->
+              <div v-if="promo.auto_apply" class="col-span-12 md:col-span-6">
+                <label class="block mb-2 font-medium">Giờ bắt đầu (HH:MM)</label>
+                <input
+                  type="text"
+                  placeholder="HH:MM"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="promo.start_time"
+                  maxlength="5"
+                  @keyup="integerTimeOnly($event.target)">
+              </div>
+
+              <div v-if="promo.auto_apply" class="col-span-12 md:col-span-6">
+                <label class="block mb-2 font-medium">Giờ kết thúc (HH:MM)</label>
+                <input
+                  type="text"
+                  placeholder="HH:MM"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="promo.end_time"
+                  maxlength="5"
+                  @keyup="integerTimeOnly($event.target)">
+              </div>
+            </template>
+
+            <!-- Discount on items checkboxes (for discount_on_item type) -->
+            <div v-if="promo.type === 'discount_on_item'" class="col-span-12">
+              <hr class="my-4"/>
+              <label class="block mb-2 font-medium">Chọn món ăn áp dụng giảm giá</label>
+              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                <label v-for="item in itemFood" :key="item.value" class="inline-flex items-center">
+                  <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" :value="item.value" v-model="promo.on_items">
+                  <span class="ml-2">{{ item.text }}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-span-12">
+              <label class="block mb-2 font-medium">Mô tả</label>
+              <textarea
+                rows="3"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="promo.description">
+              </textarea>
+            </div>
+
+            <!-- Image upload with cropper -->
+            <div class="col-span-12">
+              <label class="block mb-2 font-medium">Hình ảnh</label>
+              <div class="flex items-center space-x-4 mb-2">
+                <input
+                  type="text"
+                  readonly
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
+                  v-model="promo.image"
+                  placeholder="Chọn hình ảnh">
+                <button
+                  type="button"
+                  class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                  @click="$refs.file.click()">
+                  Browse
+                </button>
+              </div>
+              <input
+                class="hidden"
+                type="file"
+                ref="file"
+                accept="image/*"
+                @change="handleFileUpload">
+
+              <!-- Image preview with cropper -->
+              <div v-if="promo.image_preview" class="mt-4">
+                <vue-cropper
+                  ref="cropper"
+                  :src="promo.image_preview"
+                  :aspect-ratio="1"
+                  :view-mode="1"
+                  :auto-crop-area="1"
+                  :background="false"
+                  :rotatable="false"
+                  :scalable="false"
+                  :zoomable="false"
+                  @crop="cropImage"
+                  class="max-w-md mx-auto"
+                  :style="{maxWidth: '100%', maxHeight: '300px'}">
+                </vue-cropper>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-end space-x-2">
+            <button 
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
+              @click="back">
+              Quay lại
+            </button>
+            <button 
+              class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="saving" 
+              @click="save">
+              Lưu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const route = useRoute()
+const { showToast } = useToast()
 
-export default {
-  components: {
-    VueCropper
-  },
-  data () {
-    return {
-      promo: {
-        "id": null,
-        "code": null,
-        "method": "other",
-        "name": null,
-        "type": null,
-        "discount_percent": null,
-        "max_discount": null,
-        "discount_on_amount": null,
-        "value_of_voucher": null,
-        "item_free": null,
-        "on_items": [],
-        "cost": null,
-        "expired_date_from": null,
-        "expired_date_to": null,
-        "quantity": null,
-        "auto_apply": false,
-        "day_of_week": [],
-        "start_time": "00:00",
-        "end_time": "23:59",
-        "description": null,
-        "image": null,
-        image_preview: null
-      },
-      typeOptions: [{value: null, text: ''}],
-      itemFreeOptions: [{value: null, text: ''}],
-      itemFood: [],
-      file: null,
-      height: '100px',
-      styleImg: {},
-      click: false,
-      saving: false,
-      loading: false,
+const promo = ref({
+  id: null,
+  code: null,
+  method: "other",
+  name: null,
+  type: null,
+  discount_percent: null,
+  max_discount: null,
+  discount_on_amount: null,
+  value_of_voucher: null,
+  item_free: null,
+  on_items: [],
+  cost: null,
+  expired_date_from: null,
+  expired_date_to: null,
+  quantity: null,
+  auto_apply: false,
+  day_of_week: [],
+  start_time: "00:00",
+  end_time: "23:59",
+  description: null,
+  image: null,
+  image_preview: null
+})
+
+const typeOptions = ref([{value: null, text: ''}])
+const itemFreeOptions = ref([{value: null, text: ''}])
+const itemFood = ref([])
+const file = ref(null)
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+const cropper = ref(null)
+
+const errorMethod = computed(() => click.value && (promo.value.method == null || promo.value.method.length <= 0))
+const errorName = computed(() => click.value && (promo.value.name == null || promo.value.name.length <= 0))
+const errorType = computed(() => click.value && (promo.value.type == null || promo.value.type.length <= 0))
+const errorPercentDiscount = computed(() => {
+  return click.value && 
+    (promo.value.type === 'discount' || promo.value.type === 'discount_with_max_value' || promo.value.type === 'discount_on_item') && 
+    (promo.value.discount_percent == null || promo.value.discount_percent.length <= 0)
+})
+const errorMaxDiscount = computed(() => {
+  return click.value && promo.value.type === 'discount_with_max_value' && 
+    (promo.value.max_discount == null || promo.value.max_discount.length <= 0)
+})
+const errorDiscountOnAmount = computed(() => {
+  return click.value && promo.value.type === 'discount_with_max_value' && 
+    (promo.value.discount_on_amount == null || promo.value.discount_on_amount.length <= 0)
+})
+const errorValueOfVoucher = computed(() => {
+  return click.value && promo.value.type === 'voucher' && 
+    (promo.value.value_of_voucher == null || promo.value.value_of_voucher.length <= 0)
+})
+const errorFreeItem = computed(() => {
+  return click.value && promo.value.type === 'free_item' && 
+    (promo.value.item_free == null || promo.value.item_free.length <= 0)
+})
+const errorCost = computed(() => {
+  return click.value && promo.value.method === 'trade_point' && 
+    (promo.value.cost == null || promo.value.cost.length <= 0)
+})
+const errorExpiredDateFrom = computed(() => {
+  return click.value && (promo.value.expired_date_from === "" || promo.value.expired_date_from == null || 
+    commonFunc.dateFormatCheck(promo.value.expired_date_from) === false)
+})
+const errorExpiredDateTo = computed(() => {
+  return click.value && (promo.value.expired_date_to === "" || promo.value.expired_date_to == null || 
+    commonFunc.dateFormatCheck(promo.value.expired_date_to) === false)
+})
+const errorQuantity = computed(() => click.value && (promo.value.quantity == null || promo.value.quantity.length <= 0))
+
+const checkValidate = () => {
+  return !(errorMethod.value || errorName.value || errorType.value || errorCost.value || 
+    errorExpiredDateFrom.value || errorExpiredDateTo.value || errorQuantity.value || 
+    errorPercentDiscount.value || errorMaxDiscount.value || errorDiscountOnAmount.value || 
+    errorValueOfVoucher.value || errorFreeItem.value)
+}
+
+const getDefaultDate = () => {
+  const dateNow = new Date()
+  promo.value.expired_date_from = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
+  const todate = new Date(dateNow.setMonth(dateNow.getMonth() + 1))
+  promo.value.expired_date_to = commonFunc.formatDate(todate.toJSON().slice(0,10))
+}
+
+const getPromotionTypeList = async () => {
+  try {
+    const res = await adminAPI.getListPromotionType()
+    if (res != null && res.data != null && res.data.data != null) {
+      typeOptions.value = typeOptions.value.concat(res.data.data)
     }
-  },
-  mounted() {
-    this.getDefaultDate()
-
-    this.getPromotionTypeList()
-
-    this.getListItemFree()
-
-    this.getPromoDetail()
-  },
-  computed: {
-    computedWidth() {
-      return this.height
-    },
-    computedImg() {
-      return this.styleImg
-    },
-    errorMethod: function () {
-      return this.checkInfo(this.promo.method)
-    },
-    errorName: function () {
-      return this.checkInfo(this.promo.name)
-    },
-    errorType: function () {
-      return this.checkInfo(this.promo.type)
-    },
-    errorPercentDiscount: function () {
-      return this.checkPercentDiscount(this.promo.discount_percent)
-    },
-    errorMaxDiscount: function () {
-      return this.checkDiscountWithMaxValue(this.promo.max_discount)
-    },
-    errorDiscountOnAmount: function () {
-      return this.checkDiscountWithMaxValue(this.promo.discount_on_amount)
-    },
-    errorValueOfVoucher: function () {
-      return this.checkValueOfVoucher(this.promo.value_of_voucher)
-    },
-    errorFreeItem: function () {
-      return this.checkFreeItem(this.promo.item_free)
-    },
-    errorCost: function () {
-      return this.checkCost(this.promo.cost)
-    },
-    errorExpiredDateFrom: function () {
-      return this.checkDate(this.promo.expired_date_from)
-    },
-    errorExpiredDateTo: function () {
-      return this.checkDate(this.promo.expired_date_to)
-    },
-    errorQuantity: function () {
-      return this.checkInfo(this.promo.quantity)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkPercentDiscount (info) {
-      return (this.click && (this.promo.type == 'discount' || this.promo.type == 'discount_with_max_value' || this.promo.type == 'discount_on_item') && (info == null || info.length <= 0))
-    },
-    checkDiscountWithMaxValue (info) {
-      return (this.click && this.promo.type == 'discount_with_max_value' && (info == null || info.length <= 0))
-    },
-    checkValueOfVoucher (info) {
-      return (this.click && this.promo.type == 'voucher' && (info == null || info.length <= 0))
-    },
-    checkFreeItem (info) {
-      return (this.click && this.promo.type == 'free_item' && (info == null || info.length <= 0))
-    },
-    checkCost (info) {
-      return (this.click && this.promo.method == 'trade_point' && (info == null || info.length <= 0))
-    },
-    checkDate (dateInput) {
-      return (this.click && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
-    },
-    checkValidate () {
-      return !(this.errorMethod || this.errorName || this.errorType || this.errorCost || this.errorExpiredDateFrom
-        || this.errorExpiredDateTo || this.errorQuantity || this.errorPercentDiscount || this.errorMaxDiscount
-        || this.errorDiscountOnAmount || this.errorValueOfVoucher || this.errorFreeItem)
-    },
-
-   /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Get default date
-     */
-    getDefaultDate() {
-      // Get default date
-      let dateNow = new Date()
-      this.promo.expired_date_from = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-      let todate = new Date(dateNow.setMonth(dateNow.getMonth() + 1))
-      this.promo.expired_date_to = commonFunc.formatDate(todate.toJSON().slice(0,10))
-    },
-
-    /**
-     * Load list option promotion type
-     */
-    getPromotionTypeList () {
-      adminAPI.getListPromotionType().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.typeOptions = this.typeOptions.concat(res.data.data)
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Load list option item free
-     */
-    getListItemFree () {
-      adminAPI.getListFreeItem().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.itemFreeOptions = this.itemFreeOptions.concat(res.data.data)
-          this.itemFood = res.data.data
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get detail
-     */
-    getPromoDetail() {
-      let promoId = this.$route.params.id
-      if(promoId){
-        this.loading = true
-
-        adminAPI.getPromoDetail(promoId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.promo = res.data.data
-
-            if(this.promo.day_of_week) {
-              // Convert string to array
-              let itemString = JSON.parse(JSON.stringify(this.promo.day_of_week))
-              itemString = itemString.replace("[", "").replace("]", "").replaceAll(" ", "").replaceAll("'", "").replaceAll("\"", "")
-              let items = itemString.split(",")
-              this.promo.day_of_week = items
-            } else {
-              this.promo.day_of_week = []
-            }
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Handle upload file
-     */
-    handleFileUpload () { // event
-      this.promo.image_preview = null
-      this.file = this.$refs.file.files[0]//event.target.files[0]
-      this.promo.image = this.file.name
-
-      // Render image in review
-      let reader  = new FileReader ()
-      reader.addEventListener("load", function () {
-        // this.$refs.cropper.image = reader.result
-        this.promo.image_preview = reader.result
-      }.bind(this), false)
-      if( this.file ){
-        reader.readAsDataURL( this.file )
-        this.height = '300px'
-        this.styleImg = {'max-width': '100%', 'max-height': '100%'}
-      }
-    },
-
-    /**
-     * Check valid from date and to date
-     */
-    checkFromDateAndToDate() {
-      let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_from))
-      let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_to))
-
-      if(fromDate > toDate) {
-        this.popToast('danger', "Ngày bắt đầu hiệu lực không thể lớn hớn ngày hết hiệu lực")
-        return false
-      }
-
-      return true
-    },
-
-    /**
-     * Edit promotion
-     */
-    editPromotion(dataPost) {
-      if(dataPost.image_preview) {
-        this.$refs.cropper
-          .getCroppedCanvas({
-            width: 300,
-            height: 300
-          })
-          .toBlob(blob => {
-            const formData = new FormData();
-            formData.append("id", dataPost.id)
-            formData.append("code", dataPost.code)
-            formData.append("method", dataPost.method)
-            formData.append("name", dataPost.name)
-            formData.append("type", dataPost.type)
-            formData.append("discount_percent", dataPost.discount_percent)
-            formData.append("max_discount", dataPost.max_discount)
-            formData.append("discount_on_amount", dataPost.discount_on_amount)
-            formData.append("value_of_voucher", dataPost.value_of_voucher)
-            formData.append("item_free", dataPost.item_free)
-            formData.append("on_items", dataPost.on_items)
-            formData.append("cost", dataPost.cost)
-            formData.append("expired_date_from", dataPost.expired_date_from)
-            formData.append("expired_date_to", dataPost.expired_date_to)
-            formData.append("quantity", dataPost.quantity)
-            formData.append("auto_apply", dataPost.auto_apply)
-            formData.append("start_time", dataPost.start_time)
-            formData.append("end_time", dataPost.end_time)
-            formData.append("day_of_week", dataPost.day_of_week)
-            formData.append("description", dataPost.description)
-            formData.append("image", blob, dataPost.image)
-
-            this.doEdit(formData)
-          });
-      } else {
-        const formData = new FormData();
-        formData.append("id", dataPost.id)
-        formData.append("code", dataPost.code)
-        formData.append("method", dataPost.method)
-        formData.append("name", dataPost.name)
-        formData.append("type", dataPost.type)
-        formData.append("discount_percent", dataPost.discount_percent)
-        formData.append("max_discount", dataPost.max_discount)
-        formData.append("discount_on_amount", dataPost.discount_on_amount)
-        formData.append("value_of_voucher", dataPost.value_of_voucher)
-        formData.append("item_free", dataPost.item_free)
-        formData.append("on_items", dataPost.on_items)
-        formData.append("cost", dataPost.cost)
-        formData.append("expired_date_from", dataPost.expired_date_from)
-        formData.append("expired_date_to", dataPost.expired_date_to)
-        formData.append("quantity", dataPost.quantity)
-        formData.append("auto_apply", dataPost.auto_apply)
-        formData.append("start_time", dataPost.start_time)
-        formData.append("end_time", dataPost.end_time)
-        formData.append("day_of_week", dataPost.day_of_week)
-        formData.append("description", dataPost.description)
-        formData.append("image", null)
-
-        this.doEdit(formData)
-      }
-    },
-
-    /**
-     * Do edit
-     */
-    doEdit(formData) {
-      adminAPI.editPromo(formData).then(res => {
-        this.saving = false
-        if(res != null && res.data != null){
-          if (res.data.status == 200) {
-            // show popup success
-            this.popToast('success', 'Cập nhật khuyến mãi thành công!!! ')
-          }
-        }
-      }).catch(err => {
-        this.saving = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.makeToast('danger', "Cập nhật thất bại!!!", errorMess)
-      })
-    },
-
-    /**
-     * Add promotion
-     */
-    addPromotion(dataPost) {
-      if(dataPost.image_preview) {
-        this.$refs.cropper
-          .getCroppedCanvas({
-            width: 300,
-            height: 300
-          })
-          .toBlob(blob => {
-            const formData = new FormData();
-            formData.append("id", dataPost.id)
-            formData.append("code", dataPost.code)
-            formData.append("method", dataPost.method)
-            formData.append("name", dataPost.name)
-            formData.append("type", dataPost.type)
-            formData.append("discount_percent", dataPost.discount_percent)
-            formData.append("max_discount", dataPost.max_discount)
-            formData.append("discount_on_amount", dataPost.discount_on_amount)
-            formData.append("value_of_voucher", dataPost.value_of_voucher)
-            formData.append("item_free", dataPost.item_free)
-            formData.append("on_items", dataPost.on_items)
-            formData.append("cost", dataPost.cost)
-            formData.append("expired_date_from", dataPost.expired_date_from)
-            formData.append("expired_date_to", dataPost.expired_date_to)
-            formData.append("quantity", dataPost.quantity)
-            formData.append("auto_apply", dataPost.auto_apply)
-            formData.append("start_time", dataPost.start_time)
-            formData.append("end_time", dataPost.end_time)
-            formData.append("day_of_week", dataPost.day_of_week)
-            formData.append("description", dataPost.description)
-            formData.append("image", blob, dataPost.image)
-
-            this.doAddPmt(formData)
-          });
-      } else {
-        const formData = new FormData();
-        formData.append("id", dataPost.id)
-        formData.append("code", dataPost.code)
-        formData.append("method", dataPost.method)
-        formData.append("name", dataPost.name)
-        formData.append("type", dataPost.type)
-        formData.append("discount_percent", dataPost.discount_percent)
-        formData.append("max_discount", dataPost.max_discount)
-        formData.append("discount_on_amount", dataPost.discount_on_amount)
-        formData.append("value_of_voucher", dataPost.value_of_voucher)
-        formData.append("item_free", dataPost.item_free)
-        formData.append("on_items", dataPost.on_items)
-        formData.append("cost", dataPost.cost)
-        formData.append("expired_date_from", dataPost.expired_date_from)
-        formData.append("expired_date_to", dataPost.expired_date_to)
-        formData.append("quantity", dataPost.quantity)
-        formData.append("auto_apply", dataPost.auto_apply)
-        formData.append("start_time", dataPost.start_time)
-        formData.append("end_time", dataPost.end_time)
-        formData.append("day_of_week", dataPost.day_of_week)
-        formData.append("description", dataPost.description)
-        formData.append("image", null)
-
-        this.doAddPmt(formData)
-      }
-    },
-
-    /**
-     * Do add
-     */
-    doAddPmt(formData) {
-      adminAPI.addPromo(formData).then(res => {
-        this.saving = false
-        if(res != null && res.data != null){
-          if (res.data.status == 200) {
-            this.$router.push("/promo/list")
-          }
-        }
-      }).catch(err => {
-        this.saving = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.makeToast('danger', "Thêm mới thất bại!!!", errorMess)
-      })
-    },
-
-    /**
-     * Save promotion
-     */
-    save () {
-      this.click = true
-      this.saving = true
-
-      // Check validate
-      if(!this.checkValidate()) {
-        this.saving = false
-        return
-      }
-      if(!this.checkFromDateAndToDate()) {
-        this.saving = false
-        return
-      }
-      let dataPost = JSON.parse(JSON.stringify(this.promo))
-
-      // Reformat date
-      dataPost.expired_date_from = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_from)
-      dataPost.expired_date_to = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_to)
-
-      let promoId = this.$route.params.id
-      if(promoId){
-        // Edit
-        dataPost.id = promoId
-        this.editPromotion(dataPost)
-      } else { // Add
-        this.addPromotion(dataPost)
-      }
-    },
-
-    /**
-     * Event crop image
-     */
-    cropImage() {
-      // Use to check reupload image when edit
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Only input integer and :
-     */
-     integerTimeOnly(item) {
-      let valueInput = item.value
-      if (valueInput != '') {
-        valueInput = valueInput.replace(/[^0-9:]+/g,'');
-      }
-      item.value = valueInput
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/promo/list")
-    },
-
-    /**
-     * Event change method to other
-     */
-    setMethodIsOther() {
-      this.promo.cost = null
-    },
-
-    /**
-     * Event change method to trade point
-     */
-    setMethodIsTradePoint() {
-      this.promo.auto_apply = false
-      this.promo.start_time = "00:00"
-      this.promo.end_time = "23:59"
-      this.promo.day_of_week = []
-    }
-
-
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
   }
 }
+
+const getListItemFree = async () => {
+  try {
+    const res = await adminAPI.getListFreeItem()
+    if (res != null && res.data != null && res.data.data != null) {
+      itemFreeOptions.value = itemFreeOptions.value.concat(res.data.data)
+      itemFood.value = res.data.data
+    }
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+const getPromoDetail = async () => {
+  const promoId = route.params.id
+  if (promoId) {
+    loading.value = true
+
+    try {
+      const res = await adminAPI.getPromoDetail(promoId)
+      if (res != null && res.data != null && res.data.data != null) {
+        promo.value = res.data.data
+
+        if (promo.value.day_of_week) {
+          // Convert string to array
+          let itemString = JSON.parse(JSON.stringify(promo.value.day_of_week))
+          itemString = itemString.replace("[", "").replace("]", "").replaceAll(" ", "").replaceAll("'", "").replaceAll("\"", "")
+          const items = itemString.split(",")
+          promo.value.day_of_week = items
+        } else {
+          promo.value.day_of_week = []
+        }
+      }
+
+      loading.value = false
+    } catch (err) {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      showToast(errorMess, 'danger')
+    }
+  }
+}
+
+const handleFileUpload = () => {
+  promo.value.image_preview = null
+  file.value = document.querySelector('input[type="file"]').files[0]
+  promo.value.image = file.value.name
+
+  // Render image in preview
+  const reader = new FileReader()
+  reader.addEventListener("load", function () {
+    promo.value.image_preview = reader.result
+  })
+  if (file.value) {
+    reader.readAsDataURL(file.value)
+  }
+}
+
+const checkFromDateAndToDate = () => {
+  const fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(promo.value.expired_date_from))
+  const toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(promo.value.expired_date_to))
+
+  if (fromDate > toDate) {
+    showToast("Ngày bắt đầu hiệu lực không thể lớn hơn ngày hết hiệu lực", 'danger')
+    return false
+  }
+
+  return true
+}
+
+const editPromotion = (dataPost) => {
+  if (dataPost.image_preview) {
+    cropper.value.getCroppedCanvas({
+      width: 300,
+      height: 300
+    }).toBlob(blob => {
+      const formData = new FormData()
+      formData.append("id", dataPost.id)
+      formData.append("code", dataPost.code)
+      formData.append("method", dataPost.method)
+      formData.append("name", dataPost.name)
+      formData.append("type", dataPost.type)
+      formData.append("discount_percent", dataPost.discount_percent)
+      formData.append("max_discount", dataPost.max_discount)
+      formData.append("discount_on_amount", dataPost.discount_on_amount)
+      formData.append("value_of_voucher", dataPost.value_of_voucher)
+      formData.append("item_free", dataPost.item_free)
+      formData.append("on_items", dataPost.on_items)
+      formData.append("cost", dataPost.cost)
+      formData.append("expired_date_from", dataPost.expired_date_from)
+      formData.append("expired_date_to", dataPost.expired_date_to)
+      formData.append("quantity", dataPost.quantity)
+      formData.append("auto_apply", dataPost.auto_apply)
+      formData.append("start_time", dataPost.start_time)
+      formData.append("end_time", dataPost.end_time)
+      formData.append("day_of_week", dataPost.day_of_week)
+      formData.append("description", dataPost.description)
+      formData.append("image", blob, dataPost.image)
+
+      doEdit(formData)
+    })
+  } else {
+    const formData = new FormData()
+    formData.append("id", dataPost.id)
+    formData.append("code", dataPost.code)
+    formData.append("method", dataPost.method)
+    formData.append("name", dataPost.name)
+    formData.append("type", dataPost.type)
+    formData.append("discount_percent", dataPost.discount_percent)
+    formData.append("max_discount", dataPost.max_discount)
+    formData.append("discount_on_amount", dataPost.discount_on_amount)
+    formData.append("value_of_voucher", dataPost.value_of_voucher)
+    formData.append("item_free", dataPost.item_free)
+    formData.append("on_items", dataPost.on_items)
+    formData.append("cost", dataPost.cost)
+    formData.append("expired_date_from", dataPost.expired_date_from)
+    formData.append("expired_date_to", dataPost.expired_date_to)
+    formData.append("quantity", dataPost.quantity)
+    formData.append("auto_apply", dataPost.auto_apply)
+    formData.append("start_time", dataPost.start_time)
+    formData.append("end_time", dataPost.end_time)
+    formData.append("day_of_week", dataPost.day_of_week)
+    formData.append("description", dataPost.description)
+    formData.append("image", null)
+
+    doEdit(formData)
+  }
+}
+
+const doEdit = async (formData) => {
+  try {
+    const res = await adminAPI.editPromo(formData)
+    saving.value = false
+    if (res != null && res.data != null) {
+      if (res.data.status === 200) {
+        showToast('Cập nhật khuyến mãi thành công!!!', 'success')
+      }
+    }
+  } catch (err) {
+    saving.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+const addPromotion = (dataPost) => {
+  if (dataPost.image_preview) {
+    cropper.value.getCroppedCanvas({
+      width: 300,
+      height: 300
+    }).toBlob(blob => {
+      const formData = new FormData()
+      formData.append("id", dataPost.id)
+      formData.append("code", dataPost.code)
+      formData.append("method", dataPost.method)
+      formData.append("name", dataPost.name)
+      formData.append("type", dataPost.type)
+      formData.append("discount_percent", dataPost.discount_percent)
+      formData.append("max_discount", dataPost.max_discount)
+      formData.append("discount_on_amount", dataPost.discount_on_amount)
+      formData.append("value_of_voucher", dataPost.value_of_voucher)
+      formData.append("item_free", dataPost.item_free)
+      formData.append("on_items", dataPost.on_items)
+      formData.append("cost", dataPost.cost)
+      formData.append("expired_date_from", dataPost.expired_date_from)
+      formData.append("expired_date_to", dataPost.expired_date_to)
+      formData.append("quantity", dataPost.quantity)
+      formData.append("auto_apply", dataPost.auto_apply)
+      formData.append("start_time", dataPost.start_time)
+      formData.append("end_time", dataPost.end_time)
+      formData.append("day_of_week", dataPost.day_of_week)
+      formData.append("description", dataPost.description)
+      formData.append("image", blob, dataPost.image)
+
+      doAddPmt(formData)
+    })
+  } else {
+    const formData = new FormData()
+    formData.append("id", dataPost.id)
+    formData.append("code", dataPost.code)
+    formData.append("method", dataPost.method)
+    formData.append("name", dataPost.name)
+    formData.append("type", dataPost.type)
+    formData.append("discount_percent", dataPost.discount_percent)
+    formData.append("max_discount", dataPost.max_discount)
+    formData.append("discount_on_amount", dataPost.discount_on_amount)
+    formData.append("value_of_voucher", dataPost.value_of_voucher)
+    formData.append("item_free", dataPost.item_free)
+    formData.append("on_items", dataPost.on_items)
+    formData.append("cost", dataPost.cost)
+    formData.append("expired_date_from", dataPost.expired_date_from)
+    formData.append("expired_date_to", dataPost.expired_date_to)
+    formData.append("quantity", dataPost.quantity)
+    formData.append("auto_apply", dataPost.auto_apply)
+    formData.append("start_time", dataPost.start_time)
+    formData.append("end_time", dataPost.end_time)
+    formData.append("day_of_week", dataPost.day_of_week)
+    formData.append("description", dataPost.description)
+    formData.append("image", null)
+
+    doAddPmt(formData)
+  }
+}
+
+const doAddPmt = async (formData) => {
+  try {
+    const res = await adminAPI.addPromo(formData)
+    saving.value = false
+    if (res != null && res.data != null) {
+      if (res.data.status === 200) {
+        router.push("/promo/list")
+      }
+    }
+  } catch (err) {
+    saving.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+const save = () => {
+  click.value = true
+  saving.value = true
+
+  // Check validate
+  if (!checkValidate()) {
+    saving.value = false
+    return
+  }
+  if (!checkFromDateAndToDate()) {
+    saving.value = false
+    return
+  }
+  
+  const dataPost = JSON.parse(JSON.stringify(promo.value))
+
+  // Reformat date
+  dataPost.expired_date_from = commonFunc.convertDDMMYYYYToYYYYMMDD(promo.value.expired_date_from)
+  dataPost.expired_date_to = commonFunc.convertDDMMYYYYToYYYYMMDD(promo.value.expired_date_to)
+
+  const promoId = route.params.id
+  if (promoId) {
+    // Edit
+    dataPost.id = promoId
+    editPromotion(dataPost)
+  } else {
+    // Add
+    addPromotion(dataPost)
+  }
+}
+
+const cropImage = () => {
+  // Use to check reupload image when edit
+}
+
+const integerOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+const inputDateOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.inputDateOnly(valueInput)
+  item.value = result
+}
+
+const integerTimeOnly = (item) => {
+  let valueInput = item.value
+  if (valueInput !== '') {
+    valueInput = valueInput.replace(/[^0-9:]+/g,'')
+  }
+  item.value = valueInput
+}
+
+const back = () => {
+  router.push("/promo/list")
+}
+
+const setMethodIsOther = () => {
+  promo.value.cost = null
+}
+
+const setMethodIsTradePoint = () => {
+  promo.value.auto_apply = false
+  promo.value.start_time = "00:00"
+  promo.value.end_time = "23:59"
+  promo.value.day_of_week = []
+}
+
+onMounted(() => {
+  getDefaultDate()
+  getPromotionTypeList()
+  getListItemFree()
+  getPromoDetail()
+})
 </script>

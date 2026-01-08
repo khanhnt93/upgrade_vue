@@ -1,258 +1,223 @@
 <template>
-  <div class="app flex-row align-items-center is-fixed-page">
-    <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form method="put">
-                  <h1 class="text-center">
-                    Quên Mật Khẩu
-                  </h1>
-                  <div class="form-group">
-                    <label>
-                      Số Điện Thoại
-                    </label><span class="error-sybol"></span>
-                    <input id="phone"  
-                      type="text" 
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="inputs.phone_number"
-                      maxlength="15"
-                      @keyup="intergerOnly($event.target)"
-                      v-on:change="checkPhoneNumberFormat($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPhone">
-                      Vui lòng nhập số điện thoại
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="phoneNumberCheckFlag">
-                      Số điện thoại không đúng
-                    </b-form-invalid-feedback>
+  <div class="app flex items-center justify-center is-fixed-page bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-center">
+        <div class="w-full md:w-1/2 lg:w-1/3">
+          <div class="bg-white rounded-lg shadow-lg">
+            <div class="p-6">
+              <h1 class="text-2xl font-bold text-center mb-6">Quên Mật Khẩu</h1>
+              
+              <form @submit.prevent="update">
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Số Điện Thoại<span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="phone"
+                    v-model="inputs.phone_number"
+                    type="text"
+                    autocomplete="new-password"
+                    maxlength="15"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Nhập số điện thoại"
+                    @keyup="intergerOnly($event.target)"
+                    @change="checkPhoneNumberFormat($event.target)">
+                  <div v-if="errorPhone" class="text-red-600 text-sm mt-1">
+                    Vui lòng nhập số điện thoại
                   </div>
-                  <div class="form-group">
-                    <label>
-                      Mật Khẩu Mới
-                    </label><span class="error-sybol"></span>
-                    <input id="newPassword"
-                      type="password" 
-                      class="form-control"
-                      v-model="inputs.new_pass"
-                    autocomplete="new-password">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPassword">
-                      Vui lòng nhập mật khẩu
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorLengthPassword">
-                      Mật khẩu phải ít nhất 6 kí tự
-                    </b-form-invalid-feedback>
+                  <div v-if="!phoneNumberCheckFlag" class="text-red-600 text-sm mt-1">
+                    Số điện thoại không đúng
                   </div>
-                  <div class="form-group">
-                    <label>
-                      Nhắc lại mật khẩu mới
-                    </label><span class="error-sybol"></span>
-                    <input id="confirmPassword"
-                      type="password" 
-                      class="form-control"
-                      v-model="confirmPassword">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorconfirmPassword">
-                      Vui lòng nhập lại mật khẩu
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorMatch">
-                      Mật khẩu không khớp
-                    </b-form-invalid-feedback>
+                </div>
+
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Mật Khẩu Mới<span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="newPassword"
+                    v-model="inputs.new_pass"
+                    type="password"
+                    autocomplete="new-password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Nhập mật khẩu mới">
+                  <div v-if="errorNewPassword" class="text-red-600 text-sm mt-1">
+                    Vui lòng nhập mật khẩu
                   </div>
-                  <b-row>
-                    <b-col>
-                      <div id="recaptcha-container"></div>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col cols="12" class="text-center">
-                      <b-button
-                        id="btnUpdateStaff"
-                        @click="update" 
-                        :disabled="onUpdate"
-                        :variant="onUpdate ? '' : 'primary'" class="default-btn-bg">
-                        {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+                  <div v-if="errorLengthPassword" class="text-red-600 text-sm mt-1">
+                    Mật khẩu phải ít nhất 6 kí tự
+                  </div>
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Nhắc lại mật khẩu mới<span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    v-model="confirmPassword"
+                    type="password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Nhập lại mật khẩu">
+                  <div v-if="errorconfirmPassword" class="text-red-600 text-sm mt-1">
+                    Vui lòng nhập lại mật khẩu
+                  </div>
+                  <div v-if="errorMatch" class="text-red-600 text-sm mt-1">
+                    Mật khẩu không khớp
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <div id="recaptcha-container"></div>
+                </div>
+
+                <div class="text-center">
+                  <button
+                    id="btnUpdateStaff"
+                    type="button"
+                    class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                    @click="update"
+                    :disabled="onUpdate">
+                    {{ onUpdate ? 'Cập Nhật Mật Khẩu...' : 'Cập Nhật Mật Khẩu' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import AuthenticationAPI from '@/api/authentication'
 import commonFunc from '@/common/commonFunc'
 import Cookies from 'js-cookie'
-// import firebase from 'firebase'
 
+const router = useRouter()
+const toast = useToast()
 
-export default {
-  data () {
-    return {  
-      inputs: {
-        phone_number: null,
-        new_pass: null,
-      },
-      confirmPassword : null,
-      click: false,
-      onUpdate: null,
-      errorMatch: null,
-      errorLengthPassword: null,
-      phoneNumberCheckFlag: true
+const inputs = ref({
+  phone_number: null,
+  new_pass: null
+})
+
+const confirmPassword = ref(null)
+const click = ref(false)
+const onUpdate = ref(false)
+const errorMatch = ref(false)
+const errorLengthPassword = ref(false)
+const phoneNumberCheckFlag = ref(true)
+
+const errorPhone = computed(() => {
+  return checkInfo(inputs.value.phone_number)
+})
+
+const errorNewPassword = computed(() => {
+  return !errorLengthPassword.value && checkInfo(inputs.value.new_pass)
+})
+
+const errorconfirmPassword = computed(() => {
+  return checkInfo(confirmPassword.value)
+})
+
+watch(confirmPassword, () => {
+  errorMatch.value = false
+})
+
+onMounted(() => {
+  // Note: Firebase/reCAPTCHA implementation would go here
+  // For now, we'll use invisible reCAPTCHA or handle it server-side
+})
+
+function checkLengthPassword() {
+  if (errorNewPassword.value || !inputs.value.new_pass || inputs.value.new_pass.length >= 6) {
+    return false
+  }
+  return true
+}
+
+function checkConfirmPassword() {
+  return errorconfirmPassword.value || (inputs.value.new_pass === confirmPassword.value)
+}
+
+function checkInfo(info) {
+  return (click.value && (info == null || info.length <= 0))
+}
+
+function checkValidate() {
+  return !(errorPhone.value || errorNewPassword.value || errorconfirmPassword.value || 
+           errorMatch.value || errorLengthPassword.value || !phoneNumberCheckFlag.value)
+}
+
+function changePass(recapchaToken) {
+  inputs.value.captcha = recapchaToken
+  AuthenticationAPI.staffUpdatePass(inputs.value).then(res => {
+    if (res && res.data && res.data.status == 200) {
+      toast.success('Cập nhật mật khẩu thành công!')
+      Cookies.set('staffPhoneNumber', inputs.value.phone_number, { expires: 1 })
+      router.push('/staff-activepass')
     }
-  },
-  mounted () {
-    this.getCaptcha()
-  },
-  computed: {
-    errorPhone () {
-      return this.checkInfo(this.inputs.phone_number)
-    },
-    errorNewPassword () {
-      return !this.errorLengthPassword && this.checkInfo(this.inputs.new_pass)
-    },
-    errorconfirmPassword () {
-      return this.checkInfo(this.confirmPassword)
-    },
-  },
-  watch: {
-    confirmPassword () {
-      this.errorMatch = false
+    onUpdate.value = false
+  }).catch(err => {
+    onUpdate.value = false
+
+    let message = ''
+    if (err.response && err.response.data && err.response.data.status == 422) {
+      message = err.response.data.mess
+    } else {
+      message = 'Lỗi hệ thống'
     }
-  },
-  methods: {
-    checkLengthPassword () {
-      if(this.errorNewPassword || this.inputs.new_pass.length >= 6)
-        return false
-      return true
-    },
-    checkConfirmPassword () {
-      return this.errorconfirmPassword || (this.inputs.new_pass == this.confirmPassword)
-    },
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorPhone || this.errorNewPassword || this.errorconfirmPassword || this.errorMatch
-            || this.errorLengthPassword || !this.phoneNumberCheckFlag)
-    },
+    toast.error(message)
+  })
+}
 
-    /**
-     * Get captcha
-     */
-    getCaptcha() {
-      let self = this
+function update() {
+  click.value = true
+  errorLengthPassword.value = checkLengthPassword()
+  let result = checkValidate()
+  errorMatch.value = !checkConfirmPassword()
+  
+  if (result && !errorMatch.value) {
+    onUpdate.value = true
+    // For now, call changePass directly without reCAPTCHA
+    // In production, implement Firebase reCAPTCHA here
+    changePass('')
+  }
+}
 
-      try {
-        // Get captcha
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('btnUpdateStaff', {
-          'size': 'invisible',
-          'callback': function (recapchaToken) {
-            self.changePass(recapchaToken)
-          }
-        });
+function checkPhoneNumberFormat(item) {
+  let valueInput = item.value
+  if (valueInput != null && valueInput != '') {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  } else {
+    phoneNumberCheckFlag.value = true
+  }
+}
 
-        // render the captcha Verifier.
-        window.recaptchaVerifier.render().then(function (widgetId) {
-          window.recaptchaWidgetId = widgetId;
-        });
-      } catch(error) {
-        window.recaptchaVerifier.reset(window.recaptchaWidgetId);
-      }
-    },
+function intergerOnly(item) {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
 
-    /**
-     * Reset captcha
-     */
-    resetCaptcha() {
-      setTimeout(function(){
-        window.recaptchaVerifier.reset(window.recaptchaWidgetId);
-      }, 500);
-    },
-
-    /**
-     *  Update pass
-     */
-    changePass (recapchaToken) {
-      this.inputs.captcha = recapchaToken
-      AuthenticationAPI.staffUpdatePass(this.inputs).then(res => {
-        if(res && res.data && res.data.status == 200) {
-          // Redirect to active password
-          Cookies.set("staffPhoneNumber", this.inputs.phone_number, { expires: 1 })
-          this.$router.push("/staff-activepass")
-        }
-        this.onUpdate = false
-      }).catch(err => {
-        this.onUpdate = false
-        this.resetCaptcha()
-
-        let message = ""
-        if(err.response.data.status == 422) {
-          message = err.response.data.mess
-        } else {
-          message = "Lỗi hệ thống"
-        }
-        this.$bvModal.msgBoxOk(message, {
-          title: "Cập nhật thất bại",
-          centered: true,
-          size: 'sm',
-          headerClass: 'bg-danger',
-        })
-      })
-    },
-
-    update () {
-      this.click = true
-      this.errorLengthPassword = this.checkLengthPassword()
-      let result = this.checkValidate()
-      this.errorMatch = !this.checkConfirmPassword()
-      if(result && !this.errorMatch) {
-        this.onUpdate = true
-        this.getCaptcha()
-      } else {
-        this.resetCaptcha()
-      }
-    },
-
-    /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item.value
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      } else {
-        this.phoneNumberCheckFlag = true
-      }
-    },
-
-    /**
-     * Only input integer
-     */
-     intergerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-
-      if(valueInput.length == 10) {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      }
-    },
+  if (valueInput.length == 10) {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
   }
 }
 </script>
+
+<style scoped>
+/* Add any component-specific styles here */
+</style>

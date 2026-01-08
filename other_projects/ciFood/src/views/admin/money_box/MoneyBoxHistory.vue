@@ -1,330 +1,310 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col>
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="goBack">
-                  Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+  <div class="container-fluid px-4 py-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <div class="row mb-3">
+          <div class="col-12">
+            <button
+              class="btn btn-outline-secondary btn-width-120"
+              @click="goBack">
+              Quay lại
+            </button>
+          </div>
+        </div>
 
-            <b-row>
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Lịch Sử Két Tiền</h4>
-              </b-col>
-            </b-row>
-            <hr>
+        <div class="row mb-4">
+          <div class="col-12">
+            <h4 class="text-center font-semibold text-lg">Lịch Sử Két Tiền</h4>
+          </div>
+        </div>
 
-            <b-row>
-              <b-col md="4">
-                <label> Loại giao dịch </label>
-                <b-form-select
-                  :options="typeOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.type"></b-form-select>
-              </b-col>
-              <b-col md="4">
-                <label> Loại tiền </label>
-                <b-form-select
-                  :options="moneyTypeOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.moneyType"></b-form-select>
-              </b-col>
-              <b-col md="4">
-                <label> Nhân viên </label>
-                <b-form-select
-                  :options="staffOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.staff"></b-form-select>
-              </b-col>
-            </b-row>
+        <hr class="mb-4">
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                  Tìm Kiếm
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Filter Section -->
+        <div class="row mb-4">
+          <div class="col-md-4 mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Loại giao dịch</label>
+            <select
+              id="status"
+              class="form-control"
+              v-model="inputs.type"
+            >
+              <option :value="null"></option>
+              <option value="plus">Thu</option>
+              <option value="minus">Chi</option>
+              <option value="fund">Vốn đầu ngày</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Loại tiền</label>
+            <select
+              id="moneyType"
+              class="form-control"
+              v-model="inputs.moneyType"
+            >
+              <option :value="null"></option>
+              <option value="cash">Tiền mặt</option>
+              <option value="credit">Chuyển khoản</option>
+              <option value="e_money">Tiền điện tử</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nhân viên</label>
+            <select
+              id="staff"
+              class="form-control"
+              v-model="inputs.staff"
+            >
+              <option :value="null"></option>
+              <option
+                v-for="staff in staffOption"
+                :key="staff.value"
+                :value="staff.value"
+              >
+                {{ staff.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-            <b-row>
-              <b-col>
-                Số kết quả: {{totalRow}}
-              </b-col>
-            </b-row>
+        <div class="row mb-4">
+          <div class="col-12 flex justify-end">
+            <button
+              class="btn btn-outline-primary btn-width-120"
+              :disabled="onSearch"
+              @click="prepareToSearch">
+              Tìm Kiếm
+            </button>
+          </div>
+        </div>
 
-            <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-              <template v-slot:cell(type)="data">{{ convertTypeCodeToName(data.item.type) }}</template>
-              <template v-slot:cell(total)="data">{{ currencyFormat(data.item.total) }}</template>
-              <template v-slot:cell(cash)="data">{{ currencyFormat(data.item.cash) }}</template>
-              <template v-slot:cell(credit)="data">{{ currencyFormat(data.item.credit) }}</template>
-              <template v-slot:cell(e_money)="data">{{ currencyFormat(data.item.e_money) }}</template>
-            </b-table>
+        <div class="row mb-3">
+          <div class="col-12">
+            Số kết quả: {{ totalRow }}
+          </div>
+        </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-            <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-            <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Loại</th>
+                <th>Số tiền</th>
+                <th>Nội dung</th>
+                <th>Tiền mặt</th>
+                <th>Chuyển khoản</th>
+                <th>Tiền điện tử</th>
+                <th>Thời gian</th>
+                <th>Nhân viên</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.stt">
+                <td>{{ item.stt }}</td>
+                <td>{{ convertTypeCodeToName(item.type) }}</td>
+                <td>{{ formatCurrency(item.total) }}</td>
+                <td>{{ item.content }}</td>
+                <td>{{ formatCurrency(item.cash) }}</td>
+                <td>{{ formatCurrency(item.credit) }}</td>
+                <td>{{ formatCurrency(item.e_money) }}</td>
+                <td>{{ item.created_at }}</td>
+                <td>{{ item.created_by }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Loading / Pagination -->
+        <div class="text-center mt-4">
+          <span v-show="loading" class="loading-more">
+            <font-awesome-icon icon="spinner" spin size="2x" />
+          </span>
+          <span v-if="hasNext === false" class="loading-more">--Hết--</span>
+          <span v-if="hasNext === true && totalRow != 0" class="loading-more">
+            <font-awesome-icon icon="angle-double-down" class="has-next" />
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 
-<script>
+<script setup>
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
+const router = useRouter()
+const { popToast } = useToast()
+const { formatCurrency } = useFormatters()
 
-export default {
-  data () {
-    return {
-      inputs: {
-        type: null,
-        moneyType: null,
-        staff: null
-      },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'type',
-          label: 'Loại'
-        },
-        {
-          key: 'total',
-          label: 'Số tiền'
-        },
-        {
-          key: 'content',
-          label: 'Nội dung'
-        },
-        {
-          key: 'cash',
-          label: 'Tiền mặt'
-        },
-        {
-          key: 'credit',
-          label: 'Chuyển khoản'
-        },
-        {
-          key: 'e_money',
-          label: 'Tiền điện tử'
-        },
-        {
-          key: 'created_at',
-          label: 'Thời gian'
-        },
-        {
-          key: 'created_by',
-          label: 'Nhân viên'
-        },
-      ],
-      items: [],
-      typeOption: [
-        {value: null, text: ''},
-        {value: 'plus', text: 'Thu'},
-        {value: 'minus', text: 'Chi'},
-        {value: 'fund', text: 'Vốn đầu ngày'},
-      ],
-      moneyTypeOption: [
-        {value: null, text: ''},
-        {value: 'cash', text: 'Tiền mặt'},
-        {value: 'credit', text: 'Chuyển khoản'},
-        {value: 'e_money', text: 'Tiền điện tử'},
-      ],
-      staffOption: [
-        {value: null, text: ''}
-      ],
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      hasNext: true,
-      onSearch: false,
-      loadByScroll: false,
-      loading: false,
-      totalRow: 0
+// Data
+const inputs = reactive({
+  type: null,
+  moneyType: null,
+  staff: null
+})
 
+const items = ref([])
+const staffOption = ref([])
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const offset = ref(0)
+const hasNext = ref(true)
+const onSearch = ref(false)
+const loadByScroll = ref(false)
+const loading = ref(false)
+const totalRow = ref(0)
+
+/**
+ * Get staff option
+ */
+const getStaffOption = () => {
+  adminAPI.getStaffOption().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      staffOption.value = res.data.data
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
 
-    // Load option staff
-    this.getStaffOption()
-
-    // Load list when load page
-    this.search()
-  },
-  computed: {
-  },
-  methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Get staff option
-     */
-    getStaffOption() {
-      adminAPI.getStaffOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let staffs = res.data.data
-          for (let index in staffs) {
-            this.staffOption.push(staffs[index])
-          }
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     *  Processing on scroll: use for paging
-     */
-    onScroll (event) {
-      if(this.onSearch) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + this.pageLimit
-          this.loadByScroll = true
-          this.search ()
-        }
-      }
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-
-      this.search()
-    },
-
-    /**
-     *  Search
-     */
-    search() {
-      if (this.loading) { return }
-
-      this.onSearch = true
-      this.loading = true
-      // Define params
-      let params = {
-        "type": this.inputs.type,
-        "moneyType": this.inputs.moneyType,
-        "staff": this.inputs.staff,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      // Search
-      adminAPI.searchMoneyBoxHistory(params).then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          let it = res.data.data.data
-          this.totalRow = res.data.data.total_row
-
-           // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
-          }
-        }else{
-            this.items = []
-        }
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
-
-    /**
-     * Go back
-     */
-    goBack () {
-      this.$router.push('/money-box')
-    },
-
-    /**
-     * Convert type code to name
-     */
-    convertTypeCodeToName(code) {
-      if(code == "plus") {
-        return "Thu"
-      }
-      if(code == "minus") {
-        return "Chi"
-      }
-      if(code == "fund") {
-        return "Vốn đầu ngày"
-      }
-      return ""
+/**
+ * Processing on scroll: use for paging
+ */
+const onScroll = (event) => {
+  if(onSearch.value) {
+    return
+  }
+  event.preventDefault()
+  var body = document.body
+  var html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if(hasNext.value) {
+      offset.value = offset.value + pageLimit.value
+      loadByScroll.value = true
+      search()
     }
   }
 }
+
+/**
+ * Prepare to search
+ */
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+
+  search()
+}
+
+/**
+ * Search
+ */
+const search = () => {
+  if (loading.value) { return }
+
+  onSearch.value = true
+  loading.value = true
+
+  // Define params
+  let params = {
+    type: inputs.type,
+    moneyType: inputs.moneyType,
+    staff: inputs.staff,
+    limit: pageLimit.value,
+    offset: offset.value
+  }
+
+  // Search
+  adminAPI.searchMoneyBoxHistory(params).then(res => {
+    if(res != null && res.data != null && res.data.data != null){
+      let it = res.data.data.data
+      totalRow.value = res.data.data.total_row
+
+      // Update items
+      if(loadByScroll.value) {
+        items.value = items.value.concat(it)
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      // Check has next
+      if(offset.value + pageLimit.value >= res.data.data.total_row) {
+        hasNext.value = false
+      }
+    } else {
+      items.value = []
+    }
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+/**
+ * Go back
+ */
+const goBack = () => {
+  router.push('/money-box')
+}
+
+/**
+ * Convert type code to name
+ */
+const convertTypeCodeToName = (code) => {
+  if(code == "plus") {
+    return "Thu"
+  }
+  if(code == "minus") {
+    return "Chi"
+  }
+  if(code == "fund") {
+    return "Vốn đầu ngày"
+  }
+  return ""
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+
+  // Load option staff
+  getStaffOption()
+
+  // Load list when load page
+  search()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
+
+<style scoped>
+.loading-more {
+  display: block;
+  padding: 1rem;
+}
+
+.has-next {
+  cursor: pointer;
+  font-size: 2rem;
+  color: #007bff;
+}
+</style>

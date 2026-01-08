@@ -1,13 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import state from './state'
-import actions from './actions'
-import mutations from './mutations'
+// This file is deprecated - the project now uses Pinia instead of Vuex
+// Import stores directly from their respective files:
+// import { useAuthStore } from './auth'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
-  state,
-  actions,
-  mutations
-})
+export { useAuthStore } from './auth'

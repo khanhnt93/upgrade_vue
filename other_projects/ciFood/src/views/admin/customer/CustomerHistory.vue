@@ -1,265 +1,219 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+  <div class="mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Title -->
+      <h4 class="text-2xl font-semibold text-center mb-4">Lịch Sử Khách Hàng</h4>
+      <hr class="mb-6">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Lịch Sử Khách Hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <!-- Search Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium mb-2">Tên</label>
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.name"
+            maxlength="75"
+          >
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Số điện thoại</label>
+          <input
+            id="phone"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.phone"
+            maxlength="11"
+            @keyup="integerOnly($event.target)"
+          >
+        </div>
+      </div>
 
-          <b-row>
-            <b-col md="6">
-              <label> Tên </label>
-              <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name"
-              maxlength="75">
-            </b-col>
-            <b-col md="6">
-              <label> Số điện thoại </label>
-              <input
-              id="price"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.phone"
-              maxlength="11"
-              @keyup="integerOnly($event.target)">
-            </b-col>
-          </b-row>
+      <!-- Search Button -->
+      <div class="flex justify-end mb-4">
+        <button
+          @click="prepareToSearch"
+          :disabled="onSearch"
+          class="px-6 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Tìm Kiếm
+        </button>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <!-- Result Count -->
+      <div class="mb-4">
+        <span class="text-sm text-gray-600">Số kết quả: {{ totalRow }}</span>
+      </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tên K.H</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Số điện thoại</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Giờ vào</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Giờ ra</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tổng tiền món</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+              <td class="px-4 py-3 text-sm">{{ item.stt }}</td>
+              <td class="px-4 py-3 text-sm">{{ item.customer_name }}</td>
+              <td class="px-4 py-3 text-sm">{{ item.phone_number }}</td>
+              <td class="px-4 py-3 text-sm">{{ item.order_at }}</td>
+              <td class="px-4 py-3 text-sm">{{ item.payment_at }}</td>
+              <td class="px-4 py-3 text-sm">{{ formatters.formatCurrency(item.sub_total) }}</td>
+              <td class="px-4 py-3 text-sm">
+                <p v-for="(food, index) in item.foods" :key="food.name + index" class="mb-1">
+                  {{ food.quantity + " x " + food.name }}
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(sub_total)="data">{{ currencyFormat(data.item.sub_total) }}</template>
-            <template v-slot:cell(foods)="data">
-              <p v-for="(item, index) in data.item.foods" :key="item.name + index">{{item.quantity + " x " + item.name}}</p>
-            </template>
-
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-
-      </b-col>
-    </b-row>
-
+      <!-- Loading Indicators -->
+      <div class="text-center mt-4">
+        <span v-show="loading" class="inline-block">
+          <i class="fa fa-spinner fa-spin text-2xl text-blue-600"></i>
+        </span>
+        <span v-if="hasNext === false" class="text-gray-500">--Hết--</span>
+        <span v-if="hasNext === true && totalRow != 0" class="text-blue-600 cursor-pointer">
+          <i class="fa fa-angle-double-down text-2xl"></i>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import customerApi from '@/api/customer'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-export default {
-  data () {
-    return {
-      inputs: {
-        name: null,
-        phone: null
-      },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'customer_name',
-          label: 'Tên k.H'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số điện thoại'
-        },
-        {
-          key: 'order_at',
-          label: 'Giờ vào'
-        },
-        {
-          key: 'payment_at',
-          label: 'Giờ ra'
-        },
-        {
-          key: 'sub_total',
-          label: 'Tổng tiền món'
-        },
-        {
-          key: 'foods',
-          label: 'Chi tiết'
-        }
-      ],
-      items: [],
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      hasNext: true,
-      onSearch: false,
-      loadByScroll: false,
-      listIdDeleted: [],
-      loading: false,
-      totalRow: 0
+const { popToast } = useToast()
+const formatters = useFormatters()
+
+const inputs = ref({
+  name: null,
+  phone: null
+})
+
+const items = ref([])
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const offset = ref(0)
+const hasNext = ref(true)
+const onSearch = ref(false)
+const loadByScroll = ref(false)
+const loading = ref(false)
+const totalRow = ref(0)
+
+/**
+ * Processing on scroll: use for paging
+ */
+const onScroll = (event) => {
+  if (onSearch.value) {
+    return
+  }
+  event.preventDefault()
+  var body = document.body
+  var html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if (hasNext.value) {
+      offset.value = offset.value + pageLimit.value
+      loadByScroll.value = true
+      search()
     }
-  },
-  computed: {
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-
-    window.addEventListener('resize', this.delete)
-
-    // Load list when load page
-    this.search()
-  },
-  methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     *  Processing on scroll: use for paging
-     */
-    onScroll (event) {
-      if(this.onSearch) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + this.pageLimit
-          this.loadByScroll = true
-          this.search ()
-        }
-      }
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-
-      this.search()
-    },
-
-    /**
-     *  Search
-     */
-    search() {
-      if (this.loading) { return }
-
-      this.onSearch = true
-      this.loading = true
-
-      // Define params
-      let params = {
-        "name": this.inputs.name,
-        "phone": this.inputs.phone,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      // Search
-      customerApi.getCustomerHistory(params).then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          let it = res.data.data.customers
-          this.totalRow = res.data.data.total_row
-
-           // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
-          }
-        }else{
-            this.items = []
-        }
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-
-    /**
-     * Go to page edit
-     */
-    edit (id) {
-      this.$router.push('/customer/edit/' + id)
-    },
   }
 }
+
+/**
+ * Prepare to search
+ */
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+  search()
+}
+
+/**
+ * Search
+ */
+const search = () => {
+  if (loading.value) { return }
+
+  onSearch.value = true
+  loading.value = true
+
+  // Define params
+  let params = {
+    "name": inputs.value.name,
+    "phone": inputs.value.phone,
+    "limit": pageLimit.value,
+    "offset": offset.value
+  }
+
+  // Search
+  customerApi.getCustomerHistory(params).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      let it = res.data.data.customers
+      totalRow.value = res.data.data.total_row
+
+      // Update items
+      if (loadByScroll.value) {
+        items.value = items.value.concat(it)
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      // Check has next
+      if (offset.value + pageLimit.value >= res.data.data.total_row) {
+        hasNext.value = false
+      }
+    } else {
+      items.value = []
+    }
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+/**
+ * Only input integer
+ */
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+  // Load list when load page
+  search()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>

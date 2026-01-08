@@ -1,419 +1,342 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Ghi Nợ</h4>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col md="3">
-              <label> Tên </label>
-              <input
-                id="name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.customer_name"
-                maxlength="75">
-            </b-col>
-            <b-col md="3">
-              <label> Số điện thoại </label>
-              <input
-                id="price"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.customer_phone_number"
-                maxlength="11">
-            </b-col>
-            <b-col md="3">
-              <label>Số Bill</label>
-              <input
-                id="bill"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.bill_number"
-                maxlength="75">
-            </b-col>
-            <b-col md="3">
-              <label>
-                Trạng thái
-              </label>
-              <b-form-select
-                :options="status"
-                id="status"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.status">
-              </b-form-select>
-            </b-col>
-          </b-row>
-
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
-
-          <hr>
-
-          <b-row>
-            <b-col md='12'>
-              <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-
-                <template v-slot:cell(total)="data">
-                  {{ data.item.total | format_currency }}
-                </template>
-
-                <template v-slot:cell(remaining)="data">
-                  {{ data.item.remaining | format_currency }}
-                </template>
-
-                <template v-slot:cell(status)="data">
-                  {{ data.item.status === 1 ? "Đã trả nợ" :  (data.item.status === 2 ? "Đã xoá nợ" : "Đang nợ")}}
-                </template>
-
-                <template v-slot:cell(actions)="data">
-                  <b-list-group horizontal v-show="data.item.status === 0">
-                    <b-list-group-item v-b-tooltip.hover title="Thanh toán" @click="openPayModal(data.item)">
-                      <i class="fa fa-check-square-o" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Sửa" @click="edit(data.item.id)">
-                      <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Xoá nợ" @click="deleted(data.item.id, data.item.customer_name)">
-                      <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-              </b-table>
-            </b-col>
-          </b-row>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
-
-
-    <b-modal centered hide-footer hide-header id="modal-pay">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Thanh toán</h5>
-          <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-col md="12">
-            <label>
-              Số tiền còn lại
-            </label>
-            <input
-              id="remaining"
-              type="number"
-              autocomplete="new-password"
-              class="form-control"
-              disabled
-              v-model="payData.remaining"
-              maxlength="75">
-          </b-col>
-          <b-col md="12">
-            <label>
-              Số tiền trả
-            </label>
-            <input
-              id="amount"
-              type="number"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="payData.amount"
-              maxlength="75">
-          </b-col>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
-            Thanh toán
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header Row -->
+        <div class="flex justify-end mb-4">
+          <button
+            @click="goToAdd"
+            class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors duration-200">
+            Thêm
           </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
+
+        <!-- Title -->
+        <h4 class="text-xl font-semibold text-center mb-4">Danh Sách Ghi Nợ</h4>
+
+        <!-- Search Filters -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tên</label>
+            <input
+              v-model="inputs.customer_name"
+              type="text"
+              autocomplete="new-password"
+              maxlength="75"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+            <input
+              v-model="inputs.customer_phone_number"
+              type="text"
+              autocomplete="new-password"
+              maxlength="11"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Số Bill</label>
+            <input
+              v-model="inputs.bill_number"
+              type="text"
+              autocomplete="new-password"
+              maxlength="75"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+            <select
+              v-model="inputs.status"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value=""></option>
+              <option value="1">Đã trả nợ</option>
+              <option value="2">Đã xoá nợ</option>
+              <option value="0">Đang nợ</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Search Button -->
+        <div class="flex justify-end mb-4">
+          <button
+            @click="prepareToSearch"
+            :disabled="onSearch"
+            class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Tìm Kiếm
+          </button>
+        </div>
+
+        <!-- Total Row -->
+        <div class="mb-4">
+          <span>Số kết quả: {{ totalRow }}</span>
+        </div>
+
+        <hr class="mb-4">
+
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số Bill</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên KH</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số Điện thoại</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Địa chỉ</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng tiền</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Còn lại</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mô tả</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="item in items" :key="item.id">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.bill_number }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.customer_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.customer_phone_number }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.customer_address }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ formatCurrency(item.total) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ formatCurrency(item.remaining) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ item.status === 1 ? 'Đã trả nợ' : (item.status === 2 ? 'Đã xoá nợ' : 'Đang nợ') }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.description }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <div v-show="item.status === 0" class="flex space-x-2">
+                    <button
+                      @click="openPayModal(item)"
+                      title="Thanh toán"
+                      class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                      <i class="fa fa-check-square-o" />
+                    </button>
+                    <button
+                      @click="edit(item.id)"
+                      title="Sửa"
+                      class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button
+                      @click="deleted(item.id, item.customer_name)"
+                      title="Xoá nợ"
+                      class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                      <i class="fa fa-trash" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- End marker -->
+        <div class="text-center mt-4">
+          <span class="text-gray-500">--Hết--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pay Modal -->
+    <TransitionRoot appear :show="showPayModal" as="template">
+      <Dialog as="div" @close="showPayModal = false" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center mb-4">
+                  Thanh toán
+                </DialogTitle>
+                <hr class="mb-4">
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số tiền còn lại</label>
+                    <input
+                      v-model="payData.remaining"
+                      type="number"
+                      disabled
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số tiền trả</label>
+                    <input
+                      v-model="payData.amount"
+                      type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  </div>
+                </div>
+
+                <div class="mt-6 text-right">
+                  <button
+                    @click="pay"
+                    class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200">
+                    Thanh toán
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import adminAPI from '@/api/admin'
-import Mapper from '@/mapper/topping'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
-export default {
-  data () {
-    return {
-      perPage: '10',
-      currentPage: '1',
-      totalRow: 0,
-      status: [
-        {value: '', text: ''},
-        {value: '1', text: 'Đã trả nợ'},
-        {value: '2', text: 'Đã xoá nợ'},
-        {value: '0', text: 'Đang nợ'}
-      ],
-      inputs: {
-        customer_name: null,
-        customer_phone_number: null,
-        bill_number: null,
-        status: null,
-      },
-      fields: [
-        {
-          key: 'id',
-          label: 'STT'
-        },
-        {
-          key: 'bill_number',
-          label: 'Số Bill'
-        },
-        {
-          key: 'customer_name',
-          label: 'Tên KH'
-        },
-        {
-          key: 'customer_phone_number',
-          label: 'Số Điện thoại'
-        },
-        {
-          key: 'customer_address',
-          label: 'Địa chỉ'
-        },
-        {
-          key: 'total',
-          label: 'Tổng tiền'
-        },
-        {
-          key: 'remaining',
-          label: 'Còn lại'
-        },
-        {
-          key: 'status',
-          label: 'Trạng thái'
-        },
-        {
-          key: 'description',
-          label: 'Mô tả'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      payData: {
-        id: null,
-        amount: 0,
-        remaining: 0
-      },
-      loading: false,
-      onSearch: false,
-      offset: 0,
-      hasNext: true,
-    }
-  },
-  computed: {
-  },
-  mounted() {
-    // Load list when load page
-    this.getAll()
-  },
-  methods: {
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
+const router = useRouter()
+const { popToast } = useToast()
+const { formatCurrency } = useFormatters()
 
-      this.search()
-    },
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+// Data
+const totalRow = ref(0)
+const inputs = ref({
+  customer_name: null,
+  customer_phone_number: null,
+  bill_number: null,
+  status: null
+})
 
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title, content) {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
+const items = ref([])
+const payData = ref({
+  id: null,
+  amount: 0,
+  remaining: 0
+})
 
-    /**
-     *  Delete
-     */
-    deleted (id, name) {
+const loading = ref(false)
+const onSearch = ref(false)
+const showPayModal = ref(false)
 
-      this.$bvModal.msgBoxConfirm('Xóa nợ [' + name + "]. Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          adminAPI.reliefDebt(id).then(res => {
-            if(res != null && res.data != null && res.data.data != null) {
-              this.items = res.data.data
-            }
-            this.getAll()
-            this.popToast('success', 'Xóa nợ thành công!!!')
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
-    },
+// Methods
+const prepareToSearch = () => {
+  items.value = []
+  search()
+}
 
-    /**
-     *  Go to edit
-     */
-    edit (id) {
-      this.$router.push('/debt/edit/' + id)
-    },
-
-    openPayModal(pay) {
-      this.payData.id = pay.id;
-      this.payData.remaining = pay.remaining
-      this.payData.amount = pay.remaining
-      this.$bvModal.show('modal-pay')
-    },
-
-    /**
-     * Thanh toán
-     */
-    pay() {
-      if (this.payData.amount <= 0) {
-        this.popToast('danger', 'Số tiền trả phải lớn hơn 0')
-        return;
+const deleted = (id, name) => {
+  if (confirm(`Xóa nợ [${name}]. Bạn có chắc không?`)) {
+    adminAPI.reliefDebt(id).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        items.value = res.data.data
       }
-
-      adminAPI.payDebt(this.payData).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data
-        }
-        this.payData.id = null
-        this.payData.amount = 0
-        this.payData.remaining = 0
-        this.$bvModal.hide('modal-pay')
-        this.popToast('success', 'Đã thanh toán thành công!!')
-        this.getAll()
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     *  Go to add
-     */
-    goToAdd () {
-      this.$router.push('/debt/add')
-    },
-
-    /**
-     *  Search
-     */
-    getAll() {
-      this.loading = true
-
-      // Search
-      adminAPI.getListDebt().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data;
-          this.totalRow = this.items.length;
-        }
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     *  Search
-     */
-    search() {
-        if(this.onSearch) {
-            return
-        }
-      this.loading = true
-        this.onSearch = true
-
-      // Search
-      adminAPI.searchDebit(this.inputs).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data;
-          this.totalRow = this.items.length;
-        }
-        this.loading = false
-          this.onSearch = false
-      }).catch(err => {
-        this.loading = false
-          this.onSearch = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
+      getAll()
+      popToast('success', 'Xóa nợ thành công!!!')
+    }).catch(err => {
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+const edit = (id) => {
+  router.push('/debt/edit/' + id)
+}
+
+const openPayModal = (pay) => {
+  payData.value.id = pay.id
+  payData.value.remaining = pay.remaining
+  payData.value.amount = pay.remaining
+  showPayModal.value = true
+}
+
+const pay = () => {
+  if (payData.value.amount <= 0) {
+    popToast('danger', 'Số tiền trả phải lớn hơn 0')
+    return
+  }
+
+  adminAPI.payDebt(payData.value).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
+    }
+    payData.value.id = null
+    payData.value.amount = 0
+    payData.value.remaining = 0
+    showPayModal.value = false
+    popToast('success', 'Đã thanh toán thành công!!')
+    getAll()
+  }).catch(err => {
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+const goToAdd = () => {
+  router.push('/debt/add')
+}
+
+const getAll = () => {
+  loading.value = true
+
+  adminAPI.getListDebt().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
+      totalRow.value = items.value.length
+    }
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+const search = () => {
+  if (onSearch.value) {
+    return
+  }
+  loading.value = true
+  onSearch.value = true
+
+  adminAPI.searchDebit(inputs.value).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
+      totalRow.value = items.value.length
+    }
+    loading.value = false
+    onSearch.value = false
+  }).catch(err => {
+    loading.value = false
+    onSearch.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+// Lifecycle
+onMounted(() => {
+  getAll()
+})
 </script>

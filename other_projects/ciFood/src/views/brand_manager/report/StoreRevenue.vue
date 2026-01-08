@@ -1,469 +1,470 @@
 <template>
-  <div class="container-fluid">
+  <div id="store-revenue">
+    <div class="grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-lg shadow-md">
+        <div class="border-b border-gray-200 px-6 py-4">
+          <h2 class="text-xl font-semibold text-gray-800 text-center">Biểu Đồ Doanh Thu Chuỗi Cửa Hàng</h2>
+        </div>
+        <div class="p-6">
+          <div class="space-y-4">
+            <!-- Store -->
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Cửa hàng</label>
+              <select
+                :disabled="onSearch"
+                class="col-span-8 md:col-span-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="inputs.storeId">
+                <option v-for="option in storeOptions" :key="option.value" :value="option.value">{{ option.name }}</option>
+              </select>
+            </div>
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center text-header">Biểu đồ doanh thu</h4>
-            <b-row>
-              <b-col md="3">
-                <label> Cửa hàng </label>
-                <b-form-select
-                  :options="optionsStore"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.store_id"
-                  :disabled="onSearch">
-                </b-form-select>
-              </b-col>
+            <!-- Chart By -->
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Xem theo</label>
+              <select
+                @change="changeChartBy()"
+                :disabled="onSearch"
+                class="col-span-8 md:col-span-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="inputs.chartBy">
+                <option v-for="option in chartByOption" :key="option.value" :value="option.value">{{ option.text }}</option>
+              </select>
+            </div>
 
-              <b-col md="3">
-                <label> Xem theo </label>
-                <b-form-select
-                  :options="chartByOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.chartBy"
-                  @change="changeChartBy"
-                  :disabled="onSearch">
-                </b-form-select>
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy != 'Month'">
-                <label> Từ ngày </label><span class="error-sybol"></span>
+            <!-- From Date & To Date (Day/Week) -->
+            <div v-if="inputs.chartBy != 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Từ ngày</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="fromDate"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy != 'Month'">
-                <label> Đến ngày </label><span class="error-sybol"></span>
+                  placeholder="DD/MM/YYYY">
+                <div v-if="errorFromDate" class="text-red-600 text-xs mt-1">Mục từ ngày không đúng</div>
+              </div>
+            </div>
+
+            <div v-if="inputs.chartBy != 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Đến ngày</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="toDate"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                  placeholder="DD/MM/YYYY">
+                <div v-if="errorToDate" class="text-red-600 text-xs mt-1">Mục đến ngày không đúng</div>
+              </div>
+            </div>
 
-              <b-col md="3" v-show="inputs.chartBy == 'Month'">
-                <label> Từ tháng </label><span class="error-sybol"></span>
+            <!-- From Month & To Month (Month) -->
+            <div v-if="inputs.chartBy == 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Từ tháng</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="fromMonth"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="7"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.fromMonth"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">
-                  Mục từ tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy == 'Month'">
-                <label> Đến tháng </label><span class="error-sybol"></span>
+                  placeholder="MM/YYYY">
+                <div v-if="errorFromMonth" class="text-red-600 text-xs mt-1">Mục từ tháng không đúng</div>
+              </div>
+            </div>
+
+            <div v-if="inputs.chartBy == 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Đến tháng</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="toMonth"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toMonth"
-                  maxlength="10"
                   @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">
-                  Mục đến tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                  type="text"
+                  maxlength="7"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="inputs.toMonth"
+                  placeholder="MM/YYYY">
+                <div v-if="errorToMonth" class="text-red-600 text-xs mt-1">Mục đến tháng không đúng</div>
+              </div>
+            </div>
 
-            </b-row>
+            <!-- Search Button -->
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <div class="col-span-4"></div>
+              <button
+                :disabled="onSearch"
+                class="col-span-8 md:col-span-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+                @click="search()">
+                Xem
+              </button>
+            </div>
+          </div>
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
-                  Xem
-                </b-button>
-              </b-col>
-            </b-row>
+          <!-- Loading -->
+          <div v-if="loading" class="text-center mt-3">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-
+          <!-- Chart -->
+          <div class="mt-6" v-if="click && chartData.length > 0">
             <GChart
               type="ColumnChart"
               :data="chartData"
               :options="chartOptions"
-              v-show="click && chartData.length > 0"
             />
-            <p v-show="click && firstSearch == false && chartData.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
 
+          <p v-if="click && !firstSearch && chartData.length == 0" class="text-center text-gray-600 mt-6">
+            Không có dữ liệu để hiển thị
+          </p>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
 
+const { showToast } = useToast()
 
-export default {
-  components: {
-    GChart
-  },
-  data () {
-    return {
-      inputs: {
-        "store_id": null,
-        "fromDate": null,
-        "toDate": null,
-        "fromMonth": null,
-        "toMonth": null,
-        "chartBy": "Day"
-      },
-      optionsStore: [],
-      chartByOption: [
-        {value: 'Day', text: ''},
-        {value: 'Day', text: 'Ngày'},
-        {value: 'Week', text: 'Tuần'},
-        {value: 'Month', text: 'Tháng'},
-      ],
-      chartData: [],
-      chartOptions: {
-        chart: {
-          title: 'Biểu đồ doanh thu và lợi nhuận',
-          subtitle: 'Biểu đồ doanh thu và lợi nhuận',
-        }
-      },
-      onSearch: false,
-      click: false,
-      loading: false,
-      firstSearch: true,
-    }
-  },
-  mounted() {
-    // Load store option
-    this.getOptionStore()
+const storeOptions = ref([
+  { value: '', text: 'Tất cả' }
+])
 
-    // Get default date
-    let dateNow = new Date()
-    this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-    this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
+const chartByOption = ref([
+  { value: 'Day', text: '' },
+  { value: 'Day', text: 'Ngày' },
+  { value: 'Week', text: 'Tuần' },
+  { value: 'Month', text: 'Tháng' }
+])
 
-  },
-  computed: {
-    errorFromDate: function () {
-      return this.checkDate(this.inputs.fromDate)
-    },
-    errorToDate: function () {
-      return this.checkDate(this.inputs.toDate)
-    },
-    errorFromMonth: function () {
-      return this.checkMonth(this.inputs.fromMonth)
-    },
-    errorToMonth: function () {
-      return this.checkMonth(this.inputs.toMonth)
-    },
-  },
-  methods: {
-    checkDate (dateInput) {
-      return (this.click && this.inputs.chartBy != "Month" && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
-    },
-    checkMonth (monthInput) {
-      return (this.click && this.inputs.chartBy == "Month" && (monthInput == "" || monthInput == null || commonFunc.dateFormatCheck("01-" + monthInput) == false))
-    },
-    checkValidate () {
-      return !(this.errorFromDate || this.errorToDate)
-    },
+const inputs = ref({
+  storeId: '',
+  fromDate: null,
+  toDate: null,
+  fromMonth: null,
+  toMonth: null,
+  chartBy: 'Day'
+})
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const chartData = ref([])
+const chartOptions = ref({
+  chart: {
+    title: 'Biểu đồ doanh thu chuỗi cửa hàng',
+    subtitle: 'Biểu đồ doanh thu',
+  }
+})
 
-    /**
-     * Get store options
-     */
-    getOptionStore() {
-      adminAPI.getStoreOption().then(res => {
-        if(res && res.data && res.data.data) {
-          this.optionsStore = res.data.data
-        }
-      }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
+const onSearch = ref(false)
+const click = ref(false)
+const loading = ref(false)
+const firstSearch = ref(true)
 
-    /**
-     * Event change chart by
-     */
-    changeChartBy() {
-      let dateNow = new Date()
+const errorFromDate = computed(() => {
+  return checkDate(inputs.value.fromDate)
+})
 
-      if(this.inputs.chartBy == "Day") {
-        // Get default date
-        this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-        let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-        this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-      }
+const errorToDate = computed(() => {
+  return checkDate(inputs.value.toDate)
+})
 
-      if(this.inputs.chartBy == "Week") {
-        // Get default week
-        this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-        let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
-        this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-      }
+const errorFromMonth = computed(() => {
+  return checkMonth(inputs.value.fromMonth)
+})
 
-      if(this.inputs.chartBy == "Month") {
-        // Get default month
-        this.inputs.toMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-        dateNow.setMonth(dateNow.getMonth() - 11)
-        this.inputs.fromMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-      }
-    },
+const errorToMonth = computed(() => {
+  return checkMonth(inputs.value.toMonth)
+})
 
-    /**
-     * Check valid from date and to date
-     */
-    checkFromDateAndToDate() {
+onMounted(() => {
+  // Get default date
+  let dateNow = new Date()
+  inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+  let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
+  inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
 
-      if(this.inputs.chartBy == "Day" || this.inputs.chartBy == "Week") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
+  // Get store options
+  getStoreOptions()
+})
 
-        if(fromDate > toDate) {
-          this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
-          return false
-        }
-
-        if(this.inputs.chartBy == "Day") {
-          fromDate.setMonth(fromDate.getMonth() + 1)
-
-          if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 1 tháng")
-            return false
-          }
-        }
-
-        if(this.inputs.chartBy == "Week") {
-          fromDate.setMonth(fromDate.getMonth() + 6)
-
-          if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 6 tháng")
-            return false
-          }
-        }
-      }
-
-      if(this.inputs.chartBy == "Month") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.toMonth))
-
-        if(fromDate > toDate) {
-          this.popToast('danger', "Từ tháng không thể lớn hớn đến tháng")
-          return false
-        }
-
-        fromDate.setMonth(fromDate.getMonth() + 12)
-
-        if(fromDate < toDate) {
-          this.popToast('danger', "Thời gian không được quá 12 tháng")
-          return false
-        }
-      }
-
-      return true
-    },
-
-    /**
-     * Get monday
-     */
-    getMonday(d) {
-      d = new Date(d);
-      var day = d.getDay(),
-          diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-      return new Date(d.setDate(diff));
-    },
-
-    /**
-     * Get number of days in month
-     */
-    getDaysInMonth(month, year) {
-      return new Date(year, month, 0).getDate();
-    },
-
-    /**
-     * Get days by month input
-     */
-    getDayByMonthInput(monthInput) {
-      if(monthInput) {
-        let toMonths = monthInput.split("-")
-        let daysOfMonth = this.getDaysInMonth(toMonths[0], toMonths[1])
-        return daysOfMonth
-      }
-    },
-
-    /**
-     * Get list date from date input
-     */
-    getListDateFromDateInput() {
-      let result = []
-
-      if(this.inputs.chartBy == "Day") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-        while(fromDate <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0,10)).substring(0, 5)
-          result.push(dateTemp)
-          fromDate = new Date(fromDate.setDate(fromDate.getDate() + 1))
-        }
-      }
-
-      if(this.inputs.chartBy == "Week") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-        let fromDateTemp = this.getMonday(fromDate)
-        while(fromDateTemp <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDateTemp.toJSON().slice(0,10)).substring(0, 5)
-          result.push(dateTemp)
-          fromDateTemp = new Date(fromDateTemp.setDate(fromDateTemp.getDate() + 7))
-        }
-      }
-
-      if(this.inputs.chartBy == "Month") {
-        let daysOfMonth = this.getDayByMonthInput(this.inputs.toMonth)
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(daysOfMonth + "-" + this.inputs.toMonth))
-        while(fromDate <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0,10)).substring(3, 10)
-          result.push(dateTemp)
-          fromDate = new Date(fromDate.setMonth(fromDate.getMonth() + 1))
-        }
-      }
-
-      return result
-    },
-
-    /**
-     * Convert db data to chart data
-     */
-    convertDbDataToChartData(datas) {
-      let chartDayData = [
-        ["Time", "Doanh thu"]
+/**
+ * Get store options
+ */
+const getStoreOptions = () => {
+  adminAPI.getStoreOption().then(res => {
+    if (res && res.data && res.data.data) {
+      storeOptions.value = [
+        { value: '', text: 'Tất cả' },
+        ...res.data.data.map(item => ({
+          value: item.id,
+          text: item.name
+        }))
       ]
-      let listDay = this.getListDateFromDateInput()
-      for (let i in listDay) {
-        let item = [listDay[i], 0]
-        for (let j in datas) {
-          if(listDay[i] == datas[j].time) {
-            item[1] = datas[j].profit
-            break
-          }
-        }
-        chartDayData.push(item)
-      }
-      this.chartData = chartDayData
-    },
+    }
+  }).catch(err => {
+    let errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'error')
+  })
+}
 
-    /**
-     * Search
-     */
-    search() {
-      if (this.loading) { return }
-      this.click = true
+const checkDate = (dateInput) => {
+  return (click.value && inputs.value.chartBy != 'Month' && (dateInput == '' || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
+}
 
-      // Check validate
-      if(!this.checkValidate()) {
-        this.chartData = []
-        return
-      }
+const checkMonth = (monthInput) => {
+  return (click.value && inputs.value.chartBy == 'Month' && (monthInput == '' || monthInput == null || commonFunc.dateFormatCheck('01-' + monthInput) == false))
+}
 
-      // Check store id
-      if(!this.inputs.store_id) {
-        this.popToast('danger', "Vui lòng chọn cửa hàng")
-        return
-      }
+const checkValidate = () => {
+  return !(errorFromDate.value || errorToDate.value)
+}
 
-      if(!this.checkFromDateAndToDate()) {
-        this.chartData = []
-        return
-      }
+/**
+ * Event change chart by
+ */
+const changeChartBy = () => {
+  let dateNow = new Date()
 
-      this.loading = true
-      this.onSearch = true
-        let listDay = this.getListDateFromDateInput()
+  if (inputs.value.chartBy == 'Day') {
+    // Get default date
+    inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
+    inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+  }
 
-      let params = {
-        "store_id": this.inputs.store_id,
-        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate),
-        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate),
-        "chartBy": this.inputs.chartBy,
-        "fromMonth": commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth),
-        "toMonth": commonFunc.convertDDMMYYYYToYYYYMMDD(this.getDayByMonthInput(this.inputs.toMonth) + "-" + this.inputs.toMonth),
-          "listDay": listDay
-      }
+  if (inputs.value.chartBy == 'Week') {
+    // Get default week
+    inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+    let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
+    inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+  }
 
-      // Search
-      adminAPI.getBrandRevenue(params).then(res => {
-        if(res && res.data && res.data.data) {
-          this.convertDbDataToChartData(res.data.data)
-        }
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
+  if (inputs.value.chartBy == 'Month') {
+    // Get default month
+    inputs.value.toMonth = commonFunc.formatDate(dateNow.toJSON().slice(0, 10)).substring(3, 10)
+    dateNow.setMonth(dateNow.getMonth() - 11)
+    inputs.value.fromMonth = commonFunc.formatDate(dateNow.toJSON().slice(0, 10)).substring(3, 10)
   }
 }
+
+/**
+ * Check valid from date and to date
+ */
+const checkFromDateAndToDate = () => {
+  if (inputs.value.chartBy == 'Day' || inputs.value.chartBy == 'Week') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate))
+
+    if (fromDate > toDate) {
+      showToast('Từ ngày không thể lớn hớn đến ngày', 'error')
+      return false
+    }
+
+    if (inputs.value.chartBy == 'Day') {
+      fromDate.setMonth(fromDate.getMonth() + 1)
+
+      if (fromDate < toDate) {
+        showToast('Thời gian không được quá 1 tháng', 'error')
+        return false
+      }
+    }
+
+    if (inputs.value.chartBy == 'Week') {
+      fromDate.setMonth(fromDate.getMonth() + 6)
+
+      if (fromDate < toDate) {
+        showToast('Thời gian không được quá 6 tháng', 'error')
+        return false
+      }
+    }
+  }
+
+  if (inputs.value.chartBy == 'Month') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.toMonth))
+
+    if (fromDate > toDate) {
+      showToast('Từ tháng không thể lớn hớn đến tháng', 'error')
+      return false
+    }
+
+    fromDate.setMonth(fromDate.getMonth() + 12)
+
+    if (fromDate < toDate) {
+      showToast('Thời gian không được quá 12 tháng', 'error')
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * Get monday
+ */
+const getMonday = (d) => {
+  d = new Date(d)
+  var day = d.getDay(),
+    diff = d.getDate() - day + (day == 0 ? -6 : 1) // adjust when day is sunday
+  return new Date(d.setDate(diff))
+}
+
+/**
+ * Get number of days in month
+ */
+const getDaysInMonth = (month, year) => {
+  return new Date(year, month, 0).getDate()
+}
+
+/**
+ * Get days by month input
+ */
+const getDayByMonthInput = (monthInput) => {
+  if (monthInput) {
+    let toMonths = monthInput.split('-')
+    let daysOfMonth = getDaysInMonth(toMonths[0], toMonths[1])
+    return daysOfMonth
+  }
+}
+
+/**
+ * Get list date from date input
+ */
+const getListDateFromDateInput = () => {
+  let result = []
+
+  if (inputs.value.chartBy == 'Day') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate) + ' 23:00:00')
+    toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
+    while (fromDate <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0, 10)).substring(0, 5)
+      result.push(dateTemp)
+      fromDate = new Date(fromDate.setDate(fromDate.getDate() + 1))
+    }
+  }
+
+  if (inputs.value.chartBy == 'Week') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate) + ' 23:00:00')
+    toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
+    let fromDateTemp = getMonday(fromDate)
+    while (fromDateTemp <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDateTemp.toJSON().slice(0, 10)).substring(0, 5)
+      result.push(dateTemp)
+      fromDateTemp = new Date(fromDateTemp.setDate(fromDateTemp.getDate() + 7))
+    }
+  }
+
+  if (inputs.value.chartBy == 'Month') {
+    let daysOfMonth = getDayByMonthInput(inputs.value.toMonth)
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(daysOfMonth + '-' + inputs.value.toMonth))
+    while (fromDate <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0, 10)).substring(3, 10)
+      result.push(dateTemp)
+      fromDate = new Date(fromDate.setMonth(fromDate.getMonth() + 1))
+    }
+  }
+
+  return result
+}
+
+/**
+ * Convert db data to chart data
+ */
+const convertDbDataToChartData = (datas) => {
+  let chartDayData = [
+    ['Time', 'Doanh thu']
+  ]
+  let listDay = getListDateFromDateInput()
+  for (let i in listDay) {
+    let item = [listDay[i], 0]
+    for (let j in datas) {
+      if (listDay[i] == datas[j].time) {
+        item[1] = datas[j].revenue
+        break
+      }
+    }
+    chartDayData.push(item)
+  }
+  chartData.value = chartDayData
+}
+
+/**
+ * Search
+ */
+const search = () => {
+  if (loading.value) {
+    return
+  }
+  click.value = true
+
+  // Check validate
+  if (!checkValidate()) {
+    chartData.value = []
+    return
+  }
+  if (!checkFromDateAndToDate()) {
+    chartData.value = []
+    return
+  }
+
+  loading.value = true
+  onSearch.value = true
+
+  let listDay = getListDateFromDateInput()
+  let params = {
+    storeId: inputs.value.storeId,
+    fromDate: commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate),
+    toDate: commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate),
+    chartBy: inputs.value.chartBy,
+    fromMonth: commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth),
+    toMonth: commonFunc.convertDDMMYYYYToYYYYMMDD(getDayByMonthInput(inputs.value.toMonth) + '-' + inputs.value.toMonth),
+    listDay: listDay
+  }
+
+  // Search
+  adminAPI.getBrandRevenue(params).then(res => {
+    if (res && res.data && res.data.data) {
+      convertDbDataToChartData(res.data.data)
+    }
+
+    firstSearch.value = false
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'error')
+
+    firstSearch.value = false
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+/**
+ * Only input date
+ */
+const inputDateOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.inputDateOnly(valueInput)
+  item.value = result
+}
 </script>
+
+<style lang="css" scoped>
+</style>

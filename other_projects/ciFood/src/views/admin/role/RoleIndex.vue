@@ -1,245 +1,199 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button 
+            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
+            @click="back">
+            Quay lại
+          </button>
+          <button 
+            class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="saving" 
+            @click="save">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12">
+            <h4 class="mt-2 text-center text-2xl font-semibold">Nhóm Quyền</h4>
+          </div>
+        </div>
+        <hr class="my-4"/>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading Overlay -->
+        <div v-if="loading" class="flex justify-center items-center py-12">
+          <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Nhóm Quyền</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <div v-else>
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3">
+              <label class="block mb-2 font-medium">Code <span class="text-red-600"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorCode ? 'border-red-500' : 'border-gray-300'"
+                v-model="role.code"
+                maxlength="50">
+              <p v-if="errorCode" class="mt-1 text-sm text-red-600">Vui lòng nhập code</p>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Code </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="code"
-                  type="text"
-                  class="form-control"
-                  v-model="role.code"
-                  autocomplete="new-password"
-                  maxlength="50">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorCode">
-                    Vui lòng nhập code
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="col-span-12 md:col-span-3">
+              <label class="block mb-2 font-medium">Name <span class="text-red-600"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorName ? 'border-red-500' : 'border-gray-300'"
+                v-model="role.name"
+                maxlength="100">
+              <p v-if="errorName" class="mt-1 text-sm text-red-600">Vui lòng nhập name</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Name </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="role.name"
-                  autocomplete="new-password"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập name
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="mt-6">
+            <label class="block mb-2 font-semibold text-lg">Phân quyền vào chức năng</label>
+            <label class="block mb-4 text-sm text-gray-600">(Bạn hãy chọn những chức năng mà nhóm quyền này được quyền truy cập)</label>
 
-              <b-row class="form-row mt-5">
-                <b-col>
-                  <label> Phân quyền vào chức năng </label>
-                  <br>
-                  <label> (Bạn hãy chọn những chức năng mà nhóm quyền này được quyền truy cập) </label>
-                </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col>
-                  <div v-for="group in groupScreen" :key="group.group_name">
-                    <p><b>{{ group.group_name }}</b></p>
-                    <b-row>
-                      <b-col md="4" v-for="screen in group.screen" :key="screen.screen_id">
-                        <input :id="screen.screen_id" type="checkbox" v-model="role.screen" name="screens" :value="screen.screen_id">
-                        <label :for="screen.screen_id">{{ screen.screen_name }}</label>
-                      </b-col>
-                    </b-row>
-                  </div>
-               </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+            <div v-for="group in groupScreen" :key="group.group_name" class="mb-6">
+              <p class="font-bold mb-3">{{ group.group_name }}</p>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <label 
+                  v-for="screen in group.screen" 
+                  :key="screen.screen_id"
+                  class="inline-flex items-center">
+                  <input 
+                    :id="screen.screen_id" 
+                    type="checkbox" 
+                    class="form-checkbox h-4 w-4 text-blue-600 rounded"
+                    v-model="role.screen" 
+                    :value="screen.screen_id">
+                  <span class="ml-2">{{ screen.screen_name }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const route = useRoute()
+const { showToast } = useToast()
 
-export default {
-  data () {
-    return {
-      role: {
-        "code": null,
-        "name": null,
-        "screen": []
-      },
-      click: false,
-      saving: false,
-      loading: false,
-      groupScreen: [],
+const role = ref({
+  code: null,
+  name: null,
+  screen: []
+})
 
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+const groupScreen = ref([])
+
+const errorCode = computed(() => click.value && (role.value.code == null || role.value.code.length <= 0))
+const errorName = computed(() => click.value && (role.value.name == null || role.value.name.length <= 0))
+
+const checkValidate = () => {
+  return !(errorCode.value || errorName.value)
+}
+
+const getMasterScreen = async () => {
+  try {
+    const res = await adminAPI.getMasterScreen()
+    if (res != null && res.data != null && res.data.data != null) {
+      groupScreen.value = res.data.data
     }
-  },
-  mounted() {
-    // Get master screen
-    this.getMasterScreen()
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-    // Get role detail
-    this.getRoleDetail()
-  },
-  computed: {
-    errorCode: function () {
-      return this.checkInfo(this.role.code)
-    },
-    errorName: function () {
-      return this.checkInfo(this.role.name)
-    },
-  },
-  methods: {
+const getRoleDetail = async () => {
+  const roleId = route.params.id
+  if (roleId) {
+    loading.value = true
 
-    /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
-  },
-
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorCode || this.errorName)
-    },
-
-    /**
-     *  Get master screen
-     */
-    getMasterScreen() {
-      adminAPI.getMasterScreen().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.groupScreen = res.data.data
-        }
-      })
-    },
-
-    /**
-     *  Get detail
-     */
-    getRoleDetail() {
-      let roleId = this.$route.params.id
-      if(roleId){
-        this.loading = true
-
-        adminAPI.getRoleDetail(roleId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.role = res.data.data
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+    try {
+      const res = await adminAPI.getRoleDetail(roleId)
+      if (res != null && res.data != null && res.data.data != null) {
+        role.value = res.data.data
       }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-
-      let checkValidate = this.checkValidate()
-      if(!checkValidate) {
-        return
-      }
-
-      this.saving = true
-
-      let roleId = this.$route.params.id
-      if(roleId){
-        // Edit
-        this.role.id = roleId
-        adminAPI.editRole(this.role).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            if (res.data.status == 200) {
-              // show popup success
-              this.popToast('success', 'Cập nhật nhóm quyền thành công!!! ')
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addRole(this.role).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-
-            if (res.data.status == 200) {
-              this.$router.push("/role/list")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/role/list")
+      loading.value = false
+    } catch (err) {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      showToast(errorMess, 'danger')
     }
   }
 }
+
+const save = async () => {
+  click.value = true
+
+  const checkValid = checkValidate()
+  if (!checkValid) {
+    return
+  }
+
+  saving.value = true
+
+  const roleId = route.params.id
+  try {
+    if (roleId) {
+      // Edit
+      role.value.id = roleId
+      const res = await adminAPI.editRole(role.value)
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status === 200) {
+          showToast('Cập nhật nhóm quyền thành công!!!', 'success')
+        }
+      }
+    } else {
+      // Add
+      const res = await adminAPI.addRole(role.value)
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status === 200) {
+          router.push("/role/list")
+        }
+      }
+    }
+  } catch (err) {
+    saving.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+const back = () => {
+  router.push("/role/list")
+}
+
+onMounted(() => {
+  getMasterScreen()
+  getRoleDetail()
+})
 </script>

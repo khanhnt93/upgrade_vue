@@ -1,201 +1,160 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Topping</h4>
-            </b-col>
-          </b-row>
-          <hr>
-
-          <b-table 
-          hover
-          bordered
-          stacked="md"
-          :fields="fields" 
-          :items="items">
-            <template v-slot:cell(price)="data">{{ currencyFormat(data.item.price) }}</template>
-            <template v-slot:cell(actions)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.value)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.value, dataId.item.name, dataId.item.stt)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
-
+  <div id="topping-list">
+    <div class="grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-lg shadow-md">
+        <div class="border-b border-gray-200 px-6 py-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-800">Danh Sách Topping</h2>
+            <button 
+              @click="goToAdd" 
+              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+              Thêm
+            </button>
+          </div>
+        </div>
+        <div class="p-6">
+          
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div v-if="loading" class="text-center mt-3">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          </div>
+
+          <!-- Table -->
+          <div v-else class="overflow-x-auto">
+            <table class="min-w-full border border-gray-300 rounded-md shadow-sm">
+              <thead class="bg-blue-100">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">STT</th>
+                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Tên</th>
+                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Giá</th>
+                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Trạng Thái</th>
+                  <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+                  <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ item.stt }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ item.name }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ formatCurrency(item.price) }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ item.status }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-center text-sm">
+                    <div class="flex justify-center gap-2">
+                      <button 
+                        @click="edit(item.actions)" 
+                        class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        title="Edit">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button 
+                        @click="deleted(item.actions, item.name, item.stt)" 
+                        class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        title="Delete">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-center text-gray-600 mt-4">--Hết--</div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/topping'
 import commonFunc from '@/common/commonFunc'
 
-export default {
-  data () {
-    return {
-      perPage: '10',
-      currentPage: '1',
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'price',
-          label: 'Giá'
-        },
-        {
-          key: 'status',
-          label: 'Trạng Thái'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      listIdDeleted: [],
-      loading: false,
-    }
-  },
-  computed: {
-  },
-  mounted() {
-    // Load list when load page
-    this.search()
-  },
-  methods: {
+const router = useRouter()
+const { showToast } = useToast()
+const { formatCurrency } = useFormatters()
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const items = ref([])
+const listIdDeleted = ref([])
+const loading = ref(false)
 
-    /**
-   * Make toast with title
-   */
-    makeToast(variant = null, title, content) {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
+onMounted(() => {
+  // Load list when load page
+  search()
+})
 
-    /**
-     *  Delete
-     */
-    deleted (id, name, rowIndex) {
+/**
+ *  Delete
+ */
+const deleted = (id, name, rowIndex) => {
+  if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+    adminAPI.deleteTopping(id).then(res => {
+      // Remove item in list
+      let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+      items.value.splice(indexTemp, 1)
+      listIdDeleted.value.push(rowIndex - 1)
 
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          adminAPI.deleteTopping(id).then(res => {
-
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-
-            this.popToast('success', 'Xóa topping thành công!!!')
-          }).catch(err => {
-            let message = ""
-            if(err.response.data.status == 500) {
-              message = "Lỗi hệ thống, chúng tôi rất tiếc về sự cố này, bạn thử lại sau vài phút nhé"
-            } else {
-              message = err.response.data.mess
-            }
-            this.makeToast('danger', 'Cập nhật topping thất bại!!!', message)
-          })
-        }
-      })
-    },
-
-    /**
-     *  Go to edit
-     */
-    edit (id) {
-      this.$router.push('/topping/edit/' + id)
-    },
-
-    /**
-     *  Go to add
-     */
-    goToAdd () {
-      this.$router.push('/topping/add')
-    },
-
-    /**
-     *  Search
-     */
-    search() {
-      this.loading = true
-
-      // Search
-      adminAPI.searchTopping().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = Mapper.mapToppingModelToDto(res.data.data)
-        }
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
-
+      showToast('Xóa topping thành công!!!', 'success')
+    }).catch(err => {
+      let message = ''
+      if (err.response.data.status == 500) {
+        message = 'Lỗi hệ thống, chúng tôi rất tiếc về sự cố này, bạn thử lại sau vài phút nhé'
+      } else {
+        message = err.response.data.mess
+      }
+      showToast(message, 'error')
+    })
   }
+}
+
+/**
+ *  Go to edit
+ */
+const edit = (id) => {
+  router.push('/topping/edit/' + id)
+}
+
+/**
+ *  Go to add
+ */
+const goToAdd = () => {
+  router.push('/topping/add')
+}
+
+/**
+ *  Search
+ */
+const search = () => {
+  loading.value = true
+
+  // Search
+  adminAPI.searchTopping().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = Mapper.mapToppingModelToDto(res.data.data)
+    }
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
+
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'error')
+  })
 }
 </script>
 
-<style lang="scss">
-.mess {
-    background-color: white
+<style lang="css" scoped>
+table {
+  margin: auto;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
 }
 </style>

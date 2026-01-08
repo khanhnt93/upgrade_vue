@@ -11,7 +11,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-10">
-            <div class="section-title text-center pb-40">
+            <div class="section-title text-center">
               <!--<div class="line m-auto"></div>-->
               <h3 class="title">
                 ciFood
@@ -145,6 +145,13 @@
       <!--</div>-->
       <div class="container">
         <div class="row">
+          <div class="col-lg-6 order-lg-first mt-3">
+            <div
+              class="about-image text-center mt-50 fadeInRightBig"
+            >
+              <img src="/static/img/project/home/header-hero.png" alt="about" />
+            </div>
+          </div>
           <div class="col-lg-6 order-lg-last  mt-3">
             <div
               class="about-content mt-50 fadeInLeftBig"
@@ -162,13 +169,7 @@
               <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
             </div>
           </div>
-          <div class="col-lg-6 order-lg-first mt-3">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/header-hero.png" alt="about" />
-            </div>
-          </div>
+
         </div>
       </div>
     </section>
@@ -209,6 +210,14 @@
       </div>
       <div class="container">
         <div class="row">
+
+          <div class="col-lg-6 order-lg-first">
+            <div
+              class="about-image text-center mt-50 fadeInRightBig"
+            >
+              <img src="/static/img/project/home/save_money.jpg" alt="Best choose" />
+            </div>
+          </div>
           <div class="col-lg-6 order-lg-last">
             <div
               class="about-content mt-50 fadeInLeftBig"
@@ -228,13 +237,6 @@
                 Giá chỉ từ 79.000đ/tháng
               </p>
               <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
-            </div>
-          </div>
-          <div class="col-lg-6 order-lg-first">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/save_money.jpg" alt="Best choose" />
             </div>
           </div>
         </div>
@@ -358,62 +360,69 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, onUnmounted } from 'vue'
 
-export default {
-  data() {
-    return {
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-  },
-  methods: {
-    onScroll() {
-      // Show or hide the sticky footer button
-      if (document.documentElement.scrollTop > 600) {
-        document.getElementById("back-to-top").style.display = "inline-block";
-      } else {
-        document.getElementById("back-to-top").style.display = "none";
-      }
-    },
-
-    /**
-     * Scroll to top
-     */
-    scrollToTop() {
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    },
-
-    /**
-     * Scroll to function
-     */
-    scrollToAbout() {
-      let el = document.getElementById("about");
-      let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
-      disFromTop = disFromTop - 50
-      window.scrollTo({top: disFromTop, behavior: 'smooth'});
-
-    },
-
-    /**
-     * Scroll to function
-     */
-    scrollToFunction() {
-      let el = document.getElementById("features");
-      let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
-      disFromTop = disFromTop - 50
-      window.scrollTo({top: disFromTop, behavior: 'smooth'});
-    },
-
-    /**
-     * Scroll bot
-     */
-    scrollBottom() {
-      window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+/**
+ * Handle scroll event to show/hide back-to-top button
+ */
+const onScroll = () => {
+  const backToTopBtn = document.getElementById("back-to-top")
+  if (backToTopBtn) {
+    if (document.documentElement.scrollTop > 600) {
+      backToTopBtn.style.display = "inline-block"
+    } else {
+      backToTopBtn.style.display = "none"
     }
   }
 }
+
+/**
+ * Scroll to top
+ */
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+/**
+ * Scroll to about section
+ */
+const scrollToAbout = () => {
+  const el = document.getElementById("about")
+  if (el) {
+    let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
+    disFromTop = disFromTop - 50
+    window.scrollTo({ top: disFromTop, behavior: 'smooth' })
+  }
+}
+
+/**
+ * Scroll to features section
+ */
+const scrollToFunction = () => {
+  const el = document.getElementById("features")
+  if (el) {
+    let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
+    disFromTop = disFromTop - 50
+    window.scrollTo({ top: disFromTop, behavior: 'smooth' })
+  }
+}
+
+/**
+ * Scroll to bottom
+ */
+const scrollBottom = () => {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+}
+
+// Lifecycle hooks
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
 
 <style>

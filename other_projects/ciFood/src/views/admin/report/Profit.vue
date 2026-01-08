@@ -1,551 +1,471 @@
 <template>
-  <div class="container-fluid">
+  <div id="profit-report">
+    <div class="grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-lg shadow-md">
+        <div class="border-b border-gray-200 px-6 py-4">
+          <h2 class="text-xl font-semibold text-gray-800 text-center">Báo Cáo Lợi Nhuận</h2>
+        </div>
+        <div class="p-6">
+          <div class="space-y-4">
+            <!-- Data By -->
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Xem theo</label>
+              <select
+                @change="changeDataBy()"
+                :disabled="onSearch"
+                class="col-span-8 md:col-span-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="inputs.dataBy">
+                <option v-for="option in dataByOption" :key="option.value" :value="option.value">{{ option.text }}</option>
+              </select>
+            </div>
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center text-header">Báo Cáo Lợi Nhuận</h4>
-            <b-row>
-              <b-col md="4">
-                <label> Xem theo </label>
-                <b-form-select
-                  :options="dataByOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.dataBy"
-                  @change="changeDataBy"
-                  :disabled="onSearch">
-                </b-form-select>
-              </b-col>
-              <b-col md="4" v-show="inputs.dataBy != 'Month'">
-                <label> Từ ngày </label><span class="error-sybol"></span>
+            <!-- From Date & To Date (Day/Week) -->
+            <div v-if="inputs.dataBy != 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Từ ngày</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="fromDate"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="4" v-show="inputs.dataBy != 'Month'">
-                <label> Đến ngày </label><span class="error-sybol"></span>
+                  placeholder="DD/MM/YYYY">
+                <div v-if="errorFromDate" class="text-red-600 text-xs mt-1">Mục từ ngày không đúng</div>
+              </div>
+            </div>
+
+            <div v-if="inputs.dataBy != 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Đến ngày</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="toDate"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                  placeholder="DD/MM/YYYY">
+                <div v-if="errorToDate" class="text-red-600 text-xs mt-1">Mục đến ngày không đúng</div>
+              </div>
+            </div>
 
-              <b-col md="4" v-show="inputs.dataBy == 'Month'">
-                <label> Từ tháng </label><span class="error-sybol"></span>
+            <!-- From Month & To Month (Month) -->
+            <div v-if="inputs.dataBy == 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Từ tháng</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="fromMonth"
+                  @keyup="inputDateOnly($event.target)"
                   type="text"
-                  autocomplete="new-password"
-                  class="form-control"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   v-model="inputs.fromMonth"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">
-                  Mục từ tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="4" v-show="inputs.dataBy == 'Month'">
-                <label> Đến tháng </label><span class="error-sybol"></span>
+                  placeholder="MM/YYYY">
+                <div v-if="errorFromMonth" class="text-red-600 text-xs mt-1">Mục từ tháng không đúng</div>
+              </div>
+            </div>
+
+            <div v-if="inputs.dataBy == 'Month'" class="grid grid-cols-12 gap-4 items-center">
+              <label class="col-span-4 text-sm font-medium text-gray-700">Đến tháng</label>
+              <div class="col-span-8 md:col-span-4">
                 <input
-                  id="toMonth"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toMonth"
-                  maxlength="10"
                   @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">
-                  Mục đến tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                  type="text"
+                  maxlength="10"
+                  :disabled="onSearch"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="inputs.toMonth"
+                  placeholder="MM/YYYY">
+                <div v-if="errorToMonth" class="text-red-600 text-xs mt-1">Mục đến tháng không đúng</div>
+              </div>
+            </div>
 
-            </b-row>
+            <!-- Search Button -->
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <div class="col-span-4"></div>
+              <button
+                :disabled="onSearch"
+                class="col-span-8 md:col-span-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+                @click="search()">
+                Xem
+              </button>
+            </div>
+          </div>
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="search">
-				  Xem
-				</b-button>
-              </b-col>
-            </b-row>
+          <!-- Loading -->
+          <div v-if="loading" class="text-center mt-3">
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <!-- Report Table -->
+          <div v-if="click && datas.length > 0" class="mt-6">
+            <div class="flex justify-between items-center mb-4">
+              <div class="text-sm text-gray-600">Số kết quả: {{ datas.length }}</div>
+              <download-excel
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :data="datas"
+                :fields="excel_bill_fields"
+                worksheet="Báo Cáo Lợi Nhuận"
+                name="bao_cao_loi_nhuan.xls">
+                <b>Xuất Excel</b>
+              </download-excel>
+            </div>
 
-            <b-row v-show="click && datas.length > 0">
-                <b-col>
-                  <b-row>
-                    <b-col md="4">
-                      Số kết quả: {{datas.length}}
-                    </b-col>
-                    <b-col md="8" class="text-right">
-                      <download-excel
-                        class   = "btn btn-default text-header"
-                        :data   = "datas"
-                        :fields = "excel_bill_fields"
-                        worksheet = "Báo Cáo Lợi Nhuận"
-                        name    = "bao_cao_loi_nhuan.xls">
-                        <b>Xuất Excel</b>
-                      </download-excel>
-                    </b-col>
-                  </b-row>
+            <div class="overflow-x-auto">
+              <table class="min-w-full border border-gray-300 rounded-md shadow-sm">
+                <thead class="bg-blue-100">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">STT</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Ngày</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Doanh thu bán hàng</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Doanh thu khác</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Chi phí</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b-2 border-blue-800">Lợi nhuận</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="bg-orange-100 font-semibold text-orange-600">
+                    <td class="px-4 py-2 text-center border-t border-gray-300" colspan="2">Tổng</td>
+                    <td class="px-4 py-2 text-right border-t border-gray-300">{{ formatCurrency(totalRevenue) }}</td>
+                    <td class="px-4 py-2 text-right border-t border-gray-300">{{ formatCurrency(totalRevenueOther) }}</td>
+                    <td class="px-4 py-2 text-right border-t border-gray-300">{{ formatCurrency(totalFee) }}</td>
+                    <td class="px-4 py-2 text-right border-t border-gray-300">{{ formatCurrency(totalProfit) }}</td>
+                  </tr>
+                  <tr v-for="(data, index) in datas" :key="index" class="hover:bg-gray-50">
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ index + 1 }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ data.time }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(data.revenue) }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(data.revenueOther) }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(data.fee) }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(data.profit) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-                  <table class="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Ngày</th>
-                        <th>Doanh thu bán hàng</th>
-                        <th>Doanh thu khác</th>
-                        <th>Chi phí</th>
-                        <th>Lợi nhuận</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="font-weight-bold total text-center" colspan="2">Tổng</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalRevenue)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalRevenueOther)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalFee)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalProfit)}}</td>
-                      </tr>
-
-                      <tr v-for="(data, index) in datas">
-                        <td>{{index + 1}}</td>
-                        <td>{{data.time}}</td>
-                        <td class="text-right">{{currencyFormat(data.revenue)}}</td>
-                        <td class="text-right">{{currencyFormat(data.revenueOther)}}</td>
-                        <td class="text-right">{{currencyFormat(data.fee)}}</td>
-                        <td class="text-right">{{currencyFormat(data.profit)}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-col>
-              </b-row>
-
-            <!--<p v-show="click && firstSearch == false && datas.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>-->
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
-import adminAPI from '@/api/admin'
-import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
 import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
-
-
 export default {
-  data () {
-    return {
-      inputs: {
-        "fromDate": null,
-        "toDate": null,
-        "fromMonth": null,
-        "toMonth": null,
-        "dataBy": "Day"
-      },
-      dataByOption: [
-        {value: 'Day', text: ''},
-        {value: 'Day', text: 'Ngày'},
-        {value: 'Week', text: 'Tuần'},
-        {value: 'Month', text: 'Tháng'},
-      ],
-      datas: [],
-      totalRevenue: 0,
-      totalRevenueOther: 0,
-      totalFee: 0,
-      totalProfit: 0,
-      onSearch: false,
-      click: false,
-      loading: false,
-      firstSearch: true,
-      excel_bill_fields: {
-        'Ngày': 'time',
-        'Doanh thu bán hàng': 'revenue',
-        'Doanh thu khác' : 'revenueOther',
-        'Chi phí': 'fee',
-        'Lợi nhuận' : 'profit'
-      },
-    }
-  },
-  mounted() {
-    // Get default date
-    let dateNow = new Date()
-    this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-    this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-
-  },
-  computed: {
-    errorFromDate: function () {
-      return this.checkDate(this.inputs.fromDate)
-    },
-    errorToDate: function () {
-      return this.checkDate(this.inputs.toDate)
-    },
-    errorFromMonth: function () {
-      return this.checkMonth(this.inputs.fromMonth)
-    },
-    errorToMonth: function () {
-      return this.checkMonth(this.inputs.toMonth)
-    },
-  },
-  methods: {
-    checkDate (dateInput) {
-      return (this.click && this.inputs.dataBy != "Month" && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
-    },
-    checkMonth (monthInput) {
-      return (this.click && this.inputs.dataBy == "Month" && (monthInput == "" || monthInput == null || commonFunc.dateFormatCheck("01-" + monthInput) == false))
-    },
-    checkValidate () {
-      return !(this.errorFromDate || this.errorToDate)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Event change data by
-     */
-    changeDataBy() {
-      let dateNow = new Date()
-
-      if(this.inputs.dataBy == "Day") {
-        // Get default date
-        this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-        let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-        this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-      }
-
-      if(this.inputs.dataBy == "Week") {
-        // Get default week
-        this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-        let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
-        this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-      }
-
-      if(this.inputs.dataBy == "Month") {
-        // Get default month
-        this.inputs.toMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-        dateNow.setMonth(dateNow.getMonth() - 11)
-        this.inputs.fromMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-      }
-    },
-
-    /**
-     * Check valid from date and to date
-     */
-    checkFromDateAndToDate() {
-
-      if(this.inputs.dataBy == "Day" || this.inputs.dataBy == "Week") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-
-        if(fromDate > toDate) {
-          this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
-          return false
-        }
-
-        if(this.inputs.dataBy == "Day") {
-          fromDate.setMonth(fromDate.getMonth() + 1)
-
-          if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 1 tháng")
-            return false
-          }
-        }
-
-        if(this.inputs.dataBy == "Week") {
-          fromDate.setMonth(fromDate.getMonth() + 6)
-
-          if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 6 tháng")
-            return false
-          }
-        }
-      }
-
-      if(this.inputs.dataBy == "Month") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.toMonth))
-
-        if(fromDate > toDate) {
-          this.popToast('danger', "Từ tháng không thể lớn hớn đến tháng")
-          return false
-        }
-
-        fromDate.setMonth(fromDate.getMonth() + 12)
-
-        if(fromDate < toDate) {
-          this.popToast('danger', "Thời gian không được quá 12 tháng")
-          return false
-        }
-      }
-
-      return true
-    },
-
-    /**
-     * Get monday
-     */
-    getMonday(d) {
-      d = new Date(d);
-      var day = d.getDay(),
-          diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
-      return new Date(d.setDate(diff));
-    },
-
-    /**
-     * Get number of days in month
-     */
-    getDaysInMonth(month, year) {
-      return new Date(year, month, 0).getDate();
-    },
-
-    /**
-     * Get days by month input
-     */
-    getDayByMonthInput(monthInput) {
-      if(monthInput) {
-        let toMonths = monthInput.split("-")
-        let daysOfMonth = this.getDaysInMonth(toMonths[0], toMonths[1])
-        return daysOfMonth
-      }
-    },
-
-    /**
-     * Get list date from date input
-     */
-    getListDateFromDateInput() {
-      let result = []
-
-      if(this.inputs.dataBy == "Day") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate) + ' 23:00:00')
-        toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
-        while(fromDate <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-          result.push(dateTemp)
-          fromDate = new Date(fromDate.setDate(fromDate.getDate() + 1))
-        }
-      }
-
-      if(this.inputs.dataBy == "Week") {
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-        fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate) + ' 23:00:00')
-        toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
-        let fromDateTemp = this.getMonday(fromDate)
-        while(fromDateTemp <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDateTemp.toJSON().slice(0,10))
-          result.push(dateTemp)
-          fromDateTemp = new Date(fromDateTemp.setDate(fromDateTemp.getDate() + 7))
-        }
-      }
-
-      if(this.inputs.dataBy == "Month") {
-        let daysOfMonth = this.getDayByMonthInput(this.inputs.toMonth)
-        let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth))
-        let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(daysOfMonth + "-" + this.inputs.toMonth))
-        while(fromDate <= toDate) {
-          let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0,10)).substring(3, 10)
-          result.push(dateTemp)
-          fromDate = new Date(fromDate.setMonth(fromDate.getMonth() + 1))
-        }
-      }
-
-      return result
-    },
-
-    // /**
-    //  * Convert db data to chart data
-    //  */
-    // convertDbDataToChartData(datas) {
-    //   let data = []
-    //   let listDay = this.getListDateFromDateInput()
-    //   for (let i in listDay) {
-    //     let item =  {
-    //       "time": listDay[i],
-    //       "revenue": 0,
-    //       "fee": 0,
-    //       "profit": 0
-    //     }
-    //     for (let j in datas) {
-    //       if(listDay[i] == datas[j].time) {
-    //         item = datas[j]
-    //         break
-    //       }
-    //     }
-    //     data.push(item)
-    //   }
-    //   this.datas = data
-    // },
-
-    /**
-     * Search
-     */
-    search() {
-      if (this.loading) { return }
-      this.click = true
-
-      // Check validate
-      if(!this.checkValidate()) {
-        this.chartData = []
-        return
-      }
-      if(!this.checkFromDateAndToDate()) {
-        this.chartData = []
-        return
-      }
-
-      this.loading = true
-      this.onSearch = true
-
-      let listDay = this.getListDateFromDateInput()
-      let params = {
-        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate),
-        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate),
-        "dataBy": this.inputs.dataBy,
-        "fromMonth": commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.fromMonth),
-        "toMonth": commonFunc.convertDDMMYYYYToYYYYMMDD(this.getDayByMonthInput(this.inputs.toMonth) + "-" + this.inputs.toMonth),
-        "listDay": listDay
-      }
-
-      // Search
-      adminAPI.getProfitReport(params).then(res => {
-        if(res && res.data && res.data.data) {
-          // this.convertDbDataToChartData(res.data.data)
-          this.datas = res.data.data.data
-          this.totalRevenue = res.data.data.total_revenue
-          this.totalRevenueOther = res.data.data.total_revenue_other
-          this.totalFee = res.data.data.total_fee
-          this.totalProfit = res.data.data.total_profit
-        }
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        console.log(err)
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num == 0) {
-          return 0
-        }
-      }
-      return result
-    },
+  components: {
+    'downloadExcel': JsonExcel,
   }
 }
 </script>
 
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
+import adminAPI from '@/api/admin'
+import commonFunc from '@/common/commonFunc'
+
+const { showToast } = useToast()
+const { formatCurrency } = useFormatters()
+
+const dataByOption = ref([
+  { value: 'Day', text: '' },
+  { value: 'Day', text: 'Ngày' },
+  { value: 'Week', text: 'Tuần' },
+  { value: 'Month', text: 'Tháng' }
+])
+
+const inputs = ref({
+  fromDate: null,
+  toDate: null,
+  fromMonth: null,
+  toMonth: null,
+  dataBy: 'Day'
+})
+
+const datas = ref([])
+const totalRevenue = ref(0)
+const totalRevenueOther = ref(0)
+const totalFee = ref(0)
+const totalProfit = ref(0)
+const onSearch = ref(false)
+const click = ref(false)
+const loading = ref(false)
+const firstSearch = ref(true)
+
+const excel_bill_fields = ref({
+  'Ngày': 'time',
+  'Doanh thu bán hàng': 'revenue',
+  'Doanh thu khác': 'revenueOther',
+  'Chi phí': 'fee',
+  'Lợi nhuận': 'profit'
+})
+
+const errorFromDate = computed(() => {
+  return checkDate(inputs.value.fromDate)
+})
+
+const errorToDate = computed(() => {
+  return checkDate(inputs.value.toDate)
+})
+
+const errorFromMonth = computed(() => {
+  return checkMonth(inputs.value.fromMonth)
+})
+
+const errorToMonth = computed(() => {
+  return checkMonth(inputs.value.toMonth)
+})
+
+onMounted(() => {
+  // Get default date
+  let dateNow = new Date()
+  inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+  let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
+  inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+})
+
+const checkDate = (dateInput) => {
+  return (click.value && inputs.value.dataBy != 'Month' && (dateInput == '' || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
+}
+
+const checkMonth = (monthInput) => {
+  return (click.value && inputs.value.dataBy == 'Month' && (monthInput == '' || monthInput == null || commonFunc.dateFormatCheck('01-' + monthInput) == false))
+}
+
+const checkValidate = () => {
+  return !(errorFromDate.value || errorToDate.value)
+}
+
+/**
+ * Event change data by
+ */
+const changeDataBy = () => {
+  let dateNow = new Date()
+
+  if (inputs.value.dataBy == 'Day') {
+    // Get default date
+    inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
+    inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+  }
+
+  if (inputs.value.dataBy == 'Week') {
+    // Get default week
+    inputs.value.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0, 10))
+    let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
+    inputs.value.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+  }
+
+  if (inputs.value.dataBy == 'Month') {
+    // Get default month
+    inputs.value.toMonth = commonFunc.formatDate(dateNow.toJSON().slice(0, 10)).substring(3, 10)
+    dateNow.setMonth(dateNow.getMonth() - 11)
+    inputs.value.fromMonth = commonFunc.formatDate(dateNow.toJSON().slice(0, 10)).substring(3, 10)
+  }
+}
+
+/**
+ * Check valid from date and to date
+ */
+const checkFromDateAndToDate = () => {
+  if (inputs.value.dataBy == 'Day' || inputs.value.dataBy == 'Week') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate))
+
+    if (fromDate > toDate) {
+      showToast('Từ ngày không thể lớn hớn đến ngày', 'error')
+      return false
+    }
+
+    if (inputs.value.dataBy == 'Day') {
+      fromDate.setMonth(fromDate.getMonth() + 1)
+
+      if (fromDate < toDate) {
+        showToast('Thời gian không được quá 1 tháng', 'error')
+        return false
+      }
+    }
+
+    if (inputs.value.dataBy == 'Week') {
+      fromDate.setMonth(fromDate.getMonth() + 6)
+
+      if (fromDate < toDate) {
+        showToast('Thời gian không được quá 6 tháng', 'error')
+        return false
+      }
+    }
+  }
+
+  if (inputs.value.dataBy == 'Month') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.toMonth))
+
+    if (fromDate > toDate) {
+      showToast('Từ tháng không thể lớn hớn đến tháng', 'error')
+      return false
+    }
+
+    fromDate.setMonth(fromDate.getMonth() + 12)
+
+    if (fromDate < toDate) {
+      showToast('Thời gian không được quá 12 tháng', 'error')
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * Get monday
+ */
+const getMonday = (d) => {
+  d = new Date(d)
+  var day = d.getDay(),
+    diff = d.getDate() - day + (day == 0 ? -6 : 1) // adjust when day is sunday
+  return new Date(d.setDate(diff))
+}
+
+/**
+ * Get number of days in month
+ */
+const getDaysInMonth = (month, year) => {
+  return new Date(year, month, 0).getDate()
+}
+
+/**
+ * Get days by month input
+ */
+const getDayByMonthInput = (monthInput) => {
+  if (monthInput) {
+    let toMonths = monthInput.split('-')
+    let daysOfMonth = getDaysInMonth(toMonths[0], toMonths[1])
+    return daysOfMonth
+  }
+}
+
+/**
+ * Get list date from date input
+ */
+const getListDateFromDateInput = () => {
+  let result = []
+
+  if (inputs.value.dataBy == 'Day') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate) + ' 23:00:00')
+    toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
+    while (fromDate <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0, 10))
+      result.push(dateTemp)
+      fromDate = new Date(fromDate.setDate(fromDate.getDate() + 1))
+    }
+  }
+
+  if (inputs.value.dataBy == 'Week') {
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate))
+    fromDate = new Date(fromDate.getTime() - (fromDate.getTimezoneOffset() * 60000))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate) + ' 23:00:00')
+    toDate = new Date(toDate.getTime() - (toDate.getTimezoneOffset() * 60000))
+    let fromDateTemp = getMonday(fromDate)
+    while (fromDateTemp <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDateTemp.toJSON().slice(0, 10))
+      result.push(dateTemp)
+      fromDateTemp = new Date(fromDateTemp.setDate(fromDateTemp.getDate() + 7))
+    }
+  }
+
+  if (inputs.value.dataBy == 'Month') {
+    let daysOfMonth = getDayByMonthInput(inputs.value.toMonth)
+    let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth))
+    let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(daysOfMonth + '-' + inputs.value.toMonth))
+    while (fromDate <= toDate) {
+      let dateTemp = commonFunc.formatDate(fromDate.toJSON().slice(0, 10)).substring(3, 10)
+      result.push(dateTemp)
+      fromDate = new Date(fromDate.setMonth(fromDate.getMonth() + 1))
+    }
+  }
+
+  return result
+}
+
+/**
+ * Search
+ */
+const search = () => {
+  if (loading.value) {
+    return
+  }
+  click.value = true
+
+  // Check validate
+  if (!checkValidate()) {
+    datas.value = []
+    return
+  }
+  if (!checkFromDateAndToDate()) {
+    datas.value = []
+    return
+  }
+
+  loading.value = true
+  onSearch.value = true
+
+  let listDay = getListDateFromDateInput()
+  let params = {
+    fromDate: commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.fromDate),
+    toDate: commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate),
+    dataBy: inputs.value.dataBy,
+    fromMonth: commonFunc.convertDDMMYYYYToYYYYMMDD('01-' + inputs.value.fromMonth),
+    toMonth: commonFunc.convertDDMMYYYYToYYYYMMDD(getDayByMonthInput(inputs.value.toMonth) + '-' + inputs.value.toMonth),
+    listDay: listDay
+  }
+
+  // Search
+  adminAPI.getProfitReport(params).then(res => {
+    if (res && res.data && res.data.data) {
+      datas.value = res.data.data.data
+      totalRevenue.value = res.data.data.total_revenue
+      totalRevenueOther.value = res.data.data.total_revenue_other
+      totalFee.value = res.data.data.total_fee
+      totalProfit.value = res.data.data.total_profit
+    }
+
+    firstSearch.value = false
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    console.log(err)
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'error')
+
+    firstSearch.value = false
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+/**
+ * Only input date
+ */
+const inputDateOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.inputDateOnly(valueInput)
+  item.value = result
+}
+</script>
+
 <style lang="css" scoped>
-  .total {
-    color: #ed592a;
-  }
-
-  table {
-   margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
+table {
+  margin: auto;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
 </style>

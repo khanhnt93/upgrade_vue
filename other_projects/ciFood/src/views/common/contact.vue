@@ -1,95 +1,70 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-form>
+  <div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Liên Hệ</h4>
+      <hr class="mb-6" />
 
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="text-center text-header">Liên Hệ</h4>
-                </b-col>
-              </b-row>
-              <hr/>
+      <!-- Tư vấn - CSKH -->
+      <div class="border-b border-warning-500 pb-6 mb-6">
+        <h5 class="text-xl font-semibold text-gray-800 mb-4">Tư vấn - CSKH</h5>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Nhân viên:</span> Ms.Anh</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Số điện thoại:</span> 0969.675.819</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Zalo:</span> 0969.675.819</p>
+        <p class="mb-4">
+          <span class="font-semibold text-gray-700">Facebook:</span>
+          <a 
+            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" 
+            target="_blank"
+            class="text-primary-500 hover:text-primary-600 underline ml-2"
+          >
+            https://www.facebook.com/CiinTech-Co-Ltd-110706387220364
+          </a>
+        </p>
+      </div>
 
-              <b-row class="form-row border-bottom border-warning">
-                <b-col md='12'>
-                  <h5 class="text-header">Tư vấn - CSKH</h5>
-                  <p><label class="text-header">Nhân viên:</label> Ms.Anh</p>
-                  <p><label class="text-header">Số điện thoại:</label> 0969.675.819</p>
-                  <p><label class="text-header">Zalo:</label> 0969.675.819</p>
-                  <p>
-                    <label class="text-header">Facebook:</label>
-                    <a href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" target="_blank">https://www.facebook.com/CiinTech-Co-Ltd-110706387220364</a></p>
-                  <br>
-                </b-col>
+      <!-- Kỹ thuật -->
+      <div class="border-b border-warning-500 pb-6 mb-6">
+        <h5 class="text-xl font-semibold text-gray-800 mb-4">Kỹ thuật</h5>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Nhân viên:</span> Ms.Anh</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Số điện thoại:</span> 0969.675.819</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Zalo:</span> 0969.675.819</p>
+        <p class="mb-4">
+          <span class="font-semibold text-gray-700">Facebook:</span>
+          <a 
+            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" 
+            target="_blank"
+            class="text-primary-500 hover:text-primary-600 underline ml-2"
+          >
+            https://www.facebook.com/CiinTech-Co-Ltd-110706387220364
+          </a>
+        </p>
+      </div>
 
-              </b-row>
-
-              <br>
-              <b-row class="form-row border-bottom border-warning">
-                <b-col md='12'>
-                  <h5 class="text-header">Kỹ thuật</h5>
-                  <p><label class="text-header">Nhân viên:</label> Ms.Anh</p>
-                  <p><label class="text-header">Số điện thoại:</label> 0969.675.819</p>
-                  <p><label class="text-header">Zalo:</label> 0969.675.819</p>
-                  <p>
-                    <label class="text-header">Facebook:</label>
-                    <a href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" target="_blank">https://www.facebook.com/CiinTech-Co-Ltd-110706387220364</a></p>
-                  <br>
-                </b-col>
-              </b-row>
-              <br>
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h5 class="text-header">ciFood - Sản phẩm của cty CiInTech</h5>
-                  <p><label class="text-header">Số điện thoại:</label> 0865.827.248</p>
-                  <p><label class="text-header">Mã số thuế:</label> 0316431771</p>
-                  <p><label class="text-header">Địa chỉ:</label> 23/36 Mai Lão Bạng p.13 Q.Tân Bình HCM</p>
-                  <p><label class="text-header">Website:</label> <a href="https://ciintech.com" target="_blank">https://ciintech.com</a></p>
-                  <p><label class="text-header">Thông tin giao dịch:</label></p>
-                  <p class="lv2">- Ngân hàng MB Bank</p>
-                  <p class="lv2">- STK: 9391135440021</p>
-                  <p class="lv2">- Chi nhánh TP HCM</p>
-                </b-col>
-              </b-row>
-
-              </b-form>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- ciFood - Sản phẩm của cty CiInTech -->
+      <div>
+        <h5 class="text-xl font-semibold text-gray-800 mb-4">ciFood - Sản phẩm của cty CiInTech</h5>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Số điện thoại:</span> 0865.827.248</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Mã số thuế:</span> 0316431771</p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Địa chỉ:</span> 23/36 Mai Lão Bạng p.13 Q.Tân Bình HCM</p>
+        <p class="mb-2">
+          <span class="font-semibold text-gray-700">Website:</span>
+          <a href="https://ciintech.com" target="_blank" class="text-primary-500 hover:text-primary-600 underline ml-2">
+            https://ciintech.com
+          </a>
+        </p>
+        <p class="mb-2"><span class="font-semibold text-gray-700">Thông tin giao dịch:</span></p>
+        <p class="pl-4 mb-1">- Ngân hàng MB Bank</p>
+        <p class="pl-4 mb-1">- STK: 9391135440021</p>
+        <p class="pl-4">- Chi nhánh TP HCM</p>
+      </div>
+    </div>
   </div>
 </template>
 
-
-<script>
-
-
-export default {
-  components: {
-  },
-  data () {
-    return {
-    }
-  },
-  mounted() {
-  },
-  computed: {
-  },
-  methods: {
-  }
-}
+<script setup>
+// Static content page - no additional logic needed
 </script>
 
-<style lang="scss">
-  .imageLogo {
-    width: 100%;
-    height: 100%;
-  }
-  .lv2 {
-    padding-left: 10px;
-  }
-
+<style scoped>
+/* Additional styles if needed */
 </style>

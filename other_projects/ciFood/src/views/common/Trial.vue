@@ -1,353 +1,401 @@
 <template>
-  <!--<div class="app flex-row align-items-center is-fixed-page">-->
-    <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="8">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form method="put">
-                  <h1 class="text-center text-header">Đăng Ký Dùng Thử</h1>
-                  <div class="form-group">
-                    <label>
-                      Tên nhà hàng:
-                    </label><span class="error-sybol"></span>
-                    <input
-                      id="store_name"
-                      type="text"
-                      class="form-control"
-                      v-model="store.store_name"
-                      maxlength="100">
-                      <b-form-invalid-feedback  class="invalid-feedback" :state="!errorStoreName">
-                        Vui lòng nhập tên nhà hàng
-                      </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Tên chủ quán:
-                    </label><span class="error-sybol"></span>
-                    <input
-                      id="user_name"
-                      type="text"
-                      class="form-control"
-                      v-model="store.user_name"
-                      maxlength="100">
-                      <b-form-invalid-feedback  class="invalid-feedback" :state="!errorUserName">
-                        Vui lòng nhập tên chủ quán
-                      </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Số điện thoại:
-                    </label><span class="error-sybol"></span>
-                    <input
-                      id="phone"
-                      type="text"
-                      class="form-control"
-                      v-model="store.phone_number"
-                      maxlength="12"
-                      @keyup="integerOnly($event.target)"
-                      v-on:change="checkPhoneNumberFormat($event.target)">
-                      <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPhoneNumber">
-                        Vui lòng nhập số điện thoại
-                      </b-form-invalid-feedback>
-                      <b-form-invalid-feedback  class="invalid-feedback" :state="phoneNumberCheckFlag">
-                        Số điện thoại không đúng
-                      </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Tỉnh/Thành phố:
-                    </label><span class="error-sybol"></span>
-                    <b-form-select
-                      :options="optionsCity"
-                      id="city_id"
-                      type="text"
-                      class="form-control"
-                      v-model="store.city_id"
-                      v-on:change="changeCity($event.target)">
-                    </b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCiti">
-                      Vui lòng nhập tỉnh/thành phố
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Quận/Huyện:
-                    </label><span class="error-sybol"></span>
-                    <b-form-select
-                      v-bind="{ disabled: store.city_id=='' }"
-                      :options="optionsDistrict"
-                      id="district"
-                      type="text"
-                      class="form-control"
-                      v-model="store.district_id"
-                      :disabled="!store.city_id"
-                      ></b-form-select>
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorDistrict">
-                      Vui lòng nhập quận/huyện
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Địa chỉ:
-                    </label><span class="error-sybol"></span>
-                    <input
-                    id="address"
-                    type="text"
-                    class="form-control"
-                    v-model="store.address">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAddress">
-                      Vui lòng nhập địa chỉ
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Loại hình kinh doanh:
-                    </label>
-                    <input
-                    id="type"
-                    type="text"
-                    class="form-control"
-                    v-model="store.type"
-                    placeholder="Cafe, trà sữa, quán ăn, ....">
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Mã voucher:
-                    </label>
-                    <input
-                    id="voucherCode"
-                    type="text"
-                    class="form-control"
-                    v-model="store.voucher_code"
-                    maxlength="10">
-                  </div>
-                  <p>**Cảm ơn bạn đã quan tâm sản phẩm của chúng tôi. Thời hạn dùng thử là 15 ngày
-                    (Nếu không có mã voucher). Chúng tôi sẽ liên hệ với bạn ngay để hướng dẫn chi tiết hơn.
-                    Xin chân thành cảm ơn!
-                  </p>
-                  <b-row>
-                    <b-col cols="12" class="text-center">
-                      <b-button
-                        @click="update"
-                        :disabled="onUpdate"
-                        :variant="onUpdate ? '' : 'primary'" class="default-btn-bg">
-                        {{ onUpdate ? "Đăng ký..." : "Đăng ký" }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+  <div class="container mx-auto px-4 py-6">
+    <div class="flex justify-center">
+      <div class="w-full md:w-2/3">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Đăng Ký Dùng Thử</h1>
+          
+          <form @submit.prevent="update">
+            <!-- Tên nhà hàng -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Tên nhà hàng:
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="store_name"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.store_name"
+                maxlength="100"
+                :class="{ 'border-red-500': errorStoreName }"
+              />
+              <p v-if="errorStoreName" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập tên nhà hàng
+              </p>
+            </div>
 
-      <!-- Modal xác nhận đăng ký thành công -->
-      <b-modal centered hide-footer hide-header :no-close-on-backdrop="true" id="modal-confirm-info">
-        <b-row>
-          <b-col class="text-center text-header">
-            <h5>Đăng Ký thành công!!!</h5>
-          </b-col>
-        </b-row>
-        <br>
+            <!-- Tên chủ quán -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Tên chủ quán:
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="user_name"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.user_name"
+                maxlength="100"
+                :class="{ 'border-red-500': errorUserName }"
+              />
+              <p v-if="errorUserName" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập tên chủ quán
+              </p>
+            </div>
 
-        <b-row>
-          <b-col>
-            <p>Thông tin đăng nhập: </p>
-            <p class="pl-5">Số điện thoại: {{phone_number_signup}}</p>
-            <p class="pl-5">Mật khẩu: {{phone_number_signup}}</p>
-        </b-col>
-        </b-row>
+            <!-- Số điện thoại -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Số điện thoại:
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="phone"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.phone_number"
+                maxlength="12"
+                @keyup="integerOnly($event.target)"
+                @change="checkPhoneNumberFormat($event.target)"
+                :class="{ 'border-red-500': errorPhoneNumber || !phoneNumberCheckFlag }"
+              />
+              <p v-if="errorPhoneNumber" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập số điện thoại
+              </p>
+              <p v-if="!phoneNumberCheckFlag" class="text-red-500 text-sm mt-1">
+                Số điện thoại không đúng
+              </p>
+            </div>
 
-        <b-row>
-          <b-col>
-            <p class="text-danger">**Phía trên là thông tin đăng nhập của bạn, bạn hãy ghi nhớ trước khi xác nhận.</p>
-          </b-col>
-          <b-col cols="12" class="text-right mt-3">
-            <button class="btn btn-primary px-4 default-btn-bg" @click="confirmInfoSignup">
-              Xác nhận
-            </button>
-          </b-col>
-        </b-row>
+            <!-- Tỉnh/Thành phố -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Tỉnh/Thành phố:
+                <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="city_id"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.city_id"
+                @change="changeCity"
+                :class="{ 'border-red-500': errorCiti }"
+              >
+                <option v-for="option in optionsCity" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <p v-if="errorCiti" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập tỉnh/thành phố
+              </p>
+            </div>
 
-      </b-modal>
+            <!-- Quận/Huyện -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Quận/Huyện:
+                <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="district"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.district_id"
+                :disabled="!store.city_id"
+                :class="{ 'border-red-500': errorDistrict, 'bg-gray-100': !store.city_id }"
+              >
+                <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <p v-if="errorDistrict" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập quận/huyện
+              </p>
+            </div>
 
+            <!-- Địa chỉ -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Địa chỉ:
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="address"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.address"
+                :class="{ 'border-red-500': errorAddress }"
+              />
+              <p v-if="errorAddress" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập địa chỉ
+              </p>
+            </div>
+
+            <!-- Loại hình kinh doanh -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Loại hình kinh doanh:
+              </label>
+              <input
+                id="type"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.type"
+                placeholder="Cafe, trà sữa, quán ăn, ...."
+              />
+            </div>
+
+            <!-- Mã voucher -->
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2">
+                Mã voucher:
+              </label>
+              <input
+                id="voucherCode"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                v-model="store.voucher_code"
+                maxlength="10"
+              />
+            </div>
+
+            <p class="text-sm text-gray-600 mb-4">
+              **Cảm ơn bạn đã quan tâm sản phẩm của chúng tôi. Thời hạn dùng thử là 15 ngày
+              (Nếu không có mã voucher). Chúng tôi sẽ liên hệ với bạn ngay để hướng dẫn chi tiết hơn.
+              Xin chân thành cảm ơn!
+            </p>
+
+            <!-- Submit button -->
+            <div class="text-center">
+              <button
+                type="submit"
+                :disabled="onUpdate"
+                class="px-8 py-2 rounded-md text-white font-semibold transition-colors"
+                :class="onUpdate ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-500 hover:bg-primary-600'"
+              >
+                {{ onUpdate ? "Đăng ký..." : "Đăng ký" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  <!--</div>-->
+
+    <!-- Modal xác nhận đăng ký thành công -->
+    <TransitionRoot :show="showConfirmModal" as="template">
+      <Dialog as="div" class="relative z-50" @close="showConfirmModal = false">
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 shadow-xl transition-all">
+                <DialogTitle class="text-xl font-bold text-center text-gray-800 mb-4">
+                  Đăng Ký thành công!!!
+                </DialogTitle>
+
+                <div class="mb-4">
+                  <p class="mb-2">Thông tin đăng nhập:</p>
+                  <p class="pl-5 mb-1">Số điện thoại: {{ phone_number_signup }}</p>
+                  <p class="pl-5">Mật khẩu: {{ phone_number_signup }}</p>
+                </div>
+
+                <p class="text-red-600 text-sm mb-4">
+                  **Phía trên là thông tin đăng nhập của bạn, bạn hãy ghi nhớ trước khi xác nhận.
+                </p>
+
+                <div class="text-right">
+                  <button
+                    class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-md"
+                    @click="confirmInfoSignup"
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+  </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store'
+import { useToast } from 'vue-toastification'
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import AuthenticationAPI from '@/api/authentication'
-import {Constant} from '@/common/constant'
-import MasterApi from "../../api/master";
-import MasterMapper from "../../mapper/master";
-import commonFunc from "../../common/commonFunc";
+import MasterApi from '@/api/master'
+import MasterMapper from '@/mapper/master'
+import commonFunc from '@/common/commonFunc'
 
+const router = useRouter()
+const authStore = useAuthStore()
+const toast = useToast()
 
-export default {
-  data () {
-    return {
-      store: {
-        store_name: null,
-        user_name: null,
-        phone_number: null,
-        city_id: null,
-        district_id: null,
-        address: null,
-        type: null,
-        voucher_code: null
-      },
-      optionsCity: [],
-      optionsDistrict: [],
-      phoneNumberCheckFlag: true,
-      click: false,
-      onUpdate: null,
-      phone_number_signup: null
-    }
-  },
-  mounted() {
-    // Get city options
-    this.getOptionCity()
-  },
-  computed: {
-    errorStoreName: function () {
-      return this.checkInfo(this.store.store_name)
-    },
-    errorUserName: function () {
-      return this.checkInfo(this.store.user_name)
-    },
-    errorPhoneNumber: function () {
-      return this.checkInfo(this.store.phone_number)
-    },
-    errorCiti: function () {
-      return this.checkInfo(this.store.city_id)
-    },
-    errorDistrict: function () {
-      return this.checkInfo(this.store.district_id)
-    },
-    errorAddress: function () {
-      return this.checkInfo(this.store.address)
-    },
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorStoreName || this.errorUserName || this.errorPhoneNumber || this.errorCiti || this.errorDistrict || this.errorAddress)
-    },
+const store = ref({
+  store_name: null,
+  user_name: null,
+  phone_number: null,
+  city_id: null,
+  district_id: null,
+  address: null,
+  type: null,
+  voucher_code: null
+})
 
-    /**
-     * Get city options
-     */
-    getOptionCity() {
-      MasterApi.getCityOptions().then(res => {
-        this.optionsCity = MasterMapper.mapCityModelToDto(res.data.data)
-        this.changeCity()
-      }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
+const optionsCity = ref([])
+const optionsDistrict = ref([])
+const phoneNumberCheckFlag = ref(true)
+const click = ref(false)
+const onUpdate = ref(false)
+const phone_number_signup = ref(null)
+const showConfirmModal = ref(false)
 
-      /**
-     * Get district by city
-     */
-    changeCity() {
-      let cityId = this.store.city_id
-      // console.log(cityId)
-      if(cityId != "" && cityId != undefined) {
-        MasterApi.getDistrictOptions(cityId).then(res => {
-          // console.log(res.data.data)
-          this.optionsDistrict = MasterMapper.mapCityModelToDto(res.data.data)
-        })
-      } else {
-        this.store.district_id = ""
-      }
-    },
+// Computed properties for validation
+const errorStoreName = computed(() => {
+  return checkInfo(store.value.store_name)
+})
 
+const errorUserName = computed(() => {
+  return checkInfo(store.value.user_name)
+})
 
-    update () {
-      if(this.onUpdate == true) {
-        return
-      }
+const errorPhoneNumber = computed(() => {
+  return checkInfo(store.value.phone_number)
+})
 
-      this.click = true
-      let result = this.checkValidate()
-      if(result) {
-        this.onUpdate = true
+const errorCiti = computed(() => {
+  return checkInfo(store.value.city_id)
+})
 
-        AuthenticationAPI.signUpTrial(this.store).then(res => {
-          if(res && res.data && res.data.status == 200) {
-            this.phone_number_signup = res.data.data.phone_number
+const errorDistrict = computed(() => {
+  return checkInfo(store.value.district_id)
+})
 
-            // Show modal xác nhận thông tin đăng ký
-            this.$bvModal.show('modal-confirm-info')
-          }
-          this.onUpdate = false
-        }).catch(err => {
-          this.onUpdate = false
+const errorAddress = computed(() => {
+  return checkInfo(store.value.address)
+})
 
-          let message = ""
-          if(err.response.data.status == 422) {
-            message = err.response.data.mess
-          } else {
-            message = "Lỗi hệ thống"
-          }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập nhật thất bại",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
-        })
-      }
-    },
+// Methods
+const checkInfo = (info) => {
+  return click.value && (info == null || info.length <= 0)
+}
 
-    /**
-     * Xác nhận thông tin đăng ký
-     */
-    confirmInfoSignup() {
-      // Redirect to login page
-      this.$store.commit('removeToken')
-      this.$router.push('/staff-login')
-    },
+const checkValidate = () => {
+  return !(errorStoreName.value || errorUserName.value || errorPhoneNumber.value || 
+           errorCiti.value || errorDistrict.value || errorAddress.value)
+}
 
-      /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
+const getOptionCity = () => {
+  MasterApi.getCityOptions().then(res => {
+    optionsCity.value = MasterMapper.mapCityModelToDto(res.data.data)
+    changeCity()
+  }).catch(err => {
+    let errorMess = commonFunc.handleStaffError(err)
+    toast.error(errorMess)
+  })
+}
 
-      if(valueInput.length == 10) {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      }
-    },
-
-      /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item.value
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      } else {
-        this.phoneNumberCheckFlag = true
-      }
-    },
+const changeCity = () => {
+  let cityId = store.value.city_id
+  if (cityId != "" && cityId != undefined) {
+    MasterApi.getDistrictOptions(cityId).then(res => {
+      optionsDistrict.value = MasterMapper.mapCityModelToDto(res.data.data)
+    })
+  } else {
+    store.value.district_id = ""
   }
 }
+
+const update = () => {
+  if (onUpdate.value == true) {
+    return
+  }
+
+  click.value = true
+  let result = checkValidate()
+  if (result) {
+    onUpdate.value = true
+
+    AuthenticationAPI.signUpTrial(store.value).then(res => {
+      if (res && res.data && res.data.status == 200) {
+        phone_number_signup.value = res.data.data.phone_number
+        showConfirmModal.value = true
+      }
+      onUpdate.value = false
+    }).catch(err => {
+      onUpdate.value = false
+
+      let message = ""
+      if (err.response.data.status == 422) {
+        message = err.response.data.mess
+      } else {
+        message = "Lỗi hệ thống"
+      }
+      toast.error(message)
+    })
+  }
+}
+
+const confirmInfoSignup = () => {
+  authStore.removeToken()
+  showConfirmModal.value = false
+  router.push('/staff-login')
+}
+
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+
+  if (valueInput.length == 10) {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  }
+}
+
+const checkPhoneNumberFormat = (item) => {
+  let valueInput = item.value
+  if (valueInput != null && valueInput != "") {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  } else {
+    phoneNumberCheckFlag.value = true
+  }
+}
+
+onMounted(() => {
+  getOptionCity()
+})
 </script>
+
+<style scoped>
+/* Additional styles if needed */
+</style>

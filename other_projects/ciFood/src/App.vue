@@ -1,95 +1,95 @@
 <template>
   <div class="app">
-    <template v-if="this.$route.name != 'Login'">
-      <AppHeader fixed v-if="this.$store.state.user == null" class="header-custom">
-        <div class="container-fluid">
-          <div class="nav-left">
-            <button @click="activePushedMenu = !activePushedMenu" display="lg" type="button" class="navbar-toggler">
-                <!--<span class="navbar-toggler-icon"></span>-->
-              <img src="/static/img/icons/sticker_1.png" class="iconsCustom"/>
+    <template v-if="$route.name != 'Login'">
+      <!-- Header: User not logged in -->
+      <header v-if="!authStore.user" class="header-custom fixed top-0 left-0 right-0 z-50 bg-gray-800">
+        <div class="header-container flex items-center justify-between w-full px-4">
+          <div class="nav-left flex items-center">
+            <button @click="toggleSidebarVisibility" type="button" class="navbar-toggler p-2">
+              <img src="/static/img/icons/sticker_1.png" class="iconsCustom w-10 h-10"/>
             </button>
 
-            <b-link class="nav-link home-icon" to="/">
-                <span class="mr-2"></span>
-              <img src="/static/img/icons/sticker_2.png" class="iconsCustom"/>
-            </b-link>
+            <router-link class="nav-link home-icon px-2" to="/">
+              <img src="/static/img/icons/sticker_2.png" class="iconsCustom w-10 h-10"/>
+            </router-link>
           </div>
         </div>
-      </AppHeader>
+      </header>
 
-       <!-- đăng nhập xong sẽ dùng đoạn code bên dưới -->
-      <AppHeader fixed v-if="this.$store.state.user"  class="header-custom">
-        <div class="header-container">
-          <div class="nav-left">
-            <button @click="activePushedMenu = !activePushedMenu" display="lg" type="button" class="navbar-toggler" >
-
-              <!--<span class="navbar-toggler-icon"></span>-->
-              <img src="/static/img/icons/sticker_1.png" class="iconsCustom"/>
+      <!-- Header: User logged in -->
+      <header v-if="authStore.user" class="header-custom fixed top-0 left-0 right-0 z-50 bg-gray-800">
+        <div class="header-container flex items-center justify-between w-full px-4">
+          <div class="nav-left flex items-center">
+            <button @click="toggleSidebarVisibility" type="button" class="navbar-toggler p-2">
+              <img src="/static/img/icons/sticker_1.png" class="iconsCustom w-10 h-10"/>
             </button>
-            <b-link class="nav-link home-icon" to="/">
-              <span class="mr-2"></span>
-              <img src="/static/img/icons/sticker_2.png" class="iconsCustom"/>
-            </b-link>
+            <router-link class="nav-link home-icon px-2" to="/">
+              <img src="/static/img/icons/sticker_2.png" class="iconsCustom w-10 h-10"/>
+            </router-link>
           </div>
 
-        <b-navbar-nav>
-          <!-- hiện cho template staff -->
-          <template>
-            <span class="white text-right"  v-if="this.$store.state.user.userType == 'staff'">
-              {{ this.$store.state.user.userName }}
-              <br>
-              <span class="text-muted">
-                ({{ this.$store.state.user.role }})
+          <div class="flex items-center">
+            <!-- Show for staff template -->
+            <template v-if="authStore.user.userType == 'staff'">
+              <span class="text-white text-right mr-4">
+                {{ authStore.user.userName }}
+                <br>
+                <span class="text-gray-400">
+                  ({{ authStore.user.role }})
+                </span>
               </span>
-            </span>
-            <HeaderDropdownStaffAcc  v-if="this.$store.state.user.userType == 'staff'"/>
-          </template>
-          <!-- end -->
-
-        </b-navbar-nav>
+              <HeaderDropdownStaffAcc />
+            </template>
+          </div>
         </div>
-      </AppHeader>
+      </header>
 
-      <div class="app-body" >
-        <template>
-          <div class="bg-pushed-menu" v-if="activePushedMenu" @click="activePushedMenu = false"></div>
-          <template>
+      <div class="app-body pt-14">
+        <div class="bg-pushed-menu" v-if="sidebarVisible && !sidebarCollapsed" @click="toggleSidebarVisibility"></div>
 
-            <!-- Menu: User not login -->
-            <sidebar-menu v-if="!this.$store.state.user" width="250px" fixed v-show="activePushedMenu"
-                          :menu="navCusNotLogin">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            </sidebar-menu>
+        <!-- Menu: User not login -->
+        <CustomSidebar
+          v-if="!authStore.user"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="250px"
+          :menu="navCusNotLogin"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
-            <!-- Menu: staff -->
-            <sidebar-menu v-if="this.$store.state.user && !this.$store.state.user.isSuper"
-                          width="250px" fixed v-show="activePushedMenu" :menu="this.$store.state.menu">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-              <span slot="dropdown-icon"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-            </sidebar-menu>
+        <!-- Menu: staff -->
+        <CustomSidebar
+          v-if="authStore.user && !authStore.user.isSuper"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="280px"
+          :menu="authStore.menu"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
-            <!-- Menu: super admin -->
-            <sidebar-menu v-if="this.$store.state.user && this.$store.state.user.isSuper"
-                          width="250px" fixed v-show="activePushedMenu" :menu="navSpAdmin">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            </sidebar-menu>
-          </template>
+        <!-- Menu: super admin -->
+        <CustomSidebar
+          v-if="authStore.user && authStore.user.isSuper"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="250px"
+          :menu="navSpAdmin"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
-          <!-- Audio: Notification -->
-          <audio id = "audioNotification" src="/static/sound/on_message.mp3" type="audio/mp3" muted="false"></audio>
-          <button type="button" id="btnPlayNotify" v-on:click="playNotify" hidden>
-            Play
-          </button>
-        </template>
+        <!-- Audio: Notification -->
+        <audio id="audioNotification" src="/static/sound/on_message.mp3" type="audio/mp3"></audio>
+        <button type="button" id="btnPlayNotify" @click="playNotify" hidden>
+          Play
+        </button>
 
         <main class="main">
           <router-view />
         </main>
-
       </div>
     </template>
 
-    <template v-if="this.$route.name == 'Login'">
+    <template v-if="$route.name == 'Login'">
       <main class="main">
         <router-view />
       </main>
@@ -97,110 +97,80 @@
   </div>
 </template>
 
-<script>
-import navSpAdmin from '@/navSpAdmin'
-import navBrandManager from '@/navBrandManager'
-import navAdmin from '@/navAdmin'
-import navCashier from '@/navCashier'
-import navCusNotLogin from '@/navCusNotLogin'
-import navCus from '@/navCus'
-import navStaff from '@/navStaff'
-import navKitchen from '@/navKitchen'
-import { Header as AppHeader} from '@coreui/vue'
-import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc'
-import {Constant} from '@/common/constant'
-import { RootAPI } from '@/api/index'
-import { SidebarMenu } from 'vue-sidebar-menu'
+<script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
+import navSpAdminData from '@/navSpAdmin'
+import navCusNotLoginData from '@/navCusNotLogin'
+import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc.vue'
+import CustomSidebar from '@/components/common/CustomSidebar.vue'
 
+const route = useRoute()
+const authStore = useAuthStore()
+const navCusNotLogin = ref(navCusNotLoginData.items || [])
+const navSpAdmin = ref(navSpAdminData.items || [])
+const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
+const sidebarVisible = ref(localStorage.getItem('sidebarVisible') !== 'false')
 
-export default {
-  name: 'App',
-  components: {
-    SidebarMenu,
-    AppHeader,
-    HeaderDropdownStaffAcc
-  },
-  data () {
-    return {
-      language: 'en',
-      navCus: navCus.items,
-      navCusNotLogin: navCusNotLogin.items,
-      navSpAdmin: navSpAdmin.items,
-      navAdmin: navAdmin.items,
-      navBrandManager: navBrandManager.items,
-      navCashier: navCashier.items,
-      navStaff: navStaff.items,
-      navKitchen: navKitchen.items,
-      fullName: '',
-      size: 40,
-      roleCus: Constant.ROLE_CUS,
-      roleBrandManager: Constant.ROLE_BRAND_MANGER,
-      roleAdmin: Constant.ROLE_ADMIN,
-      roleCashier: Constant.ROLE_CASHIER,
-      roleStaff: Constant.ROLE_STAFF,
-      roleKitchen: Constant.ROLE_KITCHEN,
-      roleSpAdmin: Constant.ROLE_SP_ADMIN,
-      notifyNumber: 0,
-      activePushedMenu: false,
-    }
-  },
-  watch: {
-    '$route' (newVal, oldVal) {
-      this.activePushedMenu = false
-    }
-  },
-  mounted() {
-  },
+// Toggle sidebar visibility (show/hide)
+const toggleSidebarVisibility = () => {
+  sidebarVisible.value = !sidebarVisible.value
+  localStorage.setItem('sidebarVisible', sidebarVisible.value.toString())
+}
 
-  computed: {
-    name () {
-      return this.$route.name
-    },
-    list () {
-      return this.$route.matched.filter((route) => route.name || route.meta.label)
-    }
-  },
-  created () {
-  },
-  methods: {
-    /**
-     * Go to notification
-     */
-    goToNotification() {
-      this.$router.push("/notification")
-    },
+// Toggle sidebar collapsed state (expand/collapse)
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString())
+}
 
-    /**
-     * Play sound notify
-     */
-    playNotify() {
-      var audio = document.getElementById("audioNotification")
-      audio.muted = false;
-      audio.play();
-    }
+// Watch route changes
+watch(() => route.path, () => {
+  // Close sidebar on mobile when route changes
+  if (window.innerWidth < 992 && sidebarVisible.value) {
+    sidebarVisible.value = false
+  }
+})
+
+/**
+ * Play sound notify
+ */
+const playNotify = () => {
+  const audio = document.getElementById("audioNotification")
+  if (audio) {
+    audio.muted = false
+    audio.play()
   }
 }
 </script>
 
 <style lang="scss">
-// CoreUI Icons Set
+  // Import Tailwind CSS
+  @use '@/assets/css/tailwind.css';
+
+  // Import Font Awesome
+  @use '@fortawesome/fontawesome-free/scss/fontawesome' as *;
+  @use '@fortawesome/fontawesome-free/scss/solid' as *;
+  @use '@fortawesome/fontawesome-free/scss/regular' as *;
+  @use '@fortawesome/fontawesome-free/scss/brands' as *;
+  @use '@fortawesome/fontawesome-free/scss/v4-shims' as *;
+
   /* Import Font Awesome Icons Set */
-  $fa-font-path: '~font-awesome/fonts/';
-  @import '~font-awesome/scss/font-awesome';
-  @import '~bootstrap-vue/dist/bootstrap-vue';
-  @import 'assets/scss/style';
-  @import 'assets/scss/rsw';
-  @import 'assets/scss/sidebar.scss';
+  @use 'assets/scss/style';
+  @use 'assets/scss/rsw';
 
   .center-xy {
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
   .shadow {
     box-shadow: 0 2px 10px #dedede;
     border-radius: 10px;
   }
+
   .fa-stack[data-count]:after{
     position:absolute;
     right:0%;
@@ -216,29 +186,55 @@ export default {
     min-width:2em;
     font-weight:bold;
   }
+
   .nav-left {
     display: flex;
-    align-content: center;
-    .home-icon {
-      padding: .5rem .5rem .5rem .2rem;
+    align-items: center;
+    gap: 0.25rem;
+
+    .navbar-toggler {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 4px;
+      }
     }
+
+    .home-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: .5rem;
+      text-decoration: none;
+      &:hover {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .main {
+    margin-top: 40px;
+    transition: margin-left 0.3s ease;
+  }
+
+  .custom-sidebar:not(.collapsed) ~ .main {
+    margin-left: 0;
   }
   .app-body .sidebar.active {
     margin-left: 0;
   }
+
   .header-custom {
     background-color: #444444 !important;
-    ul.navbar-nav {
-      li.nav-item {
-        min-width: unset;
-        a {
-          display: block;
-          span {
-            display: block;
-          }
-        }
-      }
-    }
+    height: 55px;
+
     .badge {
       top: 10px!important;
       left: unset!important;
@@ -254,17 +250,21 @@ export default {
       font-size: 0.8em;
     }
   }
+
   .iconsCustom {
     width: 40px;
     height: 40px;
   }
+
   .inline-center {
     display: flex;
     align-items: center;
   }
+
   .default-btn-bg {
     background-color: #444444 !important;
   }
+
   .bg-pushed-menu {
     position: fixed;
     top: 0;
@@ -272,15 +272,19 @@ export default {
     right: 0;
     bottom: 0;
     z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
   }
+
   .sidebar-minimizer {
     display: none!important;
   }
+
   .card {
     border: none!important;
     box-shadow: 0 2px 10px #DEDEDE;
     border-radius: 10px!important;
   }
+
   .is-fixed-page {
     position: fixed;
     top: 0;
@@ -288,9 +292,11 @@ export default {
     right: 0;
     bottom: 0;
   }
+
   button {
     &:focus {outline:0;}
   }
+
   .header-container {
     display: flex;
     align-items: center;
@@ -298,18 +304,20 @@ export default {
     width: 100%;
     padding: 0 15px;
   }
+
   .text-header {
     color: #ed592a !important;
   }
 
   .app-header {
     position: fixed !important;
-    padding: 0!important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0 !important;
     height: 55px;
-  }
-  .v-sidebar-menu {
-    top: 55px!important;
-    height: calc(100vh - 55px);
+    z-index: 1001;
   }
 
   .ow-table {

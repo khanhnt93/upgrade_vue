@@ -1,63 +1,54 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='6'>
-              <h6 class="mt-2">Super admin</h6>
-            </b-col>
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+          <h6 class="text-lg font-semibold">Super admin</h6>
+        </div>
+        
+        <hr class="mb-6">
 
-          </b-row>
-          <hr/>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToBrandList()">
-                Quản lý thương hiệu
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToStoreList()">
-                Quản lý cửa hàng
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToAdminStoreList()">
-                Quản lý admin
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
+        <!-- Navigation Buttons -->
+        <div class="space-y-4">
+          <button
+            @click="goToBrandList"
+            class="w-full px-4 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200 text-center">
+            Quản lý thương hiệu
+          </button>
 
-        </b-card>
-      </b-col>
-    </b-row>
+          <button
+            @click="goToStoreList"
+            class="w-full px-4 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200 text-center">
+            Quản lý cửa hàng
+          </button>
+
+          <button
+            @click="goToAdminStoreList"
+            class="w-full px-4 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200 text-center">
+            Quản lý admin
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
-export default {
-  data () {
-    return {
-    }
-  },
-  computed: {
-  },
-  methods: {
-    goToBrandList () {
-      this.$router.push('/brand/list')
-    },
-    goToStoreList () {
-      this.$router.push('/store/list')
-    },
-    goToAdminStoreList () {
-      this.$router.push('/admin-store/list')
-    }
-  }
+
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Methods
+const goToBrandList = () => {
+  router.push('/brand/list')
+}
+
+const goToStoreList = () => {
+  router.push('/store/list')
+}
+
+const goToAdminStoreList = () => {
+  router.push('/admin-store/list')
 }
 </script>

@@ -1,70 +1,70 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-form>
+  <div class="container mx-auto px-4">
+    <div class="flex flex-wrap -mx-4">
+      <div class="w-full px-4">
+        <div class="bg-white rounded-lg shadow-md">
+          <div class="p-6">
+            <form>
 
-              <b-row class="form-row border-bottom border-warning">
-                <b-col md='12'>
-                  <h2 class="text-center">Hướng dẫn sử dụng</h2>
-                </b-col>
-              </b-row>
+              <div class="border-b-2 border-yellow-500 pb-4 mb-4">
+                <div class="w-full">
+                  <h2 class="text-center text-2xl font-bold">Hướng dẫn sử dụng</h2>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
-                  <h4 class="text-header">
+              <div class="border-b-2 border-yellow-500 pt-2 pb-4 mb-4">
+                <div class="w-full">
+                  <h4 class="text-lg font-semibold flex items-center cursor-pointer" @click="isShowIntroduction = !isShowIntroduction">
                     Giới thiệu hệ thống
-                    <i v-show="!isShowIntroduction" class="fa fa-plus pl-3" @click="isShowIntroduction = !isShowIntroduction"></i>
-                    <i v-show="isShowIntroduction" class="fa fa-minus pl-3" @click="isShowIntroduction = !isShowIntroduction"></i>
+                    <i v-show="!isShowIntroduction" class="fa fa-plus ml-3"></i>
+                    <i v-show="isShowIntroduction" class="fa fa-minus ml-3"></i>
                   </h4>
-                  <b-row v-show="isShowIntroduction">
-                    <b-col>
-                      <h5>Hệ thống ciFood bao gồm:</h5>
-                      <p class="lv2">- Web quản lý: <a target="_blank" href="https://cifood.vn">https://cifood.vn</a></p>
+                  <div v-show="isShowIntroduction" class="mt-4">
+                    <div class="w-full">
+                      <h5 class="text-md font-medium mb-2">Hệ thống ciFood bao gồm:</h5>
+                      <p class="lv2">- Web quản lý: <a target="_blank" href="https://cifood.vn" class="text-blue-600 hover:underline">https://cifood.vn</a></p>
                       <p class="lv2">- App máy tính tại quầy (app thu ngân)</p>
                       <p class="lv2">- App điện thoại(android và IOS) giúp nhân viên order tại bàn và quản lý từ xa</p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
-                  <h4 class="text-header">
+              <div class="border-b-2 border-yellow-500 pt-2 pb-4 mb-4">
+                <div class="w-full">
+                  <h4 class="text-lg font-semibold flex items-center cursor-pointer" @click="isShowDownApp = !isShowDownApp">
                     Hướng dẫn tải app
-                    <i v-show="!isShowDownApp" class="fa fa-plus pl-3" @click="isShowDownApp = !isShowDownApp"></i>
-                    <i v-show="isShowDownApp" class="fa fa-minus pl-3" @click="isShowDownApp = !isShowDownApp"></i>
+                    <i v-show="!isShowDownApp" class="fa fa-plus ml-3"></i>
+                    <i v-show="isShowDownApp" class="fa fa-minus ml-3"></i>
                   </h4>
-                  <b-row v-show="isShowDownApp">
-                    <b-col>
+                  <div v-show="isShowDownApp" class="mt-4">
+                    <div class="w-full">
                       <p>Tùy vào nhu cầu sử dụng, nhà hàng bạn có thể tải app điện thoại, app máy tính hoặc cả hai.</p>
                       <p>Để tải app điện thoại:</p>
                       <p class="lv2">- Đối với điện thoại android: Bạn lên CH play hoặc google play, tìm và tải app "ciFood"</p>
                       <p class="lv2">- Đối với điện thoại iOS: Bạn lên app store, tìm và tải app "ciFood"</p>
                       <p>Để tài app máy tính (app thu ngân):</p>
-                      <p class="lv2">- Đối với máy tính windows 64bit <a target="_blank" href="https://api.cifood.vn/files/setup/ciFood-Setup-1.0.1.exe">Tải xuống</a></p>
-                      <p class="lv2">- Đối với máy tính windows 32bit <a target="_blank" href="https://api.cifood.vn/files/setup/ciFood-Setup-1.0.1.exe">Tải xuống</a></p>
+                      <p class="lv2">- Đối với máy tính windows 64bit <a target="_blank" href="https://api.cifood.vn/files/setup/ciFood-Setup-1.0.1.exe" class="text-blue-600 hover:underline">Tải xuống</a></p>
+                      <p class="lv2">- Đối với máy tính windows 32bit <a target="_blank" href="https://api.cifood.vn/files/setup/ciFood-Setup-1.0.1.exe" class="text-blue-600 hover:underline">Tải xuống</a></p>
                       <p class="lv2">- Đối với máy POS chạy android: Bạn lên CH play hoặc google play, tìm và tải app "ciFood Tablet"</p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
-                  <h4 class="text-header">
+              <div class="border-b-2 border-yellow-500 pt-2 pb-4 mb-4">
+                <div class="w-full">
+                  <h4 class="text-lg font-semibold flex items-center cursor-pointer" @click="isShowBaseSetting = !isShowBaseSetting">
                     Thiết lập căn bản
-                    <i v-show="!isShowBaseSetting" class="fa fa-plus pl-3" @click="isShowBaseSetting = !isShowBaseSetting"></i>
-                    <i v-show="isShowBaseSetting" class="fa fa-minus pl-3" @click="isShowBaseSetting = !isShowBaseSetting"></i>
+                    <i v-show="!isShowBaseSetting" class="fa fa-plus ml-3"></i>
+                    <i v-show="isShowBaseSetting" class="fa fa-minus ml-3"></i>
                   </h4>
-                  <b-row v-show="isShowBaseSetting">
-                    <b-col>
-                      <p>Bạn truy cập web quản lý <a target="_blank" href="https://cifood.vn">https://cifood.vn</a> đăng nhập và thực hiện các bước sau đây</p>
-                      <p class="text-primary">** Nếu bạn chưa rõ cách làm, bạn có thể đăng nhập bằng tài khoản demo của chúng tôi (Số điện thoại: 0968668668, mật khẩu: cifoodxincamon), xem mẫu và làm tương tự </p>
+                  <div v-show="isShowBaseSetting" class="mt-4">
+                    <div class="w-full">
+                      <p>Bạn truy cập web quản lý <a target="_blank" href="https://cifood.vn" class="text-blue-600 hover:underline">https://cifood.vn</a> đăng nhập và thực hiện các bước sau đây</p>
+                      <p class="text-blue-600">** Nếu bạn chưa rõ cách làm, bạn có thể đăng nhập bằng tài khoản demo của chúng tôi (Số điện thoại: 0968668668, mật khẩu: cifoodxincamon), xem mẫu và làm tương tự </p>
                       <p class="lv2">1. Thêm bàn ăn</p>
                       <p class="lv2">2. Thêm danh mục món (nếu dùng)</p>
                       <p class="lv2">3. Thêm thực đơn</p>
@@ -73,31 +73,31 @@
                       <p>
                         <img src="/static/img/project/guide/base_setting.PNG" class="image-logo"/>
                       </p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
-                  <h4 class="text-header">
+              <div class="border-b-2 border-yellow-500 pt-2 pb-4 mb-4">
+                <div class="w-full">
+                  <h4 class="text-lg font-semibold flex items-center cursor-pointer" @click="isShowSetting = !isShowSetting">
                     Thiết lập nâng cao
-                    <i v-show="!isShowSetting" class="fa fa-plus pl-3" @click="isShowSetting = !isShowSetting"></i>
-                    <i v-show="isShowSetting" class="fa fa-minus pl-3" @click="isShowSetting = !isShowSetting"></i>
+                    <i v-show="!isShowSetting" class="fa fa-plus ml-3"></i>
+                    <i v-show="isShowSetting" class="fa fa-minus ml-3"></i>
                   </h4>
-                  <b-row v-show="isShowSetting">
-                    <b-col>
-                      <p>Bạn truy cập web quản lý <a target="_blank" href="https://cifood.vn">https://cifood.vn</a> đăng nhập và thực hiện các bước sau đây</p>
-                      <p class="text-primary">** Nếu bạn chưa rõ cách làm, bạn có thể đăng nhập bằng tài khoản demo của chúng tôi (Số điện thoại: 0968668668, mật khẩu: cifoodxincamon), xem mẫu và làm tương tự </p>
+                  <div v-show="isShowSetting" class="mt-4">
+                    <div class="w-full">
+                      <p>Bạn truy cập web quản lý <a target="_blank" href="https://cifood.vn" class="text-blue-600 hover:underline">https://cifood.vn</a> đăng nhập và thực hiện các bước sau đây</p>
+                      <p class="text-blue-600">** Nếu bạn chưa rõ cách làm, bạn có thể đăng nhập bằng tài khoản demo của chúng tôi (Số điện thoại: 0968668668, mật khẩu: cifoodxincamon), xem mẫu và làm tương tự </p>
 
-                      <h5 class="lv2 pt-3">
+                      <h5 class="lv2 pt-3 text-md font-medium flex items-center cursor-pointer" @click="isShowOptionTopping = !isShowOptionTopping">
                         Thêm lựa chọn, topping cho món
-                        <i v-show="!isShowOptionTopping" class="fa fa-plus pl-3" @click="isShowOptionTopping = !isShowOptionTopping"></i>
-                        <i v-show="isShowOptionTopping" class="fa fa-minus pl-3" @click="isShowOptionTopping = !isShowOptionTopping"></i>
+                        <i v-show="!isShowOptionTopping" class="fa fa-plus ml-3"></i>
+                        <i v-show="isShowOptionTopping" class="fa fa-minus ml-3"></i>
                       </h5>
-                      <b-row v-show="isShowOptionTopping" class="lv3">
-                        <b-col>
+                      <div v-show="isShowOptionTopping" class="lv3 mt-2">
+                        <div class="w-full">
                           <p>Đối với các quán cafe, trà sữa, … món thường có thêm các lựa chọn như 100% đường, 50% đường,
                             50% đá, 100% đá hoặc topping trên món như thạch rau câu, kem cheese, trân châu, …</p>
 
@@ -122,19 +122,19 @@
                           <p>
                             <img src="/static/img/project/guide/topping.PNG" class="image-guide"/>
                           </p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thêm khuyến mãi
-                        <i v-show="!isShowPromotion" class="fa fa-plus pl-3" @click="isShowPromotion = !isShowPromotion"></i>
-                        <i v-show="isShowPromotion" class="fa fa-minus pl-3" @click="isShowPromotion = !isShowPromotion"></i>
+                        <i v-show="!isShowPromotion" class="fa fa-plus ml-3" @click="isShowPromotion = !isShowPromotion"></i>
+                        <i v-show="isShowPromotion" class="fa fa-minus ml-3" @click="isShowPromotion = !isShowPromotion"></i>
                       </h5>
-                      <b-row v-show="isShowPromotion" class="lv3">
-                        <b-col>
+                      <div v-show="isShowPromotion" class="lv3">
+                        <div>
                           <p>Để thêm khuyến mãi, bạn vào menu “Thiết lập cửa hàng”, chọn “Khuyến mãi”.</p>
                           <p>Bạn bấm nút “Thêm” ở góc trên bên phải. Màn hình tạo mới khuyến mãi sẽ xuất hiện.
-                            Trong màn hình, những mục có dấu sao màu đỏ (<span class="text-danger">*</span>) là những mục bắt buộc nhập.
+                            Trong màn hình, những mục có dấu sao màu đỏ (<span class="text-red-600">*</span>) là những mục bắt buộc nhập.
                           </p>
                           <p class="pt-2">Các loại khuyến mãi</p>
                           <p class="lv4">- Discount: Giảm giá theo %, ví dụ: Giảm giá 30% toàn hệ thống từ 30/4 đến 1/5</p>
@@ -154,17 +154,17 @@
                           <p>
                             <img src="/static/img/project/guide/promotion.PNG" class="image-guide"/>
                           </p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
 
                       <h5 class="lv2 pt-3">
                         Thêm khu vực chế biến
-                        <i v-show="!isShowPrinterArea" class="fa fa-plus pl-3" @click="isShowPrinterArea = !isShowPrinterArea"></i>
-                        <i v-show="isShowPrinterArea" class="fa fa-minus pl-3" @click="isShowPrinterArea = !isShowPrinterArea"></i>
+                        <i v-show="!isShowPrinterArea" class="fa fa-plus ml-3" @click="isShowPrinterArea = !isShowPrinterArea"></i>
+                        <i v-show="isShowPrinterArea" class="fa fa-minus ml-3" @click="isShowPrinterArea = !isShowPrinterArea"></i>
                       </h5>
-                      <b-row v-show="isShowPrinterArea" class="lv3">
-                        <b-col>
+                      <div v-show="isShowPrinterArea" class="lv3">
+                        <div>
                           <p>Trong nhà hàng, mỗi món ăn có thể được chế biến ở nhiều nơi khác nhau (bếp, quầy bar, …).
                             Khi đó, từng món nên được in bếp theo đúng khu vực chế biến.
                           </p>
@@ -184,16 +184,16 @@
                             <img src="/static/img/project/guide/set_kitchen_area.PNG" class="image-guide"/>
                           </p>
                           <p>Lưu</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thêm quản lý kho
-                        <i v-show="!isShowRepository" class="fa fa-plus pl-3" @click="isShowRepository = !isShowRepository"></i>
-                        <i v-show="isShowRepository" class="fa fa-minus pl-3" @click="isShowRepository = !isShowRepository"></i>
+                        <i v-show="!isShowRepository" class="fa fa-plus ml-3" @click="isShowRepository = !isShowRepository"></i>
+                        <i v-show="isShowRepository" class="fa fa-minus ml-3" @click="isShowRepository = !isShowRepository"></i>
                       </h5>
-                      <b-row v-show="isShowRepository" class="lv3">
-                        <b-col>
+                      <div v-show="isShowRepository" class="lv3">
+                        <div>
                           <p>Để tự động quản lý kho, bạn làm các bước sau:</p>
 
                           <p class="lv3">- Bước 1: Thêm đơn vị</p>
@@ -220,16 +220,16 @@
                           </p>
 
                           <p>Sau khi hoàn thành các bước trên, khi thanh toán, nguyên liệu sẽ tự động trừ trong kho.</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thêm cài đặt nhà hàng
-                        <i v-show="!isShowStoreSetting" class="fa fa-plus pl-3" @click="isShowStoreSetting = !isShowStoreSetting"></i>
-                        <i v-show="isShowStoreSetting" class="fa fa-minus pl-3" @click="isShowStoreSetting = !isShowStoreSetting"></i>
+                        <i v-show="!isShowStoreSetting" class="fa fa-plus ml-3" @click="isShowStoreSetting = !isShowStoreSetting"></i>
+                        <i v-show="isShowStoreSetting" class="fa fa-minus ml-3" @click="isShowStoreSetting = !isShowStoreSetting"></i>
                       </h5>
-                      <b-row v-show="isShowStoreSetting" class="lv3">
-                        <b-col>
+                      <div v-show="isShowStoreSetting" class="lv3">
+                        <div>
                           <p>- Mỗi nhà hàng có thể có cài đặt riêng biệt phù hợp với hoạt động của nhà hàng mình như có bao
                           gồm thuế VAT khi thanh toán, có sử dụng kho hàng, ....</p>
                           <p>- Để vào cài đặt, bạn vào menu "Thiết lập cửa hàng", chọn "Cài đặt"</p>
@@ -237,96 +237,96 @@
                           <p>
                             <img src="/static/img/project/guide/store_setting.PNG" class="image-guide"/>
                           </p>
-                        </b-col>
-                      </b-row>
-                    </b-col>
-                  </b-row>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div>
                   <h4 class="text-header">
                     Hướng dẫn sử dụng chức năng
-                    <i v-show="!isShowFunctionGuide" class="fa fa-plus pl-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
-                    <i v-show="isShowFunctionGuide" class="fa fa-minus pl-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
+                    <i v-show="!isShowFunctionGuide" class="fa fa-plus ml-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
+                    <i v-show="isShowFunctionGuide" class="fa fa-minus ml-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
                   </h4>
-                  <b-row v-show="isShowFunctionGuide">
-                    <b-col>
+                  <div v-show="isShowFunctionGuide">
+                    <div>
 
                       <h5 class="lv2 pt-3">
                         Gọi món
-                        <i v-show="!isShowGuideOrder" class="fa fa-plus pl-3" @click="isShowGuideOrder = !isShowGuideOrder"></i>
-                        <i v-show="isShowGuideOrder" class="fa fa-minus pl-3" @click="isShowGuideOrder = !isShowGuideOrder"></i>
+                        <i v-show="!isShowGuideOrder" class="fa fa-plus ml-3" @click="isShowGuideOrder = !isShowGuideOrder"></i>
+                        <i v-show="isShowGuideOrder" class="fa fa-minus ml-3" @click="isShowGuideOrder = !isShowGuideOrder"></i>
                       </h5>
-                      <b-row v-show="isShowGuideOrder" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideOrder" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Gọi món bằng app điện thoại:
-                                <i v-show="!isShowGuideOrderByMobile" class="fa fa-plus pl-3" @click="isShowGuideOrderByMobile = !isShowGuideOrderByMobile"></i>
-                                <i v-show="isShowGuideOrderByMobile" class="fa fa-minus pl-3" @click="isShowGuideOrderByMobile = !isShowGuideOrderByMobile"></i>
+                                <i v-show="!isShowGuideOrderByMobile" class="fa fa-plus ml-3" @click="isShowGuideOrderByMobile = !isShowGuideOrderByMobile"></i>
+                                <i v-show="isShowGuideOrderByMobile" class="fa fa-minus ml-3" @click="isShowGuideOrderByMobile = !isShowGuideOrderByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideOrderByMobile" class="lv4">
-                                <b-col md="3" class="pr-3">
+                              <div v-show="isShowGuideOrderByMobile" class="lv4">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click vào menu "Gọi món"</p><br><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
-                                <b-col md="3" class="pr-3">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
                                   <p>2. Click vào bàn bạn muốn order, chọn "Gọi món"</p><br><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
-                                <b-col md="3" class="pr-3">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
                                   <p>3. Bạn có thể tìm kiếm theo tên món ở thanh tìm kiếm phía trên cùng màn hình,
                                     có thể chọn danh mục món mong muốn để order nhanh hơn. Để order, bạn click vào
                                     dấu "+" cuối mỗi món với số lượng phù hợp, sau đó click "Xác nhận"</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/3.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
-                                <b-col md="3" class="pr-3">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
                                   <p>4. Tại màn hình xác nhận, bạn có thể thay đổi số lượng món, thay đổi giá món, note
                                   ghi chú trên mỗi món hoặc note ghi chú trên toàn order. Sau đó click "Xác nhận" để
                                   hoàn thành gọi món</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/4.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
+                                    </div>
+                                  </div>
 
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row class="mt-2">
-                            <b-col>
+                          <div class="mt-2">
+                            <div>
                               <p>Gọi món bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideOrderByWindowns" class="fa fa-plus pl-3" @click="isShowGuideOrderByWindowns = !isShowGuideOrderByWindowns"></i>
-                                <i v-show="isShowGuideOrderByWindowns" class="fa fa-minus pl-3" @click="isShowGuideOrderByWindowns = !isShowGuideOrderByWindowns"></i>
+                                <i v-show="!isShowGuideOrderByWindowns" class="fa fa-plus ml-3" @click="isShowGuideOrderByWindowns = !isShowGuideOrderByWindowns"></i>
+                                <i v-show="isShowGuideOrderByWindowns" class="fa fa-minus ml-3" @click="isShowGuideOrderByWindowns = !isShowGuideOrderByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideOrderByWindowns" class="lv4">
-                                <b-col md="6" class="pr-3">
+                              <div v-show="isShowGuideOrderByWindowns" class="lv4">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click vào menu "Gọi món" và chọn bàn bạn muốn gọi món</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
+                                    </div>
+                                  </div>
 
-                                </b-col>
-                                <b-col md="6" class="pr-3">
+                                </div>
+                                <div>
                                   <p>2. Tại màn hình gọi món, bạn có thể:</p>
                                   <p class="pl-2">1. Tìm kiếm "danh mục món" tại khung số 1</p>
                                   <p class="pl-2">2. Tìm kiếm theo tên món ăn tại khung số 2</p>
@@ -337,55 +337,55 @@
                                   <p class="pl-2">7. Thêm ghi chú trên order (khung số 6)</p>
                                   <p class="pl-2">8. Hoàn tất order (khung số 7)</p>
                                   <p class="pl-2">(Các bước 1, 2, 4, 5, 6, 7 là không bắt buộc)</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/order/6.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
+                                    </div>
+                                  </div>
 
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thanh toán
-                        <i v-show="!isShowGuidePayment" class="fa fa-plus pl-3" @click="isShowGuidePayment = !isShowGuidePayment"></i>
-                        <i v-show="isShowGuidePayment" class="fa fa-minus pl-3" @click="isShowGuidePayment = !isShowGuidePayment"></i>
+                        <i v-show="!isShowGuidePayment" class="fa fa-plus ml-3" @click="isShowGuidePayment = !isShowGuidePayment"></i>
+                        <i v-show="isShowGuidePayment" class="fa fa-minus ml-3" @click="isShowGuidePayment = !isShowGuidePayment"></i>
                       </h5>
-                      <b-row v-show="isShowGuidePayment" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuidePayment" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Thanh toán bằng app điện thoại:
-                                <i v-show="!isShowGuidePaymentByMobile" class="fa fa-plus pl-3" @click="isShowGuidePaymentByMobile = !isShowGuidePaymentByMobile"></i>
-                                <i v-show="isShowGuidePaymentByMobile" class="fa fa-minus pl-3" @click="isShowGuidePaymentByMobile = !isShowGuidePaymentByMobile"></i>
+                                <i v-show="!isShowGuidePaymentByMobile" class="fa fa-plus ml-3" @click="isShowGuidePaymentByMobile = !isShowGuidePaymentByMobile"></i>
+                                <i v-show="isShowGuidePaymentByMobile" class="fa fa-minus ml-3" @click="isShowGuidePaymentByMobile = !isShowGuidePaymentByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuidePaymentByMobile" class="lv4">
+                              <div v-show="isShowGuidePaymentByMobile" class="lv4">
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click vào menu "Gọi món", click vào bàn đã order trước đó
                                   (Bàn có màu đậm)</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/payment/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>2. Chọn "Thanh toán"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/payment/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>3. Tại màn hình "Thanh toán", bạn có thể: </p><br>
                                   <p class="pl-2">1. Thêm thông tin khách hàng (tích điểm)</p>
                                   <p class="pl-2">2. Thêm khuyến mãi</p>
@@ -397,35 +397,35 @@
                                   <p class="pl-2">8. In hóa đơn tạm tính (Dùng để khách hàng kiểm món trước khi thanh toán)</p>
                                   <p class="pl-2">9. Click "Thanh toán" để thanh toán</p>
                                   <p class="pl-2">(Tất cả các bước 1-> 8 là không bắt buộc)</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/payment/3.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Thanh toán bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuidePaymentByWindowns" class="fa fa-plus pl-3" @click="isShowGuidePaymentByWindowns = !isShowGuidePaymentByWindowns"></i>
-                                <i v-show="isShowGuidePaymentByWindowns" class="fa fa-minus pl-3" @click="isShowGuidePaymentByWindowns = !isShowGuidePaymentByWindowns"></i>
+                                <i v-show="!isShowGuidePaymentByWindowns" class="fa fa-plus ml-3" @click="isShowGuidePaymentByWindowns = !isShowGuidePaymentByWindowns"></i>
+                                <i v-show="isShowGuidePaymentByWindowns" class="fa fa-minus ml-3" @click="isShowGuidePaymentByWindowns = !isShowGuidePaymentByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuidePaymentByWindowns" class="lv4">
-                                <b-col md="6" class="pr-3">
+                              <div v-show="isShowGuidePaymentByWindowns" class="lv4">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click vào menu "Gọi món", click vào bàn đã order trước đó
                                   (Bàn có màu đậm)</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/payment/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Thanh toán", bạn có thể: </p><br>
                                   <p class="pl-2">1. Thêm thông tin khách hàng (tích điểm)</p>
                                   <p class="pl-2">2. Thêm khuyến mãi</p>
@@ -437,684 +437,684 @@
                                   <p class="pl-2">8. In hóa đơn tạm tính (Dùng để khách hàng kiểm món trước khi thanh toán)</p>
                                   <p class="pl-2">9. Click "Thanh toán" để thanh toán</p>
                                   <p class="pl-2">(Tất cả các bước 1-> 8 là không bắt buộc)</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/payment/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
-                        </b-col>
-                      </b-row>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Đổi bàn
-                        <i v-show="!isShowGuideChangeTable" class="fa fa-plus pl-3" @click="isShowGuideChangeTable = !isShowGuideChangeTable"></i>
-                        <i v-show="isShowGuideChangeTable" class="fa fa-minus pl-3" @click="isShowGuideChangeTable = !isShowGuideChangeTable"></i>
+                        <i v-show="!isShowGuideChangeTable" class="fa fa-plus ml-3" @click="isShowGuideChangeTable = !isShowGuideChangeTable"></i>
+                        <i v-show="isShowGuideChangeTable" class="fa fa-minus ml-3" @click="isShowGuideChangeTable = !isShowGuideChangeTable"></i>
                       </h5>
-                      <b-row v-show="isShowGuideChangeTable" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideChangeTable" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Đổi bàn bằng app điện thoại:
-                                <i v-show="!isShowGuideChangeTableByMobile" class="fa fa-plus pl-3" @click="isShowGuideChangeTableByMobile = !isShowGuideChangeTableByMobile"></i>
-                                <i v-show="isShowGuideChangeTableByMobile" class="fa fa-minus pl-3" @click="isShowGuideChangeTableByMobile = !isShowGuideChangeTableByMobile"></i>
+                                <i v-show="!isShowGuideChangeTableByMobile" class="fa fa-plus ml-3" @click="isShowGuideChangeTableByMobile = !isShowGuideChangeTableByMobile"></i>
+                                <i v-show="isShowGuideChangeTableByMobile" class="fa fa-minus ml-3" @click="isShowGuideChangeTableByMobile = !isShowGuideChangeTableByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideChangeTableByMobile" class="lv4">
-                                <b-col md="6" class="pr-3">
+                              <div v-show="isShowGuideChangeTableByMobile" class="lv4">
+                                <div>
                                   <p>1. Tại màn hình "Danh sách bàn", chọn bàn muốn đổi, chọn "Đổi bàn"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/change_table/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Đổi bàn" hiện ra, chọn bàn muốn đổi tới, sau đó click "Đổi bàn"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/change_table/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Đổi bàn bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideChangeTableByWindowns" class="fa fa-plus pl-3" @click="isShowGuideChangeTableByWindowns = !isShowGuideChangeTableByWindowns"></i>
-                                <i v-show="isShowGuideChangeTableByWindowns" class="fa fa-minus pl-3" @click="isShowGuideChangeTableByWindowns = !isShowGuideChangeTableByWindowns"></i>
+                                <i v-show="!isShowGuideChangeTableByWindowns" class="fa fa-plus ml-3" @click="isShowGuideChangeTableByWindowns = !isShowGuideChangeTableByWindowns"></i>
+                                <i v-show="isShowGuideChangeTableByWindowns" class="fa fa-minus ml-3" @click="isShowGuideChangeTableByWindowns = !isShowGuideChangeTableByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideChangeTableByWindowns" class="lv4">
+                              <div v-show="isShowGuideChangeTableByWindowns" class="lv4">
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Nhân viên order", sau đó click vào bàn muốn đổi</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/change_table/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gọi món", click "Đổi bàn" ở menu dưới cùng màn hình</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/change_table/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>3. Tại màn hình "Đổi bàn" hiện ra, chọn bàn muốn đổi tới, sau đó click "Xác nhận"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/change_table/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Gộp bàn
-                        <i v-show="!isShowGuideMergeTable" class="fa fa-plus pl-3" @click="isShowGuideMergeTable = !isShowGuideMergeTable"></i>
-                        <i v-show="isShowGuideMergeTable" class="fa fa-minus pl-3" @click="isShowGuideMergeTable = !isShowGuideMergeTable"></i>
+                        <i v-show="!isShowGuideMergeTable" class="fa fa-plus ml-3" @click="isShowGuideMergeTable = !isShowGuideMergeTable"></i>
+                        <i v-show="isShowGuideMergeTable" class="fa fa-minus ml-3" @click="isShowGuideMergeTable = !isShowGuideMergeTable"></i>
                       </h5>
-                      <b-row v-show="isShowGuideMergeTable" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideMergeTable" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Gộp bàn bằng app điện thoại:
-                                <i v-show="!isShowGuideMergeTableByMobile" class="fa fa-plus pl-3" @click="isShowGuideMergeTableByMobile = !isShowGuideMergeTableByMobile"></i>
-                                <i v-show="isShowGuideMergeTableByMobile" class="fa fa-minus pl-3" @click="isShowGuideMergeTableByMobile = !isShowGuideMergeTableByMobile"></i>
+                                <i v-show="!isShowGuideMergeTableByMobile" class="fa fa-plus ml-3" @click="isShowGuideMergeTableByMobile = !isShowGuideMergeTableByMobile"></i>
+                                <i v-show="isShowGuideMergeTableByMobile" class="fa fa-minus ml-3" @click="isShowGuideMergeTableByMobile = !isShowGuideMergeTableByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideMergeTableByMobile" class="lv4">
+                              <div v-show="isShowGuideMergeTableByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Tại màn hình "Danh sách bàn", chọn bàn bất kỳ mà bạn muốn gộp rồi chọn "Gộp bàn"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/merge_table/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gộp bàn" hiện ra, chọn những bàn bạn muốn gộp cùng, sau đó click
                                     "Gộp bàn" (có thể gộp 1 hoặc nhiều bàn)</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/merge_table/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Gộp bàn bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideMergeTableByWindowns" class="fa fa-plus pl-3" @click="isShowGuideMergeTableByWindowns = !isShowGuideMergeTableByWindowns"></i>
-                                <i v-show="isShowGuideMergeTableByWindowns" class="fa fa-minus pl-3" @click="isShowGuideMergeTableByWindowns = !isShowGuideMergeTableByWindowns"></i>
+                                <i v-show="!isShowGuideMergeTableByWindowns" class="fa fa-plus ml-3" @click="isShowGuideMergeTableByWindowns = !isShowGuideMergeTableByWindowns"></i>
+                                <i v-show="isShowGuideMergeTableByWindowns" class="fa fa-minus ml-3" @click="isShowGuideMergeTableByWindowns = !isShowGuideMergeTableByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideMergeTableByWindowns" class="lv4">
+                              <div v-show="isShowGuideMergeTableByWindowns" class="lv4">
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Nhân viên order", sau đó click vào một trong những bàn muốn gộp</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/merge_table/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gọi món", click "Gộp bàn" ở menu dưới cùng màn hình</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/merge_table/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>3. Tại màn hình "Gộp bàn" hiện ra, chọn một hoặc nhiều bàn muốn gộp, sau đó click "Xác nhận"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/merge_table/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Dọn bàn
-                        <i v-show="!isShowGuideCleanTable" class="fa fa-plus pl-3" @click="isShowGuideCleanTable = !isShowGuideCleanTable"></i>
-                        <i v-show="isShowGuideCleanTable" class="fa fa-minus pl-3" @click="isShowGuideCleanTable = !isShowGuideCleanTable"></i>
+                        <i v-show="!isShowGuideCleanTable" class="fa fa-plus ml-3" @click="isShowGuideCleanTable = !isShowGuideCleanTable"></i>
+                        <i v-show="isShowGuideCleanTable" class="fa fa-minus ml-3" @click="isShowGuideCleanTable = !isShowGuideCleanTable"></i>
                       </h5>
-                      <b-row v-show="isShowGuideCleanTable" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideCleanTable" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Dọn bàn bằng app điện thoại:
-                                <i v-show="!isShowGuideCleanTableByMobile" class="fa fa-plus pl-3" @click="isShowGuideCleanTableByMobile = !isShowGuideCleanTableByMobile"></i>
-                                <i v-show="isShowGuideCleanTableByMobile" class="fa fa-minus pl-3" @click="isShowGuideCleanTableByMobile = !isShowGuideCleanTableByMobile"></i>
+                                <i v-show="!isShowGuideCleanTableByMobile" class="fa fa-plus ml-3" @click="isShowGuideCleanTableByMobile = !isShowGuideCleanTableByMobile"></i>
+                                <i v-show="isShowGuideCleanTableByMobile" class="fa fa-minus ml-3" @click="isShowGuideCleanTableByMobile = !isShowGuideCleanTableByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideCleanTableByMobile" class="lv4">
-                                <b-col md="12" class="pr-3">
+                              <div v-show="isShowGuideCleanTableByMobile" class="lv4">
+                                <div>
                                   <p>Chỉ có thể dọn bàn với bàn đã hủy hết order và khách đã rời đi</p>
                                   <p>Tại màn hình "Danh sách bàn", chọn bàn muốn dọn sau đó click "Dọn bàn"</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/clean_table/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Dọn bàn bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideCleanTableByWindowns" class="fa fa-plus pl-3" @click="isShowGuideCleanTableByWindowns = !isShowGuideCleanTableByWindowns"></i>
-                                <i v-show="isShowGuideCleanTableByWindowns" class="fa fa-minus pl-3" @click="isShowGuideCleanTableByWindowns = !isShowGuideCleanTableByWindowns"></i>
+                                <i v-show="!isShowGuideCleanTableByWindowns" class="fa fa-plus ml-3" @click="isShowGuideCleanTableByWindowns = !isShowGuideCleanTableByWindowns"></i>
+                                <i v-show="isShowGuideCleanTableByWindowns" class="fa fa-minus ml-3" @click="isShowGuideCleanTableByWindowns = !isShowGuideCleanTableByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideCleanTableByWindowns" class="lv4">
+                              <div v-show="isShowGuideCleanTableByWindowns" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Nhân viên order", sau đó click vào bàn muốn dọn</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/clean_table/2.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gọi món", click "Dọn bàn" ở menu dưới cùng màn hình</p><br>
                                   <p>(Chỉ có thể dọn bàn với bàn đã hủy hết order và khách đã rời đi)</p>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/clean_table/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Hủy món
-                        <i v-show="!isShowGuideCancelFood" class="fa fa-plus pl-3" @click="isShowGuideCancelFood = !isShowGuideCancelFood"></i>
-                        <i v-show="isShowGuideCancelFood" class="fa fa-minus pl-3" @click="isShowGuideCancelFood = !isShowGuideCancelFood"></i>
+                        <i v-show="!isShowGuideCancelFood" class="fa fa-plus ml-3" @click="isShowGuideCancelFood = !isShowGuideCancelFood"></i>
+                        <i v-show="isShowGuideCancelFood" class="fa fa-minus ml-3" @click="isShowGuideCancelFood = !isShowGuideCancelFood"></i>
                       </h5>
-                      <b-row v-show="isShowGuideCancelFood" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideCancelFood" class="lv3">
+                        <div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Hủy món bằng app điện thoại:
-                                <i v-show="!isShowGuideCancelFoodByMobile" class="fa fa-plus pl-3" @click="isShowGuideCancelFoodByMobile = !isShowGuideCancelFoodByMobile"></i>
-                                <i v-show="isShowGuideCancelFoodByMobile" class="fa fa-minus pl-3" @click="isShowGuideCancelFoodByMobile = !isShowGuideCancelFoodByMobile"></i>
+                                <i v-show="!isShowGuideCancelFoodByMobile" class="fa fa-plus ml-3" @click="isShowGuideCancelFoodByMobile = !isShowGuideCancelFoodByMobile"></i>
+                                <i v-show="isShowGuideCancelFoodByMobile" class="fa fa-minus ml-3" @click="isShowGuideCancelFoodByMobile = !isShowGuideCancelFoodByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideCancelFoodByMobile" class="lv4">
+                              <div v-show="isShowGuideCancelFoodByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Tại màn hình "Danh sách bàn", chọn bàn muốn hủy món rồi click "Hủy món"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_food/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Hủy món" hiện ra, click dấu "-" sau món muốn hủy rồi click "Xác nhận"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_food/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Hủy món bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideCancelFoodByWindowns" class="fa fa-plus pl-3" @click="isShowGuideCancelFoodByWindowns = !isShowGuideCancelFoodByWindowns"></i>
-                                <i v-show="isShowGuideCancelFoodByWindowns" class="fa fa-minus pl-3" @click="isShowGuideCancelFoodByWindowns = !isShowGuideCancelFoodByWindowns"></i>
+                                <i v-show="!isShowGuideCancelFoodByWindowns" class="fa fa-plus ml-3" @click="isShowGuideCancelFoodByWindowns = !isShowGuideCancelFoodByWindowns"></i>
+                                <i v-show="isShowGuideCancelFoodByWindowns" class="fa fa-minus ml-3" @click="isShowGuideCancelFoodByWindowns = !isShowGuideCancelFoodByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideCancelFoodByWindowns" class="lv4">
+                              <div v-show="isShowGuideCancelFoodByWindowns" class="lv4">
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Nhân viên order", sau đó click vào bàn muốn hủy món</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_food/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gọi món", click "Hủy món" ở menu dưới cùng màn hình</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_food/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>3. Tại màn hình "Hủy món" hiện ra, click vào dấu "-" ở món muốn hủy, sau đó click "Xác nhận"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_food/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Hủy order
-                        <i v-show="!isShowGuideCancelOrder" class="fa fa-plus pl-3" @click="isShowGuideCancelOrder = !isShowGuideCancelOrder"></i>
-                        <i v-show="isShowGuideCancelOrder" class="fa fa-minus pl-3" @click="isShowGuideCancelOrder = !isShowGuideCancelOrder"></i>
+                        <i v-show="!isShowGuideCancelOrder" class="fa fa-plus ml-3" @click="isShowGuideCancelOrder = !isShowGuideCancelOrder"></i>
+                        <i v-show="isShowGuideCancelOrder" class="fa fa-minus ml-3" @click="isShowGuideCancelOrder = !isShowGuideCancelOrder"></i>
                       </h5>
-                      <b-row v-show="isShowGuideCancelOrder" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideCancelOrder" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Hủy order bằng app điện thoại:
-                                <i v-show="!isShowGuideCancelOrderByMobile" class="fa fa-plus pl-3" @click="isShowGuideCancelOrderByMobile = !isShowGuideCancelOrderByMobile"></i>
-                                <i v-show="isShowGuideCancelOrderByMobile" class="fa fa-minus pl-3" @click="isShowGuideCancelOrderByMobile = !isShowGuideCancelOrderByMobile"></i>
+                                <i v-show="!isShowGuideCancelOrderByMobile" class="fa fa-plus ml-3" @click="isShowGuideCancelOrderByMobile = !isShowGuideCancelOrderByMobile"></i>
+                                <i v-show="isShowGuideCancelOrderByMobile" class="fa fa-minus ml-3" @click="isShowGuideCancelOrderByMobile = !isShowGuideCancelOrderByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideCancelOrderByMobile" class="lv4">
+                              <div v-show="isShowGuideCancelOrderByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Tại màn hình "Danh sách bàn", chọn bàn muốn hủy order rồi click "Hủy order"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_order/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Hủy order" hiện ra, click "Xác nhận" để hủy hết những món đã order</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_order/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Hủy order bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideCancelOrderByWindowns" class="fa fa-plus pl-3" @click="isShowGuideCancelOrderByWindowns = !isShowGuideCancelOrderByWindowns"></i>
-                                <i v-show="isShowGuideCancelOrderByWindowns" class="fa fa-minus pl-3" @click="isShowGuideCancelOrderByWindowns = !isShowGuideCancelOrderByWindowns"></i>
+                                <i v-show="!isShowGuideCancelOrderByWindowns" class="fa fa-plus ml-3" @click="isShowGuideCancelOrderByWindowns = !isShowGuideCancelOrderByWindowns"></i>
+                                <i v-show="isShowGuideCancelOrderByWindowns" class="fa fa-minus ml-3" @click="isShowGuideCancelOrderByWindowns = !isShowGuideCancelOrderByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideCancelOrderByWindowns" class="lv4">
+                              <div v-show="isShowGuideCancelOrderByWindowns" class="lv4">
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Nhân viên order", sau đó click vào bàn muốn hủy order</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_order/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Gọi món", click "Hủy order" ở menu dưới cùng màn hình</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_order/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="4" class="pr-3">
+                                <div>
                                   <p>3. Tại màn hình "Hủy order" hiện ra, click "Xác nhận"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/cancel_order/5.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Xem lịch sử gọi món
-                        <i v-show="!isShowGuideOrderHistory" class="fa fa-plus pl-3" @click="isShowGuideOrderHistory = !isShowGuideOrderHistory"></i>
-                        <i v-show="isShowGuideOrderHistory" class="fa fa-minus pl-3" @click="isShowGuideOrderHistory = !isShowGuideOrderHistory"></i>
+                        <i v-show="!isShowGuideOrderHistory" class="fa fa-plus ml-3" @click="isShowGuideOrderHistory = !isShowGuideOrderHistory"></i>
+                        <i v-show="isShowGuideOrderHistory" class="fa fa-minus ml-3" @click="isShowGuideOrderHistory = !isShowGuideOrderHistory"></i>
                       </h5>
-                      <b-row v-show="isShowGuideOrderHistory" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideOrderHistory" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Xem lịch sử gọi món bằng app điện thoại:
-                                <i v-show="!isShowGuideOrderHistoryByMobile" class="fa fa-plus pl-3" @click="isShowGuideOrderHistoryByMobile = !isShowGuideOrderHistoryByMobile"></i>
-                                <i v-show="isShowGuideOrderHistoryByMobile" class="fa fa-minus pl-3" @click="isShowGuideOrderHistoryByMobile = !isShowGuideOrderHistoryByMobile"></i>
+                                <i v-show="!isShowGuideOrderHistoryByMobile" class="fa fa-plus ml-3" @click="isShowGuideOrderHistoryByMobile = !isShowGuideOrderHistoryByMobile"></i>
+                                <i v-show="isShowGuideOrderHistoryByMobile" class="fa fa-minus ml-3" @click="isShowGuideOrderHistoryByMobile = !isShowGuideOrderHistoryByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideOrderHistoryByMobile" class="lv4">
-                                <b-col md="6" class="pr-3">
+                              <div v-show="isShowGuideOrderHistoryByMobile" class="lv4">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click menu "QL gọi món", sau đó chọn "Xem lịch sử gọi món"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_order/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử order" hiện ra, Nhập các điều kiện tìm kiếm nếu muốn rồi nhấn "Lọc"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_order/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Xem lịch sử gọi món bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideOrderHistoryByWindowns" class="fa fa-plus pl-3" @click="isShowGuideOrderHistoryByWindowns = !isShowGuideOrderHistoryByWindowns"></i>
-                                <i v-show="isShowGuideOrderHistoryByWindowns" class="fa fa-minus pl-3" @click="isShowGuideOrderHistoryByWindowns = !isShowGuideOrderHistoryByWindowns"></i>
+                                <i v-show="!isShowGuideOrderHistoryByWindowns" class="fa fa-plus ml-3" @click="isShowGuideOrderHistoryByWindowns = !isShowGuideOrderHistoryByWindowns"></i>
+                                <i v-show="isShowGuideOrderHistoryByWindowns" class="fa fa-minus ml-3" @click="isShowGuideOrderHistoryByWindowns = !isShowGuideOrderHistoryByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideOrderHistoryByWindowns" class="lv4">
+                              <div v-show="isShowGuideOrderHistoryByWindowns" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Quản lý order", sau đó click "Lịch sử order"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_order/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử order" hiện ra, nhập điều kiện tìm kiếm phù hợp nếu muốn rồi click "Tìm kiếm"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_order/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Xem lịch sử bill
-                        <i v-show="!isShowGuideBillHistory" class="fa fa-plus pl-3" @click="isShowGuideBillHistory = !isShowGuideBillHistory"></i>
-                        <i v-show="isShowGuideBillHistory" class="fa fa-minus pl-3" @click="isShowGuideBillHistory = !isShowGuideBillHistory"></i>
+                        <i v-show="!isShowGuideBillHistory" class="fa fa-plus ml-3" @click="isShowGuideBillHistory = !isShowGuideBillHistory"></i>
+                        <i v-show="isShowGuideBillHistory" class="fa fa-minus ml-3" @click="isShowGuideBillHistory = !isShowGuideBillHistory"></i>
                       </h5>
-                      <b-row v-show="isShowGuideBillHistory" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideBillHistory" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Xem lịch sử bill bằng app điện thoại:
-                                <i v-show="!isShowGuideBillHistoryByMobile" class="fa fa-plus pl-3" @click="isShowGuideBillHistoryByMobile = !isShowGuideBillHistoryByMobile"></i>
-                                <i v-show="isShowGuideBillHistoryByMobile" class="fa fa-minus pl-3" @click="isShowGuideBillHistoryByMobile = !isShowGuideBillHistoryByMobile"></i>
+                                <i v-show="!isShowGuideBillHistoryByMobile" class="fa fa-plus ml-3" @click="isShowGuideBillHistoryByMobile = !isShowGuideBillHistoryByMobile"></i>
+                                <i v-show="isShowGuideBillHistoryByMobile" class="fa fa-minus ml-3" @click="isShowGuideBillHistoryByMobile = !isShowGuideBillHistoryByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideBillHistoryByMobile" class="lv4">
+                              <div v-show="isShowGuideBillHistoryByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click menu "QL gọi món", sau đó chọn "Xem lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_bill/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, Nhập các điều kiện tìm kiếm nếu muốn rồi nhấn "Lọc"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_bill/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Xem lịch sử bill bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideBillHistoryByWindowns" class="fa fa-plus pl-3" @click="isShowGuideBillHistoryByWindowns = !isShowGuideBillHistoryByWindowns"></i>
-                                <i v-show="isShowGuideBillHistoryByWindowns" class="fa fa-minus pl-3" @click="isShowGuideBillHistoryByWindowns = !isShowGuideBillHistoryByWindowns"></i>
+                                <i v-show="!isShowGuideBillHistoryByWindowns" class="fa fa-plus ml-3" @click="isShowGuideBillHistoryByWindowns = !isShowGuideBillHistoryByWindowns"></i>
+                                <i v-show="isShowGuideBillHistoryByWindowns" class="fa fa-minus ml-3" @click="isShowGuideBillHistoryByWindowns = !isShowGuideBillHistoryByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideBillHistoryByWindowns" class="lv4">
+                              <div v-show="isShowGuideBillHistoryByWindowns" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Quản lý order", sau đó click "Lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_bill/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, nhập điều kiện tìm kiếm phù hợp nếu muốn rồi click "Tìm kiếm"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/man_bill/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         In lại bill cũ
-                        <i v-show="!isShowGuidePrintOldBill" class="fa fa-plus pl-3" @click="isShowGuidePrintOldBill = !isShowGuidePrintOldBill"></i>
-                        <i v-show="isShowGuidePrintOldBill" class="fa fa-minus pl-3" @click="isShowGuidePrintOldBill = !isShowGuidePrintOldBill"></i>
+                        <i v-show="!isShowGuidePrintOldBill" class="fa fa-plus ml-3" @click="isShowGuidePrintOldBill = !isShowGuidePrintOldBill"></i>
+                        <i v-show="isShowGuidePrintOldBill" class="fa fa-minus ml-3" @click="isShowGuidePrintOldBill = !isShowGuidePrintOldBill"></i>
                       </h5>
-                      <b-row v-show="isShowGuidePrintOldBill" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuidePrintOldBill" class="lv3">
+                        <div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>In lại bill cũ bằng app điện thoại:
-                                <i v-show="!isShowGuidePrintOldBillByMobile" class="fa fa-plus pl-3" @click="isShowGuidePrintOldBillByMobile = !isShowGuidePrintOldBillByMobile"></i>
-                                <i v-show="isShowGuidePrintOldBillByMobile" class="fa fa-minus pl-3" @click="isShowGuidePrintOldBillByMobile = !isShowGuidePrintOldBillByMobile"></i>
+                                <i v-show="!isShowGuidePrintOldBillByMobile" class="fa fa-plus ml-3" @click="isShowGuidePrintOldBillByMobile = !isShowGuidePrintOldBillByMobile"></i>
+                                <i v-show="isShowGuidePrintOldBillByMobile" class="fa fa-minus ml-3" @click="isShowGuidePrintOldBillByMobile = !isShowGuidePrintOldBillByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuidePrintOldBillByMobile" class="lv4">
+                              <div v-show="isShowGuidePrintOldBillByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click menu "QL gọi món", sau đó chọn "Xem lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/print_old_bill/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, kéo xuống chọn bill muốn in lại rồi nhấn "In hóa đơn"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/print_old_bill/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>In lại bill cũ bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuidePrintOldBillByWindowns" class="fa fa-plus pl-3" @click="isShowGuidePrintOldBillByWindowns = !isShowGuidePrintOldBillByWindowns"></i>
-                                <i v-show="isShowGuidePrintOldBillByWindowns" class="fa fa-minus pl-3" @click="isShowGuidePrintOldBillByWindowns = !isShowGuidePrintOldBillByWindowns"></i>
+                                <i v-show="!isShowGuidePrintOldBillByWindowns" class="fa fa-plus ml-3" @click="isShowGuidePrintOldBillByWindowns = !isShowGuidePrintOldBillByWindowns"></i>
+                                <i v-show="isShowGuidePrintOldBillByWindowns" class="fa fa-minus ml-3" @click="isShowGuidePrintOldBillByWindowns = !isShowGuidePrintOldBillByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuidePrintOldBillByWindowns" class="lv4">
+                              <div v-show="isShowGuidePrintOldBillByWindowns" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Quản lý order", sau đó click "Lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/print_old_bill/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, đến vị trị bill muốn in lại, chọn "In bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/print_old_bill/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Xóa bill
-                        <i v-show="!isShowGuideDeleteBill" class="fa fa-plus pl-3" @click="isShowGuideDeleteBill = !isShowGuideDeleteBill"></i>
-                        <i v-show="isShowGuideDeleteBill" class="fa fa-minus pl-3" @click="isShowGuideDeleteBill = !isShowGuideDeleteBill"></i>
+                        <i v-show="!isShowGuideDeleteBill" class="fa fa-plus ml-3" @click="isShowGuideDeleteBill = !isShowGuideDeleteBill"></i>
+                        <i v-show="isShowGuideDeleteBill" class="fa fa-minus ml-3" @click="isShowGuideDeleteBill = !isShowGuideDeleteBill"></i>
                       </h5>
-                      <b-row v-show="isShowGuideDeleteBill" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideDeleteBill" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Xóa bill bằng app điện thoại:
-                                <i v-show="!isShowGuideDeleteBillByMobile" class="fa fa-plus pl-3" @click="isShowGuideDeleteBillByMobile = !isShowGuideDeleteBillByMobile"></i>
-                                <i v-show="isShowGuideDeleteBillByMobile" class="fa fa-minus pl-3" @click="isShowGuideDeleteBillByMobile = !isShowGuideDeleteBillByMobile"></i>
+                                <i v-show="!isShowGuideDeleteBillByMobile" class="fa fa-plus ml-3" @click="isShowGuideDeleteBillByMobile = !isShowGuideDeleteBillByMobile"></i>
+                                <i v-show="isShowGuideDeleteBillByMobile" class="fa fa-minus ml-3" @click="isShowGuideDeleteBillByMobile = !isShowGuideDeleteBillByMobile"></i>
                               </p>
-                              <b-row v-show="isShowGuideDeleteBillByMobile" class="lv4">
+                              <div v-show="isShowGuideDeleteBillByMobile" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, bạn click menu "QL gọi món", sau đó chọn "Xem lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/delete_bill/1.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, kéo xuống chọn bill muốn xóa rồi nhấn "Xóa hóa đơn"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/delete_bill/2.jpg" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Xóa bill bằng app thu ngân máy tính:
-                                <i v-show="!isShowGuideDeleteBillByWindowns" class="fa fa-plus pl-3" @click="isShowGuideDeleteBillByWindowns = !isShowGuideDeleteBillByWindowns"></i>
-                                <i v-show="isShowGuideDeleteBillByWindowns" class="fa fa-minus pl-3" @click="isShowGuideDeleteBillByWindowns = !isShowGuideDeleteBillByWindowns"></i>
+                                <i v-show="!isShowGuideDeleteBillByWindowns" class="fa fa-plus ml-3" @click="isShowGuideDeleteBillByWindowns = !isShowGuideDeleteBillByWindowns"></i>
+                                <i v-show="isShowGuideDeleteBillByWindowns" class="fa fa-minus ml-3" @click="isShowGuideDeleteBillByWindowns = !isShowGuideDeleteBillByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideDeleteBillByWindowns" class="lv4">
+                              <div v-show="isShowGuideDeleteBillByWindowns" class="lv4">
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>1. Sau khi đăng nhập, click menu "Quản lý order", sau đó click "Lịch sử bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/delete_bill/3.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                                <b-col md="6" class="pr-3">
+                                <div>
                                   <p>2. Tại màn hình "Lịch sử bill" hiện ra, đến vị trị bill muốn xóa, chọn "Xóa bill"</p><br>
-                                  <b-row>
-                                    <b-col>
+                                  <div>
+                                    <div>
                                       <img src="https://api.cifood.vn/files/images/guide/delete_bill/4.PNG" class="image-full"/>
-                                    </b-col>
-                                  </b-row>
-                                </b-col>
+                                    </div>
+                                  </div>
+                                </div>
 
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý kho hàng
-                        <i v-show="!isShowGuideManRepository" class="fa fa-plus pl-3" @click="isShowGuideManRepository = !isShowGuideManRepository"></i>
-                        <i v-show="isShowGuideManRepository" class="fa fa-minus pl-3" @click="isShowGuideManRepository = !isShowGuideManRepository"></i>
+                        <i v-show="!isShowGuideManRepository" class="fa fa-plus ml-3" @click="isShowGuideManRepository = !isShowGuideManRepository"></i>
+                        <i v-show="isShowGuideManRepository" class="fa fa-minus ml-3" @click="isShowGuideManRepository = !isShowGuideManRepository"></i>
                       </h5>
-                      <b-row v-show="isShowGuideManRepository" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideManRepository" class="lv3">
+                        <div>
                           <p>Chỉ thực hiện trên web</p>
                           <p class="ml-2">Bước 1: Truy cập cifood.vn, đăng nhập với tài khoản của bạn</p>
                           <p class="ml-2">Bước 2: Tại menu "Quản lý kho hàng", chọn "Đơn vị"</p>
@@ -1131,24 +1131,24 @@
                           liệu", nhập số lượng nguyên liệu tương ứng khi làm món này. Sau đó nhấn "Thêm". Sau khi thêm
                           đầy đủ nguyên liệu, click "Xác nhận". Sau cùng là click "Lưu"</p>
                           <p>Khi nhân viên order món, nguyên liệu làm món sẽ tự động được trừ trong kho</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý két tiền, thu chi
-                        <i v-show="!isShowGuideManMoneyBox" class="fa fa-plus pl-3" @click="isShowGuideManMoneyBox = !isShowGuideManMoneyBox"></i>
-                        <i v-show="isShowGuideManMoneyBox" class="fa fa-minus pl-3" @click="isShowGuideManMoneyBox = !isShowGuideManMoneyBox"></i>
+                        <i v-show="!isShowGuideManMoneyBox" class="fa fa-plus ml-3" @click="isShowGuideManMoneyBox = !isShowGuideManMoneyBox"></i>
+                        <i v-show="isShowGuideManMoneyBox" class="fa fa-minus ml-3" @click="isShowGuideManMoneyBox = !isShowGuideManMoneyBox"></i>
                       </h5>
-                      <b-row v-show="isShowGuideManMoneyBox" class="lv3">
-                        <b-col>
-                          <b-row>
-                            <b-col>
+                      <div v-show="isShowGuideManMoneyBox" class="lv3">
+                        <div>
+                          <div>
+                            <div>
                               <p>Quản lý két tiền, thu chi trên web quản lý:
-                                <i v-show="!isShowGuideManMoneyBoxByWeb" class="fa fa-plus pl-3" @click="isShowGuideManMoneyBoxByWeb = !isShowGuideManMoneyBoxByWeb"></i>
-                                <i v-show="isShowGuideManMoneyBoxByWeb" class="fa fa-minus pl-3" @click="isShowGuideManMoneyBoxByWeb = !isShowGuideManMoneyBoxByWeb"></i>
+                                <i v-show="!isShowGuideManMoneyBoxByWeb" class="fa fa-plus ml-3" @click="isShowGuideManMoneyBoxByWeb = !isShowGuideManMoneyBoxByWeb"></i>
+                                <i v-show="isShowGuideManMoneyBoxByWeb" class="fa fa-minus ml-3" @click="isShowGuideManMoneyBoxByWeb = !isShowGuideManMoneyBoxByWeb"></i>
                               </p>
-                              <b-row v-show="isShowGuideManMoneyBoxByWeb" class="lv4">
-                                <b-col>
+                              <div v-show="isShowGuideManMoneyBoxByWeb" class="lv4">
+                                <div>
                                   <p class="ml-2">Bước 1: Truy cập cifood.vn, đăng nhập với tài khoản của bạn</p>
                                   <p class="ml-2">Bước 2: Click menu "Quản lý két tiền, thu chi"</p>
                                   <p class="ml-2">Bước 3: Tại màn hình "Quản lý két tiền, thu chi" hiện ra, bạn có thể:
@@ -1156,19 +1156,19 @@
                                   mua nguyên liệu), thêm vốn đầu ngày (đầu ngày, chủ quán thường để 1 số tiền nhất định
                                     vào két tiển để nhân viên có thể trà tiền thừa cho khách hoặc chi trả các khoản chi),
                                    đóng ngày (cuối ngày làm việc, nên đóng ngày để dễ quản lý két tiền), xem lịch sử két tiền.</p>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Quản lý két tiền, thu chi trên app thu ngân máy tính:
-                                <i v-show="!isShowGuideManMoneyBoxByWindowns" class="fa fa-plus pl-3" @click="isShowGuideManMoneyBoxByWindowns = !isShowGuideManMoneyBoxByWindowns"></i>
-                                <i v-show="isShowGuideManMoneyBoxByWindowns" class="fa fa-minus pl-3" @click="isShowGuideManMoneyBoxByWindowns = !isShowGuideManMoneyBoxByWindowns"></i>
+                                <i v-show="!isShowGuideManMoneyBoxByWindowns" class="fa fa-plus ml-3" @click="isShowGuideManMoneyBoxByWindowns = !isShowGuideManMoneyBoxByWindowns"></i>
+                                <i v-show="isShowGuideManMoneyBoxByWindowns" class="fa fa-minus ml-3" @click="isShowGuideManMoneyBoxByWindowns = !isShowGuideManMoneyBoxByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideManMoneyBoxByWindowns" class="lv4">
-                                <b-col>
+                              <div v-show="isShowGuideManMoneyBoxByWindowns" class="lv4">
+                                <div>
                                   <p class="ml-2">Bước 1: mở app thu ngân máy tính, đăng nhập với tài khoản của bạn</p>
                                   <p class="ml-2">Bước 2: Click menu "Két tiền, thu chi"</p>
                                   <p class="ml-2">Bước 3: Tại màn hình "Két tiền, thu chi" hiện ra, bạn có thể:
@@ -1177,70 +1177,70 @@
                                     vào két tiển để nhân viên có thể trà tiền thừa cho khách hoặc chi trả các khoản chi),
                                    đóng ngày (cuối ngày làm việc, nên đóng ngày để dễ quản lý két tiền), xem lịch sử két
                                     tiền, xem danh sách hóa đơn.</p>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Giao ca
-                        <i v-show="!isShowGuideChangeShift" class="fa fa-plus pl-3" @click="isShowGuideChangeShift = !isShowGuideChangeShift"></i>
-                        <i v-show="isShowGuideChangeShift" class="fa fa-minus pl-3" @click="isShowGuideChangeShift = !isShowGuideChangeShift"></i>
+                        <i v-show="!isShowGuideChangeShift" class="fa fa-plus ml-3" @click="isShowGuideChangeShift = !isShowGuideChangeShift"></i>
+                        <i v-show="isShowGuideChangeShift" class="fa fa-minus ml-3" @click="isShowGuideChangeShift = !isShowGuideChangeShift"></i>
                       </h5>
-                      <b-row v-show="isShowGuideChangeShift" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideChangeShift" class="lv3">
+                        <div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Kiểm tra giao ca trên web quản lý:
-                                <i v-show="!isShowGuideChangeShiftByWeb" class="fa fa-plus pl-3" @click="isShowGuideChangeShiftByWeb = !isShowGuideChangeShiftByWeb"></i>
-                                <i v-show="isShowGuideChangeShiftByWeb" class="fa fa-minus pl-3" @click="isShowGuideChangeShiftByWeb = !isShowGuideChangeShiftByWeb"></i>
+                                <i v-show="!isShowGuideChangeShiftByWeb" class="fa fa-plus ml-3" @click="isShowGuideChangeShiftByWeb = !isShowGuideChangeShiftByWeb"></i>
+                                <i v-show="isShowGuideChangeShiftByWeb" class="fa fa-minus ml-3" @click="isShowGuideChangeShiftByWeb = !isShowGuideChangeShiftByWeb"></i>
                               </p>
-                              <b-row v-show="isShowGuideChangeShiftByWeb" class="lv4">
-                                <b-col>
+                              <div v-show="isShowGuideChangeShiftByWeb" class="lv4">
+                                <div>
                                   <p class="ml-2">Bước 1: Truy cập cifood.vn, đăng nhập với tài khoản của bạn</p>
                                   <p class="ml-2">Bước 2: Click menu "Quản lý két tiền, thu chi"</p>
                                   <p class="ml-2">Bước 3: Kiểm tra số tiền hiện trên web có trùng khớp với số tiền đang
                                     có trong két tiền tại quán. Nếu trùng khớp, ca trước bàn giao cho ca sau và hoàn
                                     tất giao ca. Nếu số tiền sai lệch, bạn có thể phải kiểm tra lại hóa đơn, các khoản
                                   thu chi, có khoản nào chưa nhập không</p>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                          <b-row>
-                            <b-col>
+                          <div>
+                            <div>
                               <p>Kiểm tra giao ca trên app thu ngân máy tính:
-                                <i v-show="!isShowGuideChangeShiftByWindowns" class="fa fa-plus pl-3" @click="isShowGuideChangeShiftByWindowns = !isShowGuideChangeShiftByWindowns"></i>
-                                <i v-show="isShowGuideChangeShiftByWindowns" class="fa fa-minus pl-3" @click="isShowGuideChangeShiftByWindowns = !isShowGuideChangeShiftByWindowns"></i>
+                                <i v-show="!isShowGuideChangeShiftByWindowns" class="fa fa-plus ml-3" @click="isShowGuideChangeShiftByWindowns = !isShowGuideChangeShiftByWindowns"></i>
+                                <i v-show="isShowGuideChangeShiftByWindowns" class="fa fa-minus ml-3" @click="isShowGuideChangeShiftByWindowns = !isShowGuideChangeShiftByWindowns"></i>
                               </p>
-                              <b-row v-show="isShowGuideChangeShiftByWindowns" class="lv4">
-                                <b-col>
+                              <div v-show="isShowGuideChangeShiftByWindowns" class="lv4">
+                                <div>
                                   <p class="ml-2">Bước 1: mở app thu ngân máy tính, đăng nhập với tài khoản của bạn</p>
                                   <p class="ml-2">Bước 2: Click menu "Két tiền, thu chi"</p>
                                   <p class="ml-2">Bước 3: Kiểm tra số tiền hiện trên app có trùng khớp với số tiền đang
                                     có trong két tiền tại quán. Nếu trùng khớp, ca trước bàn giao cho ca sau và hoàn
                                     tất giao ca. Nếu số tiền sai lệch, bạn có thể phải kiểm tra lại hóa đơn, các khoản
                                   thu chi, có khoản nào chưa nhập không</p>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                          </b-row>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Xem báo cáo bán hàng
-                        <i v-show="!isShowGuideReport" class="fa fa-plus pl-3" @click="isShowGuideReport = !isShowGuideReport"></i>
-                        <i v-show="isShowGuideReport" class="fa fa-minus pl-3" @click="isShowGuideReport = !isShowGuideReport"></i>
+                        <i v-show="!isShowGuideReport" class="fa fa-plus ml-3" @click="isShowGuideReport = !isShowGuideReport"></i>
+                        <i v-show="isShowGuideReport" class="fa fa-minus ml-3" @click="isShowGuideReport = !isShowGuideReport"></i>
                       </h5>
-                      <b-row v-show="isShowGuideReport" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideReport" class="lv3">
+                        <div>
                           <p>Chỉ thực hiện trên web</p>
                           <p class="ml-2">Bước 1: Truy cập cifood.vn, đăng nhập với tài khoản của bạn</p>
                           <p class="ml-2">Bước 2: Tại menu "Báo cáo", hãy chọn loại báo cáo mà bạn quan tâm</p>
@@ -1260,54 +1260,54 @@
                             linh hoạt cho việc quản trị kế toán.</p>
                           <p class="ml-2">"Báo cáo sửa giá": Cho phép bạn thống kê các bill có sửa giá món, tránh gian lận
                           nhưng linh hoạt bán hàng.</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý và chăm sóc khách hàng
-                        <i v-show="!isShowGuideManCustomer" class="fa fa-plus pl-3" @click="isShowGuideManCustomer = !isShowGuideManCustomer"></i>
-                        <i v-show="isShowGuideManCustomer" class="fa fa-minus pl-3" @click="isShowGuideManCustomer = !isShowGuideManCustomer"></i>
+                        <i v-show="!isShowGuideManCustomer" class="fa fa-plus ml-3" @click="isShowGuideManCustomer = !isShowGuideManCustomer"></i>
+                        <i v-show="isShowGuideManCustomer" class="fa fa-minus ml-3" @click="isShowGuideManCustomer = !isShowGuideManCustomer"></i>
                       </h5>
-                      <b-row v-show="isShowGuideManCustomer" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideManCustomer" class="lv3">
+                        <div>
                           <p>Chỉ thực hiện trên web</p>
                           <p class="ml-2">Bước 1: Truy cập cifood.vn, đăng nhập với tài khoản của bạn</p>
                           <p class="ml-2">Bước 2: Tại menu "Chăm sóc K.H", bạn có thể</p>
                           <p class="ml-2">"Khách hàng": Tìm kiếm, thêm mới, sửa thông tin khách hàng.</p>
                           <p class="ml-2">"Lịch sử khách hàng": Cho phép bạn tìm kiếm lịch sử khách hàng đã mua hàng tại quán.</p>
                           <p class="ml-2">"Thiết lập ưu đãi": Cho phép bạn thiết lập khuyến mãi cho khách hàng theo số điểm tích lũy.</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div>
                   <h4 class="text-header">
                     Video hướng dẫn
-                    <i v-show="!isShowVideoGuide" class="fa fa-plus pl-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
-                    <i v-show="isShowVideoGuide" class="fa fa-minus pl-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
+                    <i v-show="!isShowVideoGuide" class="fa fa-plus ml-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
+                    <i v-show="isShowVideoGuide" class="fa fa-minus ml-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
                   </h4>
-                  <b-row v-show="isShowVideoGuide">
-                    <b-col>
+                  <div v-show="isShowVideoGuide">
+                    <div>
                       <p>- Video hướng dẫn truy cập web quản lý và thiết lập nhà hàng: <a href="https://youtu.be/q62jmHIV7YM" target="_blank">Xem</a></p>
                       <p>- Video hướng dẫn tải và sử dụng app điện thoại: <a href="https://youtu.be/-UZqwdlo6jU" target="_blank" >Xem</a></p>
                       <p>- Video hướng dẫn tải và sử dụng app thu ngân (app máy tính): <a href="https://youtu.be/vVQheovxcfQ" target="_blank" >Xem</a></p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              </b-form>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

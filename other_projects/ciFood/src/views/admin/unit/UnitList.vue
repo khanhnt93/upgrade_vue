@@ -1,163 +1,125 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+  <div class="container-fluid px-4 py-6">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <!-- Header -->
+      <div class="flex justify-end mb-4">
+        <button
+          @click="goToAdd"
+          class="bg-success-500 hover:bg-success-600 text-white px-6 py-2 rounded-md min-w-[120px]"
+        >
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Đơn Vị</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Danh Sách Đơn Vị</h4>
+      <hr class="mb-6" />
 
-          <b-table
-          hover
-          bordered
-          :fields="fields"
-          :items="items"
-          >
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 border-b text-left">STT</th>
+              <th class="px-4 py-2 border-b text-left">Tên</th>
+              <th class="px-4 py-2 border-b text-center w-32">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="item in items"
+              :key="item.id"
+              class="hover:bg-gray-50 transition-colors"
+            >
+              <td class="px-4 py-2 border-b">{{ item.stt }}</td>
+              <td class="px-4 py-2 border-b">{{ item.name }}</td>
+              <td class="px-4 py-2 border-b">
+                <div class="flex justify-center gap-2">
+                  <button
+                    @click="edit(item.id)"
+                    class="text-primary-500 hover:text-primary-700 p-2"
+                    title="Sửa"
+                  >
+                    <font-awesome-icon icon="edit" />
+                  </button>
+                  <button
+                    @click="deleted(item.id, item.name, item.stt)"
+                    class="text-danger-500 hover:text-danger-700 p-2"
+                    title="Xóa"
+                  >
+                    <font-awesome-icon icon="trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div v-if="loading" class="text-center py-4">
+        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+      </div>
+      <p v-else class="text-center text-gray-500 mt-4">--Hết--</p>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import adminAPI from '@/api/admin'
-import Mapper from '@/mapper/table'
 import commonFunc from '@/common/commonFunc'
 
+const router = useRouter()
+const toast = useToast()
 
-export default {
-  data () {
-    return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      listIdDeleted: [],
-      loading: false,
+const items = ref([])
+const listIdDeleted = ref([])
+const loading = ref(false)
+
+const getUnitList = () => {
+  loading.value = true
+
+  adminAPI.getListUnit().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
     }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    this.getUnitList()
-  },
-  methods: {
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
+    let errorMess = commonFunc.handleStaffError(err)
+    toast.error(errorMess)
+  })
+}
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Load list
-     */
-    getUnitList () {
-      this.loading = true
-
-      adminAPI.getListUnit().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data
-        }
-
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Delete
-     * @param id
-     * @param name
-     * @param rowIndex
-     */
-    deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          adminAPI.deleteUnit(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
-    },
-
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/unit/index/' + id)
-    },
-
-    /**
-     * Go to add
-     */
-    goToAdd () {
-      this.$router.push('/unit/index/')
-    }
+const deleted = (id, name, rowIndex) => {
+  if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+    adminAPI.deleteUnit(id).then(res => {
+      let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+      items.value.splice(indexTemp, 1)
+      listIdDeleted.value.push(rowIndex - 1)
+      toast.success('Xóa thành công!')
+    }).catch(err => {
+      let errorMess = commonFunc.handleStaffError(err)
+      toast.error(errorMess)
+    })
   }
 }
+
+const edit = (id) => {
+  router.push('/unit/index/' + id)
+}
+
+const goToAdd = () => {
+  router.push('/unit/index/')
+}
+
+onMounted(() => {
+  getUnitList()
+})
 </script>
+
+<style scoped>
+/* Additional styles if needed */
+</style>

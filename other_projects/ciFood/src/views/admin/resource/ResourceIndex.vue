@@ -1,274 +1,235 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header Row -->
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors duration-200">
+            Quay lại
+          </button>
+          <button
+            @click="save"
+            :disabled="saving"
+            class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <!-- Title -->
+        <h4 class="text-xl font-semibold text-center mb-4">Nguyên Liệu - Mặt Hàng</h4>
+        <hr class="mb-4">
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        </div>
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">Nguyên Liệu - Mặt Hàng</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Form -->
+        <div class="space-y-4">
+          <!-- Name -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Tên<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="resource.name"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }">
+              <p v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <!-- Unit -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">Đơn vị</label>
+            <div class="md:col-span-9">
+              <select
+                v-model="resource.unit"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option v-for="unit in units" :key="unit.value" :value="unit.value">{{ unit.text }}</option>
+              </select>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Đơn vị </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="units"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.unit">
-                  </b-form-select>
-                </b-col>
-              </b-row>
+          <!-- Quantity -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Số lượng<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="resource.quantity"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                :disabled="!!route.params.id"
+                @keyup="integerAndPointOnly($event.target)"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                :class="{ 'border-red-500': errorQuantity }">
+              <p v-if="errorQuantity" class="text-red-500 text-sm mt-1">Vui lòng nhập số lượng</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số lượng </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="quantity"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.quantity"
-                  :disabled="this.$route.params.id"
-                  @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
-                    Vui lòng nhập số lượng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số lượng tối thiểu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="min_quantity"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.min_quantity"
-                  @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMinQuantity">
-                    Vui lòng nhập số lượng tối thiểu
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Min Quantity -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Số lượng tối thiểu<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="resource.min_quantity"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                @keyup="integerAndPointOnly($event.target)"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorMinQuantity }">
+              <p v-if="errorMinQuantity" class="text-red-500 text-sm mt-1">Vui lòng nhập số lượng tối thiểu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  data () {
-    return {
-      resource: {
-        "name": null,
-        "unit": null,
-        "quantity": 0,
-        "min_quantity": 0,
-      },
-      units: [{value: null, text: ''}],
-      click: false,
-      saving: false,
-      loading: false,
+// Data
+const resource = ref({
+  name: null,
+  unit: null,
+  quantity: 0,
+  min_quantity: 0
+})
+
+const units = ref([{ value: null, text: '' }])
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+
+// Computed
+const errorName = computed(() => {
+  return checkInfo(resource.value.name)
+})
+
+const errorQuantity = computed(() => {
+  return checkInfo(resource.value.quantity)
+})
+
+const errorMinQuantity = computed(() => {
+  return checkInfo(resource.value.min_quantity)
+})
+
+// Methods
+const checkInfo = (info) => {
+  return click.value && (info == null || info.toString().length <= 0)
+}
+
+const checkValidate = () => {
+  return !(errorName.value || errorQuantity.value || errorMinQuantity.value)
+}
+
+const getUnitOptions = () => {
+  adminAPI.getListUnitOption().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      const unitsList = res.data.data
+      for (let index in unitsList) {
+        units.value.push(unitsList[index])
+      }
     }
-  },
-  mounted() {
-    // Load option unit
-    this.getUnitOptions()
+  }).catch(err => {
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
 
-    this.getUnitDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.resource.name)
-    },
-    errorQuantity: function () {
-      return this.checkInfo(this.resource.quantity)
-    },
-    errorMinQuantity: function () {
-      return this.checkInfo(this.resource.min_quantity)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName || this.errorQuantity || this.errorMinQuantity)
-    },
+const getUnitDetail = () => {
+  const Id = route.params.id
+  if (Id) {
+    loading.value = true
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+    adminAPI.getResourceDetail(Id).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        resource.value = res.data.data
+      }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
 
-    /**
-     * Load list option group menu
-     */
-    getUnitOptions () {
-      adminAPI.getListUnitOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let units = res.data.data
-          for (let index in units) {
-            this.units.push(units[index])
+const back = () => {
+  router.push('/resource/list')
+}
+
+const save = () => {
+  click.value = true
+  saving.value = true
+  const result = checkValidate()
+  if (result) {
+    const id = route.params.id
+    if (id) {
+      // Edit
+      const resourceData = { ...resource.value, id }
+      adminAPI.editResource(resourceData).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            popToast('success', 'Cập nhật nguyên liệu thành công!!! ')
           }
         }
       }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        saving.value = false
+        const errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
       })
-    },
-
-    /**
-     * Get detail
-     */
-    getUnitDetail() {
-      let Id = this.$route.params.id
-      if(Id){
-        this.loading = true
-
-        adminAPI.getResourceDetail(Id).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.resource = res.data.data
+    } else {
+      // Add
+      adminAPI.addResource(resource.value).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            router.push('/resource/list')
           }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/resource/list')
-    },
-
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      let result = this.checkValidate()
-      if(result) {
-        let id = this.$route.params.id
-        if(id){
-          // Edit
-          let resource = this.resource
-          resource.id = id
-          adminAPI.editResource(resource).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật nguyên liệu thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          adminAPI.addResource(this.resource).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/resource/list")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
         }
-      } else {
-        this.saving = false
-      }
-    },
-
-    /**
-     * Only input integer and point
-     */
-     integerAndPointOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.integerAndPointOnly(valueInput)
-      item.value = result
-    },
+      }).catch(err => {
+        saving.value = false
+        const errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  } else {
+    saving.value = false
   }
 }
+
+const integerAndPointOnly = (item) => {
+  const result = commonFunc.integerAndPointOnly(item.value)
+  item.value = result
+}
+
+// Lifecycle
+onMounted(() => {
+  getUnitOptions()
+  getUnitDetail()
+})
 </script>

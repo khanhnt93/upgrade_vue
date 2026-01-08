@@ -1,198 +1,168 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header Row -->
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors duration-200">
+            Quay lại
+          </button>
+          <button
+            @click="save"
+            :disabled="saving"
+            class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="secondary" class="pull-left px-4" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="save" :disabled="saving">
-                    Lưu
-                </button>
-              </b-col>
-            </b-row>
+        <!-- Title -->
+        <h4 class="text-xl font-semibold text-center mb-4">Thương Hiệu</h4>
+        <hr class="mb-4">
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center">Thương Hiệu</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  autocomplete="new-password"
-                  v-model="brand.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <!-- Form -->
+        <div class="space-y-4">
+          <!-- Name -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Tên<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="brand.name"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }">
+              <p v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Mô tả </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-textarea
-                    id="description"
-                    rows="5"
-                    v-model="brand.description"
-                  ></b-form-textarea>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Description -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">Mô tả</label>
+            <div class="md:col-span-9">
+              <textarea
+                v-model="brand.description"
+                rows="5"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  data () {
-    return {
-      brand: {
-        "name": null,
-        "description": null
-      },
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    this.getBrandDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.brand.name)
-    },
-  },
-  methods: {
+// Data
+const brand = ref({
+  name: null,
+  description: null
+})
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName)
-    },
+// Computed
+const errorName = computed(() => {
+  return checkInfo(brand.value.name)
+})
 
-    /**
-     *  Get detail
-     */
-    getBrandDetail() {
-      let brandId = this.$route.params.id
-      if(brandId){
-        this.loading = true
+// Methods
+const checkInfo = (info) => {
+  return click.value && (info == null || info.length <= 0)
+}
 
-        adminAPI.getBrandDetail(brandId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.brand = res.data.data
-          }
+const checkValidate = () => {
+  return !errorName.value
+}
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+const getBrandDetail = () => {
+  const brandId = route.params.id
+  if (brandId) {
+    loading.value = true
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+    adminAPI.getBrandDetail(brandId).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        brand.value = res.data.data
       }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-
-      let checkValidate = this.checkValidate()
-      if(!checkValidate) {
-        return
-      }
-
-      this.saving = true
-
-      let brandId = this.$route.params.id
-      if(brandId){
-        // Edit
-        this.brand.id = brandId
-        adminAPI.updateBrand(this.brand).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            if (res.data.status == 200) {
-              // show popup success
-              this.popToast('success', 'Cập nhật thương hiệu thành công!!! ')
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addBrand(this.brand).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-
-            if (res.data.status == 200) {
-              this.$router.push("/brand/list")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/brand/list")
-    }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+const save = () => {
+  click.value = true
+
+  const checkResult = checkValidate()
+  if (!checkResult) {
+    return
+  }
+
+  saving.value = true
+
+  const brandId = route.params.id
+  if (brandId) {
+    // Edit
+    brand.value.id = brandId
+    adminAPI.updateBrand(brand.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          popToast('success', 'Cập nhật thương hiệu thành công!!!')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    // Add
+    adminAPI.addBrand(brand.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          router.push("/brand/list")
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+const back = () => {
+  router.push("/brand/list")
+}
+
+// Lifecycle
+onMounted(() => {
+  getBrandDetail()
+})
 </script>

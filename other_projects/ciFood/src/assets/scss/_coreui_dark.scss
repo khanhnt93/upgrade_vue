@@ -380,10 +380,6 @@ summary {
     cursor: pointer
 }
 
-template {
-    display: none
-}
-
 [hidden] {
     display: none!important
 }
@@ -11539,7 +11535,7 @@ canvas {
 //.app-header .navbar-nav .dropdown-menu-right {
 //    right: 0;
 //    left: auto
-}
+// }
 
 .app-header .navbar-nav .dropdown-menu-left {
     right: auto;

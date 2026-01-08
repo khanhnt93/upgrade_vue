@@ -1,206 +1,177 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header Row -->
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors duration-200">
+            Quay lại
+          </button>
+          <button
+            @click="save"
+            :disabled="saving"
+            class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <!-- Title -->
+        <h4 class="text-xl font-semibold text-center mb-4">Kênh Bán Hàng</h4>
+        <hr class="mb-4">
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Kênh Bán Hàng</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Form -->
+        <div class="space-y-4">
+          <!-- Code -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Code<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="saleChannel.code"
+                type="text"
+                autocomplete="new-password"
+                maxlength="50"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorCode }">
+              <p v-if="errorCode" class="text-red-500 text-sm mt-1">Vui lòng nhập code</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Code </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="code"
-                  type="text"
-                  class="form-control"
-                  v-model="saleChannel.code"
-                  autocomplete="new-password"
-                  maxlength="50">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorCode">
-                    Vui lòng nhập code
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="saleChannel.name"
-                  autocomplete="new-password"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Name -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 pt-2 text-sm font-medium text-gray-700">
+              Tên<span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="saleChannel.name"
+                type="text"
+                autocomplete="new-password"
+                maxlength="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }">
+              <p v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  data () {
-    return {
-      saleChannel: {
-        "code": null,
-        "name": null
-      },
-      click: false,
-      saving: false,
-      loading: false
-    }
-  },
-  mounted() {
-    // Get sale channel detail
-    this.getSaleChannelDetail()
-  },
-  computed: {
-    errorCode: function () {
-      return this.checkInfo(this.saleChannel.code)
-    },
-    errorName: function () {
-      return this.checkInfo(this.saleChannel.name)
-    },
-  },
-  methods: {
+// Data
+const saleChannel = ref({
+  code: null,
+  name: null
+})
 
-    /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+
+// Computed
+const errorCode = computed(() => {
+  return checkInfo(saleChannel.value.code)
+})
+
+const errorName = computed(() => {
+  return checkInfo(saleChannel.value.name)
+})
+
+// Methods
+const checkInfo = (info) => {
+  return click.value && (info == null || info.length <= 0)
+}
+
+const checkValidate = () => {
+  return !(errorCode.value || errorName.value)
+}
+
+const getSaleChannelDetail = () => {
+  const id = route.params.id
+  if (id) {
+    loading.value = true
+
+    adminAPI.getSaleChannelDetail(id).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        saleChannel.value = res.data.data
+      }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
     })
-  },
-
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorCode || this.errorName)
-    },
-
-    /**
-     *  Get detail
-     */
-    getSaleChannelDetail() {
-      let id = this.$route.params.id
-      if(id){
-        this.loading = true
-
-        adminAPI.getSaleChannelDetail(id).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.saleChannel = res.data.data
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-
-      let checkValidate = this.checkValidate()
-      if(!checkValidate) {
-        return
-      }
-
-      this.saving = true
-
-      let id = this.$route.params.id
-      if(id){
-        // Edit
-        this.saleChannel.id = id
-        adminAPI.editSaleChannel(this.saleChannel).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            if (res.data.status == 200) {
-              // show popup success
-              this.popToast('success', 'Cập nhật nhóm quyền thành công!!! ')
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addSaleChannel(this.saleChannel).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-
-            if (res.data.status == 200) {
-              this.$router.push("/sale-channel/list")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/sale-channel/list")
-    }
   }
 }
+
+const save = () => {
+  click.value = true
+
+  if (!checkValidate()) {
+    return
+  }
+
+  saving.value = true
+
+  const id = route.params.id
+  if (id) {
+    // Edit
+    saleChannel.value.id = id
+    adminAPI.editSaleChannel(saleChannel.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          popToast('success', 'Cập nhật nhóm quyền thành công!!! ')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    // Add
+    adminAPI.addSaleChannel(saleChannel.value).then(res => {
+      saving.value = false
+      if (res != null && res.data != null) {
+        if (res.data.status == 200) {
+          router.push('/sale-channel/list')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+const back = () => {
+  router.push('/sale-channel/list')
+}
+
+// Lifecycle
+onMounted(() => {
+  getSaleChannelDetail()
+})
 </script>

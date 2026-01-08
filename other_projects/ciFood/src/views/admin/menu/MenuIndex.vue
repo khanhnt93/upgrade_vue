@@ -1,959 +1,1040 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12">
+            <button 
+              class="px-4 py-2 border border-gray-600 text-gray-600 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
+              @click="back">
+              Quay lại
+            </button>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+            <button 
+              class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] float-right disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="save" 
+              :disabled="saving">
+              Lưu
+            </button>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">Thực Đơn</h4>
-                </b-col>
-              </b-row>
-              <hr/>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12">
+            <h4 class="mt-2 text-center text-2xl font-semibold">Thực Đơn</h4>
+          </div>
+        </div>
+        <hr class="my-4"/>
 
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Danh mục </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="groupMenus"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.group_id">
-                  </b-form-select>
-                </b-col>
-              </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="flex justify-center items-center py-4">
+          <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Đây là mục bắt buộc nhập
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Giá </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="price"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.price"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="11">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPrice">
-                    Đây là mục bắt buộc nhập
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Danh mục</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <select
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="menu.group_id">
+              <option v-for="option in groupMenus" :key="option.value" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Lựa chọn </label>
-                </b-col>
-                <b-col md="9">
-                  <b-list-group horizontal>
-                    <b-list-group-item @click="showModalOption">
-                      <i class="fa fa-plus"/>
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Tên <span class="text-red-500">*</span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              id="name"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorName }"
+              v-model="menu.name">
+            <div v-if="errorName" class="text-red-500 text-sm mt-1">
+              Đây là mục bắt buộc nhập
+            </div>
+          </div>
+        </div>
 
-              <b-row>
-                <b-col md="3">
-                </b-col>
-                <b-col md="9">
-                  <p class="col-12" v-for="option in this.menu.options" :key="option.type + option.value">
-                      - Loại: {{option.type}},
-                    Giá trị: {{option.value}},
-                    <span v-show="option.price">Giá thêm: {{currencyFormat(option.price)}}vnđ,</span>
-                    Mặc định: {{option.default == "true"? 'Đúng': 'Không'}}
-                      <!-- <i class="fa fa-trash" @click="deleteOption(option.type, option.value, option.price)"/> -->
-                  </p>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Giá <span class="text-red-500">*</span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              id="price"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorPrice }"
+              v-model="menu.price"
+              @keyup="integerOnly($event.target)"
+              maxlength="11">
+            <div v-if="errorPrice" class="text-red-500 text-sm mt-1">
+              Đây là mục bắt buộc nhập
+            </div>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
-                    <label> Topping </label>
-                  </b-col>
-                  <b-col md="9">
-                    <b-list-group horizontal>
-                      <b-list-group-item @click="showModalTopping">
-                        <i class="fa fa-plus"/>
-                      </b-list-group-item>
-                    </b-list-group>
-                  </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Lựa chọn</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <button 
+              class="p-2 border border-gray-300 rounded hover:bg-gray-50"
+              @click="showModalOption">
+              <i class="fa fa-plus"/>
+            </button>
+          </div>
+        </div>
 
-              <b-row>
-                <b-col md="3">
-                </b-col>
-                <b-col md="9">
-                  <p class="col-12" v-for="(topping, index) in this.menu.toppings" :key="topping.name">
-                      <label>- {{ toppings[index].name }}   +{{currencyFormat(toppings[index].price)}}</label>
-                  </p>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3"></div>
+          <div class="col-span-12 md:col-span-9">
+            <p class="text-sm mb-2" v-for="option in menu.options" :key="option.type + option.value">
+              - Loại: {{option.type}},
+              Giá trị: {{option.value}},
+              <span v-show="option.price">Giá thêm: {{formatCurrency(option.price)}}vnđ,</span>
+              Mặc định: {{option.default == "true"? 'Đúng': 'Không'}}
+            </p>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Nguyên liệu </label>
-                </b-col>
-                <b-col md="9">
-                  <b-list-group horizontal>
-                    <b-list-group-item @click="showModalResource">
-                      <i class="fa fa-plus"/>
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Topping</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <button 
+              class="p-2 border border-gray-300 rounded hover:bg-gray-50"
+              @click="showModalTopping">
+              <i class="fa fa-plus"/>
+            </button>
+          </div>
+        </div>
 
-              <b-row>
-                <b-col md="3">
-                </b-col>
-                <b-col md="9">
-                  <p class="col-12" v-for="item in this.resourceChosen" :key="item.id">
-                    <label v-if="item.unit">- {{item.quantity + ' ' + item.unit + ': ' + item.name}}</label>
-                    <label v-if="!item.unit">- {{item.quantity + ': ' + item.name}}</label>
-                    <!-- <i class="fa fa-trash" @click="deleteResource(item.id)"/> -->
-                  </p>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3"></div>
+          <div class="col-span-12 md:col-span-9">
+            <p class="text-sm mb-2" v-for="(topping, index) in menu.toppings" :key="topping.name">
+              <label>- {{ toppings[index]?.name }}   +{{formatCurrency(toppings[index]?.price)}}</label>
+            </p>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Cho phép sửa giá </label>
-                </b-col>
-                <b-col md="9">
-                  <div class="input-group">
-                    <input type="radio" v-model="menu.can_edit_price" name="canEditPrice" :value="false" class="mt-2"><label class="ml-4 mt-1">Không</label>
-                    <input type="radio" v-model="menu.can_edit_price" name="canEditPrice" :value="true" class="ml-5 mt-2"><label class="ml-4 mt-1">Có</label>
-                  </div>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Nguyên liệu</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <button 
+              class="p-2 border border-gray-300 rounded hover:bg-gray-50"
+              @click="showModalResource">
+              <i class="fa fa-plus"/>
+            </button>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Cho phép sửa số lượng </label>
-                </b-col>
-                <b-col md="9">
-                  <div class="input-group">
-                    <input type="radio" v-model="menu.can_edit_quantity" name="canEditQuantity" :value="false" class="mt-2"><label class="ml-4 mt-1">Không</label>
-                    <input type="radio" v-model="menu.can_edit_quantity" name="canEditQuantity" :value="true" class="ml-5 mt-2"><label class="ml-4 mt-1">Có</label>
-                  </div>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3"></div>
+          <div class="col-span-12 md:col-span-9">
+            <p class="text-sm mb-2" v-for="item in resourceChosen" :key="item.id">
+              <label v-if="item.unit">- {{item.quantity + ' ' + item.unit + ': ' + item.name}}</label>
+              <label v-if="!item.unit">- {{item.quantity + ': ' + item.name}}</label>
+            </p>
+          </div>
+        </div>
 
-              <b-row class="form-row" v-show="kitchenAreas.length > 0">
-                <b-col md="3" class="mt-2">
-                  <label> Khu vực in </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="kitchenAreas"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.kitchen_area_id">
-                  </b-form-select>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Cho phép sửa giá</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center">
+                <input type="radio" v-model="menu.can_edit_price" name="canEditPrice" :value="false" class="mr-2">
+                Không
+              </label>
+              <label class="flex items-center">
+                <input type="radio" v-model="menu.can_edit_price" name="canEditPrice" :value="true" class="mr-2">
+                Có
+              </label>
+            </div>
+          </div>
+        </div>
 
-              <b-row class="form-row" v-if="this.$route.params.id">
-                <b-col md="3" class="mt-2">
-                  <label> Trạng thái </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="options"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.status"></b-form-select>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Cho phép sửa số lượng</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center">
+                <input type="radio" v-model="menu.can_edit_quantity" name="canEditQuantity" :value="false" class="mr-2">
+                Không
+              </label>
+              <label class="flex items-center">
+                <input type="radio" v-model="menu.can_edit_quantity" name="canEditQuantity" :value="true" class="mr-2">
+                Có
+              </label>
+            </div>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Thứ tự xuất hiện trên menu </label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="index"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="menu.index"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="4">
-                </b-col>
-              </b-row>
+        <div v-show="kitchenAreas.length > 0" class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Khu vực in</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <select
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="menu.kitchen_area_id">
+              <option v-for="option in kitchenAreas" :key="option.value" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Hình ảnh </label>
-                </b-col>
-                <b-col md="9">
-                  <b-input-group @click="$refs.file.click()" append="Browse" class="pointer">
-                    <b-input v-model="menu.image"></b-input>
-                  </b-input-group>
-                  <input class="d-none" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
-                </b-col>
-              </b-row>
+        <div v-if="route.params.id" class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Trạng thái <span class="text-red-500">*</span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <select
+              id="status"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="menu.status">
+              <option v-for="option in options" :key="option.value" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <div v-if="menu.image_preview" class="preview-box text-center"  :style="{height: computedWidth, width: '100%'}">
-                    <vue-cropper
-                      ref="cropper"
-                      :guides="true"
-                      :view-mode="2"
-                      :center="true"
-                      drag-mode="crop"
-                      :auto-crop-area="1"
-                      :background="true"
-                      :rotatable="true"
-                      :src="menu.image_preview"
-                      :initialAspectRatio="1/1"
-                      :aspectRatio="1/1"
-                      alt="Source Image"
-                      :style="computedImg"
-                      :crop="cropImage"
-                    >
-                    </vue-cropper>
-                </div>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Thứ tự xuất hiện trên menu</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              id="index"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="menu.index"
+              @keyup="integerOnly($event.target)"
+              maxlength="4">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label class="font-medium">Hình ảnh</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex cursor-pointer" @click="$refs.fileInput.click()">
+              <input 
+                v-model="menu.image" 
+                class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                readonly
+              >
+              <button 
+                type="button"
+                class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300">
+                Browse
+              </button>
+            </div>
+            <input 
+              class="hidden" 
+              type="file" 
+              id="file" 
+              ref="fileInput" 
+              accept="image/*" 
+              @change="handleFileUpload"
+            />
+          </div>
+        </div>
+
+        <div v-if="menu.image_preview" class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12">
+            <div class="preview-box text-center" :style="{height: computedWidth, width: '100%'}">
+              <vue-cropper
+                ref="cropper"
+                :guides="true"
+                :view-mode="2"
+                :center="true"
+                drag-mode="crop"
+                :auto-crop-area="1"
+                :background="true"
+                :rotatable="true"
+                :src="menu.image_preview"
+                :initialAspectRatio="1/1"
+                :aspectRatio="1/1"
+                alt="Source Image"
+                :style="computedImg"
+                :crop="cropImage"
+              >
+              </vue-cropper>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal choose option -->
-    <b-modal centered hide-footer hide-header id="modal-choose-option">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Thêm lựa chọn</h5>
-        </b-col>
-      </b-row>
-      <br>
-
-      <b-row>
-        <b-col>
-           <p class="col-12" v-for="option in this.menu.options" :key="option.type + option.value">
-              - Loại: {{option.type}},
-             Giá trị: {{option.value}},
-             <span v-show="option.price">Giá thêm: {{currencyFormat(option.price)}}vnđ,</span>
-             Mặc định: {{option.default == "true"? 'Đúng': 'Không'}}
-              <i class="fa fa-trash" @click="deleteOption(option.type, option.value, option.price)"/>
-           </p>
-        </b-col>
-      </b-row>
-
-      <div class="form-group">
-        <label>Loại</label>
-        <input
-          id="optionType"
-          type="text"
-          class="form-control"
-          maxlength="100">
-      </div>
-      <div class="form-group">
-        <label>Giá trị</label>
-        <input
-          id="optionValue"
-          type="text"
-          class="form-control"
-          maxlength="100">
-      </div>
-      <div class="form-group">
-        <label>Giá thêm</label>
-        <input
-          id="optionPrice"
-          type="text"
-          class="form-control"
-          maxlength="11"
-          @keyup="integerOnly($event.target)"
+    <TransitionRoot appear :show="isOptionModalOpen" as="template">
+      <Dialog as="div" @close="confirmOption" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
         >
-      </div>
-      <div class="form-group">
-        <label>Mặc định</label>
-        <input type="radio" v-model="optionDefault" name="default" value="true">
-        <label>Đúng</label>
-        <input type="radio" v-model="optionDefault" name="default" value="false">
-        <label>Không</label>
-      </div>
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addNewRowChooseOption">
-            Thêm
-          </button>
-        </b-col>
-      </b-row>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center mb-4">
+                  Thêm lựa chọn
+                </DialogTitle>
 
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmOption">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
+                <div class="mb-4">
+                  <p class="text-sm mb-2" v-for="option in menu.options" :key="option.type + option.value">
+                    - Loại: {{option.type}},
+                    Giá trị: {{option.value}},
+                    <span v-show="option.price">Giá thêm: {{formatCurrency(option.price)}}vnđ,</span>
+                    Mặc định: {{option.default == "true"? 'Đúng': 'Không'}}
+                    <button class="ml-2 text-red-600 hover:text-red-800" @click="deleteOption(option.type, option.value, option.price)">
+                      <i class="fa fa-trash" />
+                    </button>
+                  </p>
+                </div>
 
-    </b-modal>
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Loại</label>
+                  <input
+                    id="optionType"
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    maxlength="100">
+                </div>
+
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Giá trị</label>
+                  <input
+                    id="optionValue"
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    maxlength="100">
+                </div>
+
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Giá thêm</label>
+                  <input
+                    id="optionPrice"
+                    type="text"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    maxlength="11"
+                    @keyup="integerOnly($event.target)"
+                  >
+                </div>
+
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Mặc định</label>
+                  <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                      <input type="radio" v-model="optionDefault" name="default" value="true" class="mr-2">
+                      Đúng
+                    </label>
+                    <label class="flex items-center">
+                      <input type="radio" v-model="optionDefault" name="default" value="false" class="mr-2">
+                      Không
+                    </label>
+                  </div>
+                </div>
+
+                <div class="text-center mb-4">
+                  <button 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                    @click="addNewRowChooseOption">
+                    Thêm
+                  </button>
+                </div>
+
+                <div class="flex justify-end">
+                  <button 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                    @click="confirmOption">
+                    Xác nhận
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!-- Modal choose topping -->
-    <b-modal centered hide-footer hide-header id="modal-choose-topping">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Chọn topping</h5>
-        </b-col>
-      </b-row>
-      <br>
+    <TransitionRoot appear :show="isToppingModalOpen" as="template">
+      <Dialog as="div" @close="confirmTopping" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
-      <b-row>
-        <b-col>
-          <div v-for="topping in toppings" :key="topping.name">
-            <input type="checkbox" v-model="menu.toppings" name="toppingName" :value="topping.id">
-            <label>{{ topping.name }}   +{{currencyFormat(topping.price)}}</label>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center mb-4">
+                  Chọn topping
+                </DialogTitle>
+
+                <div class="mb-4">
+                  <div v-for="topping in toppings" :key="topping.name" class="mb-2">
+                    <label class="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        v-model="menu.toppings" 
+                        name="toppingName" 
+                        :value="topping.id"
+                        class="mr-2">
+                      {{ topping.name }}   +{{formatCurrency(topping.price)}}
+                    </label>
+                  </div>
+                </div>
+
+                <div class="flex justify-end">
+                  <button 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                    @click="confirmTopping">
+                    Xác nhận
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
           </div>
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmTopping">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!-- Modal choose resource -->
-    <b-modal centered hide-footer hide-header id="modal-choose-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Chọn nguyên liệu</h5>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row v-show="resourceChosen.length > 0">
-        <b-col>
-          <p class="col-12" v-for="item in this.resourceChosen" :key="item.id">
-            <label v-if="item.unit">- {{item.quantity + ' ' + item.unit + ': ' + item.name}}</label>
-            <label v-if="!item.unit">- {{item.quantity + ': ' + item.name}}</label>
-            <i class="fa fa-trash" @click="deleteResource(item.id)"/>
-          </p>
-        </b-col>
-      </b-row>
+    <TransitionRoot appear :show="isResourceModalOpen" as="template">
+      <Dialog as="div" @close="confirmResource" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
-      <b-row>
-        <b-col>
-          <div>
-            <div class="form-group">
-              <label>Nguyên liệu:</label><span class="error-sybol"></span>
-              <b-form-select
-                :options="resources"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="resource.id"
-              @change="changeResource">
-                </b-form-select>
-            </div>
-            <div class="form-group">
-              <label>Số lượng</label><span class="error-sybol"></span>
-              <div class="input-group">
-                <input
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.quantity"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="11">
-                <label class="pl-2">{{unitResource}}</label>
-              </div>
-            </div>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center mb-4">
+                  Chọn nguyên liệu
+                </DialogTitle>
+
+                <div v-show="resourceChosen.length > 0" class="mb-4">
+                  <p class="text-sm mb-2" v-for="item in resourceChosen" :key="item.id">
+                    <label v-if="item.unit">- {{item.quantity + ' ' + item.unit + ': ' + item.name}}</label>
+                    <label v-if="!item.unit">- {{item.quantity + ': ' + item.name}}</label>
+                    <button class="ml-2 text-red-600 hover:text-red-800" @click="deleteResource(item.id)">
+                      <i class="fa fa-trash"/>
+                    </button>
+                  </p>
+                </div>
+
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Nguyên liệu: <span class="text-red-500">*</span></label>
+                  <select
+                    type="text"
+                    autocomplete="new-password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    v-model="resource.id"
+                    @change="changeResource">
+                    <option v-for="option in resources" :key="option.value" :value="option.value">{{ option.text }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-4">
+                  <label class="block mb-2 font-medium">Số lượng <span class="text-red-500">*</span></label>
+                  <div class="flex items-center">
+                    <input
+                      type="text"
+                      autocomplete="new-password"
+                      class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      v-model="resource.quantity"
+                      @keyup="integerOnly($event.target)"
+                      maxlength="11">
+                    <label class="ml-2">{{unitResource}}</label>
+                  </div>
+                </div>
+
+                <div class="text-center mb-4">
+                  <button 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                    @click="addGroupResource">
+                    Thêm
+                  </button>
+                </div>
+
+                <div class="flex justify-end">
+                  <button 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                    @click="confirmResource">
+                    Xác nhận
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
           </div>
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addGroupResource">
-            Thêm
-          </button>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmResource">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import adminAPI from '@/api/admin'
-import Mapper from '@/mapper/menu'
 import GMMapper from '@/mapper/group_menu'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
+const route = useRoute()
+const router = useRouter()
+const { showToast } = useToast()
+const { formatCurrency } = useFormatters()
 
-export default {
-  components: {
-    VueCropper
-  },
-  data () {
-    return {
-      options: [
-        {value: 'true', text: 'Còn món'},
-        {value: 'false', text: 'Hết món'}
-      ],
-      menu: {
-        "id": null,
-        "name": null,
-        "price": null,
-        "status": null,
-        "options": [],
-        "toppings": [],
-        "group_id": null,
-        "can_edit_price": false,
-        "can_edit_quantity": false,
-        "kitchen_area_id": null,
-        "index": null,
-        "image": null,
-        image_preview: null,
-      },
-      file: null,
-      height: '100px',
-      styleImg: {},
-      saving: false,
-      click: false,
-      groupMenus: [],
-      toppings: [],
-      kitchenAreas: [],
-      optionDefault: "false",
-      loading: false,
-      resources: [{value: null, text: ''}],
-      resource: {id: '', quantity: ''},
-      unitResource: null,
-      resourceChosen: []
+const options = ref([
+  {value: 'true', text: 'Còn món'},
+  {value: 'false', text: 'Hết món'}
+])
+
+const menu = ref({
+  id: null,
+  name: null,
+  price: null,
+  status: null,
+  options: [],
+  toppings: [],
+  group_id: null,
+  can_edit_price: false,
+  can_edit_quantity: false,
+  kitchen_area_id: null,
+  index: null,
+  image: null,
+  image_preview: null,
+})
+
+const file = ref(null)
+const fileInput = ref(null)
+const cropper = ref(null)
+const height = ref('100px')
+const styleImg = ref({})
+const saving = ref(false)
+const click = ref(false)
+const groupMenus = ref([])
+const toppings = ref([])
+const kitchenAreas = ref([])
+const optionDefault = ref("false")
+const loading = ref(false)
+const resources = ref([{value: null, text: ''}])
+const resource = ref({id: '', quantity: ''})
+const unitResource = ref(null)
+const resourceChosen = ref([])
+
+const isOptionModalOpen = ref(false)
+const isToppingModalOpen = ref(false)
+const isResourceModalOpen = ref(false)
+
+const computedWidth = computed(() => height.value)
+const computedImg = computed(() => styleImg.value)
+
+const errorName = computed(() => {
+  return checkInfo(menu.value.name)
+})
+
+const errorPrice = computed(() => {
+  return checkInfo(menu.value.price)
+})
+
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
+
+const checkValidate = () => {
+  return !(errorName.value || errorPrice.value)
+}
+
+/**
+ * Load list option group menu
+ */
+const getGroupMenuOptions = async () => {
+  try {
+    const res = await adminAPI.getListGroupMenuOption()
+    if (res != null && res.data != null && res.data.data != null) {
+      groupMenus.value = GMMapper.mapGroupMenuOptionModelToDto(res.data.data)
     }
-  },
-  mounted() {
-    this.getGroupMenuOptions()
-
-    this.getTopping()
-
-    this.getKitchenArea()
-
-    // Load option resource
-    this.getResourceOptions()
-
-    this.getMenuDetail()
-  },
-  computed: {
-    computedWidth() {
-      return this.height
-    },
-    computedImg() {
-      return this.styleImg
-    },
-    errorName: function () {
-      return this.checkInfo(this.menu.name)
-    },
-    errorPrice: function () {
-      return this.checkInfo(this.menu.price)
-    },
-
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName || this.errorPrice)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Load list option group menu
-     */
-    getGroupMenuOptions () {
-      adminAPI.getListGroupMenuOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.groupMenus = GMMapper.mapGroupMenuOptionModelToDto(res.data.data)
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Load list option resource
-     */
-    getResourceOptions () {
-      adminAPI.getListResourceOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let items = res.data.data
-          if(items) {
-            for (let i in items) {
-              this.resources.push(items[i])
-            }
-          }
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get list topping
-     */
-    getTopping() {
-      adminAPI.getTopping().then(res => {
-        this.toppings = res.data.data
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get kitchen area
-     */
-    getKitchenArea() {
-      adminAPI.getKitchenArea().then(res => {
-        let items = res.data.data
-        let options = []
-        for (let index in items) {
-          let item = {
-            "value": items[index].id,
-            "text": items[index].name
-          }
-          options.push(item)
-        }
-        this.kitchenAreas = options
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get menu detail
-     */
-    getMenuDetail() {
-      let menuId = this.$route.params.id
-      if(menuId){
-        this.loading = true
-
-        adminAPI.getMenuDetail(menuId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            // this.menu = Mapper.mapMenuDetailModelToDto(res.data.data)
-            this.menu = res.data.data
-            this.file = this.menu.image_preview
-
-            this.resourceChosen = this.menu.resource
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Handle upload file
-     */
-    handleFileUpload () { // event
-      this.menu.image_preview = null
-      this.file = this.$refs.file.files[0]//event.target.files[0]
-      this.menu.image = this.file.name
-
-      // Render image in review
-      let reader  = new FileReader ()
-      reader.addEventListener("load", function () {
-        // this.$refs.cropper.image = reader.result
-        this.menu.image_preview = reader.result
-      }.bind(this), false)
-      if( this.file ){
-        reader.readAsDataURL( this.file )
-        this.height = '300px'
-        this.styleImg = {'max-width': '100%', 'max-height': '100%'}
-      }
-    },
-
-    /**
-     * Prepare info to save
-     */
-    save() {
-      this.click = true
-      let result = this.checkValidate()
-      if(result) {
-        if(this.menu.image_preview) {
-          this.$refs.cropper
-            .getCroppedCanvas({
-              width: 300,
-              height: 300
-            })
-            .toBlob(blob => {
-              const formData = new FormData();
-              formData.append("file", blob, this.menu.image)
-              formData.append("name", this.menu.name)
-              formData.append("price", this.menu.price)
-              formData.append("options", JSON.stringify(this.menu.options))
-              formData.append("toppings", this.menu.toppings)
-              formData.append("group", this.menu.group_id)
-              formData.append("quantity", this.menu.quantity)
-              formData.append("resource", JSON.stringify(this.resourceChosen))
-              formData.append("can_edit_price", this.menu.can_edit_price)
-              formData.append("can_edit_quantity", this.menu.can_edit_quantity)
-              formData.append("index", this.menu.index)
-              formData.append("kitchen_area_id", this.menu.kitchen_area_id)
-
-              this.doSave(formData);
-            });
-        } else {
-          const formData = new FormData();
-          formData.append("file", null)
-          formData.append("name", this.menu.name)
-          formData.append("price", this.menu.price)
-          formData.append("options", JSON.stringify(this.menu.options))
-          formData.append("toppings", this.menu.toppings)
-          formData.append("group", this.menu.group_id)
-          formData.append("quantity", this.menu.quantity)
-          formData.append("resource", JSON.stringify(this.resourceChosen))
-          formData.append("can_edit_price", this.menu.can_edit_price)
-          formData.append("can_edit_quantity", this.menu.can_edit_quantity)
-          formData.append("index", this.menu.index)
-          formData.append("kitchen_area_id", this.menu.kitchen_area_id)
-
-          this.doSave(formData);
-        }
-      }
-    },
-
-    /**
-     * Call api, save data
-     * @param formData
-     */
-    doSave(formData) {
-      this.saving = true
-      let menuId = this.$route.params.id
-      if(menuId){
-        // Edit
-        formData.append("status", this.menu.status)
-        formData.append("id", menuId)
-
-        adminAPI.editMenu(formData).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            // Show notify edit success
-            this.popToast('success', 'Lưu menu thành công!!! ')
-          }else{
-            // Show notify edit fail
-            this.popToast('danger', 'Lưu menu thất bại!!! ')
-          }
-        }).catch(err => {
-          this.saving = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addMenu(formData).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            // Go to list
-            this.$router.push('/menu/list')
-          }else{
-            // Show notify add fail
-            this.popToast('danger', 'Lưu menu thất bại!!! ')
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Show modal choose option
-     */
-    showModalOption() {
-      this.$bvModal.show('modal-choose-option')
-    },
-
-    /**
-     * Show modal choose topping
-     */
-    showModalTopping() {
-      this.$bvModal.show('modal-choose-topping')
-    },
-
-    /**
-     * Show modal choose resource
-     */
-    showModalResource() {
-      this.$bvModal.show('modal-choose-resource')
-    },
-
-    /**
-     * Add new row choose option
-     */
-    addNewRowChooseOption() {
-      let optionType = document.getElementById("optionType").value.trim()
-      let optionValue = document.getElementById("optionValue").value.trim()
-      let optionPrice = document.getElementById("optionPrice").value.trim()
-      let optionDefault = JSON.parse(JSON.stringify(this.optionDefault))
-
-      let option = {
-        "type": optionType,
-        "value": optionValue,
-        "price": optionPrice,
-        "default": optionDefault
-      }
-      this.menu.options.push(option)
-
-      document.getElementById("optionType").value = ""
-      document.getElementById("optionValue").value = ""
-      document.getElementById("optionPrice").value = ""
-      this.optionDefault = "false"
-    },
-
-    /**
-     * Delete option
-     */
-    deleteOption(type, value, price) {
-      let index = 0
-      for (var i in this.menu.options) {
-        if(this.menu.options[i].type == type && this.menu.options[i].value == value && this.menu.options[i].price == price) {
-          this.menu.options.splice(index, 1)
-        }
-        index += 1
-      }
-    },
-
-    /**
-     * Confirm option
-     */
-    confirmOption() {
-      this.$bvModal.hide('modal-choose-option')
-    },
-
-    /**
-     * Confirm topping
-     */
-    confirmTopping() {
-      this.$bvModal.hide('modal-choose-topping')
-    },
-
-    /**
-     * Event crop image
-     */
-    cropImage() {
-      // Use to check reupload image when edit
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/menu/list')
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      if(num) {
-        let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        return result
-      }
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Get unit by resource id
-     */
-    getUnitByResourceId(id) {
-      for(let index in this.resources) {
-        if(this.resources[index].value == id) {
-          return this.resources[index]
-        }
-      }
-      return ""
-    },
-
-    /**
-     * Event change resource
-     */
-    changeResource() {
-      if(this.resource.id) {
-        let item = this.getUnitByResourceId(this.resource.id)
-        if(item) {
-          this.unitResource = item.unit
-        }
-      }
-    },
-
-    /**
-     * Check exist resource id
-     */
-    checkExistResourceId(id) {
-      for (let index in this.resourceChosen) {
-        if(this.resourceChosen[index].id == id) {
-          return true
-        }
-      }
-      return false
-    },
-
-    /**
-     * Add group resource
-     */
-    addGroupResource() {
-      if(this.resource.id && this.resource.quantity) {
-        // Check exist resource id
-        if(!this.checkExistResourceId(this.resource.id)) {
-          let item = this.getUnitByResourceId(this.resource.id)
-          let itemTemp = {
-            id: item.value,
-            name: item.text,
-            quantity: this.resource.quantity,
-            unit: item.unit
-          }
-          this.resourceChosen.push(itemTemp)
-
-          // Reset value
-          this.resource.id = ''
-          this.resource.quantity = ''
-          this.unitResource = ''
-        } else {
-          this.popToast('danger', 'Nhập trùng nguyên liệu')
-        }
-      } else {
-        this.popToast('danger', 'Vui lòng nhập đủ các mục yêu cầu')
-      }
-    },
-
-    /**
-     * Confirm resource
-     */
-    confirmResource() {
-      this.$bvModal.hide('modal-choose-resource')
-    },
-
-    /**
-     * Get index by id
-     */
-    getIndexById(id) {
-      let index = 0
-      for(var i in this.resourceChosen) {
-        if(this.resourceChosen[i].id == id) {
-          return index
-        }
-        index += 1
-      }
-      return false
-    },
-
-    /**
-     * Remove resource
-     */
-    deleteResource(id) {
-
-      // Get index pmt by id
-      let indexTemp = this.getIndexById(id)
-
-      if(indexTemp !== false) {
-        this.resourceChosen.splice(indexTemp, 1)
-      }
-    },
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
   }
 }
+
+/**
+ * Load list option resource
+ */
+const getResourceOptions = async () => {
+  try {
+    const res = await adminAPI.getListResourceOption()
+    if (res != null && res.data != null && res.data.data != null) {
+      const items = res.data.data
+      if (items) {
+        for (let i in items) {
+          resources.value.push(items[i])
+        }
+      }
+    }
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+/**
+ * Get list topping
+ */
+const getTopping = async () => {
+  try {
+    const res = await adminAPI.getTopping()
+    toppings.value = res.data.data
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+/**
+ * Get kitchen area
+ */
+const getKitchenArea = async () => {
+  try {
+    const res = await adminAPI.getKitchenArea()
+    const items = res.data.data
+    const opts = []
+    for (let index in items) {
+      const item = {
+        value: items[index].id,
+        text: items[index].name
+      }
+      opts.push(item)
+    }
+    kitchenAreas.value = opts
+  } catch (err) {
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+/**
+ * Get menu detail
+ */
+const getMenuDetail = async () => {
+  const menuId = route.params.id
+  if (menuId) {
+    loading.value = true
+
+    try {
+      const res = await adminAPI.getMenuDetail(menuId)
+      if (res != null && res.data != null && res.data.data != null) {
+        menu.value = res.data.data
+        file.value = menu.value.image_preview
+        resourceChosen.value = menu.value.resource
+      }
+      loading.value = false
+    } catch (err) {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      showToast(errorMess, 'danger')
+    }
+  }
+}
+
+/**
+ * Handle upload file
+ */
+const handleFileUpload = () => {
+  menu.value.image_preview = null
+  file.value = fileInput.value.files[0]
+  menu.value.image = file.value.name
+
+  // Render image in review
+  const reader = new FileReader()
+  reader.addEventListener("load", function () {
+    menu.value.image_preview = reader.result
+  }, false)
+  
+  if (file.value) {
+    reader.readAsDataURL(file.value)
+    height.value = '300px'
+    styleImg.value = {'max-width': '100%', 'max-height': '100%'}
+  }
+}
+
+/**
+ * Prepare info to save
+ */
+const save = () => {
+  click.value = true
+  const result = checkValidate()
+  if (result) {
+    if (menu.value.image_preview) {
+      cropper.value
+        .getCroppedCanvas({
+          width: 300,
+          height: 300
+        })
+        .toBlob(blob => {
+          const formData = new FormData()
+          formData.append("file", blob, menu.value.image)
+          formData.append("name", menu.value.name)
+          formData.append("price", menu.value.price)
+          formData.append("options", JSON.stringify(menu.value.options))
+          formData.append("toppings", menu.value.toppings)
+          formData.append("group", menu.value.group_id)
+          formData.append("quantity", menu.value.quantity)
+          formData.append("resource", JSON.stringify(resourceChosen.value))
+          formData.append("can_edit_price", menu.value.can_edit_price)
+          formData.append("can_edit_quantity", menu.value.can_edit_quantity)
+          formData.append("index", menu.value.index)
+          formData.append("kitchen_area_id", menu.value.kitchen_area_id)
+
+          doSave(formData)
+        })
+    } else {
+      const formData = new FormData()
+      formData.append("file", null)
+      formData.append("name", menu.value.name)
+      formData.append("price", menu.value.price)
+      formData.append("options", JSON.stringify(menu.value.options))
+      formData.append("toppings", menu.value.toppings)
+      formData.append("group", menu.value.group_id)
+      formData.append("quantity", menu.value.quantity)
+      formData.append("resource", JSON.stringify(resourceChosen.value))
+      formData.append("can_edit_price", menu.value.can_edit_price)
+      formData.append("can_edit_quantity", menu.value.can_edit_quantity)
+      formData.append("index", menu.value.index)
+      formData.append("kitchen_area_id", menu.value.kitchen_area_id)
+
+      doSave(formData)
+    }
+  }
+}
+
+/**
+ * Call api, save data
+ */
+const doSave = async (formData) => {
+  saving.value = true
+  const menuId = route.params.id
+  
+  try {
+    if (menuId) {
+      // Edit
+      formData.append("status", menu.value.status)
+      formData.append("id", menuId)
+
+      const res = await adminAPI.editMenu(formData)
+      saving.value = false
+      if (res != null && res.data != null) {
+        showToast('Lưu menu thành công!!! ', 'success')
+      } else {
+        showToast('Lưu menu thất bại!!! ', 'danger')
+      }
+    } else {
+      // Add
+      const res = await adminAPI.addMenu(formData)
+      saving.value = false
+      if (res != null && res.data != null) {
+        router.push('/menu/list')
+      } else {
+        showToast('Lưu menu thất bại!!! ', 'danger')
+      }
+    }
+  } catch (err) {
+    saving.value = false
+    const errorMess = commonFunc.handleStaffError(err)
+    showToast(errorMess, 'danger')
+  }
+}
+
+/**
+ * Show modal choose option
+ */
+const showModalOption = () => {
+  isOptionModalOpen.value = true
+}
+
+/**
+ * Show modal choose topping
+ */
+const showModalTopping = () => {
+  isToppingModalOpen.value = true
+}
+
+/**
+ * Show modal choose resource
+ */
+const showModalResource = () => {
+  isResourceModalOpen.value = true
+}
+
+/**
+ * Add new row choose option
+ */
+const addNewRowChooseOption = () => {
+  const optionType = document.getElementById("optionType").value.trim()
+  const optionValue = document.getElementById("optionValue").value.trim()
+  const optionPrice = document.getElementById("optionPrice").value.trim()
+  const optionDef = JSON.parse(JSON.stringify(optionDefault.value))
+
+  const option = {
+    type: optionType,
+    value: optionValue,
+    price: optionPrice,
+    default: optionDef
+  }
+  menu.value.options.push(option)
+
+  document.getElementById("optionType").value = ""
+  document.getElementById("optionValue").value = ""
+  document.getElementById("optionPrice").value = ""
+  optionDefault.value = "false"
+}
+
+/**
+ * Delete option
+ */
+const deleteOption = (type, value, price) => {
+  let index = 0
+  for (const i in menu.value.options) {
+    if (menu.value.options[i].type == type && menu.value.options[i].value == value && menu.value.options[i].price == price) {
+      menu.value.options.splice(index, 1)
+    }
+    index += 1
+  }
+}
+
+/**
+ * Confirm option
+ */
+const confirmOption = () => {
+  isOptionModalOpen.value = false
+}
+
+/**
+ * Confirm topping
+ */
+const confirmTopping = () => {
+  isToppingModalOpen.value = false
+}
+
+/**
+ * Event crop image
+ */
+const cropImage = () => {
+  // Use to check reupload image when edit
+}
+
+/**
+ * Back to list
+ */
+const back = () => {
+  router.push('/menu/list')
+}
+
+/**
+ * Only input integer
+ */
+const integerOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+/**
+ * Get unit by resource id
+ */
+const getUnitByResourceId = (id) => {
+  for (const index in resources.value) {
+    if (resources.value[index].value == id) {
+      return resources.value[index]
+    }
+  }
+  return ""
+}
+
+/**
+ * Event change resource
+ */
+const changeResource = () => {
+  if (resource.value.id) {
+    const item = getUnitByResourceId(resource.value.id)
+    if (item) {
+      unitResource.value = item.unit
+    }
+  }
+}
+
+/**
+ * Check exist resource id
+ */
+const checkExistResourceId = (id) => {
+  for (const index in resourceChosen.value) {
+    if (resourceChosen.value[index].id == id) {
+      return true
+    }
+  }
+  return false
+}
+
+/**
+ * Add group resource
+ */
+const addGroupResource = () => {
+  if (resource.value.id && resource.value.quantity) {
+    // Check exist resource id
+    if (!checkExistResourceId(resource.value.id)) {
+      const item = getUnitByResourceId(resource.value.id)
+      const itemTemp = {
+        id: item.value,
+        name: item.text,
+        quantity: resource.value.quantity,
+        unit: item.unit
+      }
+      resourceChosen.value.push(itemTemp)
+
+      // Reset value
+      resource.value.id = ''
+      resource.value.quantity = ''
+      unitResource.value = ''
+    } else {
+      showToast('Nhập trùng nguyên liệu', 'danger')
+    }
+  } else {
+    showToast('Vui lòng nhập đủ các mục yêu cầu', 'danger')
+  }
+}
+
+/**
+ * Confirm resource
+ */
+const confirmResource = () => {
+  isResourceModalOpen.value = false
+}
+
+/**
+ * Get index by id
+ */
+const getIndexById = (id) => {
+  let index = 0
+  for (const i in resourceChosen.value) {
+    if (resourceChosen.value[i].id == id) {
+      return index
+    }
+    index += 1
+  }
+  return false
+}
+
+/**
+ * Remove resource
+ */
+const deleteResource = (id) => {
+  // Get index pmt by id
+  const indexTemp = getIndexById(id)
+
+  if (indexTemp !== false) {
+    resourceChosen.value.splice(indexTemp, 1)
+  }
+}
+
+onMounted(() => {
+  getGroupMenuOptions()
+  getTopping()
+  getKitchenArea()
+  getResourceOptions()
+  getMenuDetail()
+})
 </script>
 
-<style lang="scss">
-
-  .width-33 {
-    width: 31%;
-    float: left;
-  }
-
+<style lang="scss" scoped>
+.width-33 {
+  width: 31%;
+  float: left;
+}
 </style>

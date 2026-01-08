@@ -1,24 +1,23 @@
 module.exports = {
   root: true,
   env: {
-    // This section will be used to determine which APIs are available to us
-    // (i.e are we running in a browser environment or a node.js env)
     node: true,
-    browser: true
+    browser: true,
+    es2021: true
   },
   parserOptions: {
-    parser: "babel-eslint",
-    // Specify a module sourcetype prevent eslint from marking import statements as errors
-    sourceType: "module"
+    ecmaVersion: 2021,
+    sourceType: 'module'
   },
   extends: [
-    // Use the recommended rule set for both plain javascript and vue
-    "eslint:recommended",
-    "plugin:vue/recommended"
+    'eslint:recommended',
+    'plugin:vue/vue3-recommended'
   ],
   rules: {
     // Disable console logs and debugging in production
-    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/no-v-html': 'off'
   }
-};
+}

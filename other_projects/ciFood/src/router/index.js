@@ -1,106 +1,100 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // Customer group
-import CustomerHome from '@/views/customer/Home'
+import CustomerHome from '@/views/customer/Home.vue'
 
 // Staff group
-import StaffLogin from '@/views/staff/StaffLogin'
-import StaffChangePass from '@/views/staff/StaffChangePass'
-import StaffActivePass from '@/views/staff/StaffActivePass'
-import StaffForgetPass from '@/views/staff/StaffForgetPass'
+import StaffLogin from '@/views/staff/StaffLogin.vue'
+import StaffChangePass from '@/views/staff/StaffChangePass.vue'
+import StaffActivePass from '@/views/staff/StaffActivePass.vue'
+import StaffForgetPass from '@/views/staff/StaffForgetPass.vue'
 
 // Admin group
-import OverView from '@/views/admin/over_view/OverView'
-import Topping from '@/views/admin/topping/List'
-import ToppingAdd from '@/views/admin/topping/Index'
-import GroupMenu from '@/views/admin/group_menu/List'
-import GroupMenuAdd from '@/views/admin/group_menu/Index'
-import Menu from '@/views/admin/menu/List'
-import MenuAdd from '@/views/admin/menu/MenuIndex'
-import Role from '@/views/admin/role/RoleList'
-import RoleAdd from '@/views/admin/role/RoleIndex'
-import Staff from '@/views/admin/staff/List'
-import StaffAdd from '@/views/admin/staff/Index'
-import Promo from '@/views/admin/promo/List'
-import PromoAdd from '@/views/admin/promo/Index'
-import Table from '@/views/admin/table/List'
-import TableAdd from '@/views/admin/table/Index'
-import GroupTable from '@/views/admin/group_table/GroupTableList'
-import GroupTableAdd from '@/views/admin/group_table/GroupTableIndex'
-import Printer from '@/views/admin/printer/Printer'
-import Unit from '@/views/admin/unit/UnitList'
-import UnitAdd from '@/views/admin/unit/UnitIndex'
-import Resource from '@/views/admin/resource/ResourceList'
-import ResourceAdd from '@/views/admin/resource/ResourceIndex'
-import RepoHistory from '@/views/admin/resource/ResourceLog'
-import Setting from '@/views/admin/setting/List'
-import SaleReport from '@/views/admin/report/BillReport'
-import Statistic from '@/views/admin/report/Statistic'
-import ChartProfitRevenue from '@/views/admin/report/ChartProfitRevenue'
-import TodayReport from '@/views/admin/report/TodayReport'
-import Profit from '@/views/admin/report/Profit'
-import PromotionReport from '@/views/admin/report/PromotionReport'
-import StaffReport from '@/views/admin/report/StaffReport'
-import DeleteBill from '@/views/admin/report/DeleteBillReport'
-import EditPriceReport from '@/views/admin/report/EditPriceReport'
-import EditOldBillReport from '@/views/admin/report/EditOldBillReport'
-import MoneyBox from '@/views/admin/money_box/MoneyBox'
-import MoneyBoxHistory from '@/views/admin/money_box/MoneyBoxHistory'
-import CustomerList from '@/views/admin/customer/CustomerList'
-import CustomerHistory from '@/views/admin/customer/CustomerHistory'
-import CustomerIndex from '@/views/admin/customer/CustomerIndex'
-import MemberConfig from '@/views/admin/customer/MemberConfig'
-import KitchenAreaList from '@/views/admin/kitchen_area/KitchenAreaList'
-import KitchenAreaAdd from '@/views/admin/kitchen_area/KitchenAreaIndex'
-import KitchenAreaEdit from '@/views/admin/kitchen_area/KitchenAreaIndex'
-import SaleChannelList from '@/views/admin/sale_channel/SaleChannelList'
-import SaleChannelAdd from '@/views/admin/sale_channel/SaleChannelIndex'
-import SaleChannelEdit from '@/views/admin/sale_channel/SaleChannelIndex'
-import SetPriceByChannel from '@/views/admin/sale_channel/SetPriceByChannel'
-import DebtList from '@/views/admin/debt/DebtList'
-import DebtIndex from '@/views/admin/debt/DebtIndex'
-import PublicDebtList from '@/views/admin/debt/PublicDebtList'
-import PublicDebtIndex from '@/views/admin/debt/PublicDebtIndex'
-import DebtReport from '@/views/admin/debt/DebtReport'
+import OverView from '@/views/admin/over_view/OverView.vue'
+import Topping from '@/views/admin/topping/List.vue'
+import ToppingAdd from '@/views/admin/topping/Index.vue'
+import GroupMenu from '@/views/admin/group_menu/List.vue'
+import GroupMenuAdd from '@/views/admin/group_menu/Index.vue'
+import Menu from '@/views/admin/menu/List.vue'
+import MenuAdd from '@/views/admin/menu/MenuIndex.vue'
+import Role from '@/views/admin/role/RoleList.vue'
+import RoleAdd from '@/views/admin/role/RoleIndex.vue'
+import Staff from '@/views/admin/staff/List.vue'
+import StaffAdd from '@/views/admin/staff/Index.vue'
+import Promo from '@/views/admin/promo/List.vue'
+import PromoAdd from '@/views/admin/promo/Index.vue'
+import Table from '@/views/admin/table/List.vue'
+import TableAdd from '@/views/admin/table/Index.vue'
+import GroupTable from '@/views/admin/group_table/GroupTableList.vue'
+import GroupTableAdd from '@/views/admin/group_table/GroupTableIndex.vue'
+import Printer from '@/views/admin/printer/Printer.vue'
+import Unit from '@/views/admin/unit/UnitList.vue'
+import UnitAdd from '@/views/admin/unit/UnitIndex.vue'
+import Resource from '@/views/admin/resource/ResourceList.vue'
+import ResourceAdd from '@/views/admin/resource/ResourceIndex.vue'
+import RepoHistory from '@/views/admin/resource/ResourceLog.vue'
+import Setting from '@/views/admin/setting/List.vue'
+import SaleReport from '@/views/admin/report/BillReport.vue'
+import Statistic from '@/views/admin/report/Statistic.vue'
+import ChartProfitRevenue from '@/views/admin/report/ChartProfitRevenue.vue'
+import TodayReport from '@/views/admin/report/TodayReport.vue'
+import Profit from '@/views/admin/report/Profit.vue'
+import PromotionReport from '@/views/admin/report/PromotionReport.vue'
+import StaffReport from '@/views/admin/report/StaffReport.vue'
+import DeleteBill from '@/views/admin/report/DeleteBillReport.vue'
+import EditPriceReport from '@/views/admin/report/EditPriceReport.vue'
+import EditOldBillReport from '@/views/admin/report/EditOldBillReport.vue'
+import MoneyBox from '@/views/admin/money_box/MoneyBox.vue'
+import MoneyBoxHistory from '@/views/admin/money_box/MoneyBoxHistory.vue'
+import CustomerList from '@/views/admin/customer/CustomerList.vue'
+import CustomerHistory from '@/views/admin/customer/CustomerHistory.vue'
+import CustomerIndex from '@/views/admin/customer/CustomerIndex.vue'
+import MemberConfig from '@/views/admin/customer/MemberConfig.vue'
+import KitchenAreaList from '@/views/admin/kitchen_area/KitchenAreaList.vue'
+import KitchenAreaAdd from '@/views/admin/kitchen_area/KitchenAreaIndex.vue'
+import KitchenAreaEdit from '@/views/admin/kitchen_area/KitchenAreaIndex.vue'
+import SaleChannelList from '@/views/admin/sale_channel/SaleChannelList.vue'
+import SaleChannelAdd from '@/views/admin/sale_channel/SaleChannelIndex.vue'
+import SaleChannelEdit from '@/views/admin/sale_channel/SaleChannelIndex.vue'
+import SetPriceByChannel from '@/views/admin/sale_channel/SetPriceByChannel.vue'
+import DebtList from '@/views/admin/debt/DebtList.vue'
+import DebtIndex from '@/views/admin/debt/DebtIndex.vue'
+import PublicDebtList from '@/views/admin/debt/PublicDebtList.vue'
+import PublicDebtIndex from '@/views/admin/debt/PublicDebtIndex.vue'
+import DebtReport from '@/views/admin/debt/DebtReport.vue'
 
 // Super admin group
-import HomeSPAdmin from '@/views/supperAdmin/HomeSPAdmin'
-import Brand from '@/views/supperAdmin/brand/BrandList'
-import BrandAdd from '@/views/supperAdmin/brand/BrandIndex'
-import Store from '@/views/supperAdmin/store/List'
-import StoreAdd from '@/views/supperAdmin/store/Index'
-import StoreAdmin from '@/views/supperAdmin/storeAdmin/List'
-import StoreAdminAdd from '@/views/supperAdmin/storeAdmin/Index'
+import HomeSPAdmin from '@/views/supperAdmin/HomeSPAdmin.vue'
+import Brand from '@/views/supperAdmin/brand/BrandList.vue'
+import BrandAdd from '@/views/supperAdmin/brand/BrandIndex.vue'
+import Store from '@/views/supperAdmin/store/List.vue'
+import StoreAdd from '@/views/supperAdmin/store/Index.vue'
+import StoreAdmin from '@/views/supperAdmin/storeAdmin/List.vue'
+import StoreAdminAdd from '@/views/supperAdmin/storeAdmin/Index.vue'
 
 // Brand manager
-import TotalStoreReport from '@/views/brand_manager/total/TotalStoreReport'
-import StoreProfit from '@/views/brand_manager/report/StoreProfit'
-import StoreReport from '@/views/brand_manager/report/StoreReport'
-import StoreRevenue from '@/views/brand_manager/report/StoreRevenue'
-import StoreStatistic from '@/views/brand_manager/report/StoreStatistic'
-import StoreTodayReport from '@/views/brand_manager/report/StoreTodayReport'
-import StorePromotionReport from '@/views/brand_manager/report/StorePromotionReport'
-import StoreStaffReport from '@/views/brand_manager/report/StoreStaffReport'
-import StoreDeleteBill from '@/views/brand_manager/report/StoreDeleteBillReport'
-import StoreEditPriceReport from '@/views/brand_manager/report/StoreEditPriceReport'
-import StoreEditOldBillReport from '@/views/brand_manager/report/StoreEditOldBillReport'
+import TotalStoreReport from '@/views/brand_manager/total/TotalStoreReport.vue'
+import StoreProfit from '@/views/brand_manager/report/StoreProfit.vue'
+import StoreReport from '@/views/brand_manager/report/StoreReport.vue'
+import StoreRevenue from '@/views/brand_manager/report/StoreRevenue.vue'
+import StoreStatistic from '@/views/brand_manager/report/StoreStatistic.vue'
+import StoreTodayReport from '@/views/brand_manager/report/StoreTodayReport.vue'
+import StorePromotionReport from '@/views/brand_manager/report/StorePromotionReport.vue'
+import StoreStaffReport from '@/views/brand_manager/report/StoreStaffReport.vue'
+import StoreDeleteBill from '@/views/brand_manager/report/StoreDeleteBillReport.vue'
+import StoreEditPriceReport from '@/views/brand_manager/report/StoreEditPriceReport.vue'
+import StoreEditOldBillReport from '@/views/brand_manager/report/StoreEditOldBillReport.vue'
 
 // Common
-import Page404 from '@/views/common/Page404'
-import Page500 from '@/views/common/Page500'
-import Contact from '@/views/common/contact'
-import AboutUs from '@/views/common/aboutUs'
-import PriceList from '@/views/common/PriceList'
-import Tutorial from '@/views/common/tutorial'
-import Trial from '@/views/common/Trial'
+import Page404 from '@/views/common/Page404.vue'
+import Page500 from '@/views/common/Page500.vue'
+import Contact from '@/views/common/contact.vue'
+import AboutUs from '@/views/common/aboutUs.vue'
+import PriceList from '@/views/common/PriceList.vue'
+import Tutorial from '@/views/common/tutorial.vue'
+import Trial from '@/views/common/Trial.vue'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
-  routes: [
+const routes = [
 
     // Authenticate group
     {
@@ -578,5 +572,18 @@ export default new Router({
     { path: '/about-us', name: 'AboutUs', component: AboutUs },
     { path: '/price-list', name: 'PriceList', component: PriceList },
   ]
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0 }
+  },
+  routes,
 })
 
+// Navigation guards
+router.beforeEach((to, from, next) => {
+  next()
+})
+
+export default router

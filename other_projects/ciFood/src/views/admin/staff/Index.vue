@@ -1,337 +1,261 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button 
+            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
+            @click="back">
+            Quay lại
+          </button>
+          <button 
+            class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="saving" 
+            @click="save">
+            Lưu
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12">
+            <h4 class="mt-2 text-center text-2xl font-semibold">Nhân Viên</h4>
+          </div>
+        </div>
+        <hr class="my-4"/>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Loading Overlay -->
+        <div v-if="loading" class="flex justify-center items-center py-12">
+          <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">Nhân Viên</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <div v-else>
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3">
+              <label class="block mb-2 font-medium">Tên <span class="text-red-600"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorName ? 'border-red-500' : 'border-gray-300'"
+                v-model="staff.name"
+                maxlength="100">
+              <p v-if="errorName" class="mt-1 text-sm text-red-600">Vui lòng nhập tên</p>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="staff.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số Điện Thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="phone"
-                  type="text"
-                  class="form-control"
-                  v-model="staff.phone_number"
-                  @keyup="integerOnly($event.target)"
-                  autocomplete="new-password"
-                  maxlength="20"
-                  v-on:change="checkPhoneNumberFormat($event.target.value)">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                    Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                    Số điện thoại không đúng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="col-span-12 md:col-span-3">
+              <label class="block mb-2 font-medium">Số Điện Thoại <span class="text-red-600"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <input
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorPhone || !phoneNumberCheckFlag ? 'border-red-500' : 'border-gray-300'"
+                v-model="staff.phone_number"
+                @keyup="integerOnly($event.target)"
+                @change="checkPhoneNumberFormat($event.target.value)"
+                maxlength="20">
+              <p v-if="errorPhone" class="mt-1 text-sm text-red-600">Vui lòng nhập số điện thoại</p>
+              <p v-if="!phoneNumberCheckFlag && staff.phone_number" class="mt-1 text-sm text-red-600">Số điện thoại không đúng</p>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Quyền </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="roleOptions"
-                  id="permission"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="100"
-                  v-model="staff.role_id"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorRole">
-                    Vui lòng nhập quyền
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="col-span-12 md:col-span-3">
+              <label class="block mb-2 font-medium">Quyền <span class="text-red-600"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <select
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="errorRole ? 'border-red-500' : 'border-gray-300'"
+                v-model="staff.role_id">
+                <option v-for="option in roleOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+              </select>
+              <p v-if="errorRole" class="mt-1 text-sm text-red-600">Vui lòng nhập quyền</p>
+            </div>
 
-              <b-row class="form-row" v-if="this.$route.params.id == null">
-                <b-col md="3" class="mt-2">
-                  <label> Mật Khẩu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="password"
+            <template v-if="!route.params.id">
+              <div class="col-span-12 md:col-span-3">
+                <label class="block mb-2 font-medium">Mật Khẩu <span class="text-red-600"></span></label>
+              </div>
+              <div class="col-span-12 md:col-span-9">
+                <input
                   type="password"
-                  class="form-control"
-                  v-model="staff.password"
                   autocomplete="new-password"
+                  class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="errorPassword || errorLengthPassword ? 'border-red-500' : 'border-gray-300'"
+                  v-model="staff.password"
                   maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPassword">
-                    Vui lòng nhập mật khẩu
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorLengthPassword">
-                    Mật khẩu phải ít nhất 6 kí tự
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+                <p v-if="errorPassword" class="mt-1 text-sm text-red-600">Vui lòng nhập mật khẩu</p>
+                <p v-if="errorLengthPassword" class="mt-1 text-sm text-red-600">Mật khẩu phải ít nhất 6 kí tự</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const route = useRoute()
+const { showToast } = useToast()
 
-export default {
-  data () {
-    return {
-      roleOptions: [],
-      staff: {
-        "name": null,
-        "phone_number": null,
-        "role_id": null,
-        "password": null
-      },
-      click: false,
-      phoneNumberCheckFlag: null,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    // Get role options
-    this.getRoleOption()
+const roleOptions = ref([])
+const staff = ref({
+  name: null,
+  phone_number: null,
+  role_id: null,
+  password: null
+})
 
-    this.getStaffDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.staff.name)
-    },
-    errorPhone: function () {
-      return this.checkInfo(this.staff.phone_number)
-    },
-    errorRole: function () {
-      return this.checkInfo(this.staff.role_id)
-    },
-    errorPassword: function () {
-      if(this.$route.params.id != null) {
-        return false
-      }
-      return this.checkInfo(this.staff.password)
-    },
-    errorLengthPassword () {
-      if(!this.staff.password || this.errorPassword)
-        return false
-      if(!this.click)
-        return false
-      return (this.staff.password.length < 6) 
-    },
-  },
-  methods: {
+const click = ref(false)
+const phoneNumberCheckFlag = ref(null)
+const saving = ref(false)
+const loading = ref(false)
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const errorName = computed(() => click.value && (staff.value.name == null || staff.value.name.length <= 0))
+const errorPhone = computed(() => click.value && (staff.value.phone_number == null || staff.value.phone_number.length <= 0))
+const errorRole = computed(() => click.value && (staff.value.role_id == null || staff.value.role_id.length <= 0))
+const errorPassword = computed(() => {
+  if (route.params.id != null) {
+    return false
+  }
+  return click.value && (staff.value.password == null || staff.value.password.length <= 0)
+})
+const errorLengthPassword = computed(() => {
+  if (!staff.value.password || errorPassword.value)
+    return false
+  if (!click.value)
+    return false
+  return (staff.value.password.length < 6)
+})
 
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName || this.errorPhone || this.errorRole || this.errorPassword 
-            || this.errorLengthPassword || !this.phoneNumberCheckFlag)
-    },
+const checkValidate = () => {
+  return !(errorName.value || errorPhone.value || errorRole.value || errorPassword.value || 
+    errorLengthPassword.value || !phoneNumberCheckFlag.value)
+}
 
-    /**
-     *  Get role options
-     */
-    getRoleOption() {
-      adminAPI.getRoleOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.roleOptions = [{value: null, text: ''}]
-
-          var roles = res.data.data
-          if(roles) {
-            for (let i in roles) {
-              this.roleOptions.push(roles[i])
-            }
-          }
-        }
-      })
-    },
-
-    /**
-     *  Get detail
-     */
-    getStaffDetail() {
-      let staffId = this.$route.params.id
-      if(staffId){
-        this.loading = true
-
-        adminAPI.getStaffDetail(staffId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.staff = Mapper.mapStaffDetailModelToDto(res.data.data)
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      this.checkPhoneNumberFormat(this.staff.phone_number)
-      let result = this.checkValidate()
-      if(result) { 
-        let staffId = this.$route.params.id
-        let staff = this.staff
-        staff.id = staffId
-        if(staffId){
-          // Edit
-          this.staff = staff
-          adminAPI.editStaff(staff).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              let message = ""
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật nhân viên thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Show notify edit fail
-            let message = ""
-            if(err.response.data.status == 422) {
-              message = err.response.data.mess
-            } else {
-              message = "Lỗi hệ thống"
-            }
-            this.$bvModal.msgBoxOk(message, {
-              title: "Cập Nhật Nhân Viên",
-              centered: true, 
-              size: 'sm',
-              headerClass: 'bg-danger',
-            })
-          })
-        } else {
-          // Add
-          adminAPI.addStaff(this.staff).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-
-              let message = ""
-              if (res.data.status == 200) {
-                this.$router.push("/staff/list")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            let message = ""
-              if(err.response.data.status == 422) {
-                message = err.response.data.mess
-              } else {
-                message = "Lỗi hệ thống"
-              }
-              this.$bvModal.msgBoxOk(message, {
-                title: "Thêm Nhân Viên",
-                centered: true, 
-                size: 'sm',
-                headerClass: 'bg-danger',
-              })
-          })
-        }
-      } else {
-        this.saving = false
-      }
+const getRoleOption = async () => {
+  try {
+    const res = await adminAPI.getRoleOption()
+    if (res != null && res.data != null && res.data.data != null) {
+      roleOptions.value = [{value: null, text: ''}]
       
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
+      const roles = res.data.data
+      if (roles) {
+        for (let i in roles) {
+          roleOptions.value.push(roles[i])
         }
-      } else {
-        this.phoneNumberCheckFlag = true
       }
-    },
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/staff/list")
+const getStaffDetail = async () => {
+  const staffId = route.params.id
+  if (staffId) {
+    loading.value = true
+
+    try {
+      const res = await adminAPI.getStaffDetail(staffId)
+      if (res != null && res.data != null && res.data.data != null) {
+        staff.value = Mapper.mapStaffDetailModelToDto(res.data.data)
+      }
+      loading.value = false
+    } catch (err) {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      showToast(errorMess, 'danger')
     }
   }
 }
+
+const save = async () => {
+  click.value = true
+  saving.value = true
+  checkPhoneNumberFormat(staff.value.phone_number)
+  
+  const result = checkValidate()
+  if (result) {
+    const staffId = route.params.id
+    const staffData = staff.value
+    staffData.id = staffId
+    
+    try {
+      if (staffId) {
+        // Edit
+        staff.value = staffData
+        const res = await adminAPI.editStaff(staffData)
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status === 200) {
+            showToast('Cập nhật nhân viên thành công!!!', 'success')
+          }
+        }
+      } else {
+        // Add
+        const res = await adminAPI.addStaff(staff.value)
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status === 200) {
+            router.push("/staff/list")
+          }
+        }
+      }
+    } catch (err) {
+      saving.value = false
+      let message = ""
+      if (err.response && err.response.data && err.response.data.status === 422) {
+        message = err.response.data.mess
+      } else {
+        message = "Lỗi hệ thống"
+      }
+      alert((staffId ? "Cập Nhật Nhân Viên" : "Thêm Nhân Viên") + "\n\n" + message)
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+const integerOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+const checkPhoneNumberFormat = (item) => {
+  const valueInput = item
+  if (valueInput != null && valueInput !== "") {
+    if (commonFunc.phoneNumberCheck(valueInput)) {
+      phoneNumberCheckFlag.value = true
+    } else {
+      phoneNumberCheckFlag.value = false
+    }
+  } else {
+    phoneNumberCheckFlag.value = true
+  }
+}
+
+const back = () => {
+  router.push("/staff/list")
+}
+
+onMounted(() => {
+  getRoleOption()
+  getStaffDetail()
+})
 </script>

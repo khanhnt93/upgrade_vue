@@ -1,178 +1,157 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-6">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <!-- Header Buttons -->
+      <div class="flex justify-between mb-4">
+        <button
+          @click="back"
+          class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md min-w-[120px]"
+        >
+          Quay lại
+        </button>
+        <button
+          @click="save"
+          :disabled="saving"
+          class="text-white px-6 py-2 rounded-md min-w-[120px]"
+          :class="saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-success-500 hover:bg-success-600'"
+        >
+          Lưu
+        </button>
+      </div>
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
+      <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Đơn Vị</h4>
+      <hr class="mb-6" />
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+      <!-- Loading -->
+      <div v-if="loading" class="text-center py-8">
+        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+      </div>
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">Đơn Vị</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="unit.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Form -->
+      <div v-else class="max-w-2xl mx-auto">
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <label class="col-span-12 md:col-span-3 flex items-center text-gray-700">
+            Tên <span class="text-red-500 ml-1">*</span>
+          </label>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              id="name"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              v-model="unit.name"
+              :class="{ 'border-red-500': errorName }"
+            />
+            <p v-if="errorName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập tên
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 
+const router = useRouter()
+const route = useRoute()
+const toast = useToast()
 
-export default {
-  data () {
-    return {
-      unit: {
-        "name": null,
-      },
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    this.getUnitDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.unit.name)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName)
-    },
+const unit = ref({
+  name: null
+})
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    /**
-     * Get detail
-     */
-    getUnitDetail() {
-      let unitId = this.$route.params.id
-      if(unitId){
-        this.loading = true
+// Computed
+const errorName = computed(() => {
+  return click.value && (unit.value.name == null || unit.value.name.length <= 0)
+})
 
-        adminAPI.getUnitDetail(unitId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.unit = res.data.data
-          }
+const checkValidate = () => {
+  return !errorName.value
+}
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+// Methods
+const getUnitDetail = () => {
+  let unitId = route.params.id
+  if (unitId) {
+    loading.value = true
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+    adminAPI.getUnitDetail(unitId).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        unit.value = res.data.data
       }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/unit/list')
-    },
-
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      let result = this.checkValidate()
-      if(result) {
-        let unitId = this.$route.params.id
-        if(unitId){
-          // Edit
-          let unit = this.unit
-          unit.id = unitId
-          adminAPI.editUnit(unit).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật đơn vị thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          adminAPI.addUnit(this.unit).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/unit/list")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      } else {
-        this.saving = false
-      }
-    }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      let errorMess = commonFunc.handleStaffError(err)
+      toast.error(errorMess)
+    })
   }
 }
+
+const back = () => {
+  router.push('/unit/list')
+}
+
+const save = () => {
+  click.value = true
+  saving.value = true
+  let result = checkValidate()
+  
+  if (result) {
+    let unitId = route.params.id
+    if (unitId) {
+      // Edit
+      let unitData = { ...unit.value }
+      unitData.id = unitId
+      adminAPI.editUnit(unitData).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            toast.success('Cập nhật đơn vị thành công!!!')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        let errorMess = commonFunc.handleStaffError(err)
+        toast.error(errorMess)
+      })
+    } else {
+      // Add
+      adminAPI.addUnit(unit.value).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            router.push("/unit/list")
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        let errorMess = commonFunc.handleStaffError(err)
+        toast.error(errorMess)
+      })
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+onMounted(() => {
+  getUnitDetail()
+})
 </script>
+
+<style scoped>
+/* Additional styles if needed */
+</style>
