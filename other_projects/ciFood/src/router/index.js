@@ -94,7 +94,10 @@ import PriceList from '@/views/common/PriceList.vue'
 import Tutorial from '@/views/common/tutorial.vue'
 import Trial from '@/views/common/Trial.vue'
 
-const routes = [
+const router = createRouter({
+  history: createWebHistory(),
+  scrollBehavior: () => ({ top: 0 }),
+  routes: [
 
     // Authenticate group
     {
@@ -572,18 +575,6 @@ const routes = [
     { path: '/about-us', name: 'AboutUs', component: AboutUs },
     { path: '/price-list', name: 'PriceList', component: PriceList },
   ]
-
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior() {
-    return { top: 0 }
-  },
-  routes,
-})
-
-// Navigation guards
-router.beforeEach((to, from, next) => {
-  next()
 })
 
 export default router
