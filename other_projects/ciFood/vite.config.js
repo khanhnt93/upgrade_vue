@@ -33,7 +33,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor': ['vue', 'vue-router', 'pinia'],
-          'charts': ['vue-google-charts', 'apexcharts'],
+          'charts': ['vue-google-charts', 'apexcharts', 'vue3-apexcharts'],
         },
       },
     },

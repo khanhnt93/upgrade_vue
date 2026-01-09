@@ -1,42 +1,31 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import Toast from 'vue-toastification'
-import 'vue-toastification/dist/index.css'
-
 import App from './App.vue'
 import router from './router'
 
-// Import Bootstrap CSS
-import 'bootstrap/dist/css/bootstrap.css'
-
-// Import Font Awesome
+// Import Font Awesome CSS first
 import '@fortawesome/fontawesome-free/css/all.css'
 
-// Import Vue Sidebar Menu CSS
-import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+// Import Tailwind CSS
+import './assets/css/tailwind.css'
 
-// svg: loading
-import * as svgicon from 'vue-svgicon'
-import './icons.js'
+// Import Styles
+import './assets/scss/style.scss'
+
+// Import Toast Notifications
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
 // Init chart
 import VueGoogleCharts from 'vue-google-charts'
 
-// Create Vue app
+// Create app instance
 const app = createApp(App)
 
-// Create and configure Pinia
+// Create Pinia instance
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-
-// Use plugins
-app.use(router)
-app.use(pinia)
-app.use(svgicon, {
-  tagName: 'icon'
-})
-app.use(VueGoogleCharts)
 
 // Configure Toast
 app.use(Toast, {
@@ -46,9 +35,22 @@ app.use(Toast, {
   position: "top-right",
   timeout: 3000,
   closeOnClick: true,
+  pauseOnFocusLoss: true,
   pauseOnHover: true,
-  draggable: true
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: "button",
+  icon: true,
+  rtl: false
 })
 
+// Use plugins
+app.use(pinia)
+app.use(router)
+app.use(VueGoogleCharts)
+
+// Register Font Awesome component globally
 // Mount app
 app.mount('#app')
