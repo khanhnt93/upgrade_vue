@@ -264,11 +264,11 @@ export default {
     }
   },
   mounted() {
-    // Get over view
-    this.getOverView()
-
     // Define default value for from data, to date
     this.defineInput()
+
+    // Get over view
+    this.getOverView()
 
     // Doanh thu
     this.getRevenue()
@@ -300,11 +300,9 @@ export default {
      * Define input
      */
     defineInput() {
-      let dateNow = new Date()
-
-      this.year_input = dateNow.getFullYear()
-
-      let currentYear = dateNow.getFullYear()
+      let currentYear = new Date().getFullYear()
+      this.year_input = currentYear
+      
       this.yearOptions = []
       for (let i = currentYear; i > currentYear - 10; i--) {
           this.yearOptions.push({value: i, text: i})

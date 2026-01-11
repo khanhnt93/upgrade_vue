@@ -224,6 +224,14 @@
                   </b-col>
                 </b-row>
 
+                <b-row v-show="trade.customer_id">
+                  <b-col>
+                    <p>
+                      Số lượng đơn hàng: <b>{{ currencyFormat(currentCustomer.number_order_sell || 0) }}</b> | Tổng doanh số mua hàng: <b>{{ currencyFormat(currentCustomer.order_sell_amount || 0) }}</b>
+                    </p>
+                  </b-col>
+                </b-row>
+
               </b-col>
             </b-row>
 
@@ -250,11 +258,11 @@
                   <b-col md="10" class="mt-2">
                       <div class="input-group">
                         <input type="radio" v-model="currentProduct.project_type" name="project_type"
-                               value="0" @change="changeProjectType">
-                        <label class="ml-4 mt-1">Dự án mới</label>
+                               value="0" @change="changeProjectType"  id="project_type_0">
+                        <label class="ml-4 mt-1" for="project_type_0">Dự án mới</label>
                         <input type="radio" v-model="currentProduct.project_type" name="project_type"
-                               value="1" class="ml-5" @change="changeProjectType">
-                        <label class="ml-4 mt-1">Dự án mẫu</label>
+                               value="1" class="ml-5" @change="changeProjectType" id="project_type_1">
+                        <label class="ml-4 mt-1" for="project_type_1">Dự án mẫu</label>
                       </div>
                   </b-col>
                 </b-row>
@@ -4375,6 +4383,9 @@ export default {
 
     handleListProduct() {
       if(this.trade.products.length > 0) {
+        console.log("bbbbbbbbbbbbbbbbbbbbbb")
+        console.log(this.trade.products)
+        console.log("bbbbbbbbbbbbbb")
 
         // Tạo danh sách dự án
         let list_projects = []
@@ -4409,9 +4420,6 @@ export default {
               project_item.product_type = 1 // Sản phẩm
 
               project_item = this.reformatProductItem(project_item)
-                console.log("xxx")
-                console.log(project_item)
-                console.log("xxx")
 
               list_projects_products.push(project_item)
 
@@ -4503,7 +4511,7 @@ export default {
           if (res.data.status == 200) {
             this.popToast('success', "Lưu nháp thành công!")
 
-            this.trade.products = this.reformatProduct(data.products)
+            // this.trade.products = this.reformatProduct(data.products)
             let response = res.data.data
             this.trade.id = response.quotation_id
             this.trade.quotation_number = response.quotation_number
@@ -4553,9 +4561,6 @@ export default {
       if(product.conversion_value) {
         product.quantity_root = parseFloat(product.quantity) / parseFloat(product.conversion_value)
       }
-      console.log("formatProductItem")
-      console.log(product)
-      console.log("formatProductItem")
 
       return product
     },
@@ -5093,6 +5098,9 @@ export default {
         }
 
         let index = index_item - parseInt(project_index)
+        if(project_index) {
+          index = parseInt(product_index) - 1
+        }
         // if(product_index) {
         //   index = product_index - 1
         // }
@@ -5228,7 +5236,7 @@ export default {
       // Tính toán amount
       this.calculateAmount()
 
-        this.handleProductExcel()
+      this.handleProductExcel()
 
       // Lưu nháp
       if(this.trade.id) {
@@ -5242,7 +5250,7 @@ export default {
         this.handleListProduct()
       }
 
-      },
+    },
 
       // fortmatProductItem(index) {
       //   let item = this.trade.products[index]

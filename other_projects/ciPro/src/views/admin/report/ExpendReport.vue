@@ -275,9 +275,8 @@ export default {
       // let from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
       // this.inputs.to_date = to_date
       // this.inputs.from_date = from_date
-      this.year_input = dateNow.getFullYear()
-
-      let currentYear = dateNow.getFullYear()
+      let currentYear = new Date().getFullYear()
+      this.year_input = currentYear
       this.yearOptions = []
       for (let i = currentYear; i > currentYear - 10; i--) {
           this.yearOptions.push({value: i, text: i})

@@ -480,9 +480,8 @@ export default {
       let dateNow = new Date()
       this.inputs.to_date = dateNow.toJSON().slice(0,10)
       this.inputs.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
-      this.year_input = dateNow.getFullYear()
-
-      let currentYear = dateNow.getFullYear()
+      let currentYear = new Date().getFullYear()
+      this.year_input = currentYear
       this.yearOptions = []
       for (let i = currentYear; i > currentYear - 10; i--) {
         this.yearOptions.push({value: i, text: i})
