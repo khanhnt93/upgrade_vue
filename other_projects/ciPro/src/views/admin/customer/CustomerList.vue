@@ -365,69 +365,6 @@ export default {
         {value: 2, text: 'Cty - Nhà máy'},
         {value: 3, text: 'Cty - Công Trình'}
       ],
-      // fields: [
-      //   {
-      //     key: 'stt',
-      //     label: 'STT'
-      //   },
-      //   {
-      //     key: 'type',
-      //     label: 'Loại'
-      //   },
-      //   {
-      //     key: 'name',
-      //     label: 'Tên'
-      //   },
-      //   {
-      //     key: 'code',
-      //     label: 'Mã K.H'
-      //   },
-      //   {
-      //     key: 'phone_number',
-      //     label: 'SĐT'
-      //   },
-      //   {
-      //     key: 'email',
-      //     label: 'Email'
-      //   },
-      //   {
-      //     key: 'tax_code',
-      //     label: 'Mã số thuế'
-      //   },
-      //   {
-      //     key: 'city_name',
-      //     label: 'Tỉnh /TP'
-      //   },
-      //   {
-      //     key: 'district_name',
-      //     label: 'Quận /Huyện'
-      //   },
-      //   {
-      //     key: 'address',
-      //     label: 'Địa chỉ'
-      //   },
-      //   {
-      //     key: 'contact_person_name',
-      //     label: 'Tên người liên hệ'
-      //   },
-      //   {
-      //     key: 'contact_person_phone',
-      //     label: 'Sđt người liên hệ'
-      //   },
-      //   {
-      //     key: 'staff_name',
-      //     label: 'NV phụ trách'
-      //   },
-      //   {
-      //     key: 'created_at',
-      //     label: 'Ngày thêm'
-      //   },
-      //   {
-      //     key: 'action',
-      //     label: '',
-      //     class: 'actions-cell'
-      //   }
-      // ],
       items: [],
       pageLimit: Constant.PAGE_LIMIT,
       offset: 0,
@@ -568,9 +505,8 @@ export default {
         let dateNow = new Date()
         this.inputs.created_to = dateNow.toJSON().slice(0,10)
         this.inputs.created_from = new Date(dateNow.setDate(dateNow.getDate() - 7)).toJSON().slice(0,10)
-        this.year_input = dateNow.getFullYear()
-
-          let currentYear = dateNow.getFullYear()
+        let currentYear = new Date().getFullYear()
+        this.year_input = currentYear
           this.yearOptions = []
           for (let i = currentYear; i > currentYear - 10; i--) {
               this.yearOptions.push({value: i, text: i})

@@ -25,7 +25,7 @@ export const Constant = {
   ROLE_SP_ADMIN: 'SUPER_ADMIN',
 
   // Paging conts
-  PAGE_LIMIT: 10,
+  PAGE_LIMIT: 20,
 
   // Order status conts
   ORDER_APPROVED: "approved",
