@@ -1,329 +1,310 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center">Thống Kê</h4>
-            <b-row>
-              <b-col md="3">
-                <label> Cửa hàng </label>
-                <b-form-select
-                  :options="optionsStore"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.store_id"
-                  :disabled="onSearch">
-                </b-form-select>
-              </b-col>
+    <div class="row">
+      <div class="col">
+        <div class="bg-white shadow-sm rounded p-4">
+          <h4 class="text-center mb-4">Thống Kê</h4>
 
-              <b-col md="3">
-                <label> Từ ngày </label><span class="error-sybol"></span>
-                <input
-                  id="fromDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
-                <label> Đến ngày </label><span class="error-sybol"></span>
-                <input
-                  id="toDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
-                <label> Sắp xếp theo </label>
-                <b-form-select
-                  :options="orderByOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.orderBy">
-                </b-form-select>
-              </b-col>
-            </b-row>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Cửa hàng</label>
+              <select
+                v-model="inputs.store_id"
+                :disabled="onSearch"
+                class="form-control">
+                <option
+                  v-for="option in optionsStore"
+                  :key="option.value"
+                  :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
-                  Xem
-                </b-button>
-              </b-col>
-            </b-row>
+            <div class="col-md-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Từ ngày <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                v-model="inputs.fromDate"
+                maxlength="10"
+                @keyup="inputDateOnly($event.target)"
+                :class="['form-control', {'border-red-500': errorFromDate}]" />
+              <div v-if="errorFromDate" class="text-red-500 text-sm mt-1">
+                Mục từ ngày không đúng
+              </div>
+            </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <div class="col-md-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Đến ngày <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                v-model="inputs.toDate"
+                maxlength="10"
+                @keyup="inputDateOnly($event.target)"
+                :class="['form-control', {'border-red-500': errorToDate}]" />
+              <div v-if="errorToDate" class="text-red-500 text-sm mt-1">
+                Mục đến ngày không đúng
+              </div>
+            </div>
 
-            <b-row v-show="items.length > 0">
-              <b-col md="4">
-                Số kết quả: {{items.length}}
-              </b-col>
-              <b-col md="8" class="text-right">
-                <download-excel
-                  class   = "btn btn-default text-header"
-                  :data   = "items"
-                  :fields = "excel_statistic_fields"
-                  worksheet = "Thống kê"
-                  name    = "filename.xls">
-                  <b>Xuất Excel</b>
-                </download-excel>
-              </b-col>
-            </b-row>
+            <div class="col-md-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Sắp xếp theo</label>
+              <select
+                v-model="inputs.orderBy"
+                class="form-control">
+                <option
+                  v-for="option in orderByOption"
+                  :key="option.value"
+                  :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-            <b-row class="mt-2 mb-2" v-show="click == true">
-              <b-col md="12">
-                <b-table
-                  hover
-                  bordered
-                  stacked="md"
-                  :fields="fields"
-                  :items="items"
-                  v-show="items.length > 0">
-                </b-table>
+          <div class="row mt-3 mb-3">
+            <div class="col-md-12 text-right">
+              <button
+                @click.prevent="search"
+                :disabled="onSearch"
+                class="btn btn-primary px-4"
+                style="min-width: 120px;">
+                Xem
+              </button>
+            </div>
+          </div>
 
-                <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
-              </b-col>
-            </b-row>
+          <!-- Loading -->
+          <div v-show="loading" class="text-center py-4">
+            <icon name="loading" width="60" />
+          </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div v-show="items && items.length > 0" class="row mb-3">
+            <div class="col-md-4">
+              Số kết quả: {{ items.length }}
+            </div>
+            <div class="col-md-8 text-right">
+              <download-excel
+                class="btn btn-default font-weight-bold"
+                :data="items"
+                :fields="excel_statistic_fields"
+                worksheet="Thống kê"
+                name="filename.xls">
+                <b>Xuất Excel</b>
+              </download-excel>
+            </div>
+          </div>
 
+          <div class="row mt-3 mb-3" v-show="click == true">
+            <div class="col-md-12">
+              <table class="table table-bordered table-striped table-hover" v-show="items && items.length > 0">
+                <thead class="bg-blue-100">
+                  <tr>
+                    <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in items" :key="index">
+                    <td>{{ item.stt }}</td>
+                    <td>{{ item.name }}</td>
+                    <td class="text-right">{{ item.quantity }}</td>
+                    <td class="text-right">{{ item.percent_quantity }}</td>
+                    <td class="text-right">{{ item.amount }}</td>
+                    <td class="text-right">{{ item.percent_amount }}</td>
+                  </tr>
+                </tbody>
+              </table>
 
+              <p v-show="firstSearch == false && (!items || items.length <= 0)" class="text-center py-4">
+                Không có kết quả nào
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
 import JsonExcel from 'vue-json-excel'
 
-Vue.component('downloadExcel', JsonExcel)
-
-
 export default {
-  data () {
-    return {
-      inputs: {
-        "store_id": null,
-        "fromDate": null,
-        "toDate": null,
-        "orderBy": "quantityAsc"
-      },
-      onSearch: false,
-      click: false,
-      optionsStore: [],
-      orderByOption: [
-        {value: 'quantityAsc', text: ''},
-        {value: 'quantityAsc', text: 'Số lượng tăng dần'},
-        {value: 'quantityDesc', text: 'Số lượng giảm dần'},
-        {value: 'amountAsc', text: 'Doanh thu tăng dần'},
-        {value: 'amountDesc', text: 'Doanh thu giảm dần'}
-      ],
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'quantity',
-          label: 'Số lượng'
-        },
-        {
-          key: 'percent_quantity',
-          label: '% Số lượng'
-        },
-        {
-          key: 'amount',
-          label: 'Doanh thu'
-        },
-        {
-          key: 'percent_amount',
-          label: '% Doanh thu'
-        },
-      ],
-      items: [],
-      loading: false,
-      excel_statistic_fields: {
-        'STT': 'stt',
-        'Tên': 'name',
-        'Số lượng' : 'quantity',
-        '% Số lượng' : 'percent_quantity',
-        'Doanh thu' : 'amount',
-        '% Doanh thu' : 'percent_amount'
-      },
-      firstSearch: true,
+  name: 'StoreStatistic',
+  components: {
+    'downloadExcel': JsonExcel
+  },
+  setup() {
+    const { showToast } = useToast()
+
+    const inputs = reactive({
+      store_id: null,
+      fromDate: null,
+      toDate: null,
+      orderBy: 'quantityAsc'
+    })
+
+    const onSearch = ref(false)
+    const click = ref(false)
+    const optionsStore = ref([])
+    const orderByOption = ref([
+      { value: 'quantityAsc', text: '' },
+      { value: 'quantityAsc', text: 'Số lượng tăng dần' },
+      { value: 'quantityDesc', text: 'Số lượng giảm dần' },
+      { value: 'amountAsc', text: 'Doanh thu tăng dần' },
+      { value: 'amountDesc', text: 'Doanh thu giảm dần' }
+    ])
+
+    const fields = ref([
+      { key: 'stt', label: 'STT' },
+      { key: 'name', label: 'Tên' },
+      { key: 'quantity', label: 'Số lượng' },
+      { key: 'percent_quantity', label: '% Số lượng' },
+      { key: 'amount', label: 'Doanh thu' },
+      { key: 'percent_amount', label: '% Doanh thu' }
+    ])
+
+    const items = ref([])
+    const loading = ref(false)
+    const firstSearch = ref(true)
+
+    const excel_statistic_fields = {
+      'STT': 'stt',
+      'Tên': 'name',
+      'Số lượng': 'quantity',
+      '% Số lượng': 'percent_quantity',
+      'Doanh thu': 'amount',
+      '% Doanh thu': 'percent_amount'
     }
-  },
-  mounted() {
-    // Load store option
-    this.getOptionStore()
 
-    // Get default date
-    let dateNow = new Date().toJSON().slice(0,10)
-    this.inputs.toDate = commonFunc.formatDate(dateNow)
-    this.inputs.fromDate = commonFunc.formatDate(dateNow)
+    const errorFromDate = computed(() => {
+      return click.value && (inputs.fromDate == "" || inputs.fromDate == null ||
+        commonFunc.dateFormatCheck(inputs.fromDate) == false)
+    })
 
-  },
-  computed: {
-    errorFromDate: function () {
-      return this.checkDate(this.inputs.fromDate)
-    },
-    errorToDate: function () {
-      return this.checkDate(this.inputs.toDate)
-    },
-  },
-  methods: {
-    checkDate (dateInput) {
-      return (this.click && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
-    },
-    checkValidate () {
-      return !(this.errorFromDate || this.errorToDate)
-    },
+    const errorToDate = computed(() => {
+      return click.value && (inputs.toDate == "" || inputs.toDate == null ||
+        commonFunc.dateFormatCheck(inputs.toDate) == false)
+    })
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+    const checkValidate = () => {
+      return !(errorFromDate.value || errorToDate.value)
+    }
 
-    /**
-     * Get store options
-     */
-    getOptionStore() {
-      adminAPI.getStoreOption().then(res => {
-        if(res && res.data && res.data.data) {
-          this.optionsStore = res.data.data
+    const getOptionStore = async () => {
+      try {
+        const res = await adminAPI.getStoreOption()
+        if (res && res.data && res.data.data) {
+          optionsStore.value = res.data.data
         }
-      }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
+      } catch (err) {
+        const errorMess = commonFunc.handleStaffError(err)
+        showToast('danger', errorMess)
+      }
+    }
 
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
+    const inputDateOnly = (item) => {
       let valueInput = item.value
       let result = commonFunc.inputDateOnly(valueInput)
       item.value = result
-    },
+    }
 
-    /**
-     * Only input integer
-     */
-     intergerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
+    const checkFromDateAndToDate = () => {
+      let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.fromDate))
+      let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.toDate))
 
-    /**
-     * Check valid from date and to date
-     */
-    checkFromDateAndToDate() {
-
-      let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-      let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-
-      if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+      if (fromDate > toDate) {
+        showToast('danger', "Từ ngày không thể lớn hớn đến ngày")
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
-
-      if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+      if (fromDate < toDate) {
+        showToast('danger', "Thời gian không quá 62 ngày")
         return false
       }
 
       return true
-    },
+    }
 
-    /**
-     * Search
-     */
-    search() {
-      if (this.loading) { return }
-      this.click = true
+    const search = async () => {
+      if (loading.value) { return }
+      click.value = true
 
-      // Check validate
-      if(!this.checkValidate()) {
-        this.items = []
+      if (!checkValidate()) {
+        items.value = []
         return
       }
 
-      // Check store id
-      if(!this.inputs.store_id) {
-        this.popToast('danger', "Vui lòng chọn cửa hàng")
+      if (!inputs.store_id) {
+        showToast('danger', "Vui lòng chọn cửa hàng")
         return
       }
-      if(!this.checkFromDateAndToDate()) {
-        this.items = []
+
+      if (!checkFromDateAndToDate()) {
+        items.value = []
         return
       }
-      this.loading = true
-      this.onSearch = true
+
+      loading.value = true
+      onSearch.value = true
 
       let params = {
-        "store_id": this.inputs.store_id,
-        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate),
-        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate),
-        "orderBy": this.inputs.orderBy,
+        "store_id": inputs.store_id,
+        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.fromDate),
+        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.toDate),
+        "orderBy": inputs.orderBy
       }
 
-      // Search
-      adminAPI.getBrandStatistic(params).then(res => {
-        if(res && res.data && res.data.data) {
-          this.items = res.data.data
+      try {
+        const res = await adminAPI.getBrandStatistic(params)
+        if (res && res.data && res.data.data) {
+          items.value = res.data.data
         }
+        firstSearch.value = false
+        onSearch.value = false
+        loading.value = false
+      } catch (err) {
+        const errorMess = commonFunc.handleStaffError(err)
+        showToast('danger', errorMess)
+        firstSearch.value = false
+        onSearch.value = false
+        loading.value = false
+      }
+    }
 
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+    onMounted(() => {
+      getOptionStore()
 
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      })
-    },
+      let dateNow = new Date().toJSON().slice(0, 10)
+      inputs.toDate = commonFunc.formatDate(dateNow)
+      inputs.fromDate = commonFunc.formatDate(dateNow)
+    })
+
+    return {
+      inputs,
+      onSearch,
+      click,
+      optionsStore,
+      orderByOption,
+      fields,
+      items,
+      loading,
+      firstSearch,
+      excel_statistic_fields,
+      errorFromDate,
+      errorToDate,
+      search,
+      inputDateOnly
+    }
   }
 }
 </script>

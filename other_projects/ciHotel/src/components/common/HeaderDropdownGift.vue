@@ -1,34 +1,30 @@
 <template>
-  <AppHeaderDropdown
-    right
-    no-caret
-  >
-    <template slot="header">
+  <div class="dropdown">
+    <button class="dropdown-toggle" @click="toggleDropdown">
       <span class="white mr-3">
         <!--<i class="fa fa-gift fa-2x"/>-->
-        <img src="/static/img/icons/sticker_4.png" class="iconsCustom"/>
+        <img src="/img/icons/sticker_5.png" class="iconsCustom"/>
       </span>
-    </template>
-    <template slot="dropdown">
-      <b-dropdown-item @click.prevent="goToPoint"> Điểm
-      </b-dropdown-item>
-      <b-dropdown-item @click.prevent="goToPromo"> Khuyến Mãi
-      </b-dropdown-item>
-    </template>
-  </AppHeaderDropdown>
+    </button>
+    <div v-if="isOpen" class="dropdown-menu dropdown-menu-right">
+      <a class="dropdown-item" href="#" @click.prevent="goToPoint">Điểm</a>
+      <a class="dropdown-item" href="#" @click.prevent="goToPromo">Khuyến Mãi</a>
+    </div>
+  </div>
 </template>
 
 <script>
-import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 export default {
   name: 'DefaultHeaderDropdownGift',
-  components: {
-    AppHeaderDropdown
-  },
   data: function() {
     return{
-
+      isOpen: false
     }
+  },
+  methods: {
+    toggleDropdown() {
+      this.isOpen = !this.isOpen
+    },
   },
   methods: {
     goToPoint() {

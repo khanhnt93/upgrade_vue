@@ -1,354 +1,292 @@
 <template>
-  <div class="container-fluid">
+  <div class="p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Hoá đơn bị xóa</h2>
+    </div>
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-              <h4 class="text-center text-header">BÁO CÁO XÓA BILL</h4>
-            </b-col>
-          </b-row>
+    <!-- Filters Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- From Date -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Từ ngày <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="inputs.fromDate"
+            type="text"
+            placeholder="dd-mm-yyyy"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+              errorFromDate ? 'border-red-500' : 'border-gray-300'
+            ]"
+          />
+          <p v-if="errorFromDate" class="text-red-500 text-xs mt-1">{{ errorFromDate }}</p>
+        </div>
 
-          <b-row>
+        <!-- To Date -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Đến ngày <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="inputs.toDate"
+            type="text"
+            placeholder="dd-mm-yyyy"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+              errorToDate ? 'border-red-500' : 'border-gray-300'
+            ]"
+          />
+          <p v-if="errorToDate" class="text-red-500 text-xs mt-1">{{ errorToDate }}</p>
+        </div>
 
-            <b-col md="4">
-              <label>
-                Thời gian:
-              </label>
-              <div class="input-group">
-                  <span class="input-group-addon pr-1">Từ</span>
-                  <input
-                  id="fromDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                  <span class="input-group-addon pl-1 pr-1">Đến</span>
-                  <input
-                  id="toDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                </div>
-            </b-col>
+        <!-- Order By -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Sắp xếp</label>
+          <select
+            v-model="inputs.orderBy"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="created_at asc">Thời gian tăng dần</option>
+            <option value="created_at desc">Thời gian giảm dần</option>
+          </select>
+        </div>
 
-            <b-col md="4">
-              <label>
-                Sắp xếp theo:
-              </label>
-              <b-form-select
-              :options="orderByOption"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.orderBy">
-              </b-form-select>
-            </b-col>
+        <!-- Search Button -->
+        <div class="flex items-end">
+          <button
+            @click="search"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+          >
+            <i class="fa fa-search mr-2"></i>
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
 
-            <b-col md="4">
-              <label class="label-width text-white">
-                 Xem
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
-                Xem
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card>
+      <!-- Excel Export Button -->
+      <div class="mt-4">
+        <download-excel
+          :data="excelData"
+          :fields="excelFields"
+          type="csv"
+          name="hoa_don_bi_xoa.xls"
+          class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+        >
+          <i class="fa fa-file-excel-o mr-2"></i>
+          Xuất Excel
+        </download-excel>
+      </div>
+    </div>
 
-      </b-col>
-    </b-row>
+    <!-- Results Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-8">
+        <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        <p class="text-gray-600 mt-4">Đang tải dữ liệu...</p>
+      </div>
 
-    <b-row>
-      <b-col>
+      <!-- Data Table -->
+      <div v-else-if="orders.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số Bill</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phòng</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng tiền phòng</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Phí dv, phụ thu</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Giảm Giá</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thuế</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thành Tiền</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tiền mặt</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Chuyển khoản</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Tiền điện tử</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người xóa</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian xóa</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="(item, index) in orders" :key="index" class="hover:bg-gray-50">
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ index + 1 }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.created_at }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.bill_number }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.room_name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.sub_total) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.service_amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.discount_amount) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.vat_value) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.total) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.cash) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.credit) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.e_money) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.delete_by }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.delete_at }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-        <b-card >
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-
-          <b-row>
-            <b-col>
-              <b-row>
-                <b-col md="4">
-                  Số kết quả: {{bills.length}}
-                </b-col>
-                <b-col md="8" class="text-right">
-                  <download-excel
-                    class   = "btn btn-default text-header"
-                    :data   = "bills"
-                    :fields = "excel_bill_fields"
-                    worksheet = "Báo Cáo Xóa Bill"
-                    name    = "bao_cao_xoa_bill.xls">
-                    <b>Xuất Excel</b>
-                  </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <table class="table table-bordered table-striped fixed_header">
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Ngày</th>
-                        <th>Số Bill</th>
-                        <th>Phòng</th>
-                        <th>Tổng tiền phòng</th>
-                        <th>Phí dv, phụ thu</th>
-                        <th>Giảm Giá</th>
-                        <th>Thuế</th>
-                        <th>Thành Tiền</th>
-                        <th>Tiền mặt</th>
-                        <th>Chuyển khoản</th>
-                        <th>Tiền điện tử</th>
-                        <th>Người xóa</th>
-                        <th>Thời gian xóa</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(bill, index) in bills">
-                        <td>{{index + 1}}</td>
-                        <td>{{bill.created_at}}</td>
-                        <td>{{bill.bill_number}}</td>
-                        <td>{{bill.room_name}}</td>
-                        <td class="text-right">{{currencyFormat(bill.sub_total)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.service_amount)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.discount_amount)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.vat_value)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.total)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.cash)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.credit)}}</td>
-                        <td class="text-right">{{currencyFormat(bill.e_money)}}</td>
-                        <td>{{bill.delete_by}}</td>
-                        <td>{{bill.delete_at}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
-        </b-card>
-
-      </b-col>
-    </b-row>
-
-
+      <!-- Empty State -->
+      <div v-else class="text-center py-8">
+        <i class="fa fa-inbox fa-3x text-gray-400 mb-4"></i>
+        <p class="text-gray-600">Không có dữ liệu</p>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
-import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-
-Vue.component('downloadExcel', JsonExcel)
-
 
 export default {
-  components: {
-  },
-  data () {
+  name: 'DeleteBillReport',
+  setup() {
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
     return {
-      orderByOption: [
-        {value: 'b.created_at asc', text: ''},
-        {value: 'b.created_at asc', text: 'Thời gian tăng dần'},
-        {value: 'b.created_at desc', text: 'Thời gian giảm dần'}
-      ],
+      toast,
+      formatCurrency
+    }
+  },
+  data() {
+    return {
       inputs: {
-        fromDate: null,
-        toDate: null,
-        orderBy: "b.created_at asc",
+        fromDate: '',
+        toDate: '',
+        orderBy: 'created_at asc'
       },
-      onSearch: false,
-      bills: [],
-      currentReportBy: "bill",
-      excel_bill_data: null,
-      excel_bill_fields: {
-        'Ngày': 'created_at',
-        'Số Bill': 'bill_number',
-        'Phòng' : 'room_name',
-        'Tổng tiền phòng' : 'sub_total',
-        'Phí dv, phụ thu' : 'service_amount',
-        'Giảm Giá' : 'discount_amount',
-        'Số Tiền Thuế' : 'vat_value',
-        'Thành Tiền' : 'total',
-        'Người xóa' : 'delete_by',
-        'Thời gian xóa' : 'delete_at'
-      },
+      orders: [],
       loading: false,
+      firstSearch: true
     }
   },
   computed: {
+    errorFromDate() {
+      if (!this.inputs.fromDate) {
+        return 'Vui lòng chọn từ ngày'
+      }
+      if (!commonFunc.checkDate(this.inputs.fromDate)) {
+        return 'Ngày không đúng định dạng dd-mm-yyyy'
+      }
+      return ''
+    },
+    errorToDate() {
+      if (!this.inputs.toDate) {
+        return 'Vui lòng chọn đến ngày'
+      }
+      if (!commonFunc.checkDate(this.inputs.toDate)) {
+        return 'Ngày không đúng định dạng dd-mm-yyyy'
+      }
+      return ''
+    },
+    excelData() {
+      return this.orders.map((item, index) => ({
+        stt: index + 1,
+        created_at: item.created_at,
+        bill_number: item.bill_number,
+        room_name: item.room_name,
+        sub_total: item.sub_total,
+        service_amount: item.service_amount,
+        discount_amount: item.discount_amount,
+        vat_value: item.vat_value,
+        total: item.total,
+        delete_by: item.delete_by
+      }))
+    },
+    excelFields() {
+      return {
+        'STT': 'stt',
+        'Ngày': 'created_at',
+        'Số Bill': 'bill_number',
+        'Phòng': 'room_name',
+        'Tổng tiền phòng': 'sub_total',
+        'Phí dv, phụ thu': 'service_amount',
+        'Giảm Giá': 'discount_amount',
+        'Thuế': 'vat_value',
+        'Thành Tiền': 'total',
+        'Người xóa': 'delete_by'
+      }
+    }
   },
   mounted() {
-    let dateNow = new Date().toJSON().slice(0,10)
-    let lastMonth = new Date()
+    // Set default date range (last month)
+    const today = new Date()
+    const lastMonth = new Date(today)
     lastMonth.setMonth(lastMonth.getMonth() - 1)
-    lastMonth.setDate(lastMonth.getDate() + 1)
-    lastMonth = lastMonth.toJSON().slice(0,10)
-    this.inputs.toDate = commonFunc.formatDate(dateNow)
-    this.inputs.fromDate = commonFunc.formatDate(lastMonth)
-
-    // Search
-    this.search()
+    
+    this.inputs.toDate = this.formatDateInput(today)
+    this.inputs.fromDate = this.formatDateInput(lastMonth)
   },
   methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    formatDateInput(date) {
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = date.getFullYear()
+      return `${day}-${month}-${year}`
     },
-
-    /**
-     * Check valid from date and to date
-     */
     checkFromDateAndToDate() {
-      if(this.inputs.fromDate == "" || this.inputs.fromDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục từ ngày không đúng")
-        return false
-      }
-      if(this.inputs.toDate == "" || this.inputs.toDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục đến ngày không đúng")
-        return false
-      }
-      let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-      let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-
-      if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+      if (this.errorFromDate || this.errorToDate) {
         return false
       }
 
-      fromDate.setDate(fromDate.getDate() + 62)
+      const fromParts = this.inputs.fromDate.split('-')
+      const toParts = this.inputs.toDate.split('-')
+      const fromDate = new Date(fromParts[2], fromParts[1] - 1, fromParts[0])
+      const toDate = new Date(toParts[2], toParts[1] - 1, toParts[0])
 
-      if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+      if (fromDate > toDate) {
+        this.toast.error('Từ ngày phải nhỏ hơn đến ngày')
+        return false
+      }
+
+      // Check max 62 days
+      const diffTime = Math.abs(toDate - fromDate)
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      if (diffDays > 62) {
+        this.toast.error('Khoảng thời gian không được vượt quá 62 ngày')
         return false
       }
 
       return true
     },
-
-    /**
-     * Search
-     */
-    search() {
-
-      // Check validate
-      if(!this.checkFromDateAndToDate()) {
-        this.bills = []
+    async search() {
+      if (!this.checkFromDateAndToDate()) {
         return
       }
-      this.onSearch = true
+
+      this.firstSearch = false
       this.loading = true
 
-      let params = {
-        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate),
-        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate),
-        "orderBy": this.inputs.orderBy,
+      const params = {
+        from_date: this.inputs.fromDate,
+        to_date: this.inputs.toDate,
+        order_by: this.inputs.orderBy
       }
 
-      // Search
-      adminAPI.searchDeleteBill(params).then(res => {
-        if(res && res.data && res.data.data) {
-          this.bills = res.data.data
-        }
-
-        this.firstSearch = false
-        this.onSearch = false
+      try {
+        const response = await adminAPI.searchDeleteBill(params)
+        this.orders = response.data.orders || []
+      } catch (error) {
+        console.error('Error fetching deleted bills:', error)
+        this.toast.error('Không thể tải dữ liệu. Vui lòng thử lại.')
+        this.orders = []
+      } finally {
         this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       }
-      return result
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
+    }
   }
 }
 </script>
 
-
-<style lang="css" scoped>
-  .total {
-    color: #ed592a;
-  }
-
-  table {
-   margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
+<style scoped>
+/* Custom styles if needed */
 </style>

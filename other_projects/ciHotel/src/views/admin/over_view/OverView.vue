@@ -1,145 +1,116 @@
 <template>
-  <div class="container-fluid">
+  <div class="container mx-auto px-4 py-6">
+    <!-- Today's Stats Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="mb-4">
+        <h4 class="text-2xl font-bold text-center text-gray-800">Hôm Nay</h4>
+      </div>
 
-    <b-row>
-      <b-col>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Bill Number Card -->
+        <div class="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 text-center">
+          <h5 class="text-lg font-semibold mb-4">Số bill</h5>
+          <div class="flex items-center justify-center">
+            <i class="fa fa-clipboard text-6xl text-blue-400 mr-4"></i>
+            <b class="text-4xl text-gray-800">{{ formatNumber(todayBillNumber) }}</b>
+          </div>
+        </div>
 
-        <b-card>
+        <!-- Revenue Card -->
+        <div class="bg-orange-50 border-2 border-orange-300 rounded-lg p-6 text-center">
+          <h5 class="text-lg font-semibold mb-4">Doanh thu</h5>
+          <div class="flex items-center justify-center">
+            <i class="fa fa-plus text-6xl text-orange-300 mr-4"></i>
+            <b class="text-4xl text-gray-800">{{ formatCurrency(todayRevenue) }}</b>
+          </div>
+        </div>
 
-          <b-row class="mb-2">
-            <b-col>
-              <h4 class="text-center text-header"><b>Hôm Nay</b></h4>
-            </b-col>
-          </b-row>
+        <!-- Booking Number Card -->
+        <div class="bg-purple-50 border-2 border-purple-300 rounded-lg p-6 text-center">
+          <h5 class="text-lg font-semibold mb-4">Số phòng được đặt</h5>
+          <div class="flex items-center justify-center">
+            <i class="fa fa-check text-6xl text-purple-400 mr-4"></i>
+            <b class="text-4xl text-gray-800">{{ formatNumber(todayBookingNumber) }}</b>
+          </div>
+        </div>
+      </div>
+    </div>
 
-          <b-row>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(229 249 255)"
-                >
-                  <h5>Số bill</h5>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <i class="fa fa-clipboard" style="font-size:55px;color:#78B7D0;width:20%;"></i>
-                      <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayBillNumber)}}</b>
-                      </div>
-                    </div>
-                  </div>
-                </b-card>
-              </b-col>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(255 237 229)"
-                >
-                  <h5>Doanh thu</h5>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <i class="fa fa-plus" style="font-size:60px;color:#FFDBB5;width:20%;"></i>
-                      <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayRevenue)}}</b>
-                      </div>
-                    </div>
-                  </div>
-                </b-card>
-              </b-col>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(234 229 255)"
-                >
-                  <h5>Số phòng được đặt</h5>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <i class="fa fa-check" style="font-size:60px;color:#C8A1E0;width:20%;"></i>
-                      <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayBookingNumber)}}</b>
-                      </div>
-                    </div>
-                  </div>
-                </b-card>
-              </b-col>
-            </b-row>
+    <!-- Revenue Chart Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Doanh Thu</h4>
 
-        </b-card>
+      <div class="mb-4">
+        <GChart
+          type="ColumnChart"
+          :data="chartDayData"
+          :options="chartOptions"
+        />
+      </div>
 
+      <div class="text-center">
+        <a href="/chart-profit-revenue" class="text-blue-600 hover:text-blue-800 underline">Xem nhiều hơn</a>
+      </div>
+    </div>
 
-        <b-card>
-            <h4 class="text-center text-header"><b>Doanh Thu</b></h4>
+    <!-- Most Booked Room Type Card -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Loại Phòng Đặt Nhiều Nhất</h4>
 
-            <b-row>
-              <b-col>
-                <GChart
-                  type="ColumnChart"
-                  :data="chartDayData"
-                  :options="chartOptions"
-                />
-              </b-col>
-            </b-row>
+      <div class="mb-4">
+        <p class="font-bold text-gray-700 mb-4">Phòng đặt nhiều nhất (7 ngày qua)</p>
+      </div>
 
-            <b-row>
-              <b-col class="text-center">
-                <a href="/chart-profit-revenue">Xem nhiều hơn</a>
-              </b-col>
-            </b-row>
-        </b-card>
+      <div class="mb-4">
+        <div class="flex items-center gap-4 mb-4">
+          <label class="flex items-center cursor-pointer">
+            <input 
+              type="radio" 
+              name="room" 
+              @click="showRoomAmount = true" 
+              checked
+              class="mr-2">
+            <span>Doanh thu</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input 
+              type="radio" 
+              name="room" 
+              @click="showRoomAmount = false"
+              class="mr-2">
+            <span>Số lượng</span>
+          </label>
+        </div>
 
-        <b-card>
-            <h4 class="text-center text-header"><b>Loại Phòng Đặt Nhiều Nhất</b></h4>
+        <GChart
+          v-if="showRoomAmount"
+          type="PieChart"
+          :data="chartRoomDataAmount"
+          :options="chartOptions"
+        />
 
-            <b-row>
-              <b-col>
-                <p><b class="text-header">Phòng đặt nhiều nhất (7 ngày qua)</b></p>
-              </b-col>
-            </b-row>
+        <GChart
+          v-if="!showRoomAmount"
+          type="PieChart"
+          :data="chartRoomDataQuantity"
+          :options="chartOptions"
+        />
+      </div>
 
-            <b-row>
-              <b-col>
-                <input type="radio" name="room" @click="showRoomAmount = true" checked><label class="pl-2">Doanh thu</label>
-                <input type="radio" name="room" @click="showRoomAmount = false"><label class="pl-2">Số lượng</label>
-
-                <GChart
-                  v-if="showRoomAmount"
-                  type="PieChart"
-                  :data="chartRoomDataAmount"
-                  :options="chartOptions"
-                />
-
-                <GChart
-                  v-if="!showRoomAmount"
-                  type="PieChart"
-                  :data="chartRoomDataQuantity"
-                  :options="chartOptions"
-                />
-
-              </b-col>
-            </b-row>
-
-          <b-row>
-            <b-col class="text-center">
-              <p><a href="/statistic">Xem nhiều hơn</a></p>
-            </b-col>
-          </b-row>
-        </b-card>
-      </b-col>
-    </b-row>
-
+      <div class="text-center">
+        <p><a href="/statistic" class="text-blue-600 hover:text-blue-800 underline">Xem nhiều hơn</a></p>
+      </div>
+    </div>
   </div>
 </template>
-
 
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
-import Cookies from 'js-cookie'
-import {Constant} from '@/common/constant'
-import moment from 'moment';
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
   components: {
@@ -168,83 +139,27 @@ export default {
         ["Tên phòng", "Số lượng"],
         ["Phòng đơn", 0]
       ],
-      // chartMenuDataAmount: [
-      //   ["Tên món", "Doanh thu"],
-      //   ["Món 1", 0]
-      // ],
-      // chartMenuDataQuantity: [
-      //   ["Tên món", "Số lượng"],
-      //   ["Món 1", 0]
-      // ],
       fromDay: null,
       toDay: null,
       out_over: 0,
       running_out: 0,
       showRoomAmount: true,
-      //showMenuAmount: true,
-      // store_food_report_amount: [],
-      // store_food_report_quantity: [],
       todayBillNumber: 0,
       todayRevenue: 0,
       todayBookingNumber: 0
     }
   },
+  computed: {
+    authStore() {
+      return useAuthStore()
+    }
+  },
   mounted() {
-    // Define socket
-    // this.defineSocketForNotification()
-
     this.getOverView()
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    // /**
-    //  * Define socket
-    //  */
-    // defineSocketForNotification() {
-    //   let userTemp= Cookies.get(Constant.APP_USR)
-    //
-    //   if(userTemp && userTemp != undefined) {
-    //     userTemp = JSON.parse(userTemp)
-    //
-    //     let storeId = userTemp.storeId
-    //     let socketObject = null
-    //     if(userTemp.role == Constant.ROLE_ADMIN) {
-    //       // var socket = new WebSocket("wss://" + Constant.ROOT_API + "/join-group/admin-" + storeId) // Local
-    //       // socketObject = new WebSocket("ws://127.0.0.1:8000/join-group/admin_noti-" + storeId) // Test
-    //       socketObject = new WebSocket("wss://" + Constant.ROOT_API + "/join-group/admin_noti-" + storeId)
-    //     }
-    //     if(socketObject) {
-    //       socketObject.onopen = event => {
-    //         console.log('connected noti')
-    //         this.connected = true
-    //         socketObject.send({})
-    //       }
-    //
-    //       // socket.close()
-    //
-    //       socketObject.onmessage = event => {
-    //         document.getElementById("btnPlayNotify").click()
-    //       }
-    //
-    //       socketObject.onclose = event => {
-    //         this.connected = false
-    //       }
-    //     }
-    //   }
-    // },
-
+    ...useFormatters(),
+    
     /**
      * Define input
      */
@@ -255,7 +170,6 @@ export default {
       this.toDay = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
       let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
       this.fromDay = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-
     },
 
     /**
@@ -299,6 +213,8 @@ export default {
      * Get today report
      */
     getOverView() {
+      const { error } = useToast()
+      
       // Search
       adminAPI.getOverView().then(res => {
         if(res && res.data && res.data.data) {
@@ -308,7 +224,6 @@ export default {
           this.todayBookingNumber = data.booking_number
         }
 
-
         // Get other report
         this.getData()
 
@@ -316,7 +231,7 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        error(errorMess)
       })
     },
 
@@ -324,6 +239,7 @@ export default {
      * Search
      */
     getData() {
+      const { error } = useToast()
       this.defineInput()
       let params = {
         "from_day": commonFunc.convertDDMMYYYYToYYYYMMDD(this.fromDay),
@@ -336,65 +252,19 @@ export default {
           this.handleDayData(res.data.data.data_day)
           this.chartRoomDataAmount = res.data.data.data_menu.group_report_amount
           this.chartRoomDataQuantity = res.data.data.data_menu.group_report_quantity
-          // this.out_over = res.data.data.data_resource_out_over
-          // this.running_out = res.data.data.date_resource_running_out
         }
 
       }).catch(err => {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        error(errorMess)
       })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num == 0) {
-          return 0
-        }
-      }
-      return result
-    },
-
+    }
   }
 }
 </script>
 
-
-<style lang="scss">
-  .content-circle {
-    width: 32%;
-    float: left;
-    text-align: center;
-  }
-
-  .circle-without-text {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    background-color: #003399;
-    position: relative;
-    margin: auto;
-  }
-
-  .text-inside-circle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
-
+<style lang="scss" scoped>
+  // No custom styles needed - all using Tailwind
 </style>
-

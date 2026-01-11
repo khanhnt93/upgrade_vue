@@ -1,124 +1,171 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Add Button -->
+      <div class="mb-4 flex justify-end">
+        <button
+          @click="goToAdd"
+          class="px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50">
+          Thêm
+        </button>
+      </div>
 
-           <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">KHUYẾN MÃI</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <!-- Header -->
+      <div class="mb-4">
+        <h4 class="text-2xl font-bold text-center">KHUYẾN MÃI</h4>
+      </div>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên </label>
-              <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name">
-            </b-col>
+      <!-- Search Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block mb-2 font-medium">Tên</label>
+          <input
+            v-model="inputs.name"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block mb-2 font-medium">Giá</label>
+          <input
+            v-model="inputs.price"
+            type="text"
+            autocomplete="new-password"
+            maxlength="11"
+            @keyup="integerOnly($event.target)"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block mb-2 font-medium">Loại</label>
+          <select
+            v-model="inputs.type"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option :value="null"></option>
+            <option v-for="option in typeOptions.slice(1)" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2 font-medium">Hiệu lực</label>
+          <select
+            v-model="inputs.expire"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option :value="null"></option>
+            <option value="true">Còn</option>
+            <option value="false">Hết</option>
+          </select>
+        </div>
+      </div>
 
-            <b-col md="3">
-              <label> Giá </label>
-              <input
-              id="price"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.price"
-              maxlength="11"
-              @keyup="integerOnly($event.target)">
-            </b-col>
+      <!-- Search Button -->
+      <div class="mb-4 flex justify-end">
+        <button
+          @click.prevent="prepareToSearch"
+          :disabled="onSearch"
+          class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 disabled:bg-gray-200 disabled:text-gray-500">
+          Tìm Kiếm
+        </button>
+      </div>
 
-            <b-col md="3">
-              <label> Loại </label>
-              <b-form-select
-              :options="typeOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
+      <!-- Total Row -->
+      <div class="mb-4">
+        Số kết quả: {{ totalRow }}
+      </div>
 
-            <b-col md="3">
-              <label> Hiệu lực </label>
-              <b-form-select
-              :options="expireOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.expire"></b-form-select>
-            </b-col>
-          </b-row>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Mã</th>
+              <th class="border border-gray-300 px-4 py-2">Tên</th>
+              <th class="border border-gray-300 px-4 py-2">Giá(điểm)</th>
+              <th class="border border-gray-300 px-4 py-2">Loại</th>
+              <th class="border border-gray-300 px-4 py-2">% giảm giá</th>
+              <th class="border border-gray-300 px-4 py-2">Giảm giá tối đa</th>
+              <th class="border border-gray-300 px-4 py-2">Trên tổng giá</th>
+              <th class="border border-gray-300 px-4 py-2">Giá trị voucher</th>
+              <th class="border border-gray-300 px-4 py-2">Item free</th>
+              <th class="border border-gray-300 px-4 py-2">Số lượng</th>
+              <th class="border border-gray-300 px-4 py-2">Còn lại</th>
+              <th class="border border-gray-300 px-4 py-2">Ngày hiệu lực</th>
+              <th class="border border-gray-300 px-4 py-2">Ngày Hết Hạn</th>
+              <th class="border border-gray-300 px-4 py-2">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.code }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.price }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.type_name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.discount_percent }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.max_discount }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.discount_on_amount }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.value_of_voucher }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.item_free }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.quantity }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.remaining }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.expired_date_from }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.expired_date_to }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="flex gap-2">
+                  <button
+                    @click="edit(item.id)"
+                    class="text-blue-600 hover:text-blue-800"
+                    title="Edit">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button
+                    @click="deleted(item.id, item.name, item.stt)"
+                    class="text-red-600 hover:text-red-800"
+                    title="Delete">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col md="12">
-                <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-                <template v-slot:cell(actions)="dataId">
-                  <b-list-group horizontal>
-                    <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                      <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Delete"
-                                      @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                      <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-                </b-table>
-            </b-col>
-          </b-row>
-
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div class="text-center mt-4">
+        <span v-show="loading" class="text-blue-600">
+          <icon name="loading" width="60" />
+        </span>
+        <span v-if="hasNext === false" class="text-gray-500">--Hết--</span>
+        <span v-if="hasNext === true && totalRow != 0" class="text-blue-600">
+          <i class="fa fa-angle-double-down"></i>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/promotion'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    
+    return {
+      router,
+      toast
+    }
+  },
   data () {
     return {
       inputs: {
@@ -216,8 +263,6 @@ export default {
   mounted() {
     window.addEventListener('scroll', this.onScroll)
 
-    window.addEventListener('resize', this.delete)
-
     // Load list option promotion type
     this.getPromotionTypeList()
 
@@ -225,31 +270,10 @@ export default {
     this.getPromoList()
 
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      *  Processing on scroll: use for paging
      */
@@ -274,31 +298,24 @@ export default {
      */
     deleted (id, name, rowIndex) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            let dataPost = {
-              "id": id,
-              "method": "other"
-            }
-            adminAPI.deletePromo(dataPost).then(res => {
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
-
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-            })
+        if(confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+          let dataPost = {
+            "id": id,
+            "method": "other"
           }
-        })
+          adminAPI.deletePromo(dataPost).then(res => {
+            // Remove item in list
+            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+            this.items.splice(indexTemp, 1)
+            this.listIdDeleted.push(rowIndex - 1)
+
+            this.totalRow = this.totalRow - 1
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.toast.error(errorMess)
+          })
+        }
       }
     },
 
@@ -313,7 +330,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -322,14 +339,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/promo/index/' + id)
+      this.router.push('/promo/index/' + id)
     },
 
     /**
      * Go to add
      */
     goToAdd () {
-      this.$router.push('/promo/index/')
+      this.router.push('/promo/index/')
     },
 
     /**
@@ -388,7 +405,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.onSearch = false
         this.loading = false

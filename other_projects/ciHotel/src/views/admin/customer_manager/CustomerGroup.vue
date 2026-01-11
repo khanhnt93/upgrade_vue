@@ -1,104 +1,117 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-              <b-button variant="outline-success" class="pull-right btn-width-120"
-                @click="goToAdd()"
-              >
-                Thêm
-              </b-button>
-            </b-col>
-            
-          </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
+          @click="goToAdd()">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md="12">
-              <h4 class="mt-1 text-center text-header">KHÁCH ĐOÀN</h4>
-            </b-col>
-          </b-row>
-          <hr />
+      <div class="text-center mb-4">
+        <h4 class="text-xl font-semibold mt-1">KHÁCH ĐOÀN</h4>
+      </div>
+      <hr class="mb-4" />
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên đoàn </label>
-              <input
-                id="name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.name"
-                maxlength="75"
-              />
-            </b-col>
-            <b-col md="3">
-              <label> Số điện thoại </label>
-              <input
-                id="phone"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.phone_number"
-                maxlength="75"
-              />
-            </b-col>
-            <b-col md="3">
-              <label> Trạng thái </label>
-              <b-form-select
-                id="input-3"
-                v-model="inputs.state"
-                :options="states"
-                required
-              ></b-form-select>
-            </b-col>
-            <b-col md="3">
-              <label class="label-width text-white">
-                 Tìm kiếm
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120"
-                :disabled="onSearch"
-                @click.prevent="prepareToSearch"
-              >
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3">
+          <label class="block mb-2">Tên đoàn</label>
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            class="form-control w-full"
+            v-model="inputs.name"
+            maxlength="75"
+          />
+        </div>
+        <div class="md:col-span-3">
+          <label class="block mb-2">Số điện thoại</label>
+          <input
+            id="phone"
+            type="text"
+            autocomplete="new-password"
+            class="form-control w-full"
+            v-model="inputs.phone_number"
+            maxlength="75"
+          />
+        </div>
+        <div class="md:col-span-3">
+          <label class="block mb-2">Trạng thái</label>
+          <select
+            id="input-3"
+            v-model="inputs.state"
+            class="form-control w-full">
+            <option v-for="option in states" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div class="md:col-span-3">
+          <label class="block mb-2 text-white">Tìm kiếm</label>
+          <button 
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 border border-blue-600 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+            :disabled="onSearch"
+            @click.prevent="prepareToSearch">
+            Tìm Kiếm
+          </button>
+        </div>
+      </div>
 
-          <b-row>
-            <b-col> Số kết quả: {{ totalRow }} </b-col>
-          </b-row>
+      <div class="mb-4">
+        Số kết quả: {{ totalRow }}
+      </div>
 
-          <b-table hover bordered stacked="md" :fields="fields" :items="items">
-            <template v-slot:cell(state)="data">
-              {{formatState(data.item.state)}}
-            </template>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Tên đoàn</th>
+              <th class="border border-gray-300 px-4 py-2">Số điện thoại</th>
+              <th class="border border-gray-300 px-4 py-2">Mô tả</th>
+              <th class="border border-gray-300 px-4 py-2">Trạng thái</th>
+              <th class="border border-gray-300 px-4 py-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2 text-center">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.phone_number }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.note }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ formatState(item.state) }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="flex justify-center space-x-2">
+                  <button 
+                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" 
+                    @click="edit(item.id)" 
+                    title="Edit">
+                    <i class="fa fa-edit" />
+                  </button>
+                  <button 
+                    class="p-2 text-red-600 hover:bg-red-50 rounded" 
+                    @click="deleted(item.id, item.name)" 
+                    title="Delete">
+                    <i class="fa fa-trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            <template v-slot:cell(actions)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete"
-                                   @click="deleted(dataId.item.id, dataId.item.name)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"
-            ><icon name="loading" width="60"
-          /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"
-            ><i class="fa fa-angle-double-down has-next"></i
-          ></span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center py-4">
+        <icon name="loading" width="60" />
+      </div>
+      <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
+      <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
+        <i class="fa fa-angle-double-down text-2xl"></i>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -106,8 +119,19 @@
 import { Constant } from "@/common/constant";
 import customerManagerApi from "@/api/customerManager";
 import commonFunc from "@/common/commonFunc";
+import { useRouter } from 'vue-router';
+import { useToast } from '@/composables/useToast';
 
 export default {
+  setup() {
+    const router = useRouter();
+    const toast = useToast();
+
+    return {
+      router,
+      toast
+    };
+  },
   data() {
     return {
       states: [
@@ -126,33 +150,6 @@ export default {
       offset: 0,
       loading: false,
       hasNext: false,
-      fields: [
-        {
-          key: "stt",
-          label: "STT"
-        },
-        {
-          key: "name",
-          label: "Tên đoàn"
-        },
-        {
-          key: "phone_number",
-          label: "Số điện thoại"
-        },
-        {
-          key: "note",
-          label: "Mô tả"
-        },
-        {
-          key: "state",
-          label: "Trạng thái"
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       items: [],
       pageLimit: Constant.PAGE_LIMIT,
       loadByScroll: false
@@ -163,14 +160,12 @@ export default {
   },
   methods: {
     goToAdd() {
-      this.$router.push("/customer-group/add");
+      this.router.push("/customer-group/add");
     },
     prepareToSearch() {
       this.search();
     },
     search() {
-
-      // Define params
       let params = {
         "name": this.inputs.name,
         "phone_number": this.inputs.phone_number,
@@ -187,7 +182,7 @@ export default {
 
       this.loading = true;
       this.onSearch = true;
-      // Search
+
       customerManagerApi
         .getListCustomerGroup(params)
         .then(res => {
@@ -195,7 +190,6 @@ export default {
             let it = res.data.data;
             this.totalRow = res.data.data.length;
 
-            // Update items
             if (this.loadByScroll) {
               let temp = this.items;
               var newArray = temp.concat(it);
@@ -205,7 +199,6 @@ export default {
             }
             this.loadByScroll = false;
 
-            // Check has next
             if (this.offset + this.pageLimit >= res.data.data.total_row) {
               this.hasNext = false;
             }
@@ -216,68 +209,41 @@ export default {
           this.loading = false;
         })
         .catch(err => {
-          // Handle error
           let errorMess = commonFunc.handleStaffError(err);
-          this.popToast("danger", errorMess);
+          this.toast.error(errorMess);
 
           this.onSearch = false;
           this.loading = false;
         });
     },
     edit(id) {
-      this.$router.push('/customer-group/edit/' + id)
+      this.router.push('/customer-group/edit/' + id);
     },
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
-    },
-    deleted (id, name) {
+    deleted(id, name) {
       if(id) {
-          this.$bvModal.msgBoxConfirm('Xóa [' + name + "]. Bạn có chắc không?", {
-            title: false,
-            buttonSize: 'sm',
-            centered: true, size: 'sm',
-            footerClass: 'p-2'
-          }).then(res => {
-            if (res) {
-              customerManagerApi.deleteCustomerGroup(id).then(res => {
-                this.filter();
-              }).catch(err => {
-                let errorMess = commonFunc.handleStaffError(err)
-                this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-              })
-            }
-          })
+        if(confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+          customerManagerApi.deleteCustomerGroup(id).then(res => {
+            this.filter();
+            this.toast.success('Xóa thành công!!!');
+          }).catch(err => {
+            let errorMess = commonFunc.handleStaffError(err);
+            this.toast.error('Xóa thất bại: ' + errorMess);
+          });
         }
+      }
     },
-    makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
+    formatState(state) {
+      if(state == 0) {
+        return "Đang đến";
+      }
+      if(state == 1) {
+        return "Đang ở";
+      }
+      if(state == 2) {
+        return "Đã ở";
+      }
+      return "";
     },
-
-    /**
-       * Format group state
-       */
-      formatState(state) {
-        if(state == 0) {
-            return "Đang đến"
-        }
-        if(state == 1) {
-            return "Đang ở"
-        }
-        if(state == 2) {
-            return "Đã ở"
-        }
-        return ""
-      },
   }
 };
 </script>

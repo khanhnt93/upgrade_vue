@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // Customer group
 import CustomerHome from '@/views/customer/Home'
@@ -100,19 +99,14 @@ import AboutUs from '@/views/common/aboutUs'
 import PriceList from '@/views/common/PriceList'
 import Tutorial from '@/views/common/tutorial'
 
-Vue.use(Router)
+const routes = [
 
-export default new Router({
-  mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
-  routes: [
-
-    // Authenticate group
-    {
-      path: '/staff-login',
-      name: 'StaffLogin',
-      component: StaffLogin
-    },
+  // Authenticate group
+  {
+    path: '/staff-login',
+    name: 'StaffLogin',
+    component: StaffLogin
+  },
     {
       path: '/staff-change-password',
       name: 'StaffChangePass',
@@ -642,8 +636,27 @@ export default new Router({
     { path: '/500', name: 'Page500', component: Page500 },
     { path: '/contact', name: 'Contact', component: Contact },
     { path: '/tutorial', name: 'Tutorial', component: Tutorial },
-    { path: '/about-us', name: 'AboutUs', component: AboutUs },
-    { path: '/price-list', name: 'PriceList', component: PriceList },
-  ]
+  // Common
+  { path: '/404', name: 'Page404', component: Page404 },
+  { path: '/500', name: 'Page500', component: Page500 },
+  { path: '/contact', name: 'Contact', component: Contact },
+  { path: '/tutorial', name: 'Tutorial', component: Tutorial },
+  { path: '/about-us', name: 'AboutUs', component: AboutUs },
+  { path: '/price-list', name: 'PriceList', component: PriceList },
+]
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    return { top: 0 }
+  },
+  routes
 })
 
+// Navigation guard
+router.beforeEach((to, from, next) => {
+  // Add your authentication logic here if needed
+  next()
+})
+
+export default router

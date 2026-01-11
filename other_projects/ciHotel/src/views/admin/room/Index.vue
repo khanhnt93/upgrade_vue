@@ -1,387 +1,315 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Header buttons -->
+      <div class="flex justify-between mb-4">
+        <button
+          class="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+          @click="back">
+          Quay lại
+        </button>
+        <button
+          class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:bg-gray-400"
+          @click="save"
+          :disabled="saving">
+          Lưu
+        </button>
+      </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-1 text-center text-header">PHÒNG</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+      <!-- Title -->
+      <div class="text-center mb-4">
+        <h4 class="text-2xl font-semibold text-gray-800">PHÒNG</h4>
+      </div>
+      <hr class="mb-4"/>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center mb-4">
+        <icon name="loading" width="60" />
+      </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Tên </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="room.name">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                  Đây là mục bắt buộc nhập
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>  Tầng </label>
-              </b-col>
-              <b-col md="9">
-                <b-form-select
-                  :options="optionsFloor"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="room.floor_id">
-                </b-form-select>
-              </b-col>
-            </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>  Loại phòng </label>
-              </b-col>
-              <b-col md="9">
-                <b-form-select
-                  :options="optionsRoomType"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="room.room_type_id">
-                </b-form-select>
-              </b-col>
-            </b-row>
-
-            <!--<b-row class="form-row">-->
-              <!--<b-col md="3" class="mt-2">-->
-                <!--<label> Trạng thái phòng </label><span class="error-sybol"></span>-->
-              <!--</b-col>-->
-              <!--<b-col md="9">-->
-                <!--<b-form-select-->
-                  <!--:options="optionsRoomStatus"-->
-                  <!--type="text"-->
-                  <!--autocomplete="new-password"-->
-                  <!--class="form-control"-->
-                  <!--v-model="room.room_status_id">-->
-                <!--</b-form-select>-->
-              <!--</b-col>-->
-            <!--</b-row>-->
-
-            <!--<b-row class="form-row">-->
-              <!--<b-col md="3" class="mt-2">-->
-                <!--<label> Tình trạng phòng </label><span class="error-sybol"></span>-->
-              <!--</b-col>-->
-              <!--<b-col md="9">-->
-                <!--<b-form-select-->
-                  <!--:options="optionsMasterState"-->
-                  <!--type="text"-->
-                  <!--autocomplete="new-password"-->
-                  <!--class="form-control"-->
-                  <!--v-model="room.room_state">-->
-                <!--</b-form-select>-->
-              <!--</b-col>-->
-            <!--</b-row>-->
-
-            <b-row>
-              <b-col md="6">
-                <b-row class="form-row">
-                  <b-col md="6" class="mt-2">
-                    <label> Giá tiền </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="6">
-                    <b-list-group horizontal>
-                      <b-list-group-item @click="showModalPrice">
-                        <i class="fa fa-plus"/>
-                      </b-list-group-item>
-                    </b-list-group>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="6" class="mt-2">
-                    <label> Thông tin phòng </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="6">
-                    <b-list-group horizontal>
-                      <b-list-group-item @click="showModalRoomInfo">
-                        <i class="fa fa-plus"/>
-                      </b-list-group-item>
-                    </b-list-group>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="6" class="mt-2">
-                    <label> Thiết bị trong phòng </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="6">
-                    <b-list-group horizontal>
-                      <b-list-group-item @click="showModalRoomDevice">
-                        <i class="fa fa-plus"/>
-                      </b-list-group-item>
-                    </b-list-group>
-                  </b-col>
-                </b-row>
-              </b-col>
-
-              <b-col md="6">
-                <b-row v-show="this.room.price.length > 0">
-                  <b-col>
-                    <p><b>Giá phòng: </b></p>
-                    <p class="col-12" v-for="item in this.room.price" :key="item.code">
-                      <label>- {{currencyFormat(item.room_price) + ': ' + item.name}}</label>
-                      <i class="fa fa-trash" @click="deleteResourcePrice(item.code)"/>
-                    </p>
-                  </b-col>
-                </b-row>
-
-                <b-row v-show="this.room.room_info.length > 0">
-                  <b-col>
-                    <p><b>Thông tin phòng: </b></p>
-                    <p class="col-12" v-for="item in this.room.room_info" :key="item.id">
-                      <label>- {{item.name + ": " + item.room_info_count}}</label>
-                      <i class="fa fa-trash" @click="deleteResourceInfo(item.id)"/>
-                    </p>
-                  </b-col>
-                </b-row>
-
-                <b-row v-show="this.room.room_device.length > 0">
-                  <b-col>
-                    <p><b>Thiết bị trong phòng: </b></p>
-                    <p class="col-12" v-for="item in this.room.room_device" :key="item.id">
-                      <label>- {{item.name + ': ' + item.device}}</label>
-                      <i class="fa fa-trash" @click="deleteResource(item.id)"/>
-                    </p>
-                  </b-col>
-                </b-row>
-
-              </b-col>
-            </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
-    <!-- Modal choose price -->
-    <b-modal centered hide-footer hide-header id="modal-choose-price">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Đặt giá phòng theo thời gian</h5>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row>
-        <b-col>
-          <p class="col-12" v-for="item in this.room.price" :key="item.code">
-            <label>- {{currencyFormat(item.room_price) + ': ' + item.name}}</label>
-            <i class="fa fa-trash" @click="deleteResourcePrice(item.code)"/>
-          </p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <div>
-            <div class="form-group">
-              <label> Thời gian </label><span class="error-sybol"></span>
-              <b-form-select
-                :options="optionsMasterTime"
-                id="masterPrice"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="resource_price.code"
-                @change="changeResourcePrice">
-              </b-form-select>
-            </div>
-            <div class="form-group">
-              <label> Giá phòng </label><span class="error-sybol"></span>
-              <div class="input-group">
-                <input
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource_price.room_price"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="11">
-                <label class="pl-2">{{unitResourcePrice}}</label>
-              </div>
+      <!-- Form grid -->
+      <div class="grid grid-cols-12 gap-4">
+        <!-- Name field -->
+        <div class="col-span-12 flex items-center">
+          <label class="w-1/4 text-sm font-medium text-gray-700">Tên <span class="text-red-500">*</span></label>
+          <div class="w-3/4">
+            <input
+              id="name"
+              type="text"
+              autocomplete="new-password"
+              :class="['w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500', errorName ? 'border-red-500' : 'border-gray-300']"
+              v-model="room.name">
+            <div v-if="errorName" class="text-red-500 text-sm mt-1">
+              Đây là mục bắt buộc nhập
             </div>
           </div>
-        </b-col>
-      </b-row>
+        </div>
 
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addGroupResourcePrice">
-            Thêm
-          </button>
-        </b-col>
-      </b-row>
+        <!-- Floor field -->
+        <div class="col-span-12 flex items-center">
+          <label class="w-1/4 text-sm font-medium text-gray-700">Tầng</label>
+          <div class="w-3/4">
+            <select
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="room.floor_id">
+              <option v-for="option in optionsFloor" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmResourcePrice">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
+        <!-- Room Type field -->
+        <div class="col-span-12 flex items-center">
+          <label class="w-1/4 text-sm font-medium text-gray-700">Loại phòng</label>
+          <div class="w-3/4">
+            <select
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="room.room_type_id">
+              <option v-for="option in optionsRoomType" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-    </b-modal>
-
-    <!-- Modal choose room info -->
-    <b-modal centered hide-footer hide-header id="modal-choose-room-info">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5> Thông tin phòng</h5>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row>
-        <b-col>
-          <p class="col-12" v-for="item in this.room.room_info" :key="item.id">
-            <label>- {{item.name + ": " + item.room_info_count}}</label>
-            <i class="fa fa-trash" @click="deleteResourceInfo(item.id)"/>
-          </p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
+        <!-- Two column layout for add buttons and lists -->
+        <div class="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left column: Add buttons -->
           <div>
-            <div class="form-group">
-              <label>Thông tin phòng :</label><span class="error-sybol"></span>
-              <b-form-select
-                :options="optionsRoomInfo"
-                id="roomInfo"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="resource_room_info.id"
-                @change="changeResourceInfo">
-              </b-form-select>
+            <div class="flex items-center mb-4">
+              <label class="w-2/3 text-sm font-medium text-gray-700">Giá tiền</label>
+              <button
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                @click="showModalPrice">
+                <i class="fa fa-plus"/>
+              </button>
             </div>
-            <div class="form-group">
-              <label>Mô tả</label><span class="error-sybol"></span>
-              <div class="input-group">
-                <input
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource_room_info.room_info_count"
-                  maxlength="11">
-                <label class="pl-2">{{unitResourceInfo}}</label>
-              </div>
+
+            <div class="flex items-center mb-4">
+              <label class="w-2/3 text-sm font-medium text-gray-700">Thông tin phòng</label>
+              <button
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                @click="showModalRoomInfo">
+                <i class="fa fa-plus"/>
+              </button>
+            </div>
+
+            <div class="flex items-center mb-4">
+              <label class="w-2/3 text-sm font-medium text-gray-700">Thiết bị trong phòng</label>
+              <button
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                @click="showModalRoomDevice">
+                <i class="fa fa-plus"/>
+              </button>
             </div>
           </div>
-        </b-col>
-      </b-row>
 
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addGroupResourceInfo">
-            Thêm
-          </button>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmResourceInfo">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
-    </b-modal>
-
-    <!-- Modal choose room device -->
-    <b-modal centered hide-footer hide-header id="modal-choose-room-device">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Thiết bị</h5>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row>
-        <b-col>
-          <p class="col-12" v-for="item in this.room.room_device" :key="item.id">
-            <label>- {{item.name + ': ' + item.device}}</label>
-            <i class="fa fa-trash" @click="deleteResource(item.id)"/>
-          </p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
+          <!-- Right column: Lists -->
           <div>
-            <div class="form-group">
-              <label>Thiết bị :</label><span class="error-sybol"></span>
-              <b-form-select
-                :options="optionsRoomDevice"
-                id="deviceName"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="resource_device.id"
-                @change="changeResource">
-              </b-form-select>
+            <div v-show="this.room.price.length > 0" class="mb-4">
+              <p class="font-semibold mb-2">Giá phòng:</p>
+              <p class="flex items-center justify-between" v-for="item in this.room.price" :key="item.code">
+                <label>- {{formatCurrency(item.room_price) + ': ' + item.name}}</label>
+                <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResourcePrice(item.code)"/>
+              </p>
             </div>
-            <div class="form-group">
-              <label>Số lượng</label><span class="error-sybol"></span>
-              <div class="input-group">
-                <input
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource_device.device"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="11">
-                <label class="pl-2">{{unitResource}}</label>
-              </div>
+
+            <div v-show="this.room.room_info.length > 0" class="mb-4">
+              <p class="font-semibold mb-2">Thông tin phòng:</p>
+              <p class="flex items-center justify-between" v-for="item in this.room.room_info" :key="item.id">
+                <label>- {{item.name + ": " + item.room_info_count}}</label>
+                <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResourceInfo(item.id)"/>
+              </p>
+            </div>
+
+            <div v-show="this.room.room_device.length > 0" class="mb-4">
+              <p class="font-semibold mb-2">Thiết bị trong phòng:</p>
+              <p class="flex items-center justify-between" v-for="item in this.room.room_device" :key="item.id">
+                <label>- {{item.name + ': ' + item.device}}</label>
+                <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResource(item.id)"/>
+              </p>
             </div>
           </div>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addGroupResource">
-            Thêm
-          </button>
-        </b-col>
-      </b-row>
+  <!-- Modal choose price -->
+  <div v-if="showPriceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div class="text-center mb-4">
+        <h5 class="text-xl font-semibold">Đặt giá phòng theo thời gian</h5>
+      </div>
 
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmResource">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
+      <div class="mb-4">
+        <p class="flex items-center justify-between" v-for="item in this.room.price" :key="item.code">
+          <label>- {{formatCurrency(item.room_price) + ': ' + item.name}}</label>
+          <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResourcePrice(item.code)"/>
+        </p>
+      </div>
 
-    </b-modal>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian <span class="text-red-500">*</span></label>
+        <select
+          id="masterPrice"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="resource_price.code"
+          @change="changeResourcePrice">
+          <option v-for="option in optionsMasterTime" :key="option.value" :value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Giá phòng <span class="text-red-500">*</span></label>
+        <div class="flex items-center">
+          <input
+            type="text"
+            autocomplete="new-password"
+            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="resource_price.room_price"
+            @keyup="integerOnly($event.target)"
+            maxlength="11">
+          <label class="ml-2 text-gray-700">{{unitResourcePrice}}</label>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <button
+          class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          @click="addGroupResourcePrice">
+          Thêm
+        </button>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+          @click="confirmResourcePrice">
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal choose room info -->
+  <div v-if="showRoomInfoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div class="text-center mb-4">
+        <h5 class="text-xl font-semibold">Thông tin phòng</h5>
+      </div>
+
+      <div class="mb-4">
+        <p class="flex items-center justify-between" v-for="item in this.room.room_info" :key="item.id">
+          <label>- {{item.name + ": " + item.room_info_count}}</label>
+          <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResourceInfo(item.id)"/>
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Thông tin phòng <span class="text-red-500">*</span></label>
+        <select
+          id="roomInfo"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="resource_room_info.id"
+          @change="changeResourceInfo">
+          <option v-for="option in optionsRoomInfo" :key="option.value" :value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả <span class="text-red-500">*</span></label>
+        <div class="flex items-center">
+          <input
+            type="text"
+            autocomplete="new-password"
+            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="resource_room_info.room_info_count"
+            maxlength="11">
+          <label class="ml-2 text-gray-700">{{unitResourceInfo}}</label>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <button
+          class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          @click="addGroupResourceInfo">
+          Thêm
+        </button>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+          @click="confirmResourceInfo">
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal choose room device -->
+  <div v-if="showRoomDeviceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div class="text-center mb-4">
+        <h5 class="text-xl font-semibold">Thiết bị</h5>
+      </div>
+
+      <div class="mb-4">
+        <p class="flex items-center justify-between" v-for="item in this.room.room_device" :key="item.id">
+          <label>- {{item.name + ': ' + item.device}}</label>
+          <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteResource(item.id)"/>
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Thiết bị <span class="text-red-500">*</span></label>
+        <select
+          id="deviceName"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="resource_device.id"
+          @change="changeResource">
+          <option v-for="option in optionsRoomDevice" :key="option.value" :value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng <span class="text-red-500">*</span></label>
+        <div class="flex items-center">
+          <input
+            type="text"
+            autocomplete="new-password"
+            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="resource_device.device"
+            @keyup="integerOnly($event.target)"
+            maxlength="11">
+          <label class="ml-2 text-gray-700">{{unitResource}}</label>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <button
+          class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          @click="addGroupResource">
+          Thêm
+        </button>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+          @click="confirmResource">
+          Xác nhận
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -393,11 +321,27 @@
   import VueCropper from 'vue-cropperjs'
   import 'cropperjs/dist/cropper.css'
   import commonFunc from '@/common/commonFunc'
+  import { useRouter, useRoute } from 'vue-router'
+  import { useToast } from '@/composables/useToast'
+  import { useFormatters } from '@/composables/useFormatters'
 
 
   export default {
     components: {
       VueCropper
+    },
+    setup() {
+      const router = useRouter()
+      const route = useRoute()
+      const toast = useToast()
+      const { formatCurrency } = useFormatters()
+
+      return {
+        router,
+        route,
+        toast,
+        formatCurrency
+      }
     },
     data () {
       return {
@@ -437,7 +381,10 @@
         unitResourcePrice: null,
         resourceChosen: [],
         resourceChosenInfo: [],
-        resourceChosenPrice: []
+        resourceChosenPrice: [],
+        showPriceModal: false,
+        showRoomInfoModal: false,
+        showRoomDeviceModal: false
       }
     },
     mounted() {
@@ -480,18 +427,6 @@
       },
 
       /**
-       * Make toast without title
-       */
-      popToast(variant, content) {
-        this.$bvToast.toast(content, {
-          toastClass: 'my-toast',
-          noCloseButton: true,
-          variant: variant,
-          autoHideDelay: 3000
-        })
-      },
-
-      /**
        * Prepare info to save
        */
       save() {
@@ -503,7 +438,7 @@
           return
         }
         if(result) {
-          let roomId = this.$route.params.id
+          let roomId = this.route.params.id
           if(roomId){
             this.room.id = roomId
 
@@ -511,17 +446,17 @@
               this.saving = false
               if(res != null && res.data != null){
                 // Show notify edit success
-                this.popToast('success', 'Lưu menu thành công!!! ')
+                this.toast.success('Lưu menu thành công!!! ')
               }else{
                 // Show notify edit fail
-                this.popToast('danger', 'Lưu menu thất bại!!! ')
+                this.toast.error('Lưu menu thất bại!!! ')
               }
             }).catch(err => {
               this.saving = false
 
               // Handle error
               let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
+              this.toast.error(errorMess)
             })
           } else {
             // Add
@@ -529,16 +464,16 @@
               this.saving = false
               if(res != null && res.data != null){
                 // Go to list
-                this.$router.push('/room/list')
+                this.router.push('/room/list')
               }else{
                 // Show notify add fail
-                this.popToast('danger', 'Lưu menu thất bại!!! ')
+                this.toast.error('Lưu menu thất bại!!! ')
               }
             }).catch(err => {
               this.saving = false
               // Handle error
               let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
+              this.toast.error(errorMess)
             })
           }
         }
@@ -548,21 +483,21 @@
        * Show modal choose option
        */
       showModalPrice() {
-        this.$bvModal.show('modal-choose-price')
+        this.showPriceModal = true
       },
 
       /**
        * Show modal choose topping
        */
       showModalRoomInfo() {
-        this.$bvModal.show('modal-choose-room-info')
+        this.showRoomInfoModal = true
       },
 
       /**
        * Show modal choose resource
        */
       showModalRoomDevice() {
-        this.$bvModal.show('modal-choose-room-device')
+        this.showRoomDeviceModal = true
       },
 
       /**
@@ -570,18 +505,10 @@
        */
       back() {
         // Go to list
-        this.$router.push('/room/list')
+        this.router.push('/room/list')
       },
 
-      /**
-       * Currency format
-       */
-      currencyFormat(num) {
-        if(num) {
-          let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          return result
-        }
-      },
+
 
       /**
        * Only input integer
@@ -618,7 +545,7 @@
 
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.toast.error(errorMess)
           })
         }
       },
@@ -717,10 +644,10 @@
             this.resource_device.name = ''
             this.resource_device.device = ''
           } else {
-            this.popToast('danger', 'Thiết bị đã tồn tại')
+            this.toast.error('Thiết bị đã tồn tại')
           }
         } else {
-          this.popToast('danger', 'Vui lòng nhập đủ các mục yêu cầu')
+          this.toast.error('Vui lòng nhập đủ các mục yêu cầu')
         }
       },
 
@@ -742,10 +669,10 @@
             this.resource_room_info.name = ''
             this.resource_room_info.room_info_count = ''
           } else {
-            this.popToast('danger', 'Thông tin đã tồn tại')
+            this.toast.error('Thông tin đã tồn tại')
           }
         } else {
-          this.popToast('danger', 'Vui lòng nhập đủ các mục yêu cầu')
+          this.toast.error('Vui lòng nhập đủ các mục yêu cầu')
         }
       },
 
@@ -767,10 +694,10 @@
             this.resource_price.name = ''
             this.resource_price.room_price = ''
           } else {
-            this.popToast('danger', 'Trùng giờ')
+            this.toast.error('Trùng giờ')
           }
         } else {
-          this.popToast('danger', 'Vui lòng nhập đủ các mục yêu cầu')
+          this.toast.error('Vui lòng nhập đủ các mục yêu cầu')
         }
       },
 
@@ -778,13 +705,13 @@
        * Confirm resource
        */
       confirmResource() {
-        this.$bvModal.hide('modal-choose-room-device')
+        this.showRoomDeviceModal = false
       },
       confirmResourceInfo() {
-        this.$bvModal.hide('modal-choose-room-info')
+        this.showRoomInfoModal = false
       },
       confirmResourcePrice() {
-        this.$bvModal.hide('modal-choose-price')
+        this.showPriceModal = false
       },
       /**
        * Get index by id
@@ -934,7 +861,7 @@
         }).catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast.error(errorMess)
         })
       },
     }

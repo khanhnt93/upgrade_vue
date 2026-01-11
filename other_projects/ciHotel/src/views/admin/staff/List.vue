@@ -1,174 +1,198 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="grid grid-cols-1">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+          <div class="md:col-span-12 flex justify-end">
+            <button
+              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors min-w-[120px]"
+              @click="gotoAdd()">
+              Thêm
+            </button>
+          </div>
+        </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">NHÂN VIÊN</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+          <div class="md:col-span-12">
+            <h4 class="mt-1 text-center text-xl font-semibold">NHÂN VIÊN</h4>
+          </div>
+        </div>
+        <hr class="mb-4">
 
-            <b-row class="form-row">
-              <b-col md="3">
-                <label> Tên </label>
-                <input
-                id="name"
-                type="text"
-                maxlength="100"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.name">
-              </b-col>
-              <b-col md="3">
-                <label> Số Điện Thoại </label>
-                <input
-                id="phone"
-                type="text"
-                maxlength="20"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.phone"
-                @keyup="integerOnly($event.target)">
-              </b-col>
-              <b-col md="3">
-                <label> Quyền </label>
-                <b-form-select
-                id="permision"
-                :options="roleOptions"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.role"></b-form-select>
-              </b-col>
+        <!-- Search Filters -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div>
+            <label>Tên</label>
+            <input
+              id="name"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="inputs.name">
+          </div>
+          <div>
+            <label>Số Điện Thoại</label>
+            <input
+              id="phone"
+              type="text"
+              maxlength="20"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="inputs.phone"
+              @keyup="integerOnly($event.target)">
+          </div>
+          <div>
+            <label>Quyền</label>
+            <select
+              id="permision"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="inputs.role">
+              <option v-for="option in roleOptions" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+          <div>
+            <label class="text-white">Xem</label>
+            <button
+              class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              :disabled="onSearch"
+              @click.prevent="prepareToSearch">
+              Tìm Kiếm
+            </button>
+          </div>
+        </div>
 
-              <b-col md="3">
-                  <label class="label-width text-white">
-                     Xem
-                  </label>
-                  <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                    Tìm Kiếm
-                  </b-button>
-              </b-col>
-            </b-row>
+        <div class="mb-2">
+          Số kết quả: {{ totalRow }}
+        </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 px-4 py-2 text-left">STT</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Tên</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Số Điện Thoại</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Quyền</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">Ngày Tạo</th>
+                <th class="border border-gray-300 px-4 py-2 text-center w-40"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="item.id" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.phone_number }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.role_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.created_at }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <div class="flex justify-center gap-2">
+                    <button
+                      @click="edit(item.id)"
+                      class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                      title="Edit">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button
+                      @click="deleted(item.id, item.name, item.stt)"
+                      class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                      title="Delete">
+                      <i class="fa fa-trash" />
+                    </button>
+                    <button
+                      v-if="isRoot"
+                      @click="showModalConfirmResetPass(item)"
+                      class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
+                      title="Reset password">
+                      <i class="fa fa-refresh" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="items.length === 0">
+                <td colspan="6" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
+                  Không có dữ liệu
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-            <b-list-group horizontal v-if="isRoot">
-              <b-list-group-item v-b-tooltip.hover title="Reset password" @click="showModalConfirmResetPass(dataId.item)">
-                <i class="fa fa-refresh" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mt-4">
+          <icon name="loading" width="60" />
+        </div>
+        <div v-if="hasNext === false" class="text-center mt-4 text-gray-500">--Hết--</div>
+        <div v-if="hasNext === true && totalRow != 0" class="text-center mt-4">
+          <i class="fa fa-angle-double-down text-2xl text-blue-500"></i>
+        </div>
+      </div>
+    </div>
 
-    <!-- Modal xác nhận reset pass -->
-    <b-modal centered hide-footer hide-header id="modal-confirm-reset-pass">
-      <b-row>
-        <b-col>
-          <h5 class="text-center text-header">Reset password</h5>
-          <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
-          <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
-        </b-col>
-      </b-row>
+    <!-- Modal Reset Password -->
+    <div v-if="showResetModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalConfirmResetPass">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div class="mb-4">
+          <h5 class="text-center text-xl font-semibold">Reset password</h5>
+          <hr class="mt-2">
+        </div>
 
-      <b-row>
-        <b-col class="text-center mt-3" v-show="!resetting">
-          <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
+        <div class="mb-4">
+          <p>Nhân viên: <b>{{ currentStaff.name }}</b></p>
+          <p>Số điện thoại: <b>{{ currentStaff.phone_number }}</b></p>
+        </div>
+
+        <div class="flex justify-center gap-2 mt-6" v-show="!resetting">
+          <button
+            class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors min-w-[120px]"
+            @click="hideModalConfirmResetPass()">
             Đóng
           </button>
-          <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
+          <button
+            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors min-w-[120px]"
+            @click="resetPass()">
             Xác nhận
           </button>
-        </b-col>
-        <b-col v-show="resetting">
-          <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
 
+        <div v-show="resetting" class="text-center">
+          <icon name="loading" width="60" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useAuthStore } from '@/stores/auth'
 import adminAPI from '@/api/admin'
 import staffAPI from '@/api/staff'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-
 export default {
-  data () {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const authStore = useAuthStore()
+
     return {
-      roleOptions:[],
+      router,
+      toast,
+      authStore
+    }
+  },
+  data() {
+    return {
+      roleOptions: [],
       perPage: '10',
       currentPage: '1',
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số Điện Thoại'
-        },
-        {
-          key: 'role_name',
-          label: 'Quyền'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày Tạo'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       items: [],
       inputs: {
         name: '',
@@ -186,6 +210,7 @@ export default {
       currentStaff: {},
       isRoot: false,
       resetting: false,
+      showResetModal: false,
     }
   },
   computed: {
@@ -194,7 +219,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$store.state && this.$store.state.user && this.$store.state.user.isRoot) {
+    if (this.authStore.user && this.authStore.user.isRoot) {
       this.isRoot = true
     }
 
@@ -205,31 +230,23 @@ export default {
     window.addEventListener('resize', this.deleted)
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.deleted)
+  },
   methods: {
-     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      * Scroll event
      */
-    onScroll (event) {
-      if(this.onSearch) {
+    onScroll(event) {
+      if (this.onSearch) {
         return
       }
       event.preventDefault()
       var body = document.body
       var html = document.documentElement
       if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
+        if (this.hasNext) {
           this.offset = this.offset + 10
           this.loadByScroll = true
           this.search()
@@ -242,11 +259,11 @@ export default {
      */
     getRoleOption() {
       adminAPI.getRoleOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.roleOptions = [{value: null, text: ''}]
+        if (res != null && res.data != null && res.data.data != null) {
+          this.roleOptions = [{ value: null, text: '' }]
 
           var roles = res.data.data
-          if(roles) {
+          if (roles) {
             for (let i in roles) {
               this.roleOptions.push(roles[i])
             }
@@ -272,51 +289,45 @@ export default {
      * @param name
      * @param rowIndex
      */
-    deleted (id, name, rowIndex) {
-      if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if(res){
-            adminAPI.deleteStaff(id).then(res => {
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
+    deleted(id, name, rowIndex) {
+      if (id && name) {
+        if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+          adminAPI.deleteStaff(id).then(res => {
+            // Remove item in list
+            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+            this.items.splice(indexTemp, 1)
+            this.listIdDeleted.push(rowIndex - 1)
 
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
+            this.totalRow = this.totalRow - 1
+            this.toast.success('Xóa nhân viên thành công!')
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.toast.error(errorMess)
+          })
         }
+      }
     },
 
     /**
      * Go to edit
      * @param id
      */
-    edit (id) {
-      this.$router.push('/staff/index/' + id)
+    edit(id) {
+      this.router.push('/staff/index/' + id)
     },
 
     /**
      * Go to add
      */
-    gotoAdd () {
-      this.$router.push('/staff/index/')
+    gotoAdd() {
+      this.router.push('/staff/index/')
     },
 
     /**
      * Search
      */
-    search () {
+    search() {
       if (this.loading) { return }
 
       this.onSearch = true
@@ -326,18 +337,18 @@ export default {
         "name": this.inputs.name,
         "phone_number": this.inputs.phone,
         "role_id": this.inputs.role,
-        "store_name": "store ".concat(this.$store.state.user.storeId),
+        "store_name": "store ".concat(this.authStore.user.storeId),
         "limit": this.pageLimit,
         "offset": this.offset
       }
 
       adminAPI.searchStaff(req, this.offset).then(res => {
         if (res != null && res.data != null && res.data.data != null) {
-          let it = res.data.data.staffs //Mapper.mapStaffModelSearchToDto(res.data.data.staffs, this.offset)
+          let it = res.data.data.staffs
           this.totalRow = res.data.data.total_row
 
           // Update items
-          if(this.loadByScroll) {
+          if (this.loadByScroll) {
             let temp = this.items
             var newArray = temp.concat(it)
             this.items = newArray
@@ -347,38 +358,37 @@ export default {
           this.loadByScroll = false
 
           // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
+          if (this.offset + this.pageLimit >= res.data.data.total_row) {
             this.hasNext = false
           }
         } else {
           this.items = []
         }
-          this.onSearch = false
-          this.loading = false
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+        this.onSearch = false
+        this.loading = false
+      }).catch(err => {
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
 
-          this.onSearch = false
-          this.loading = false
+        this.onSearch = false
+        this.loading = false
       })
     },
 
     showModalConfirmResetPass(staff) {
       this.currentStaff = staff
-      this.$bvModal.show('modal-confirm-reset-pass')
+      this.showResetModal = true
     },
 
     hideModalConfirmResetPass() {
-      this.$bvModal.hide('modal-confirm-reset-pass')
+      this.showResetModal = false
     },
 
     /**
-     * Go to edit
-     * @param id
+     * Reset password
      */
-     resetPass() {
+    resetPass() {
       if (this.resetting) { return }
 
       this.resetting = true
@@ -393,28 +403,23 @@ export default {
           this.hideModalConfirmResetPass()
 
           let message = "Mật khẩu mới: " + this.currentStaff.phone_number
-          this.$bvModal.msgBoxOk(message, {
-            title: "Reset Mật Khẩu Thành Công",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-success',
-          })
+          alert("Reset Mật Khẩu Thành Công\n\n" + message)
         }
 
         this.resetting = false
-        }).catch(err => {
-          this.resetting = false
+      }).catch(err => {
+        this.resetting = false
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
       })
     },
 
     /**
      * Only input integer
      */
-     integerOnly(item) {
+    integerOnly(item) {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result

@@ -1,93 +1,115 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col>
-                <b-button variant="secondary" class="pull-left px-4" @click="goBack">
-                  Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Back Button -->
+      <div class="mb-4">
+        <button
+          @click="goBack"
+          class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+          Quay lại
+        </button>
+      </div>
 
-            <b-row>
-              <b-col md='12'>
-                <h4 class="text-center text-header">LỊCH SỬ KÉT TIỀN</h4>
-              </b-col>
-            </b-row>
-            <hr>
+      <!-- Header -->
+      <div class="mb-4">
+        <h4 class="text-2xl font-bold text-center">LỊCH SỬ KÉT TIỀN</h4>
+      </div>
+      <hr class="mb-4">
 
-            <b-row>
-              <b-col md="3">
-                <label> Loại giao dịch </label>
-                <b-form-select
-                  :options="typeOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.type"></b-form-select>
-              </b-col>
-              <b-col md="3">
-                <label> Loại tiền </label>
-                <b-form-select
-                  :options="moneyTypeOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.moneyType"></b-form-select>
-              </b-col>
-              <b-col md="3">
-                <label> Nhân viên </label>
-                <b-form-select
-                  :options="staffOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.staff"></b-form-select>
-              </b-col>
-              <b-col md="3">
-                <label class="label-width text-white">
-                   Xem
-                </label>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
-                  Tìm Kiếm
-                </b-button>
-              </b-col>
-            </b-row>
+      <!-- Search Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block mb-2 font-medium">Loại giao dịch</label>
+          <select
+            v-model="inputs.type"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option :value="null"></option>
+            <option value="plus">Thu</option>
+            <option value="minus">Chi</option>
+            <option value="fund">Vốn đầu ngày</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2 font-medium">Loại tiền</label>
+          <select
+            v-model="inputs.moneyType"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option :value="null"></option>
+            <option value="cash">Tiền mặt</option>
+            <option value="credit">Chuyển khoản</option>
+            <option value="e_money">Tiền điện tử</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2 font-medium">Nhân viên</label>
+          <select
+            v-model="inputs.staff"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option :value="null"></option>
+            <option v-for="staff in staffOption.slice(1)" :key="staff.value" :value="staff.value">
+              {{ staff.text }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2 font-medium text-transparent">Xem</label>
+          <button
+            @click.prevent="prepareToSearch"
+            :disabled="onSearch"
+            class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400">
+            Tìm Kiếm
+          </button>
+        </div>
+      </div>
 
-            <b-row>
-              <b-col>
-                Số kết quả: {{totalRow}}
-              </b-col>
-            </b-row>
+      <!-- Total Row -->
+      <div class="mb-4">
+        Số kết quả: {{totalRow}}
+      </div>
 
-            <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-              <template v-slot:cell(type)="data">{{ convertTypeCodeToName(data.item.type) }}</template>
-              <template v-slot:cell(total)="data">{{ currencyFormat(data.item.total) }}</template>
-              <template v-slot:cell(cash)="data">{{ currencyFormat(data.item.cash) }}</template>
-              <template v-slot:cell(credit)="data">{{ currencyFormat(data.item.credit) }}</template>
-              <template v-slot:cell(e_money)="data">{{ currencyFormat(data.item.e_money) }}</template>
-            </b-table>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Loại</th>
+              <th class="border border-gray-300 px-4 py-2">Số tiền</th>
+              <th class="border border-gray-300 px-4 py-2">Nội dung</th>
+              <th class="border border-gray-300 px-4 py-2">Tiền mặt</th>
+              <th class="border border-gray-300 px-4 py-2">Chuyển khoản</th>
+              <th class="border border-gray-300 px-4 py-2">Tiền điện tử</th>
+              <th class="border border-gray-300 px-4 py-2">Thời gian</th>
+              <th class="border border-gray-300 px-4 py-2">Nhân viên</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ convertTypeCodeToName(item.type) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ formatCurrency(item.total) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.content }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ formatCurrency(item.cash) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ formatCurrency(item.credit) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ formatCurrency(item.e_money) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.created_at }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.created_by }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-            <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-            <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div class="text-center mt-4">
+        <span v-show="loading" class="text-blue-600">
+          <icon name="loading" width="60" />
+        </span>
+        <span v-if="hasNext === false" class="text-gray-500">--Hết--</span>
+        <span v-if="hasNext === true && totalRow != 0" class="text-blue-600">
+          <i class="fa fa-angle-double-down"></i>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -96,9 +118,23 @@
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 
 export default {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+    
+    return {
+      router,
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       inputs: {
@@ -179,21 +215,12 @@ export default {
     // Load list when load page
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   computed: {
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Get staff option
@@ -209,7 +236,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -288,7 +315,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -296,18 +323,10 @@ export default {
     },
 
     /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
-
-    /**
      * Go back
      */
     goBack () {
-      this.$router.push('/money-box')
+      this.router.push('/money-box')
     },
 
     /**

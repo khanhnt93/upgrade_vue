@@ -1,62 +1,74 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='6'>
+    <div class="row">
+      <div class="col">
+        <div class="bg-white shadow-sm rounded p-4">
+          <div class="row mb-4">
+            <div class="col-md-6">
               <h6 class="mt-2">Super admin</h6>
-            </b-col>
-
-          </b-row>
+            </div>
+          </div>
           <hr/>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToBrandList()">
-                Quản lý thương hiệu
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToStoreList()">
-                Quản lý cửa hàng
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToAdminStoreList()">
-                Quản lý admin
-              </b-button>
-            </b-col>
-          </b-row>
-          <br>
 
-        </b-card>
-      </b-col>
-    </b-row>
+          <div class="row mb-3">
+            <div class="col">
+              <button
+                @click="goToBrandList"
+                class="btn btn-primary px-4 w-100">
+                Quản lý thương hiệu
+              </button>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col">
+              <button
+                @click="goToStoreList"
+                class="btn btn-primary px-4 w-100">
+                Quản lý cửa hàng
+              </button>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col">
+              <button
+                @click="goToAdminStoreList"
+                class="btn btn-primary px-4 w-100">
+                Quản lý admin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
+import { useRouter } from 'vue-router'
+
 export default {
-  data () {
-    return {
+  name: 'HomeSPAdmin',
+  setup() {
+    const router = useRouter()
+
+    const goToBrandList = () => {
+      router.push('/brand/list')
     }
-  },
-  computed: {
-  },
-  methods: {
-    goToBrandList () {
-      this.$router.push('/brand/list')
-    },
-    goToStoreList () {
-      this.$router.push('/hotel/list')
-    },
-    goToAdminStoreList () {
-      this.$router.push('/admin-store/list')
+
+    const goToStoreList = () => {
+      router.push('/hotel/list')
+    }
+
+    const goToAdminStoreList = () => {
+      router.push('/admin-store/list')
+    }
+
+    return {
+      goToBrandList,
+      goToStoreList,
+      goToAdminStoreList
     }
   }
 }

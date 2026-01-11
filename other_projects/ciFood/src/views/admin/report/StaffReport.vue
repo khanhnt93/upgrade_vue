@@ -97,10 +97,10 @@
               <!-- Total Row -->
               <tr class="bg-orange-100 font-semibold">
                 <td colspan="3" class="border border-gray-300 px-4 py-2 text-center text-header">Tổng</td>
-                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.currency(sum_quantity_order) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.currency(sum_total_order) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.currency(sum_quantity_payment) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.currency(sum_total_payment) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.formatCurrency(sum_quantity_order) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.formatCurrency(sum_total_order) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.formatCurrency(sum_quantity_payment) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right text-header">{{ formatters.formatCurrency(sum_total_payment) }}</td>
               </tr>
 
               <!-- Data Rows -->
@@ -108,10 +108,10 @@
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ index + 1 }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ item.staff_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ item.role_name }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(item.quantity_order) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(item.total_order) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(item.quantity_payment) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(item.total_payment) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(item.quantity_order) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(item.total_order) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(item.quantity_payment) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(item.total_payment) }}</td>
               </tr>
             </tbody>
           </table>

@@ -100,12 +100,12 @@
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ item.table_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ item.staff_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ item.bill_number }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(item.total_edit_price) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(item.total_edit_price) }}</td>
                 <td class="border border-gray-300 px-4 py-2">
                   <p v-for="(food, fIndex) in item.foods" :key="fIndex" v-show="food.edit_price != 0" class="mb-1">
                     <span v-if="food.edit_price < 0">Giảm: </span>
                     <span v-if="food.edit_price > 0">Tăng: </span>
-                    {{ formatters.currency(food.edit_price) }} từ [Số lượng]:{{ food.quantity }} [Tên món]:{{ food.name }}
+                    {{ formatters.formatCurrency(food.edit_price) }} từ [Số lượng]:{{ food.quantity }} [Tên món]:{{ food.name }}
                   </p>
                 </td>
               </tr>

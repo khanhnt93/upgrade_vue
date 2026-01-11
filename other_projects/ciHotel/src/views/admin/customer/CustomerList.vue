@@ -1,194 +1,190 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
-                  Thêm
-                </b-button>
-                <b-button variant="primary" class="pull-right mr-4 default-btn-bg btn-width-120" @click="openModalImportFile()">
-                  <span class="oi mr-1" data-glyph="data-transfer-upload"></span> Upload
-                </b-button>
-            </b-col>
-          </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-end mb-4 space-x-4">
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[120px]" 
+          @click="openModalImportFile()">
+          <span class="oi mr-1" data-glyph="data-transfer-upload"></span> Upload
+        </button>
+        <button 
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]" 
+          @click="goToAdd()">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Khách hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="text-center mb-4">
+        <h4 class="text-xl font-semibold mt-2">Khách hàng</h4>
+      </div>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md="6">
-              <label> Tên </label>
-              <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name"
-              maxlength="75">
-            </b-col>
-            <b-col md="6">
-              <label> Số điện thoại </label>
-              <input
-              id="price"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.phone"
-              maxlength="11"
-              @keyup="integerOnly($event.target)">
-            </b-col>
-          </b-row>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block mb-2">Tên</label>
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            class="form-control w-full"
+            v-model="inputs.name"
+            maxlength="75">
+        </div>
+        <div>
+          <label class="block mb-2">Số điện thoại</label>
+          <input
+            id="price"
+            type="text"
+            autocomplete="new-password"
+            class="form-control w-full"
+            v-model="inputs.phone"
+            maxlength="11"
+            @keyup="integerOnly($event.target)">
+        </div>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]" 
+          :disabled="onSearch" 
+          @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+      <div class="mb-4">
+        Số kết quả: {{totalRow}}
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(point)="data">{{ currencyFormat(data.item.point) }}</template>
-            <template v-slot:cell(remaining)="data">{{ currencyFormat(data.item.remaining) }}</template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Loại</th>
+              <th class="border border-gray-300 px-4 py-2">Tên</th>
+              <th class="border border-gray-300 px-4 py-2">Số điện thoại</th>
+              <th class="border border-gray-300 px-4 py-2">Giới tính</th>
+              <th class="border border-gray-300 px-4 py-2">Ngày sinh</th>
+              <th class="border border-gray-300 px-4 py-2">Tỉnh/Thành phố</th>
+              <th class="border border-gray-300 px-4 py-2">Quận/Huyện</th>
+              <th class="border border-gray-300 px-4 py-2">Địa chỉ</th>
+              <th class="border border-gray-300 px-4 py-2">Mã số thuế</th>
+              <th class="border border-gray-300 px-4 py-2">Điểm tích lũy</th>
+              <th class="border border-gray-300 px-4 py-2">Điểm khả dụng</th>
+              <th class="border border-gray-300 px-4 py-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2 text-center">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.cus_type }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.phone_number }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.gender }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.birthday }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.city }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.district }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.address }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.mst }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-right">{{ formatCurrency(item.point) }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-right">{{ formatCurrency(item.remaining) }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="flex justify-center space-x-2">
+                  <button 
+                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" 
+                    @click="edit(item.id)" 
+                    title="Edit">
+                    <i class="fa fa-edit" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center py-4">
+        <icon name="loading" width="60" />
+      </div>
+      <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
+      <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
+        <i class="fa fa-angle-double-down text-2xl"></i>
+      </div>
+    </div>
 
-      </b-col>
-    </b-row>
-
-    <b-modal centered hide-footer hide-header id="modal-import-customer">
-      <b-row>
-        <b-col class="text-center">
+    <!-- Import Modal -->
+    <div v-show="showImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <div class="mb-4">
+          <h4 class="text-xl font-semibold">Upload khách hàng từ file excel</h4>
+        </div>
+        <div class="mb-4">
           <form method="post" id="formImport" enctype="multipart/form-data">
-              <div class="modal-header">
-                  <h4 class="modal-title">Upload khách hàng từ file excel</h4>
-              </div>
-              <div class="modal-body">
-                  <div class="custom-file">
-                    <label>Chọn file excel bạn muốn upload
-                      <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
-                    </label>
-                    <!--<input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx" :placeholder="[[ fileName ]]">-->
-                    <!--<label id="custom-file-label" class="custom-file-label" for="file">Chọn file excel bạn muốn upload</label>-->
-
-                  </div>
-              </div>
+            <div class="mb-4">
+              <label class="block mb-2">Chọn file excel bạn muốn upload</label>
+              <input 
+                type="file" 
+                id="file" 
+                ref="file" 
+                @change="handleFileUpload()" 
+                accept=".xlsx"
+                class="w-full px-3 py-2 border border-gray-300 rounded">
+            </div>
           </form>
-        </b-col>
-      </b-row>
+        </div>
 
-      <b-row>
-        <b-col class="text-right mt-3">
-          <!-- Loading -->
-          <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
-          <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
+        <div class="flex justify-end space-x-2">
+          <button 
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" 
+            @click="showImportModal = false"
+            v-show="!uploading">
+            Đóng
+          </button>
+          <div v-show="uploading" class="inline-block">
+            <icon name="loading" width="30" />
+          </div>
+          <button 
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" 
+            v-show="!uploading" 
+            @click="importCustomerFromExcelFile()" 
+            :disabled="!fileUpload || uploading">
             Upload
           </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
-
 
 <script>
 import customerApi from '@/api/customer'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      router,
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       inputs: {
         name: null,
         phone: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'cus_type',
-          label: 'Loại'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số điện thoại'
-        },
-        {
-          key: 'gender',
-          label: 'Giới tính'
-        },
-        {
-          key: 'birthday',
-          label: 'Ngày sinh'
-        },
-        {
-          key: 'city',
-          label: 'Tỉnh/Thành phố'
-        },
-        {
-          key: 'district',
-          label: 'Quận/Huyện'
-        },
-        {
-          key: 'address',
-          label: 'Địa chỉ'
-        },
-        {
-          key: 'mst',
-          label: 'Mã số thuế'
-        },
-        {
-          key: 'point',
-          label: 'Điểm tích lũy'
-        },
-        {
-          key: 'remaining',
-          label: 'Điểm khả dụng'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       items: [],
       pageLimit: Constant.PAGE_LIMIT,
       offset: 0,
@@ -199,29 +195,18 @@ export default {
       totalRow: 0,
       fileUpload: null,
       fileName: "Chọn file excel bạn muốn upload",
-      uploading: false
+      uploading: false,
+      showImportModal: false
     }
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
-
-    // Load list when load page
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      *  Processing on scroll: use for paging
      */
@@ -261,7 +246,6 @@ export default {
       this.onSearch = true
       this.loading = true
 
-      // Define params
       let params = {
         "name": this.inputs.name,
         "phone": this.inputs.phone,
@@ -269,13 +253,11 @@ export default {
         "offset": this.offset
       }
 
-      // Search
       customerApi.getCustomerByStore(params).then(res => {
         if(res != null && res.data != null && res.data.data != null){
           let it = res.data.data.customers
           this.totalRow = res.data.data.total_row
 
-           // Update items
           if(this.loadByScroll) {
             let temp = this.items
             var newArray = temp.concat(it)
@@ -285,7 +267,6 @@ export default {
           }
           this.loadByScroll = false
 
-          // Check has next
           if(this.offset + this.pageLimit >= res.data.data.total_row) {
             this.hasNext = false
           }
@@ -295,9 +276,8 @@ export default {
         this.onSearch = false
         this.loading = false
       }).catch(err => {
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -314,35 +294,24 @@ export default {
     },
 
     /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-
-    /**
      * Go to page edit
      */
     edit (id) {
-      this.$router.push('/customer/edit/' + id)
+      this.router.push('/customer/edit/' + id)
     },
 
     /**
      * Go to page add
      */
     goToAdd () {
-      this.$router.push('/customer/add')
+      this.router.push('/customer/add')
     },
 
     /**
      * Show modal import from file
      */
     openModalImportFile () {
-      this.$bvModal.show('modal-import-customer')
+      this.showImportModal = true
     },
 
     /**
@@ -354,28 +323,24 @@ export default {
       form_data.append("importFile", this.fileUpload)
       customerApi.importCustomerFromExcelFile(form_data).then(res => {
         if(res != null && res.data != null){
-          // Load list when load page
           this.search()
         }
-        this.$bvModal.hide('modal-import-customer')
+        this.showImportModal = false
         this.uploading = false
       }).catch(err => {
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.uploading = false
       })
-
     },
 
     /**
-     *
+     * Handle file upload
      */
     handleFileUpload() {
       this.fileUpload = this.$refs.file.files[0];
       console.log(this.fileUpload)
-      document.getElementById("custom-file-label").innerHTML = this.fileUpload.name
     }
   }
 }

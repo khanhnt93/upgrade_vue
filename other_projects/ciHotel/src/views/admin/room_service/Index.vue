@@ -1,440 +1,371 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between mb-4">
+        <button
+          class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 border border-gray-600 min-w-[120px]"
+          @click="back">
+          Quay lại
+        </button>
+        <button
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
+          @click="save"
+          :disabled="saving">
+          Lưu
+        </button>
+      </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+      <div class="text-center mb-4">
+        <h4 class="text-xl font-semibold mt-1">DỊCH VỤ PHÒNG</h4>
+      </div>
+      <hr class="mb-4" />
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-1 text-center text-header">DỊCH VỤ PHÒNG</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center py-4">
+        <icon name="loading" width="60" />
+      </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label class="font-medium">
+            Tên <span class="text-red-600">*</span>
+          </label>
+        </div>
+        <div class="md:col-span-9">
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            :class="['form-control w-full', errorName ? 'border-red-500' : '']"
+            v-model="inputs.name"
+            maxlength="255"
+          />
+          <div v-if="errorName" class="text-red-600 text-sm mt-1">Vui lòng nhập tên</div>
+        </div>
+      </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Tên </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.name"
-                  maxlength="255">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                  Vui lòng nhập tên
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label class="font-medium">
+            Giá <span class="text-red-600">*</span>
+          </label>
+        </div>
+        <div class="md:col-span-9">
+          <input
+            id="price"
+            type="text"
+            autocomplete="new-password"
+            :class="['form-control w-full', errorPrice ? 'border-red-500' : '']"
+            v-model="inputs.price"
+            maxlength="11"
+            @keyup="integerOnly($event.target)"
+          />
+          <div v-if="errorPrice" class="text-red-600 text-sm mt-1">Vui lòng nhập value</div>
+        </div>
+      </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Giá </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="price"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.price"
-                  maxlength="11"
-                  @keyup="integerOnly($event.target)">
-
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPrice">
-                  Vui lòng nhập value
-                </b-form-invalid-feedback>
-              </b-col>
-
-            </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Nguyên liệu </label>
-              </b-col>
-              <b-col md="9">
-                <b-list-group horizontal>
-                  <b-list-group-item @click="$bvModal.show('modal-choose-resource')">
-                    <i class="fa fa-plus"/>
-                  </b-list-group-item>
-                </b-list-group>
-              </b-col>
-            </b-row>
-          </b-card-body>
-
-        </b-card>
-      </b-col>
-    </b-row>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label class="font-medium">Nguyên liệu</label>
+        </div>
+        <div class="md:col-span-9">
+          <button
+            class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            @click="showResourceModal = true">
+            <i class="fa fa-plus" />
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal choose resource -->
-    <b-modal centered hide-footer hide-header id="modal-choose-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Chọn nguyên liệu</h5>
-        </b-col>
-      </b-row>
-      <br>
-      <b-row v-show="inputs.resources.length > 0">
-        <b-col>
-          <p class="col-12" v-for="item in this.inputs.resources" :key="item.id">
-            <label v-if="item.unit">- {{item.quantity + ' ' + item.unit + ': ' + item.name}}</label>
-            <label v-if="!item.unit">- {{item.quantity + ': ' + item.name}}</label>
-            <i class="fa fa-trash" @click="deleteResource(item.id)"/>
-          </p>
-        </b-col>
-      </b-row>
+    <div v-if="showResourceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div class="text-center mb-4">
+          <h5 class="text-xl font-semibold">Chọn nguyên liệu</h5>
+        </div>
 
-      <b-row>
-        <b-col>
+        <div v-show="inputs.resources.length > 0" class="mb-4">
+          <p v-for="item in inputs.resources" :key="item.id" class="mb-2">
+            <label v-if="item.unit">- {{ item.quantity + ' ' + item.unit + ': ' + item.name }}</label>
+            <label v-if="!item.unit">- {{ item.quantity + ': ' + item.name }}</label>
+            <i class="fa fa-trash ml-2 cursor-pointer text-red-600" @click="deleteResource(item.id)" />
+          </p>
+        </div>
+
+        <div class="space-y-4">
           <div>
-            <div class="form-group">
-              <label>Nguyên liệu:</label><span class="error-sybol"></span>
-              <b-form-select
-                :options="resources"
+            <label class="font-medium">Nguyên liệu:<span class="text-red-600">*</span></label>
+            <select
+              class="form-control w-full mt-1"
+              v-model="resource.id"
+              @change="changeResource">
+              <option v-for="opt in resources" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-medium">Số lượng<span class="text-red-600">*</span></label>
+            <div class="flex items-center gap-2 mt-1">
+              <input
                 type="text"
                 autocomplete="new-password"
-                class="form-control"
-                v-model="resource.id"
-                @change="changeResource">
-              </b-form-select>
-            </div>
-            <div class="form-group">
-              <label>Số lượng</label><span class="error-sybol"></span>
-              <div class="input-group">
-                <input
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.quantity"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="11">
-                <label class="pl-2">{{unitResource}}</label>
-              </div>
+                class="form-control flex-1"
+                v-model="resource.quantity"
+                @keyup="integerOnly($event.target)"
+                maxlength="11"
+              />
+              <label class="text-sm">{{ unitResource }}</label>
             </div>
           </div>
-        </b-col>
-      </b-row>
+        </div>
 
-      <b-row>
-        <b-col class="text-center">
-          <button class="btn btn-primary px-4 default-btn-bg " @click="addGroupResource">
+        <div class="text-center mt-4">
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            @click="addGroupResource">
             Thêm
           </button>
-        </b-col>
-      </b-row>
+        </div>
 
-      <b-row>
-        <b-col cols="12" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmResource">
+        <div class="text-right mt-4">
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            @click="confirmResource">
             Xác nhận
           </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-  import adminAPI from '@/api/admin'
-  import Mapper from '@/mapper/promotion'
-  import commonFunc from '@/common/commonFunc'
+import adminAPI from '@/api/admin';
+import commonFunc from '@/common/commonFunc';
+import { useRouter, useRoute } from 'vue-router';
+import { useToast } from '@/composables/useToast';
 
+export default {
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const toast = useToast();
 
-  export default {
-    data () {
-      return {
-        inputs: {
-          "id": null,
-          "name": null,
-          "price": null,
-          "resources":[]
-        },
-        resources: [{value: null, text: ''}],
-        resource: {id: '', quantity: ''},
-        unitResource: null,
-        click: false,
-        saving: false,
-        loading: false,
+    return {
+      router,
+      route,
+      toast
+    };
+  },
+  data() {
+    return {
+      inputs: {
+        id: null,
+        name: null,
+        price: null,
+        resources: []
+      },
+      resources: [{value: null, text: ''}],
+      resource: {id: '', quantity: ''},
+      unitResource: null,
+      click: false,
+      saving: false,
+      loading: false,
+      showResourceModal: false
+    };
+  },
+  mounted() {
+    this.getRoomServiceDetail();
+    this.getResourceOptions();
+  },
+  computed: {
+    errorName() {
+      return this.checkInfo(this.inputs.name);
+    },
+    errorPrice() {
+      return this.checkInfo(this.inputs.price);
+    }
+  },
+  methods: {
+    checkInfo(info) {
+      return this.click && (info == null || info.length <= 0);
+    },
+
+    checkValidate() {
+      return !(this.errorName || this.errorPrice);
+    },
+
+    getResourceOptions() {
+      adminAPI.getListResourceOption().then(res => {
+        if (res != null && res.data != null && res.data.data != null) {
+          let items = res.data.data;
+          if (items) {
+            for (let i in items) {
+              this.resources.push(items[i]);
+            }
+          }
+        }
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err);
+        this.toast.error(errorMess);
+      });
+    },
+
+    getRoomServiceDetail() {
+      let id = this.route.params.id;
+      if (id) {
+        this.loading = true;
+
+        adminAPI.getRoomServiceDetail(id).then(res => {
+          if (res != null && res.data != null && res.data.data != null) {
+            this.inputs = res.data.data;
+          }
+
+          this.loading = false;
+        }).catch(err => {
+          this.loading = false;
+
+          let errorMess = commonFunc.handleStaffError(err);
+          this.toast.error(errorMess);
+        });
       }
     },
-    mounted() {
 
-      this.getRoomServiceDetail()
-      this.getResourceOptions()
+    getUnitByResourceId(id) {
+      for (let index in this.resources) {
+        if (this.resources[index].value == id) {
+          return this.resources[index];
+        }
+      }
+      return "";
     },
-    computed: {
-      errorName: function () {
-        return this.checkInfo(this.inputs.name)
-      },
-      errorPrice: function () {
-        return this.checkInfo(this.inputs.price)
+
+    changeResource() {
+      if (this.resource.id) {
+        let item = this.getUnitByResourceId(this.resource.id);
+        if (item) {
+          this.unitResource = item.unit;
+        }
       }
     },
-    methods: {
-      checkInfo (info) {
-        return (this.click && (info == null || info.length <= 0))
-      },
-      checkValidate () {
-        return !(this.errorName || this.errorPrice)
-      },
 
-      /**
-       * Make toast without title
-       */
-      popToast(variant, content) {
-        this.$bvToast.toast(content, {
-          toastClass: 'my-toast',
-          noCloseButton: true,
-          variant: variant,
-          autoHideDelay: 3000
-        })
-      },
+    checkExistResourceId(id) {
+      for (let index in this.inputs.resources) {
+        if (this.inputs.resources[index].id == id) {
+          return true;
+        }
+      }
+      return false;
+    },
 
-      /**
-       * Make toast with title
-       */
-      makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-        this.$bvToast.toast(content, {
-          title: title,
-          variant: variant,
-          solid: true,
-          autoHideDelay: 3000
-        })
-      },
+    addGroupResource() {
+      if (this.resource.id && this.resource.quantity) {
+        if (!this.checkExistResourceId(this.resource.id)) {
+          let item = this.getUnitByResourceId(this.resource.id);
+          let itemTemp = {
+            id: item.value,
+            name: item.text,
+            quantity: this.resource.quantity,
+            unit: item.unit
+          };
+          this.inputs.resources.push(itemTemp);
 
-      /**
-       * Load list option resource
-       */
-      getResourceOptions () {
-        adminAPI.getListResourceOption().then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            let items = res.data.data
-            if(items) {
-              for (let i in items) {
-                this.resources.push(items[i])
-              }
+          this.resource.id = '';
+          this.resource.quantity = '';
+          this.unitResource = '';
+        } else {
+          this.toast.error('Nhập trùng nguyên liệu');
+        }
+      } else {
+        this.toast.error('Vui lòng nhập đủ các mục yêu cầu');
+      }
+    },
+
+    confirmResource() {
+      this.showResourceModal = false;
+    },
+
+    save() {
+      this.click = true;
+      this.saving = true;
+
+      if (!this.checkValidate()) {
+        this.saving = false;
+        return;
+      }
+
+      let id = this.route.params.id;
+      if (id) {
+        // Edit
+        this.inputs.id = id;
+        adminAPI.editRoomService(this.inputs).then(res => {
+          this.saving = false;
+          if (res != null && res.data != null) {
+            if (res.data.status == 200) {
+              this.toast.success('Cập nhật tầng thành công!!!');
             }
           }
         }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      },
-
-      /**
-       * Get kitchen area detail
-       */
-      getRoomServiceDetail () {
-        let id = this.$route.params.id
-        if(id){
-          this.loading = true
-
-          adminAPI.getRoomServiceDetail(id).then(res => {
-            if(res != null && res.data != null && res.data.data != null) {
-              this.inputs = res.data.data
-            }
-
-            this.loading = false
-          }).catch(err => {
-            this.loading = false
-
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      },
-      /**
-       * Get unit by resource id
-       */
-      getUnitByResourceId(id) {
-        for(let index in this.resources) {
-          if(this.resources[index].value == id) {
-            return this.resources[index]
-          }
-        }
-        return ""
-      },
-
-      /**
-       * Event change resource
-       */
-      changeResource() {
-        if(this.resource.id) {
-          let item = this.getUnitByResourceId(this.resource.id)
-          if(item) {
-            this.unitResource = item.unit
-          }
-        }
-      },
-
-      /**
-       * Check exist resource id
-       */
-      checkExistResourceId(id) {
-        for (let index in this.inputs.resources) {
-          if(this.inputs.resources[index].id == id) {
-            return true
-          }
-        }
-        return false
-      },
-
-      /**
-       * Add group resource
-       */
-      addGroupResource() {
-        if(this.resource.id && this.resource.quantity) {
-          // Check exist resource id
-          if(!this.checkExistResourceId(this.resource.id)) {
-            let item = this.getUnitByResourceId(this.resource.id)
-            let itemTemp = {
-              id: item.value,
-              name: item.text,
-              quantity: this.resource.quantity,
-              unit: item.unit
-            }
-            this.inputs.resources.push(itemTemp)
-
-            // Reset value
-            this.resource.id = ''
-            this.resource.quantity = ''
-            this.unitResource = ''
+          this.saving = false;
+          let message = "";
+          if (err.response.data.status == 422) {
+            message = err.response.data.mess;
           } else {
-            this.popToast('danger', 'Nhập trùng nguyên liệu')
+            message = "Lỗi hệ thống";
           }
-        } else {
-          this.popToast('danger', 'Vui lòng nhập đủ các mục yêu cầu')
-        }
-      },
-
-      /**
-       * Confirm resource
-       */
-      confirmResource() {
-        this.$bvModal.hide('modal-choose-resource')
-      },
-
-      /**
-       * Save promotion
-       */
-      save () {
-        this.click = true
-        this.saving = true
-
-        // Check validate
-        if(!this.checkValidate()) {
-          this.saving = false
-          return
-        }
-
-        let id = this.$route.params.id
-        if(id){
-          // Edit
-          this.inputs.id = id
-          adminAPI.editRoomService(this.inputs).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật tầng thành công!!! ')
-              }
+          this.toast.error('Cập nhật thất bại: ' + message);
+        });
+      } else {
+        // Add
+        adminAPI.addRoomService(this.inputs).then(res => {
+          this.saving = false;
+          if (res != null && res.data != null) {
+            if (res.data.status == 200) {
+              this.router.push('/room-service/list');
             }
-          }).catch(err => {
-            this.saving = false
-            // Show notify edit fail
-            let message = ""
-            if(err.response.data.status == 422) {
-              message = err.response.data.mess
-            } else {
-              message = "Lỗi hệ thống"
-            }
-            this.makeToast('danger', "Cập nhật thất bại!!!", message)
-          })
-        } else {
-          // Add
-          adminAPI.addRoomService(this.inputs).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push('/room-service/list')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            let message = ""
-            if(err.response.data.status == 422) {
-              message = err.response.data.mess
-            } else {
-              message = "Lỗi hệ thống"
-            }
-            this.makeToast('danger', "Tạo mới thất bại!!!", message)
-          })
-        }
-      },
-
-      /**
-       * Get index by id
-       */
-      getIndexById(id) {
-        let index = 0
-        for(var i in this.resourceChosen) {
-          if(this.resourceChosen[i].id == id) {
-            return index
           }
-          index += 1
+        }).catch(err => {
+          this.saving = false;
+          let message = "";
+          if (err.response.data.status == 422) {
+            message = err.response.data.mess;
+          } else {
+            message = "Lỗi hệ thống";
+          }
+          this.toast.error('Tạo mới thất bại: ' + message);
+        });
+      }
+    },
+
+    getIndexById(id) {
+      let index = 0;
+      for (var i in this.inputs.resources) {
+        if (this.inputs.resources[i].id == id) {
+          return index;
         }
-        return false
-      },
+        index += 1;
+      }
+      return false;
+    },
 
-      /**
-       * Remove resource
-       */
-      deleteResource(id) {
+    deleteResource(id) {
+      let indexTemp = this.getIndexById(id);
 
-        // Get index pmt by id
-        let indexTemp = this.getIndexById(id)
+      if (indexTemp !== false) {
+        this.inputs.resources.splice(indexTemp, 1);
+      }
+    },
 
-        if(indexTemp !== false) {
-          this.resourceChosen.splice(indexTemp, 1)
-        }
-      },
+    integerOnly(item) {
+      let valueInput = item.value;
+      let result = commonFunc.intergerOnly(valueInput);
+      item.value = result;
+    },
 
-      /**
-       * Only input integer
-       */
-      integerOnly(item) {
-        let valueInput = item.value
-        let result = commonFunc.intergerOnly(valueInput)
-        item.value = result
-      },
-      /**
-       * Back to list
-       */
-      back() {
-        // Go to list
-        this.$router.push('/room-service/list')
-      },
+    back() {
+      this.router.push('/room-service/list');
     }
   }
+};
 </script>
+
+<style lang="scss" scoped></style>

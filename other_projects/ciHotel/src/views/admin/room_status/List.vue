@@ -1,182 +1,140 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" @click="goToAdd()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 border border-blue-600 min-w-[120px]"
+          @click="goToAdd">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Trạng thái phòng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="text-center mb-4">
+        <h4 class="text-xl font-semibold mt-2">Trạng thái phòng</h4>
+      </div>
+      <hr class="mb-4" />
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{items.length}}
-            </b-col>
-          </b-row>
+      <div class="mb-4">
+        Số kết quả: {{ items.length }}
+      </div>
 
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-            <template v-slot:cell(actions)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
+      <!-- Table -->
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-300 px-4 py-2">STT</th>
+            <th class="border border-gray-300 px-4 py-2">Tên</th>
+            <th class="border border-gray-300 px-4 py-2 actions-cell"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in items" :key="item.id" class="hover:bg-gray-50">
+            <td class="border border-gray-300 px-4 py-2">{{ index + 1 }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+              <div class="flex space-x-2 justify-center">
+                <button 
+                  class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  @click="edit(item.id)"
+                  title="Edit">
                   <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete"
-                                   @click="deleted(dataId.item.id, dataId.item.name)">
+                </button>
+                <button 
+                  class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                  @click="deleted(item.id, item.name)"
+                  title="Delete">
                   <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center py-4">
+        <icon name="loading" width="60" />
+      </div>
+      <div class="text-center py-2">--Hết--</div>
+    </div>
   </div>
 </template>
-<script>
-  import adminAPI from '@/api/admin'
-  import commonFunc from '@/common/commonFunc'
 
-  export default {
-    data () {
-      return {
-        fields: [
-          {
-            key: 'stt',
-            label: 'STT'
-          },
-          {
-            key: 'name',
-            label: 'Tên'
-          },
-          {
-            key: 'actions',
-            label: '',
-            class: 'actions-cell'
-          }
-        ],
-        items: [],
-        offset: 0,
-        hasNext: true,
-        onSearch: false,
-        loading: false,
-        totalRow: 0
+<script>
+import adminAPI from '@/api/admin';
+import commonFunc from '@/common/commonFunc';
+import { useRouter } from 'vue-router';
+import { useToast } from '@/composables/useToast';
+
+export default {
+  setup() {
+    const router = useRouter();
+    const toast = useToast();
+
+    return {
+      router,
+      toast
+    };
+  },
+  data() {
+    return {
+      items: [],
+      offset: 0,
+      hasNext: true,
+      onSearch: false,
+      loading: false,
+      totalRow: 0
+    };
+  },
+  mounted() {
+    this.getRoomStatus();
+  },
+  methods: {
+    deleted(id, name) {
+      if (id && name) {
+        if (confirm('Xóa ' + name + '. Bạn có chắc không?')) {
+          adminAPI.deleteRoomStatus(id).then(res => {
+            if (res != null && res.data != null && res.data.data != null) {
+              this.items = res.data.data;
+            }
+          }).catch(err => {
+            let errorMess = commonFunc.handleStaffError(err);
+            this.toast.error(errorMess);
+          });
+        }
       }
     },
-    mounted() {
-      // Get list
-      this.getRoomStatus()
 
+    edit(id) {
+      this.router.push('/room-status/edit/' + id);
     },
-    methods: {
-      /**
-       * Make toast without title
-       */
-      popToast(variant, content) {
-        this.$bvToast.toast(content, {
-          toastClass: 'my-toast',
-          noCloseButton: true,
-          variant: variant,
-          autoHideDelay: 3000
-        })
-      },
 
-      /**
-       * Make toast with title
-       */
-      makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-        this.$bvToast.toast(content, {
-          title: title,
-          variant: variant,
-          solid: true,
-          autoHideDelay: 3000
-        })
-      },
+    goToAdd() {
+      this.router.push('/room-status/add');
+    },
 
-      /**
-       * Delete
-       */
-      deleted (id, name) {
-        if(id && name) {
-          this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-            title: false,
-            buttonSize: 'sm',
-            centered: true, size: 'sm',
-            footerClass: 'p-2'
-          }).then(res => {
-            if (res) {
-              adminAPI.deleteRoomStatus(id).then(res => {
-                if(res != null && res.data != null && res.data.data != null) {
-                  this.items = res.data.data
-                }
-              }).catch(err => {
-                // Handle error
-                let errorMess = commonFunc.handleStaffError(err)
-                this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-              })
-            }
-          })
+    getRoomStatus() {
+      if (this.loading) { return; }
+
+      this.onSearch = true;
+      this.loading = true;
+
+      adminAPI.getRoomStatus().then(res => {
+        if (res != null && res.data != null && res.data.data != null) {
+          this.items = res.data.data;
         }
-      },
+        this.onSearch = false;
+        this.loading = false;
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err);
+        this.toast.error(errorMess);
 
-      /**
-       * Go to edit
-       * @param id
-       */
-      edit (id) {
-        this.$router.push('/room-status/edit/' + id)
-      },
-
-      /**
-       * Go to add
-       */
-      goToAdd () {
-        this.$router.push('/room-status/add')
-      },
-
-      /**
-       * Get list
-       */
-      getRoomStatus () {
-        if (this.loading) { return }
-
-        this.onSearch = true
-        this.loading = true
-
-        adminAPI.getRoomStatus().then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.items = res.data.data
-          }
-          this.onSearch = false
-          this.loading = false
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-
-          this.onSearch = false
-          this.loading = false
-        })
-      },
-
+        this.onSearch = false;
+        this.loading = false;
+      });
     }
   }
+};
 </script>
+
+<style lang="scss" scoped></style>

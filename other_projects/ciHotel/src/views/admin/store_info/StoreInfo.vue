@@ -1,99 +1,108 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body>
+    <div class="grid grid-cols-1">
+      <div class="bg-white rounded-lg shadow-md p-6">
 
-            <b-row>
-              <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" @click="save()" :disabled="saving == true">
-                  Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <div class="flex justify-end mb-4">
+          <button 
+            @click="save()" 
+            :disabled="saving == true"
+            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            style="min-width: 120px"
+          >
+            Lưu
+          </button>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center">Thông Tin Nhà Hàng</h4>
-              </b-col>
-            </b-row>
+        <div class="mb-4">
+          <h4 class="mt-2 text-center text-xl font-semibold">Thông Tin Nhà Hàng</h4>
+        </div>
 
-            <b-row>
-              <b-col md="3">
-                Giờ mở cửa:
-              </b-col>
-              <b-col md="9">
-                <div class="form-inline">
-                  <input
-                    id="start_time"
-                    v-model="inputs.start_time"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control input-width-100"
-                    @keyup="integerTimeOnly($event.target)"
-                    maxlength="5"
-                    > :
-                  <input
-                    id="end_time"
-                    v-model="inputs.end_time"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control input-width-100"
-                    @keyup="integerTimeOnly($event.target)"
-                    maxlength="5"
-                    >
-                </div>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            Giờ mở cửa:
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex items-center gap-2">
+              <input
+                id="start_time"
+                v-model="inputs.start_time"
+                type="text"
+                autocomplete="new-password"
+                class="form-control border border-gray-300 rounded px-3 py-2"
+                style="width: 100px"
+                @keyup="integerTimeOnly($event.target)"
+                maxlength="5"
+              > :
+              <input
+                id="end_time"
+                v-model="inputs.end_time"
+                type="text"
+                autocomplete="new-password"
+                class="form-control border border-gray-300 rounded px-3 py-2"
+                style="width: 100px"
+                @keyup="integerTimeOnly($event.target)"
+                maxlength="5"
+              >
+            </div>
+          </div>
+        </div>
 
-            <b-row>
-              <b-col md="3">
-                Hình ảnh nhà hàng:
-              </b-col>
-              <b-col md="9">
-                <b-input-group @click="$refs.file.click()" append="Browse" class="pointer">
-                  <b-input v-model="inputs.image"></b-input>
-                </b-input-group>
-                <input class="d-none" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            Hình ảnh nhà hàng:
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex">
+              <input 
+                v-model="inputs.image"
+                type="text"
+                readonly
+                class="flex-1 border border-gray-300 rounded-l px-3 py-2 bg-white"
+              >
+              <button 
+                @click="$refs.file.click()"
+                class="px-4 py-2 bg-gray-200 border border-l-0 border-gray-300 rounded-r hover:bg-gray-300"
+              >
+                Browse
+              </button>
+            </div>
+            <input class="hidden" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-                <div v-if="inputs.image_preview" class="preview-box text-center"  :style="{height: computedWidth, width: '100%'}">
-                    <vue-cropper
-                      ref="cropper"
-                      :guides="true"
-                      :view-mode="2"
-                      :center="true"
-                      drag-mode="crop"
-                      :auto-crop-area="1"
-                      :background="true"
-                      :rotatable="true"
-                      :src="inputs.image_preview"
-                      :initialAspectRatio="1/1"
-                      :aspectRatio="1/1"
-                      alt="Hình ảnh nhà hàng"
-                      :style="computedImg"
-                      :crop="cropImage"
-                    >
-                    </vue-cropper>
-                </div>
-              </b-row>
+        <div class="mb-4" v-if="inputs.image_preview">
+          <div class="preview-box text-center" :style="{height: computedWidth, width: '100%'}">
+            <vue-cropper
+              ref="cropper"
+              :guides="true"
+              :view-mode="2"
+              :center="true"
+              drag-mode="crop"
+              :auto-crop-area="1"
+              :background="true"
+              :rotatable="true"
+              :src="inputs.image_preview"
+              :initialAspectRatio="1/1"
+              :aspectRatio="1/1"
+              alt="Hình ảnh nhà hàng"
+              :style="computedImg"
+              :crop="cropImage"
+            >
+            </vue-cropper>
+          </div>
+        </div>
 
-
-          </b-card-body>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
 
 
 <script>
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import VueCropper from 'vue-cropperjs'
@@ -103,6 +112,13 @@ import 'cropperjs/dist/cropper.css'
 export default {
   components: {
     VueCropper
+  },
+  setup() {
+    const toast = useToast()
+
+    return {
+      toast
+    }
   },
   data () {
     return {
@@ -133,18 +149,6 @@ export default {
   methods: {
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Get store info
      */
     getStoreInfo() {
@@ -158,7 +162,7 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -198,15 +202,15 @@ export default {
         if(this.inputs.start_time.indexOf(':') > -1) {
           let timeItems = this.inputs.start_time.split(":")
           if(parseInt(timeItems[0]) >= 24) {
-            this.popToast('danger', "Giờ mở cửa không quá 24")
+            this.toast.error("Giờ mở cửa không quá 24")
             return false
           }
           if(parseInt(timeItems[1]) >= 60) {
-            this.popToast('danger', "Phút mở cửa không quá 60")
+            this.toast.error("Phút mở cửa không quá 60")
             return false
           }
         } else {
-          this.popToast('danger', "Giờ mở cửa không hợp lệ! Định dạng HH:MM")
+          this.toast.error("Giờ mở cửa không hợp lệ! Định dạng HH:MM")
           return false
         }
       }
@@ -215,15 +219,15 @@ export default {
         if(this.inputs.end_time.indexOf(':') > -1) {
           let timeItems = this.inputs.end_time.split(":")
           if(parseInt(timeItems[0]) >= 24) {
-            this.popToast('danger', "Giờ đóng cửa không quá 24")
+            this.toast.error("Giờ đóng cửa không quá 24")
             return false
           }
           if(parseInt(timeItems[1]) >= 60) {
-            this.popToast('danger', "Phút đóng cửa không quá 60")
+            this.toast.error("Phút đóng cửa không quá 60")
             return false
           }
         } else {
-          this.popToast('danger', "Giờ đóng cửa không hợp lệ! Định dạng HH:MM")
+          this.toast.error("Giờ đóng cửa không hợp lệ! Định dạng HH:MM")
           return false
         }
       }
@@ -276,17 +280,17 @@ export default {
         this.saving = false
         if(res != null && res.data != null){
           // Show notify edit success
-          this.popToast('success', 'Lưu thông tin nhà hàng thành công!!! ')
+          this.toast.success('Lưu thông tin nhà hàng thành công!!! ')
         }else{
           // Show notify edit fail
-          this.popToast('danger', 'Lưu thông tin nhà hàng thất bại!!! ')
+          this.toast.error('Lưu thông tin nhà hàng thất bại!!! ')
         }
       }).catch(err => {
         this.saving = false
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
 
     },
@@ -307,7 +311,4 @@ export default {
 
 
 <style lang="css" scoped>
-  .input-width-100 {
-    width: 100px;
-  }
 </style>

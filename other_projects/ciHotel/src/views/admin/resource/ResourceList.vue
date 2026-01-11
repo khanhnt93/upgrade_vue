@@ -1,345 +1,324 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
-                  Thêm
-                </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-end mb-4">
+        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-[120px]" @click="goToAdd()">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Nguyên liệu - Mặt hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Nguyên liệu - Mặt hàng</h4>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md="4">
-              <label> Tên </label>
-              <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name">
-            </b-col>
-            <b-col md="4" v-if="units.length > 0">
-              <label> Đơn vị </label>
-              <b-form-select
-              :options="units"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.unit"></b-form-select>
-            </b-col>
-            <b-col md="4">
-              <label> Trạng Thái </label>
-              <b-form-select
-              :options="statusOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.status"></b-form-select>
-            </b-col>
-          </b-row>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label class="block mb-2">Tên</label>
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.name">
+        </div>
+        <div v-if="units.length > 0">
+          <label class="block mb-2">Đơn vị</label>
+          <select
+            id="unit"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.unit">
+            <option v-for="unit in units" :key="unit.value" :value="unit.value">{{ unit.text }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2">Trạng Thái</label>
+          <select
+            id="status"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.status">
+            <option v-for="status in statusOptions" :key="status.value" :value="status.value">{{ status.text }}</option>
+          </select>
+        </div>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
-                        @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50" 
+          :disabled="onSearch"
+          @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+      <div class="mb-4">
+        Số kết quả: {{totalRow}}
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(quantity)="data">{{ currencyFormat(data.item.quantity) }}</template>
-            <template v-slot:cell(min_quantity)="data">{{ currencyFormat(data.item.min_quantity) }}</template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Plus quantity" @click="addQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-plus" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Minus quantity" @click="minusQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-minus" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Update quantity" @click="updateQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-balance-scale" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Tên</th>
+              <th class="border border-gray-300 px-4 py-2">Số lượng</th>
+              <th class="border border-gray-300 px-4 py-2">Số lượng tối thiểu</th>
+              <th class="border border-gray-300 px-4 py-2">Đơn vị</th>
+              <th class="border border-gray-300 px-4 py-2 actions-cell"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item.id" :class="getRowClass(item)">
+              <td class="border border-gray-300 px-4 py-2 text-center">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-right">{{ formatCurrency(item.quantity) }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-right">{{ formatCurrency(item.min_quantity) }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.unit_name }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="flex gap-2 justify-center">
+                  <button class="text-blue-600 hover:text-blue-800" title="Plus quantity" @click="addQuantity(item.id, item.quantity, item.unit_name)">
+                    <i class="fa fa-plus" />
+                  </button>
+                  <button class="text-yellow-600 hover:text-yellow-800" title="Minus quantity" @click="minusQuantity(item.id, item.quantity, item.unit_name)">
+                    <i class="fa fa-minus" />
+                  </button>
+                  <button class="text-green-600 hover:text-green-800" title="Update quantity" @click="updateQuantity(item.id, item.quantity, item.unit_name)">
+                    <i class="fa fa-balance-scale" />
+                  </button>
+                  <button class="text-blue-600 hover:text-blue-800" title="Edit" @click="edit(item.id)">
+                    <i class="fa fa-edit" />
+                  </button>
+                  <button class="text-red-600 hover:text-red-800" title="Delete" @click="deleted(item.id, item.name, item.stt)">
+                    <i class="fa fa-trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-if="hasNext === false">--Hết--</span>
+      <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
+    </div>
 
     <!-- Modal add quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-add-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Thêm số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <div v-if="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeAddModal">
+      <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+        <h5 class="text-center text-lg font-semibold mb-4">Thêm số lượng</h5>
+        
+        <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng hiện tại</label>
-            <div class="input-group">
+        <div class="space-y-4">
+          <div>
+            <label class="block mb-2">Số lượng hiện tại</label>
+            <div class="flex items-center gap-2">
               <input
-              id="currentQuantity"
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+                v-model="quantityChange.currentQuantity"
+                type="text"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-100"
+                disabled>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Số lượng thêm vào</label><span class="error-sybol"></span>
-            <div class="input-group">
+          <div>
+            <label class="block mb-2">Số lượng thêm vào<span class="error-sybol"></span></label>
+            <div class="flex items-center gap-2">
               <input
-                id="quantityBonus"
                 v-model="quantityChange.quantityBonus"
                 type="text"
                 autocomplete="new-password"
-                class="form-control"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorQuantityBonus }"
                 maxlength="11"
                 @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
+            <div v-if="errorQuantityBonus" class="text-red-500 text-sm mt-1">
               Vui lòng nhập số lượng thêm vào
-            </b-form-invalid-feedback>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Nguyên nhân thêm</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
+          <div>
+            <label class="block mb-2">Nguyên nhân thêm<span class="error-sybol"></span></label>
+            <textarea
               v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorReasonBonus }"
               placeholder="Nhập hàng"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân thêm
-              </b-form-invalid-feedback>
+              maxlength="255"
+              rows="3">
+            </textarea>
+            <div v-if="errorReasonBonus" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập nguyên nhân thêm
+            </div>
           </div>
+        </div>
 
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="mt-3">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="$bvModal.hide('modal-add-quantity-resource')">
+        <div class="flex justify-between mt-6">
+          <button class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 w-[120px]" @click="closeAddModal">
             Huỷ
-          </b-button>
-
-          <b-button variant="outline-success" class="pull-right btn-width-120" @click="confirmBonusQuantity">
+          </button>
+          <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-[120px]" @click="confirmBonusQuantity">
             Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal minus quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-minus-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Giảm số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <div v-if="showMinusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeMinusModal">
+      <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+        <h5 class="text-center text-lg font-semibold mb-4">Giảm số lượng</h5>
+        
+        <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng hiện tại</label>
-            <div class="input-group">
+        <div class="space-y-4">
+          <div>
+            <label class="block mb-2">Số lượng hiện tại</label>
+            <div class="flex items-center gap-2">
               <input
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+                v-model="quantityChange.currentQuantity"
+                type="text"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-100"
+                disabled>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Số lượng giảm đi</label><span class="error-sybol"></span>
-            <div class="input-group">
+          <div>
+            <label class="block mb-2">Số lượng giảm đi<span class="error-sybol"></span></label>
+            <div class="flex items-center gap-2">
               <input
                 v-model="quantityChange.quantityBonus"
                 type="text"
                 autocomplete="new-password"
-                class="form-control"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorQuantityBonus }"
                 maxlength="11"
                 @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
+            <div v-if="errorQuantityBonus" class="text-red-500 text-sm mt-1">
               Vui lòng nhập số lượng giảm đi
-            </b-form-invalid-feedback>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Nguyên nhân giảm</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
+          <div>
+            <label class="block mb-2">Nguyên nhân giảm<span class="error-sybol"></span></label>
+            <textarea
               v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorReasonBonus }"
               placeholder="Hư hỏng"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân giảm
-              </b-form-invalid-feedback>
+              maxlength="255"
+              rows="3">
+            </textarea>
+            <div v-if="errorReasonBonus" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập nguyên nhân giảm
+            </div>
           </div>
+        </div>
 
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="mt-3">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="$bvModal.hide('modal-minus-quantity-resource')">
+        <div class="flex justify-between mt-6">
+          <button class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 w-[120px]" @click="closeMinusModal">
             Huỷ
-          </b-button>
-
-          <b-button variant="outline-success" class="pull-right btn-width-120" @click="confirmBonusQuantity">
+          </button>
+          <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-[120px]" @click="confirmBonusQuantity">
             Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal update quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-update-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Cập nhật số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <div v-if="showUpdateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeUpdateModal">
+      <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+        <h5 class="text-center text-lg font-semibold mb-4">Cập nhật số lượng</h5>
+        
+        <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng cũ</label>
-            <div class="input-group">
+        <div class="space-y-4">
+          <div>
+            <label class="block mb-2">Số lượng cũ</label>
+            <div class="flex items-center gap-2">
               <input
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+                v-model="quantityChange.currentQuantity"
+                type="text"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-100"
+                disabled>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Số lượng mới</label><span class="error-sybol"></span>
-            <div class="input-group">
+          <div>
+            <label class="block mb-2">Số lượng mới<span class="error-sybol"></span></label>
+            <div class="flex items-center gap-2">
               <input
                 v-model="quantityChange.quantityBonus"
                 type="text"
                 autocomplete="new-password"
-                class="form-control"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorQuantityBonus }"
                 maxlength="11"
                 @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+              <label class="whitespace-nowrap">{{quantityChange.unit_name}}</label>
             </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
+            <div v-if="errorQuantityBonus" class="text-red-500 text-sm mt-1">
               Vui lòng nhập số lượng mới
-            </b-form-invalid-feedback>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Nguyên nhân thay đổi</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
+          <div>
+            <label class="block mb-2">Nguyên nhân thay đổi<span class="error-sybol"></span></label>
+            <textarea
               v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorReasonBonus }"
               placeholder="Kiểm kê hàng ngày"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân thay đổi
-              </b-form-invalid-feedback>
+              maxlength="255"
+              rows="3">
+            </textarea>
+            <div v-if="errorReasonBonus" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập nguyên nhân thay đổi
+            </div>
           </div>
+        </div>
 
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="mt-3">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="$bvModal.hide('modal-update-quantity-resource')">
+        <div class="flex justify-between mt-6">
+          <button class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 w-[120px]" @click="closeUpdateModal">
             Huỷ
-          </b-button>
-
-          <b-button variant="outline-success" class="pull-right btn-width-120" @click="confirmUpdateQuantity">
+          </button>
+          <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-[120px]" @click="confirmUpdateQuantity">
             Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
 
 <script>
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      router,
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       inputs: {
@@ -347,33 +326,6 @@ export default {
         unit: null,
         status: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'quantity',
-          label: 'Số lượng'
-        },
-        {
-          key: 'min_quantity',
-          label: 'Số lượng tối thiểu'
-        },
-        {
-          key: 'unit_name',
-          label: 'Đơn vị'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       items: [],
       units: [{value: null, text: ''}],
       statusOptions: [
@@ -397,6 +349,9 @@ export default {
         reasonBonus: null
       },
       saving:false,
+      showAddModal: false,
+      showMinusModal: false,
+      showUpdateModal: false
     }
   },
   computed: {
@@ -409,7 +364,6 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
-
     window.addEventListener('resize', this.delete)
 
     // Load option unit
@@ -417,6 +371,10 @@ export default {
 
     // Load list when load page
     this.search()
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.delete)
   },
   methods: {
     checkInfo (info) {
@@ -427,15 +385,17 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+     * Get row class based on quantity
+     */
+    getRowClass(item) {
+      if(item.quantity > item.min_quantity) {
+        return ''
+      } else if(item.quantity <= item.min_quantity && item.quantity > 0) {
+        return 'bg-yellow-100'
+      } else if(item.quantity <= 0) {
+        return 'bg-red-100'
+      }
+      return ''
     },
 
     /**
@@ -466,27 +426,6 @@ export default {
       this.hasNext = true
 
       this.search()
-    },
-
-    /**
-     * Check row variant
-     */
-    checkRowVariant() {
-      for( let index in this.items) {
-        if(this.items[index].quantity > this.items[index].min_quantity) {
-          delete this.items[index]._rowVariant
-        } else {
-          if(this.items[index].quantity <= this.items[index].min_quantity && this.items[index].quantity > 0) {
-            this.items[index]._rowVariant = 'warning'
-          } else {
-            if(this.items[index].quantity <= 0) {
-              this.items[index]._rowVariant = 'danger'
-            }
-          }
-        }
-
-
-      }
     },
 
     /**
@@ -531,11 +470,10 @@ export default {
         }
         this.onSearch = false
         this.loading = false
-        this.checkRowVariant()
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -556,7 +494,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -565,28 +503,21 @@ export default {
      */
     deleted (id, name, rowIndex) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            adminAPI.deleteResource(id).then(res => {
+        if(confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+          adminAPI.deleteResource(id).then(res => {
 
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
+            // Remove item in list
+            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+            this.items.splice(indexTemp, 1)
+            this.listIdDeleted.push(rowIndex - 1)
 
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
+            this.totalRow = this.totalRow - 1
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.toast.error(errorMess)
+          })
+        }
       }
     },
 
@@ -599,8 +530,17 @@ export default {
       this.quantityChange.unit_name = unit_name
       this.quantityChange.type = "plus"
       this.quantityChange.reasonBonus = "Nhập hàng"
+      this.quantityChange.quantityBonus = null
 
-      this.$bvModal.show('modal-add-quantity-resource')
+      this.showAddModal = true
+    },
+
+    /**
+     * Close add modal
+     */
+    closeAddModal() {
+      this.showAddModal = false
+      this.click = false
     },
 
     /**
@@ -612,8 +552,17 @@ export default {
       this.quantityChange.unit_name = unit_name
       this.quantityChange.type = "minus"
       this.quantityChange.reasonBonus = "Hư hỏng"
+      this.quantityChange.quantityBonus = null
 
-      this.$bvModal.show('modal-minus-quantity-resource')
+      this.showMinusModal = true
+    },
+
+    /**
+     * Close minus modal
+     */
+    closeMinusModal() {
+      this.showMinusModal = false
+      this.click = false
     },
 
     /**
@@ -624,8 +573,17 @@ export default {
       this.quantityChange.currentQuantity = quantity
       this.quantityChange.unit_name = unit_name
       this.quantityChange.reasonBonus = "Kiểm kê hàng"
+      this.quantityChange.quantityBonus = null
 
-      this.$bvModal.show('modal-update-quantity-resource')
+      this.showUpdateModal = true
+    },
+
+    /**
+     * Close update modal
+     */
+    closeUpdateModal() {
+      this.showUpdateModal = false
+      this.click = false
     },
 
     /**
@@ -639,7 +597,7 @@ export default {
         return
       }
 
-      this.saving = false
+      this.saving = true
 
       adminAPI.bonusQuantityResource(this.quantityChange).then(res => {
 
@@ -653,14 +611,11 @@ export default {
                 } else {
                   this.items[index].quantity = Math.round((parseFloat(this.items[index].quantity) - parseFloat(this.quantityChange.quantityBonus)) * 1000) / 1000
                 }
-
-                // Check variant
-                this.checkRowVariant()
               }
             }
 
             // Show popup success
-            this.popToast('success', 'Cập nhật số lượng thành công ')
+            this.toast.success('Cập nhật số lượng thành công ')
 
             // Reset data
             this.quantityChange.id = null
@@ -671,8 +626,8 @@ export default {
             this.click = false
 
             // Hidden modal
-            this.$bvModal.hide('modal-add-quantity-resource')
-            this.$bvModal.hide('modal-minus-quantity-resource')
+            this.showAddModal = false
+            this.showMinusModal = false
           }
         }
         this.saving = false
@@ -681,7 +636,7 @@ export default {
         this.saving = false
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
 
     },
@@ -697,7 +652,7 @@ export default {
         return
       }
 
-      this.saving = false
+      this.saving = true
 
       let quantityChange = parseFloat(this.quantityChange.currentQuantity) - parseFloat(this.quantityChange.quantityBonus)
       if(quantityChange > 0) {
@@ -719,14 +674,11 @@ export default {
                 } else {
                   this.items[index].quantity = Math.round((parseFloat(this.items[index].quantity) - parseFloat(this.quantityChange.quantityBonus)) * 1000) / 1000
                 }
-
-                // Check variant
-                this.checkRowVariant()
               }
             }
 
             // Show popup success
-            this.popToast('success', 'Cập nhật số lượng thành công ')
+            this.toast.success('Cập nhật số lượng thành công ')
 
             // Reset data
             this.quantityChange.id = null
@@ -737,7 +689,7 @@ export default {
             this.click = false
 
             // Hidden modal
-            this.$bvModal.hide('modal-update-quantity-resource')
+            this.showUpdateModal = false
           }
         }
         this.saving = false
@@ -746,17 +698,9 @@ export default {
         this.saving = false
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
 
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
     },
 
     /**
@@ -772,14 +716,14 @@ export default {
      * Go to page edit
      */
     edit (id) {
-      this.$router.push('/resource/index/' + id)
+      this.router.push('/resource/index/' + id)
     },
 
     /**
      * Go to page add
      */
     goToAdd () {
-      this.$router.push('/resource/index')
+      this.router.push('/resource/index')
     }
   }
 }

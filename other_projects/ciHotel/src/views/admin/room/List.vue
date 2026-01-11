@@ -1,114 +1,149 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
-                  Thêm
-                </b-button>
-            </b-col>
-          </b-row>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Header with Add button -->
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+          @click="goToAdd()">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">PHÒNG</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <!-- Title -->
+      <div class="text-center mb-4">
+        <h4 class="text-2xl font-semibold text-gray-800">PHÒNG</h4>
+      </div>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên </label>
-              <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name">
-            </b-col>
-            <b-col md="3">
-              <label> Tầng </label>
-              <b-form-select
-                :options="optionsFloor"
-                id="status"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.floor"></b-form-select>
-            </b-col>
-            <b-col md="3">
-              <label> Trạng Thái </label>
-              <b-form-select
-              :options="optionsRoomStatus"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.status"></b-form-select>
-            </b-col>
+      <!-- Search filters -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tên</label>
+          <input
+            id="name"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.name">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tầng</label>
+          <select
+            id="floor"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.floor">
+            <option v-for="option in optionsFloor" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Trạng Thái</label>
+          <select
+            id="status"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.status">
+            <option v-for="option in optionsRoomStatus" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tình trạng</label>
+          <select
+            id="state"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.state">
+            <option v-for="option in optionsRoomState" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+      </div>
 
-            <b-col md="3">
-              <label> Tình trạng </label>
-              <b-form-select
-              :options="optionsRoomState"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.state"></b-form-select>
-            </b-col>
-          </b-row>
+      <!-- Search button -->
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+          :disabled="onSearch" 
+          @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <!-- Total results -->
+      <div class="mb-4 text-gray-700">
+        Số kết quả: {{totalRow}}
+      </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 text-left">STT</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Tên</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Tầng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Giá</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Loại phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Thông tin phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Thiết bị trong phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Trạng thái phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Tình trạng phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-center">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.floor_name }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <p v-for="price in item.price" :key="price.id">
+                  - {{ price.name }}: {{ formatCurrency(price.room_price) }}
+                </p>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.room_type_name }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <p v-for="room_info in item.room_info" :key="room_info.id">
+                  - {{ room_info.name }}: {{ room_info.room_info_count }}
+                </p>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">
+                <p v-for="room_device in item.room_device" :key="room_device.id">
+                  - {{ room_device.name }}: {{ room_device.device }}
+                </p>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.room_status_name }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.room_state }}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="flex justify-center space-x-2">
+                  <button 
+                    class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                    @click="edit(item.id)"
+                    title="Edit">
+                    <i class="fa fa-edit" />
+                  </button>
+                  <button 
+                    class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                    @click="deleted(item.id, item.name, item.stt)"
+                    title="Delete">
+                    <i class="fa fa-trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(price)="data">
-              <p  v-for="price in data.item.price" :key="price.id">{{"- " + price.name + ": " + currencyFormat(price.room_price)}}</p>
-            </template>
-            <template v-slot:cell(room_info)="data">
-              <p  v-for="room_info in data.item.room_info" :key="room_info.id">{{"- " + room_info.name + ": " + room_info.room_info_count}}</p>
-            </template>
-            <template v-slot:cell(room_device)="data">
-              <p  v-for="room_device in data.item.room_device" :key="room_device.id">{{"- " + room_device.name + ": " + room_device.device}}</p>
-            </template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center mt-4">
+        <icon name="loading" width="60" />
+      </div>
+      <div class="text-center mt-4 text-gray-500">--Hết--</div>
+    </div>
   </div>
 </template>
 
@@ -117,9 +152,23 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 
 export default {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      router,
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       inputs: {
@@ -128,49 +177,6 @@ export default {
         status: null,
         state: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'floor_name',
-          label: 'Tầng'
-        },
-        {
-          key: 'price',
-          label: 'Giá'
-        },
-        {
-          key: 'room_type_name',
-          label: 'Loại phòng'
-        },
-        {
-          key: 'room_info',
-          label: 'Thông tin phòng'
-        },
-        {
-          key: 'room_device',
-          label: 'Thiết bị trong phòng'
-        },
-        {
-          key: 'room_status_name',
-          label: 'Trạng thái phòng'
-        },
-        {
-          key: 'room_state',
-          label: 'Tình trạng phòng'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       optionsFloor: [{value: null, text: ''}],
       optionsRoomStatus: [{value: null, text: ''}],
       optionsRoomState: [{value: null, text: ''}],
@@ -193,27 +199,17 @@ export default {
     window.addEventListener('scroll', this.onScroll)
 
     window.addEventListener('resize', this.delete)
-    // this.getOptionsRoomStatus()
-    // this. getOptionsFloor()
 
     // Get options related room
     this.getOptionsRelatedRoom()
 
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.delete)
+  },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      *  Processing on scroll: use for paging
@@ -270,50 +266,9 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
-
-    // getOptionsRoomStatus() {
-    //   adminAPI.getListGroupRoomStatusOption().then(res => {
-    //     this.getOptionsRoomStatus = [{"value": null, "text": ""}]
-    //     if(res && res.data && res.data.data) {
-    //       let types = res.data.data
-    //       for (var index in types) {
-    //
-    //         let type = {
-    //           value: types[index].value,
-    //           text: types[index].text
-    //         }
-    //         this.optionsRoomStatus.push(type)
-    //       }
-    //     }
-    //   }).catch(err => {
-    //     // Handle error
-    //     let errorMess = commonFunc.handleStaffError(err)
-    //     this.popToast('danger', errorMess)
-    //   })
-    // },
-    // getOptionsFloor() {
-    //   adminAPI.getListGroupFloorOption().then(res => {
-    //     this.getOptionsFloor = [{"value": null, "text": ""}]
-    //     if(res && res.data && res.data.data) {
-    //       let types = res.data.data
-    //       for (var index in types) {
-    //
-    //         let type = {
-    //           value: types[index].value,
-    //           text: types[index].text
-    //         }
-    //         this.optionsFloor.push(type)
-    //       }
-    //     }
-    //   }).catch(err => {
-    //     // Handle error
-    //     let errorMess = commonFunc.handleStaffError(err)
-    //     this.popToast('danger', errorMess)
-    //   })
-    // },
 
     /**
        * Get option related room
@@ -358,7 +313,7 @@ export default {
         }).catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast.error(errorMess)
         })
       },
 
@@ -366,36 +321,21 @@ export default {
      * Delete
      */
     deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if (res) {
-          adminAPI.deleteRoom(id).then(res => {
+      if (confirm('Xóa ' + name + '. Bạn có chắc không?')) {
+        adminAPI.deleteRoom(id).then(res => {
 
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
+          // Remove item in list
+          let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+          this.items.splice(indexTemp, 1)
+          this.listIdDeleted.push(rowIndex - 1)
 
-            this.totalRow = this.totalRow - 1
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
+          this.totalRow = this.totalRow - 1
+        }).catch(err => {
+          // Handle error
+          let errorMess = commonFunc.handleStaffError(err)
+          this.toast.error(errorMess)
+        })
+      }
     },
 
     /**
@@ -411,14 +351,14 @@ export default {
      * Go to page edit
      */
     edit (id) {
-      this.$router.push('/room/edit/' + id)
+      this.router.push('/room/edit/' + id)
     },
 
     /**
      * Go to page add
      */
     goToAdd () {
-      this.$router.push('/room/add')
+      this.router.push('/room/add')
     }
   }
 }

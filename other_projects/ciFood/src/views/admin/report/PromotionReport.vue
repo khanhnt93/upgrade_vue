@@ -110,8 +110,8 @@
                 <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotions.table_name }}</td>
                 <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotions.customer_name }}</td>
                 <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotions.customer_phone_number }}</td>
-                <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(promotions.sub_total) }}</td>
-                <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(promotions.discount_amount) }}</td>
+                <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(promotions.sub_total) }}</td>
+                <td v-if="promotion.is_first" :rowspan="promotions.number_of_promotion" class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(promotions.discount_amount) }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.type_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.promotion_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.code }}</td>
@@ -119,7 +119,7 @@
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.max_discount }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.discount_on_amount }}</td>
                 <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ promotion.food_name }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.currency(promotion.value_of_voucher) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ formatters.formatCurrency(promotion.value_of_voucher) }}</td>
               </tr>
             </tbody>
           </table>

@@ -1,73 +1,80 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="grid grid-cols-1">
+      <div>
+        <div class="bg-white rounded-lg shadow-md">
+          <div class="p-4">
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="secondary" class="pull-left px-4" @click="back">
+              <div class="grid grid-cols-2 gap-4">
+              <div>
+                <button 
+                  class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 float-left"
+                  @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+              <div>
+                <button 
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 float-right"
+                  @click="save" 
+                  :disabled="saving">
+                  Lưu
+                </button>
+              </div>
+            </div>
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center">Bàn Ăn</h4>
-                </b-col>
-              </b-row>
-              <hr/>
+              <div class="grid grid-cols-1 mt-4">
+                <div>
+                  <h4 class="mt-2 text-center text-xl font-semibold">Bàn Ăn</h4>
+                </div>
+              </div>
+              <hr class="my-4"/>
               <!-- Loading -->
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-3 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="col-span-9">
                   <input
                   id="name"
                   type="text"
                   maxlength="100"
                   autocomplete="new-password"
-                  class="form-control"
+                  :class="['form-control', {'border-red-500': errorName}]"
                   v-model="table.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div class="text-red-500 text-sm mt-1" v-if="errorName">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Loại </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="typeOptions"
+                  </div>
+                  <div class="col-span-9">
+                    <select
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorType}]"
                     v-model="table.type">
-                    </b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorType">
+                      <option v-for="option in typeOptions" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                      </option>
+                    </select>
+                    <div class="text-red-500 text-sm mt-1" v-if="errorType">
                       Vui lòng chọn loại bàn
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-3 mt-2">
                   <label> Thứ tự xuất hiện </label>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="col-span-9">
                   <input
                   id="index_sort"
                   type="text"
@@ -76,22 +83,35 @@
                   v-model="table.index_sort"
                   @keyup="intergerOnly($event.target)"
                   maxlength="3">
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/table'
 import commonFunc from '@/common/commonFunc'
+import { useRouter, useRoute } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const toast = useToast()
+    
+    return {
+      router,
+      route,
+      toast
+    }
+  },
   data () {
     return {
       table: {
@@ -129,22 +149,10 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Get detail
      */
     getTableDetail() {
-      let tableId = this.$route.params.id
+      let tableId = this.route.params.id
       if(tableId){
         this.loading = true
 
@@ -159,7 +167,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast.error(errorMess)
         })
       }
     },
@@ -169,7 +177,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/table/list')
+      this.router.push('/table/list')
     },
 
     /**
@@ -180,7 +188,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {  
-        let tableId = this.$route.params.id
+        let tableId = this.route.params.id
         if(tableId){
           // Edit
           let table = this.table
@@ -188,10 +196,9 @@ export default {
           adminAPI.editTable(table).then(res => {
             this.saving = false
             if(res != null && res.data != null){
-              let message = ""
               if (res.data.status == 200) {
                 // show popup success
-                this.popToast('success', 'Cập nhật bàn ăn thành công!!! ')
+                this.toast.success('Cập nhật bàn ăn thành công!!! ')
               }
             }
           }).catch(err => {
@@ -202,21 +209,15 @@ export default {
             } else {
               message = "Lỗi hệ thống"
             }
-            this.$bvModal.msgBoxOk(message, {
-              title: "Cập Nhật Bàn",
-              centered: true, 
-              size: 'sm',
-              headerClass: 'bg-danger',
-            })
+            alert(message)
           })
         } else {
           // Add
           adminAPI.addTable(this.table).then(res => {
             this.saving = false
             if(res != null && res.data != null){
-              let message = ""
               if (res.data.status == 200) {
-                this.$router.push("/table/list")
+                this.router.push("/table/list")
               }
             }
           }).catch(err => {
@@ -227,12 +228,7 @@ export default {
               } else {
                 message = "Lỗi hệ thống"
               }
-              this.$bvModal.msgBoxOk(message, {
-                title: "Thêm Bàn",
-                centered: true, 
-                size: 'sm',
-                headerClass: 'bg-danger',
-              })
+              alert(message)
           })
         }
       } else {
@@ -252,3 +248,4 @@ export default {
   }
 }
 </script>
+

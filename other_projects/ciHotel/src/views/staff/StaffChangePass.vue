@@ -1,81 +1,85 @@
 <template>
-  <div class="app flex-row align-items-center is-fixed-page">
-    <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form method="put">
-                  <h1 class="text-center">
-                    Đổi Mật Khẩu
-                  </h1>
-                  <div class="form-group">
-                    <label>
-                      Mật Khẩu Hiện Tại
-                    </label><span class="error-sybol"></span>
-                    <input id="oldPassword"  
-                      type="password" 
-                      class="form-control"
-                      v-model="inputs.old_password">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorOldPassword">
-                      Vui lòng nhập mật khẩu hiện tại
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Mật Khẩu Mới
-                    </label><span class="error-sybol"></span>
-                    <input id="newPassword"
-                      type="password" 
-                      class="form-control"
-                      v-model="inputs.new_password">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPassword">
-                      Vui lòng nhập mật khẩu mới
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPasswordCompare">
-                      Mật khẩu mới không được trùng mật khẩu cũ
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Nhắc lại mật khẩu mới
-                    </label><span class="error-sybol"></span>
-                    <input id="confirmPassword"
-                      type="password" 
-                      class="form-control"
-                      v-model="confirmPass">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorConfirmPassword">
-                      Vui lòng nhập lại mật khẩu mới
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorMatch">
-                      Nhắc lại mật khẩu không đúng
-                    </b-form-invalid-feedback>
-                  </div>
-                  <b-row>
-                    <b-col cols="12" class="text-center">
-                      <b-button
-                        @click="update" 
-                        :disabled="onUpdate"
-                        :variant="onUpdate ? '' : 'primary'" class="default-btn-bg">
-                        {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+  <div class="flex flex-row items-center fixed top-0 left-0 right-0 bottom-0 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-center">
+        <div class="w-full md:w-1/2 lg:w-2/5">
+          <div class="bg-white rounded-lg shadow-md">
+            <div class="p-6">
+              <form @submit.prevent="update">
+                <h1 class="text-2xl font-bold text-center mb-6">Đổi Mật Khẩu</h1>
+
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Mật Khẩu Hiện Tại<span class="text-red-500"></span>
+                  </label>
+                  <input 
+                    id="oldPassword" 
+                    type="password"
+                    v-model="inputs.old_password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    :class="{ 'border-red-500': errorOldPassword }">
+                  <p v-if="errorOldPassword" class="mt-1 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu hiện tại
+                  </p>
+                </div>
+
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Mật Khẩu Mới<span class="text-red-500"></span>
+                  </label>
+                  <input 
+                    id="newPassword"
+                    type="password"
+                    v-model="inputs.new_password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    :class="{ 'border-red-500': errorNewPassword || errorNewPasswordCompare }">
+                  <p v-if="errorNewPassword" class="mt-1 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu mới
+                  </p>
+                  <p v-if="errorNewPasswordCompare" class="mt-1 text-sm text-red-600">
+                    Mật khẩu mới không được trùng mật khẩu cũ
+                  </p>
+                </div>
+
+                <div class="mb-6">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">
+                    Nhắc lại mật khẩu mới<span class="text-red-500"></span>
+                  </label>
+                  <input 
+                    id="confirmPassword"
+                    type="password"
+                    v-model="confirmPass"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    :class="{ 'border-red-500': errorConfirmPassword || errorMatch }">
+                  <p v-if="errorConfirmPassword" class="mt-1 text-sm text-red-600">
+                    Vui lòng nhập lại mật khẩu mới
+                  </p>
+                  <p v-if="errorMatch" class="mt-1 text-sm text-red-600">
+                    Nhắc lại mật khẩu không đúng
+                  </p>
+                </div>
+
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    class="w-full bg-[#444444] hover:bg-[#333333] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="onUpdate">
+                    {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
 <script>
 import AuthenticationAPI from '@/api/authentication'
-import {Constant} from '@/common/constant'
-
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 
 export default {
   data () {
@@ -91,6 +95,9 @@ export default {
     }
   },
   computed: {
+    authStore() {
+      return useAuthStore()
+    },
     errorNewPassword () {
       return this.checkInfo(this.inputs.new_password)
     },
@@ -132,13 +139,16 @@ export default {
       this.click = true
       let result = this.checkValidate()
       this.errorMatch = !this.checkConfirmPass()
+      const { success, error } = useToast()
+      
       if(result && !this.errorMatch) {
         this.onUpdate = true
 
         AuthenticationAPI.staffChangePass(this.inputs).then(res => {
           if(res && res.data && res.data.status == 200) {
-            // Redirect to active pass page
-            this.$store.commit('removeToken')
+            success('Đổi mật khẩu thành công! Vui lòng đăng nhập lại.')
+            // Redirect to login page
+            this.authStore.removeToken()
             this.$router.push('/staff-login')
           }
           this.onUpdate = false
@@ -146,20 +156,19 @@ export default {
           this.onUpdate = false
 
           let message = ""
-          if(err.response.data.status == 422) {
+          if(err.response?.data?.status == 422) {
             message = err.response.data.mess
           } else {
             message = "Lỗi hệ thống"
           }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập nhật thất bại",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
+          error(message)
         })
       }
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  // No custom styles needed - all using Tailwind
+</style>

@@ -1,34 +1,33 @@
 <template>
-  <AppHeaderDropdown
-    right
-    no-caret
-  >
-    <template slot="header">
+  <div class="dropdown">
+    <button class="dropdown-toggle" @click="toggleDropdown">
       <span>
         <i class="fa fa-user fa-2x" />
       </span>
-    </template>
-    <template slot="dropdown">
-      <b-dropdown-item href="/login">Đăng nhập
-      </b-dropdown-item>
-      <b-dropdown-item href="/register">Đăng ký
-      </b-dropdown-item>
-      <b-dropdown-item href="/staff-login">Nhân viên
-      </b-dropdown-item>
-    </template>
-  </AppHeaderDropdown>
+    </button>
+    <div v-if="isOpen" class="dropdown-menu dropdown-menu-right">
+      <a class="dropdown-item" href="/login">Đăng nhập</a>
+      <a class="dropdown-item" href="/register">Đăng ký</a>
+      <a class="dropdown-item" href="/staff-login">Nhân viên</a>
+    </div>
+  </div>
 </template>
 
 
 <script>
-import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
-
-
 export default {
   name: 'DefaultHeaderDropdownAccnt',
-  components: {
-    AppHeaderDropdown
+  data() {
+    return {
+      isOpen: false
+    }
   },
+  methods: {
+    toggleDropdown() {
+      this.isOpen = !this.isOpen
+    }
+  }
+}  },
   data: function() {
     return{
     }

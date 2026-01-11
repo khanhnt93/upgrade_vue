@@ -92,9 +92,9 @@
               <tr v-for="item in items" :key="item.bill_number" class="hover:bg-gray-50">
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.stt }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.bill_number }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.currency(item.old_total) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.currency(item.new_total) }}</td>
-                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.currency(item.difference_amount) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.formatCurrency(item.old_total) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.formatCurrency(item.new_total) }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{ formatters.formatCurrency(item.difference_amount) }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.created_at }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.staff_name }}</td>
               </tr>

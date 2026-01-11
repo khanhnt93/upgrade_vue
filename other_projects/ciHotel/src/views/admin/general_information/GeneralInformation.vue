@@ -1,106 +1,121 @@
 <template>
-  <div id="general-information" class="container-fluid">
-    <b-card>
-      <b-card-body class="p-4">
-        <b-row>
-          <b-col md='12'>
-            <h4 class="text-center text-header">THÔNG TIN CHUNG</h4>
-          </b-col>
-        </b-row>
+  <div id="general-information" class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="mb-6">
+        <h4 class="text-2xl font-bold text-center text-gray-800">THÔNG TIN CHUNG</h4>
+      </div>
 
-        <b-row>
-          <b-col md="8">
-            <b-row>
-              <b-col md="3">
-                <b-button
-                class="fix-width-btn-150 mt-1"
-                key="arrivals"
-                size="sm"
-                variant="dark"
-                :style="buttonStates.arrivals ? 'background:#F85F36' : ''"
-                @click="switchToArrivals"
-                >Sẽ Đến</b-button>
-              </b-col>
-              <b-col md="3">
-                <b-button
-                class="fix-width-btn-150 mt-1"
-                key="departures"
-                size="sm"
-                variant="dark"
-                :style="buttonStates.departures ? 'background:#F85F36' : ''"
-                @click="switchToDepartures"
-                >Sẽ Đi</b-button>
-              </b-col>
-              <b-col md="3">
-                <b-button
-                class="fix-width-btn-150 mt-1"
-                key="stay_overs"
-                size="sm"
-                variant="dark"
-                :style="buttonStates.stay_overs ? 'background:#F85F36' : ''"
-                @click="switchToStayOvers"
-                >Khách quá hạn đến</b-button>
-              </b-col>
-              <b-col md="3">
-                <b-button
-                class="fix-width-btn-150 mt-1"
-                key="inhouse_guest"
-                size="sm"
-                variant="dark"
-                :style="buttonStates.inhouse_guest ? 'background:#F85F36' : ''"
-                @click="switchToInhouseGuest"
-                >Khách đang lưu trú</b-button>
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col md="4">
-            <b-row>
-              <b-col md="6" class="mt-1">
-                <b-form-select
-                  v-model="selectedFilter"
-                  :options="options"
-                  @change="filterData"
-                ></b-form-select>
-              </b-col>
-              <b-col md="6" class="mt-1">
-                <b-form-input placeholder="Lọc" v-model="filterString" @keyup="filterData($event.target)" />
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-row>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+        <div class="lg:col-span-8">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button
+              class="px-4 py-2 text-sm font-medium text-white rounded hover:opacity-90 transition-opacity"
+              :class="buttonStates.arrivals ? 'bg-[#F85F36]' : 'bg-gray-700'"
+              @click="switchToArrivals">
+              Sẽ Đến
+            </button>
+            <button
+              class="px-4 py-2 text-sm font-medium text-white rounded hover:opacity-90 transition-opacity"
+              :class="buttonStates.departures ? 'bg-[#F85F36]' : 'bg-gray-700'"
+              @click="switchToDepartures">
+              Sẽ Đi
+            </button>
+            <button
+              class="px-4 py-2 text-sm font-medium text-white rounded hover:opacity-90 transition-opacity"
+              :class="buttonStates.stay_overs ? 'bg-[#F85F36]' : 'bg-gray-700'"
+              @click="switchToStayOvers">
+              Khách quá hạn đến
+            </button>
+            <button
+              class="px-4 py-2 text-sm font-medium text-white rounded hover:opacity-90 transition-opacity"
+              :class="buttonStates.inhouse_guest ? 'bg-[#F85F36]' : 'bg-gray-700'"
+              @click="switchToInhouseGuest">
+              Khách đang lưu trú
+            </button>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="grid grid-cols-2 gap-3">
+            <select
+              v-model="selectedFilter"
+              @change="filterData"
+              class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="customerName">Tên KH</option>
+              <option value="customerPhone">Số điện thoại KH</option>
+              <option value="roomName">Tên phòng</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Lọc"
+              v-model="filterString"
+              @keyup="filterData($event.target)"
+              class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
 
-        <b-row style="margin-top: 20px">
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :items="filteredRows"
-            :fields="fields"
-          >
-
-            <template v-slot:cell(checkInTime)="data">
-              {{data.value | format_date}}
-            </template>
-
-            <template v-slot:cell(checkOutTime)="data">
-              {{data.value | format_date}}
-            </template>
-
-          </b-table>
-        </b-row>
-      </b-card-body>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">
+                Tên phòng
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">
+                Tên KH
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">
+                Số điện thoại
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">
+                Thời gian Check-in
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                Thời gian Check-out
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr 
+              v-for="(row, index) in filteredRows" 
+              :key="index"
+              class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
+                {{ row.room_name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
+                {{ row.customer_name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
+                {{ row.phone_number }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
+                {{ formatDate(row.check_in) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ formatDate(row.check_out) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
-      <span class="loading-more">--Hết--</span>
-    </b-card>
+      <div v-show="loading" class="text-center py-4">
+        <i class="fa fa-spinner fa-spin text-4xl text-blue-600"></i>
+      </div>
+      <div class="text-center py-4 text-gray-500">--Hết--</div>
+    </div>
   </div>
 </template>
 
-
 <script>
 import commonFunc from '@/common/commonFunc'
-import adminAPI from "../../../api/admin";
+import adminAPI from '@/api/admin'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
+
 export default {
   data() {
     return {
@@ -130,7 +145,6 @@ export default {
         { value: "customerName", text: "Tên KH" },
         { value: "customerPhone", text: "Số điện thoại KH" },
         { value: "roomName", text: "Tên phòng" }
-
       ],
       filterString: "",
       selectedFilter: "customerName",
@@ -138,96 +152,93 @@ export default {
       loading: true,
       filteredRows: [],
       filteredRowsStore: []
-    };
-  },
-  mounted () {
-    this.fetchGuestInformations();
+    }
   },
   computed: {
+    authStore() {
+      return useAuthStore()
+    },
     buttonStates() {
       return {
         arrivals: this.selectedGuestState === "ARRIVALS",
         departures: this.selectedGuestState === "DEPARTURES",
         stay_overs: this.selectedGuestState === "STAY_OVERS",
         inhouse_guest: this.selectedGuestState === "INHOUSE_GUEST"
-      };
-    },
-    // filteredRows() {
-    //   if (this.selectedFilter)
-    //     return this.selectedInformation.filter(row => {
-    //       const searchTerm = this.filterString.toLowerCase();
-    //       return row[this.selectedFilter].toLowerCase().includes(searchTerm);
-    //     });
-    //   return this.selectedInformation;
-    // }
+      }
+    }
+  },
+  mounted() {
+    this.fetchGuestInformations()
   },
   methods: {
+    ...useFormatters(),
+    
     fetchGuestInformations() {
+      const { error } = useToast()
       this.filterString = ""
       this.selectedFilter = "customerName"
 
-      // const params ={
-      //   state: this.selectedGuestState,
-      //   date: moment().format("YYYY-MM-DD")
-      // }
-      this.loading = true;
+      this.loading = true
       adminAPI
         .getGeneralInfo(this.selectedGuestState)
         .then(res => {
-          this.loading = false;
+          this.loading = false
           if (res.data.data) {
-            this.filteredRows = res.data.data;
+            this.filteredRows = res.data.data
             this.filteredRowsStore = JSON.parse(JSON.stringify(res.data.data))
           }
         })
         .catch(err => {
-          this.loading = false;
-
+          this.loading = false
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        });
+          error(errorMess)
+        })
     },
+    
     switchToArrivals() {
-      this.selectedGuestState = "ARRIVALS";
-      this.fetchGuestInformations();
+      this.selectedGuestState = "ARRIVALS"
+      this.fetchGuestInformations()
     },
+    
     switchToDepartures() {
-      this.selectedGuestState = "DEPARTURES";
-      this.fetchGuestInformations();
+      this.selectedGuestState = "DEPARTURES"
+      this.fetchGuestInformations()
     },
+    
     switchToStayOvers() {
-      this.selectedGuestState = "STAY_OVERS";
-      this.fetchGuestInformations();
+      this.selectedGuestState = "STAY_OVERS"
+      this.fetchGuestInformations()
     },
+    
     switchToInhouseGuest() {
-      this.selectedGuestState = "INHOUSE_GUEST";
-      this.fetchGuestInformations();
+      this.selectedGuestState = "INHOUSE_GUEST"
+      this.fetchGuestInformations()
     },
 
-      filterData(item) {
-        let items = JSON.parse(JSON.stringify(this.filteredRowsStore))
+    filterData(item) {
+      let items = JSON.parse(JSON.stringify(this.filteredRowsStore))
 
-        let valueInput = item.value
-          if(!valueInput) {
-              valueInput = ""
-          }
-        if(this.selectedFilter == "customerName") {
-            items = items.filter( i => i.customer_name.includes(valueInput) );
-        }
-        if(this.selectedFilter == "roomName") {
-            items = items.filter( i => i.room_name.includes(valueInput) );
-        }
-        if(this.selectedFilter == "customerPhone") {
-            items = items.filter( i => i.phone_number.includes(valueInput) );
-        }
+      let valueInput = item.value
+      if(!valueInput) {
+        valueInput = ""
+      }
+      
+      if(this.selectedFilter == "customerName") {
+        items = items.filter( i => i.customer_name.includes(valueInput) )
+      }
+      if(this.selectedFilter == "roomName") {
+        items = items.filter( i => i.room_name.includes(valueInput) )
+      }
+      if(this.selectedFilter == "customerPhone") {
+        items = items.filter( i => i.phone_number.includes(valueInput) )
+      }
 
-        this.filteredRows = items
-      },
+      this.filteredRows = items
+    }
   }
-};
+}
 </script>
+
 <style scoped>
-  #general-information .fix-width-btn-150 {
-    width: 90%;
-  }
+  /* No custom styles needed - all using Tailwind */
 </style>

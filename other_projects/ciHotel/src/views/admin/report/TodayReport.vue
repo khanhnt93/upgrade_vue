@@ -1,185 +1,159 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <h2 class="text-center text-header">BÁO CÁO THEO NGÀY</h2>
-          <b-card-body class="p-4">
-            <div>
-              <b-card-group deck>
-                <b-card
-                  bg-variant="light"
-                  header="Số lượng hoá đơn"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ billNumber | format_currency }}</h3></b-card-text>
-                </b-card>
+  <div class="container mx-auto px-4">
+    <!-- Summary Cards Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO THEO NGÀY</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <!-- Số lượng hoá đơn -->
+        <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
+          <div class="text-sm font-medium text-gray-600 mb-2">Số lượng hoá đơn</div>
+          <h3 class="text-xl font-bold text-gray-800">{{ formatCurrency(billNumber) }}</h3>
+        </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng doanh thu"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ revenue | format_currency }}</h3></b-card-text>
-                </b-card>
+        <!-- Tổng doanh thu -->
+        <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
+          <div class="text-sm font-medium text-gray-600 mb-2">Tổng doanh thu</div>
+          <h3 class="text-xl font-bold text-gray-800">{{ formatCurrency(revenue) }}</h3>
+        </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng chi phí"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ fee | format_currency }}</h3></b-card-text>
-                </b-card>
+        <!-- Tổng chi phí -->
+        <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
+          <div class="text-sm font-medium text-gray-600 mb-2">Tổng chi phí</div>
+          <h3 class="text-xl font-bold text-gray-800">{{ formatCurrency(fee) }}</h3>
+        </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng lợi nhuận"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ profit | format_currency }}</h3></b-card-text>
-                </b-card>
+        <!-- Tổng lợi nhuận -->
+        <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
+          <div class="text-sm font-medium text-gray-600 mb-2">Tổng lợi nhuận</div>
+          <h3 class="text-xl font-bold text-gray-800">{{ formatCurrency(profit) }}</h3>
+        </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tiền vốn đầu ngày"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ fund | format_currency }}</h3></b-card-text>
-                </b-card>
-              </b-card-group>
-            </div>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Tiền vốn đầu ngày -->
+        <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
+          <div class="text-sm font-medium text-gray-600 mb-2">Tiền vốn đầu ngày</div>
+          <h3 class="text-xl font-bold text-gray-800">{{ formatCurrency(fund) }}</h3>
+        </div>
+      </div>
+    </div>
 
-    <b-row class="mt-10">
-      <b-col>
-        <b-card>
-          <span class="loading-more" v-show="loading"
-            ><icon name="loading" width="60"
-          /></span>
+    <!-- Bills Table Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+      <!-- Loading State -->
+      <span class="flex justify-center items-center py-8" v-show="loading">
+        <icon name="loading" width="60" />
+      </span>
 
-          <b-row v-show="bills.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4"> Số kết quả: {{ bills.length }} </b-col>
-                <b-col md="8" class="text-right">
-                  <download-excel
-                    class="btn btn-default text-header"
-                    :data="bills"
-                    :fields="excel_bill_fields"
-                    worksheet="Báo Cáo Theo Bill"
-                    name="bao_cao_theo_bill.xls"
-                  >
-                    <b>Xuất Excel</b>
-                  </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <table
-                    class="table table-bordered table-striped fixed_header"
-                  >
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Ngày</th>
-                        <th>Số Bill</th>
-                        <th>Phòng</th>
-                        <th>Tổng tiền phòng</th>
-                        <th>Phí dv, phụ thu</th>
-                        <th>Giảm Giá</th>
-                        <th>% Thuế</th>
-                        <th>Số Tiền Thuế</th>
-                        <th>Thành Tiền</th>
-                        <th>Tiền mặt</th>
-                        <th>Chuyển khoản</th>
-                        <th>Tiền điện tử</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td
-                          class="total text-center font-weight-bold"
-                          colspan="4"
-                        >
-                          Tổng
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ totalPrice | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ totalServicePrice | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ totalDiscount | format_currency }}
-                        </td>
-                        <td></td>
-                        <td class="text-right total font-weight-bold">
-                          {{ totalVat | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ totalAmount | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ total_cash | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ total_credit | format_currency }}
-                        </td>
-                        <td class="text-right total font-weight-bold">
-                          {{ total_emoney | format_currency }}
-                        </td>
-                      </tr>
+      <!-- Results with Excel Export -->
+      <div v-show="bills.length > 0">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+          <div class="mb-2 md:mb-0">Số kết quả: {{ bills.length }}</div>
+          <download-excel
+            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold rounded border border-gray-300"
+            :data="bills"
+            :fields="excel_bill_fields"
+            worksheet="Báo Cáo Theo Ngày"
+            name="bao_cao_theo_ngay.xls"
+          >
+            <b>Xuất Excel</b>
+          </download-excel>
+        </div>
 
-                      <tr v-for="(bill, index) in bills" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ bill.created_at }}</td>
-                        <td>{{ bill.bill_number }}</td>
-                        <td>{{ bill.room_name }}</td>
-                        <td class="text-right">
-                          {{ bill.sub_total | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.service_price | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.discount_amount | format_currency }}
-                        </td>
-                        <td class="text-right">{{ bill.vat_percent }}</td>
-                        <td class="text-right">
-                          {{ bill.vat_value | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.total | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.cash | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.credit | format_currency }}
-                        </td>
-                        <td class="text-right">
-                          {{ bill.e_money | format_currency }}
-                        </td>
-                      </tr>
+        <!-- Bills Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+              <tr class="bg-blue-100">
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">STT</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Ngày</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Số Bill</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Phòng</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Tổng tiền phòng</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Phí dv, phụ thu</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Giảm Giá</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">% Thuế</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Số Tiền Thuế</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Thành Tiền</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Tiền mặt</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Chuyển khoản</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Tiền điện tử</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Total Row -->
+              <tr style="color: #ed592a;">
+                <td class="border border-gray-300 px-4 py-2 text-center font-bold" colspan="4">
+                  Tổng
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalPrice) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalServicePrice) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalDiscount) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2"></td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalVat) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalAmount) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(total_cash) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(total_credit) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(total_emoney) }}
+                </td>
+              </tr>
 
-                    </tbody>
-                  </table>
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+              <!-- Data Rows -->
+              <tr v-for="(bill, index) in bills" :key="index">
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ index + 1 }}</td>
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ bill.created_at }}</td>
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ bill.bill_number }}</td>
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ bill.room_name }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.sub_total) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.service_price) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.discount_amount) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">{{ bill.vat_percent }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.vat_value) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.total) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.cash) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.credit) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(bill.e_money) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-          <b-row v-show="bills.length == 0">
-            <b-col class="text-center">
-              Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Empty State -->
+      <div v-show="bills.length == 0" class="text-center py-8 text-gray-500">
+        Không tìm thấy kết quả nào
+      </div>
+    </div>
   </div>
 </template>
 
@@ -187,8 +161,19 @@
 import adminAPI from "@/api/admin";
 import commonFunc from "@/common/commonFunc";
 import moment from 'moment';
+import { useToast } from '@/composables/useToast';
+import { useFormatters } from '@/composables/useFormatters';
 
 export default {
+  setup() {
+    const { toast } = useToast();
+    const { formatCurrency } = useFormatters();
+    
+    return {
+      toast,
+      formatCurrency
+    };
+  },
   data() {
     return {
       revenue: 0,
@@ -232,14 +217,6 @@ export default {
     this.getTotalBill();
   },
   methods: {
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
-    },
     getReportToday() {
       console.log("getReportToday");
       adminAPI
@@ -254,15 +231,13 @@ export default {
           }
         })
         .catch(err => {
-          // Handle error
           let errorMess = commonFunc.handleStaffError(err);
-          this.popToast("danger", errorMess);
+          this.toast.error(errorMess);
         });
     },
     getTotalBill() {
       console.log("getTotalBill");
       this.loading = true;
-      // Search
       adminAPI
         .getBillForTodayReport()
         .then(res => {
@@ -281,9 +256,8 @@ export default {
           this.loading = false;
         })
         .catch(err => {
-          // Handle error
           let errorMess = commonFunc.handleStaffError(err);
-          this.popToast("danger", errorMess);
+          this.toast.error(errorMess);
           this.loading = false;
         });
     }
@@ -292,43 +266,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  table {
-    margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
-
+/* Scoped styles if needed */
 </style>

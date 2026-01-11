@@ -1,237 +1,203 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='4'>
-              <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="goBack()">
-                Quay lại
-              </b-button>
-            </b-col>
-            <b-col md='8'>
-              <h4 class="text-center text-header">THÔNG TIN KHÁCH ĐANG Ở</h4>
-            </b-col>
-          </b-row>
-          <hr>
+  <div class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between mb-4">
+        <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="goBack">
+          Quay lại
+        </button>
+        <h4 class="text-xl font-bold text-center text-[#F85F36]">THÔNG TIN KHÁCH ĐANG Ở</h4>
+      </div>
+      <hr class="my-4">
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên khách </label>
-              <input
-                id="name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.name">
-            </b-col>
-            <b-col md="3">
-              <label>Số điện thoại </label>
-              <input
-                id="std"
-                type="number"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.sdt">
-            </b-col>
-            <b-col md="3">
-              <label>Chứng minh nhân dân </label>
-              <input
-                id="cmnd"
-                type="number"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.cmnd">
-            </b-col>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Tên khách</label>
+          <input
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.name">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
+          <input
+            type="number"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.sdt">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Chứng minh nhân dân</label>
+          <input
+            type="number"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.cmnd">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2 text-white">Tìm kiếm</label>
+          <button
+            class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="onSearch"
+            @click="prepareToSearch">
+            Tìm Kiếm
+          </button>
+        </div>
+      </div>
 
-            <b-col md="3">
-              <label class="label-width text-white">
-                 Tìm kiếm
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
+      <div class="mb-2">
+        <span class="text-sm text-gray-600">Số kết quả: {{totalRow}}</span>
+      </div>
 
-          </b-row>
-
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
-
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-            <template v-slot:cell(adult)="data">
-              <span>- {{ data.item.adult }} Người lớn</span><br>
-              <span v-show="data.item.children != 0">- {{ data.item.children }} Trẻ em</span>
-            </template>
-            <template v-slot:cell(cmnd_number)="data">
-              <p>{{ data.item.cmnd_number }}</p>
-              <div v-show="data.item.cmnd_image_front || data.item.cmnd_image_end">
-                <span>
-                  Ảnh cmnd/cccd:
-                  <i v-show="!isShowCMNDImage" class="fa fa-plus pl-3" @click="isShowCMNDImage = !isShowCMNDImage"></i>
-                  <i v-show="isShowCMNDImage" class="fa fa-minus pl-3" @click="isShowCMNDImage = !isShowCMNDImage"></i>
-                </span>
-                <div v-show="isShowCMNDImage">
-                  <img  :src="data.item.cmnd_image_front" style="width: 100%; height: auto; max-width: 200px">
-                  <img  :src="data.item.cmnd_image_end" style="width: 100%; height: auto; max-width: 200px">
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 text-left">STT</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Tên khách</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Số điện thoại</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">CMND</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Tên phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Loại phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Ngày nhận phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Ngày trả phòng</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Số lượng khách</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2">{{item.stt}}</td>
+              <td class="border border-gray-300 px-4 py-2">{{item.customer_name}}</td>
+              <td class="border border-gray-300 px-4 py-2">{{item.phone_number}}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <p>{{item.cmnd_number}}</p>
+                <div v-show="item.cmnd_image_front || item.cmnd_image_end">
+                  <span class="text-sm text-blue-600 cursor-pointer" @click="isShowCMNDImage = !isShowCMNDImage">
+                    Ảnh cmnd/cccd:
+                    <i v-show="!isShowCMNDImage" class="fa fa-plus pl-3"></i>
+                    <i v-show="isShowCMNDImage" class="fa fa-minus pl-3"></i>
+                  </span>
+                  <div v-show="isShowCMNDImage" class="mt-2 space-y-2">
+                    <img :src="item.cmnd_image_front" class="w-full max-w-[200px] h-auto">
+                    <img :src="item.cmnd_image_end" class="w-full max-w-[200px] h-auto">
+                  </div>
                 </div>
-              </div>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">{{item.room_name}}</td>
+              <td class="border border-gray-300 px-4 py-2">{{item.room_type_name}}</td>
+              <td class="border border-gray-300 px-4 py-2">{{item.check_in}}</td>
+              <td class="border border-gray-300 px-4 py-2">{{item.check_out}}</td>
+              <td class="border border-gray-300 px-4 py-2">
+                <span class="block">- {{item.adult}} Người lớn</span>
+                <span v-show="item.children != 0" class="block">- {{item.children}} Trẻ em</span>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">
+                <div class="space-y-2">
+                  <button
+                    class="w-full px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    @click="router.push('/update-check-in-info/' + item.booking_id)">
+                    Sửa
+                  </button>
+                  <button
+                    class="w-full px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                    @click="showModalChangeRoom(item)">
+                    Đổi phòng
+                  </button>
+                  <button
+                    class="w-full px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                    @click="router.push('/booking/payment/' + item.payment_id)">
+                    Thanh toán
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            </template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-button variant="outline-primary" class="btn btn-width-120 mt-1"  @click="$router.push ('/update-check-in-info/' + dataId.item.booking_id)">
-                  Sửa
-                </b-button>
-              </b-list-group>
-
-              <b-list-group horizontal>
-                <b-button variant="outline-success" class="btn btn-width-120 mt-1"  @click="showModalChangeRoom(dataId.item)">
-                  Đổi phòng
-                </b-button>
-              </b-list-group>
-
-              <b-list-group horizontal>
-                <b-button variant="outline-danger" class="btn btn-width-120 mt-1"  @click="$router.push ('/booking/payment/' + dataId.item.payment_id)">
-                  Thanh toán
-                </b-button>
-              </b-list-group>
-            </template>
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      <div v-show="loading" class="text-center my-4">
+        <i class="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+      </div>
+      <div class="text-center my-4 text-gray-500">--Hết--</div>
+    </div>
 
     <!-- Modal đổi phòng -->
-    <b-modal centered hide-footer hide-header id="modal-change-room">
+    <div v-show="showChangeRoomModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div class="border-b pb-3 mb-4">
+          <h5 class="text-center text-lg font-bold text-[#F85F36]">
+            Phòng hiện tại: {{currentItemSelected.room_name}} ({{currentItemSelected.room_type_name}})
+          </h5>
+        </div>
 
-      <b-row class="boder-bottom mb-2">
-        <b-col md="12" class="text-center text-header">
-          <h5>Phòng hiện tại: {{currentItemSelected.room_name}} ({{currentItemSelected.room_type_name}})</h5>
-        </b-col>
-      </b-row>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Đổi tới phòng:</label>
+          
+          <select
+            v-show="!loadingEmptyRoom && textEmptyRoom == ''"
+            v-model="changeToRoomId"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option v-for="option in optionsEmptyRoom" :key="option.value" :value="option.value">
+              {{option.text}}
+            </option>
+          </select>
 
-      <b-row>
-        <b-col md="12">
-          Đổi tới phòng:
-        </b-col>
-      </b-row>
+          <div v-show="loadingEmptyRoom" class="text-center">
+            <i class="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+          </div>
 
-      <b-row>
-        <b-col md="12" v-show="!loadingEmptyRoom && textEmptyRoom == ''">
-          <b-form-select
-                :options="optionsEmptyRoom"
-                id="roomEmpty"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="changeToRoomId">
-          </b-form-select>
-        </b-col>
-        <b-col md="12" v-show="loadingEmptyRoom">
-          <span class="loading-more" v-show="loadingEmptyRoom"><icon name="loading" width="60" /></span>
-        </b-col>
-        <b-col md="12" v-show="!loadingEmptyRoom && textEmptyRoom != ''">
-          <span class="loading-more">{{textEmptyRoom}}</span>
-        </b-col>
-      </b-row>
+          <div v-show="!loadingEmptyRoom && textEmptyRoom != ''" class="text-center text-red-500">
+            {{textEmptyRoom}}
+          </div>
+        </div>
 
-      <b-row class="boder-top mt-3">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" block @click="hideModalChangeRoom">
+        <div class="flex gap-4 border-t pt-4">
+          <button
+            class="flex-1 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            @click="hideModalChangeRoom">
             Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingChangeRoom"><icon name="loading" width="60" /></span>
-          <button v-show="!loadingChangeRoom" class="btn btn-primary px-4 default-btn-bg pull-right" @click="confirmChangeRoom">
+          </button>
+          <div v-show="loadingChangeRoom" class="flex-1 flex items-center justify-center">
+            <i class="fas fa-spinner fa-spin fa-2x text-blue-500"></i>
+          </div>
+          <button
+            v-show="!loadingChangeRoom"
+            class="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            @click="confirmChangeRoom">
             Xác nhận
           </button>
-        </b-col>
-      </b-row>
-    </b-modal>
-
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-
 export default {
-  data () {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+
+    return {
+      router,
+      toast
+    }
+  },
+  data() {
     return {
       inputs: {
         name: null,
         sdt: null,
         cmnd: null
       },
-      bookingStatus: [
-          {"value": null, "text": "Tất cả"},
-          {"value": "booking", "text": "Đã đặt phòng"},
-          {"value": "checkIn", "text": "Đã nhận phòng"}
-      ],
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'customer_name',
-          label: 'Tên khách'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số điện thoại'
-        },
-        {
-          key: 'cmnd_number',
-          label: 'CMND'
-        },
-        {
-          key: 'room_name',
-          label: 'Tên phòng'
-        },
-        {
-          key: 'room_type_name',
-          label: 'Loại phòng'
-        },
-        {
-          key: 'check_in',
-          label: 'Ngày nhận phòng'
-        },
-        {
-          key: 'check_out',
-          label: 'Ngày trả phòng'
-        },
-        {
-          key: 'adult',
-          label: 'Số lương khách'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      optionsEmptyRoom: [{value: null, text: ''}],
+      optionsEmptyRoom: [{ value: null, text: '' }],
       items: [],
       offset: 0,
       click: false,
@@ -245,59 +211,43 @@ export default {
       textEmptyRoom: '',
       currentItemSelected: {},
       changeToRoomId: '',
-      isShowCMNDImage: false
+      isShowCMNDImage: false,
+      showChangeRoomModal: false
     }
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     *  Processing on scroll: use for paging
-     */
-    onScroll (event) {
-      if(this.onSearch) {
+    onScroll(event) {
+      if (this.onSearch) {
         return
       }
       event.preventDefault()
       var body = document.body
       var html = document.documentElement
       if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
+        if (this.hasNext) {
           this.offset = this.offset + this.pageLimit
           this.loadByScroll = true
-          this.search ()
+          this.search()
         }
       }
     },
 
-    /**
-     * Prepare to search
-     */
     prepareToSearch() {
       this.saving = true
       this.click = true
-
       this.search()
     },
 
-    /**
-     *  Search
-     */
     search() {
       this.loading = true
 
-      // Search
       let param = {
         "name": this.inputs.name,
         "sdt": this.inputs.sdt,
@@ -308,50 +258,34 @@ export default {
       }
 
       adminAPI.searchCheckInInfo(param).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
+        if (res != null && res.data != null && res.data.data != null) {
           this.items = res.data.data.bookings
-          console.log(res.data.data.bookings)
           this.totalRow = res.data.data.total_row
         }
         this.loading = false
       }).catch(err => {
         this.loading = false
-
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
-    /**
-    * Show modal change room
-    **/
-   showModalChangeRoom(bookingInfo) {
-      this.$bvModal.hide('modal-booking')
-      this.$bvModal.show('modal-change-room')
+    showModalChangeRoom(bookingInfo) {
+      this.showChangeRoomModal = true
+      this.currentItemSelected = bookingInfo
+      this.getListEmptyRoom()
+    },
 
-        console.log("aaaaaaaa")
-        this.currentItemSelected = bookingInfo
-        console.log(bookingInfo)
-
-        // Get list empty room
-        this.getListEmptyRoom()
-   },
-
-    /**
-     * Get list empty room
-     */
     getListEmptyRoom() {
       this.loadingEmptyRoom = true
       this.textEmptyRoom = ''
 
-      // Get list empty room
       adminAPI.getListEmptyRoom(this.currentItemSelected.room_id).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.optionsEmptyRoom = [{value: null, text: ''}]
+        if (res != null && res.data != null && res.data.data != null) {
+          this.optionsEmptyRoom = [{ value: null, text: '' }]
           let rooms = res.data.data
-          if(rooms.length > 0) {
-             for (let index in rooms) {
+          if (rooms.length > 0) {
+            for (let index in rooms) {
               let room = {
                 value: rooms[index].value,
                 text: rooms[index].text
@@ -359,79 +293,47 @@ export default {
               this.optionsEmptyRoom.push(room)
             }
           } else {
-              this.textEmptyRoom = 'Không còn phòng trống phù hợp với thời gian bạn booking. Bạn hãy cập nhật lại thời gian booking và tìm lại thử nhé!!!'
+            this.textEmptyRoom = 'Không còn phòng trống phù hợp với thời gian bạn booking. Bạn hãy cập nhật lại thời gian booking và tìm lại thử nhé!!!'
           }
         }
         this.loadingEmptyRoom = false
       }).catch(err => {
         this.loadingEmptyRoom = false
-
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-  },
+    },
 
-    /**
-     *  Confirm change room
-     */
     confirmChangeRoom() {
-      if(this.changeToRoomId == '') {
-          this.popToast('danger', "Hãy chọn phòng muốn đổi")
-          return
+      if (this.changeToRoomId == '') {
+        this.toast.error("Hãy chọn phòng muốn đổi")
+        return
       }
       this.loadingChangeRoom = true
-      // Search
       let param = {
         "fromRoomId": this.currentItemSelected.room_id,
         "toRoomId": this.changeToRoomId
       }
       adminAPI.confirmChangeRoom(param).then(res => {
-        if(res != null && res.data != null) {
+        if (res != null && res.data != null) {
           this.search()
-          this.$bvModal.hide('modal-change-room')
+          this.showChangeRoomModal = false
         }
-        console.log(this.items)
         this.loadingChangeRoom = false
       }).catch(err => {
         this.loadingChangeRoom = false
-
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
-    /**
-     * Hide modal change room
-     **/
     hideModalChangeRoom() {
-       this.$bvModal.hide('modal-change-room')
+      this.showChangeRoomModal = false
     },
 
-    /**
-     * Only input date
-     */
-    inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
-
-    /**
-     * Go to table list
-     */
     goBack() {
-      this.$router.push('/booking/list-room')
-    },
+      this.router.push('/booking/list-room')
+    }
   }
 }
 </script>

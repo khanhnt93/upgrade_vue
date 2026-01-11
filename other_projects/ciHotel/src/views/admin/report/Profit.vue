@@ -1,170 +1,210 @@
 <template>
-  <div class="container-fluid">
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h4 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO LỢI NHUẬN</h4>
+      
+      <!-- Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+        <!-- Xem theo -->
+        <div class="md:col-span-3">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Xem theo</label>
+          <select
+            v-model="inputs.dataBy"
+            @change="changeDataBy"
+            :disabled="onSearch"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+          >
+            <option value="Day">Ngày</option>
+            <option value="Week">Tuần</option>
+            <option value="Month">Tháng</option>
+          </select>
+        </div>
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center text-header">BÁO CÁO LỢI NHUẬN</h4>
-            <b-row>
-              <b-col md="3">
-                <label> Xem theo </label>
-                <b-form-select
-                  :options="dataByOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.dataBy"
-                  @change="changeDataBy"
-                  :disabled="onSearch">
-                </b-form-select>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy != 'Month'">
-                <label> Từ ngày </label><span class="error-sybol"></span>
-                <input
-                  id="fromDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy != 'Month'">
-                <label> Đến ngày </label><span class="error-sybol"></span>
-                <input
-                  id="toDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+        <!-- Day/Week filters -->
+        <template v-if="inputs.dataBy != 'Month'">
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Từ ngày <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              v-model="inputs.fromDate"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)"
+              :disabled="onSearch"
+              :class="['w-full border rounded px-3 py-2', errorFromDate ? 'border-red-500' : 'border-gray-300']"
+            />
+            <div v-if="errorFromDate" class="text-red-500 text-sm mt-1">
+              Mục từ ngày không đúng
+            </div>
+          </div>
+          
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Đến ngày <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              v-model="inputs.toDate"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)"
+              :disabled="onSearch"
+              :class="['w-full border rounded px-3 py-2', errorToDate ? 'border-red-500' : 'border-gray-300']"
+            />
+            <div v-if="errorToDate" class="text-red-500 text-sm mt-1">
+              Mục đến ngày không đúng
+            </div>
+          </div>
+        </template>
 
-              <b-col md="3" v-show="inputs.dataBy == 'Month'">
-                <label> Từ tháng </label><span class="error-sybol"></span>
-                <input
-                  id="fromMonth"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromMonth"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">
-                  Mục từ tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy == 'Month'">
-                <label> Đến tháng </label><span class="error-sybol"></span>
-                <input
-                  id="toMonth"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toMonth"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)"
-                  :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">
-                  Mục đến tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+        <!-- Month filters -->
+        <template v-if="inputs.dataBy == 'Month'">
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Từ tháng <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              v-model="inputs.fromMonth"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)"
+              :disabled="onSearch"
+              :class="['w-full border rounded px-3 py-2', errorFromMonth ? 'border-red-500' : 'border-gray-300']"
+            />
+            <div v-if="errorFromMonth" class="text-red-500 text-sm mt-1">
+              Mục từ tháng không đúng
+            </div>
+          </div>
+          
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Đến tháng <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              v-model="inputs.toMonth"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)"
+              :disabled="onSearch"
+              :class="['w-full border rounded px-3 py-2', errorToMonth ? 'border-red-500' : 'border-gray-300']"
+            />
+            <div v-if="errorToMonth" class="text-red-500 text-sm mt-1">
+              Mục đến tháng không đúng
+            </div>
+          </div>
+        </template>
 
-              <b-col md="3">
-                <label class="label-width text-white">
-                   Xem
-                </label>
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
-                  Xem
-                </b-button>
-              </b-col>
+        <!-- Search button -->
+        <div class="md:col-span-3">
+          <label class="block text-sm font-medium text-transparent mb-1">Xem</label>
+          <button
+            @click.prevent="search"
+            :disabled="onSearch"
+            class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded disabled:bg-gray-400 disabled:cursor-not-allowed min-w-[120px]"
+          >
+            Xem
+          </button>
+        </div>
+      </div>
 
-            </b-row>
+      <!-- Loading -->
+      <span class="flex justify-center items-center py-8" v-show="loading">
+        <icon name="loading" width="60" />
+      </span>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Results -->
+      <div v-show="click && datas.length > 0">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+          <div class="mb-2 md:mb-0">Số kết quả: {{ datas.length }}</div>
+          <download-excel
+            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold rounded border border-gray-300"
+            :data="datas"
+            :fields="excel_bill_fields"
+            worksheet="Báo Cáo Lợi Nhuận"
+            name="bao_cao_loi_nhuan.xls"
+          >
+            <b>Xuất Excel</b>
+          </download-excel>
+        </div>
 
-            <b-row v-show="click && datas.length > 0">
-                <b-col>
-                  <b-row>
-                    <b-col md="4">
-                      Số kết quả: {{datas.length}}
-                    </b-col>
-                    <b-col md="8" class="text-right">
-                      <download-excel
-                        class   = "btn btn-default text-header"
-                        :data   = "datas"
-                        :fields = "excel_bill_fields"
-                        worksheet = "Báo Cáo Lợi Nhuận"
-                        name    = "bao_cao_loi_nhuan.xls">
-                        <b>Xuất Excel</b>
-                      </download-excel>
-                    </b-col>
-                  </b-row>
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead>
+              <tr class="bg-blue-100">
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">STT</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Ngày</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Doanh thu bán hàng</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Doanh thu khác</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Chi phí</th>
+                <th class="border border-gray-300 px-4 py-3 text-left uppercase">Lợi nhuận</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Total Row -->
+              <tr style="color: #ed592a;">
+                <td class="border border-gray-300 px-4 py-2 text-center font-bold" colspan="2">
+                  Tổng
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalRevenue) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalRevenueOther) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalFee) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right font-bold whitespace-nowrap">
+                  {{ formatCurrency(totalProfit) }}
+                </td>
+              </tr>
 
-                  <table class="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th>STT</th>
-                        <th>Ngày</th>
-                        <th>Doanh thu bán hàng</th>
-                        <th>Doanh thu khác</th>
-                        <th>Chi phí</th>
-                        <th>Lợi nhuận</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="font-weight-bold total text-center" colspan="2">Tổng</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalRevenue)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalRevenueOther)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalFee)}}</td>
-                        <td class="text-right font-weight-bold total">{{currencyFormat(totalProfit)}}</td>
-                      </tr>
-                      <tr v-for="(data, index) in datas">
-                        <td>{{index + 1}}</td>
-                        <td>{{data.time}}</td>
-                        <td class="text-right">{{currencyFormat(data.revenue)}}</td>
-                        <td class="text-right">{{currencyFormat(data.revenueOther)}}</td>
-                        <td class="text-right">{{currencyFormat(data.fee)}}</td>
-                        <td class="text-right">{{currencyFormat(data.profit)}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-col>
-              </b-row>
-
-            <!--<p v-show="click && firstSearch == false && datas.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>-->
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
+              <!-- Data Rows -->
+              <tr v-for="(data, index) in datas" :key="index">
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ index + 1 }}</td>
+                <td class="border border-gray-300 px-4 py-2 whitespace-nowrap">{{ data.time }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(data.revenue) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(data.revenueOther) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(data.fee) }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">
+                  {{ formatCurrency(data.profit) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
 
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
 import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
-
+import { useToast } from '@/composables/useToast';
+import { useFormatters } from '@/composables/useFormatters';
 
 export default {
+  components: {
+    'downloadExcel': JsonExcel
+  },
+  setup() {
+    const { toast } = useToast();
+    const { formatCurrency } = useFormatters();
+    
+    return {
+      toast,
+      formatCurrency
+    };
+  },
   data () {
     return {
       inputs: {
@@ -205,7 +245,7 @@ export default {
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
     this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
 
-      this.search()
+    this.search()
   },
   computed: {
     errorFromDate: function () {
@@ -230,18 +270,6 @@ export default {
     },
     checkValidate () {
       return !(this.errorFromDate || this.errorToDate)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**
@@ -282,7 +310,7 @@ export default {
         let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+          this.toast.error("Từ ngày không thể lớn hớn đến ngày")
           return false
         }
 
@@ -290,7 +318,7 @@ export default {
           fromDate.setMonth(fromDate.getMonth() + 1)
 
           if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 1 tháng")
+            this.toast.error("Thời gian không được quá 1 tháng")
             return false
           }
         }
@@ -299,7 +327,7 @@ export default {
           fromDate.setMonth(fromDate.getMonth() + 6)
 
           if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 6 tháng")
+            this.toast.error("Thời gian không được quá 6 tháng")
             return false
           }
         }
@@ -310,14 +338,14 @@ export default {
         let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD("01-" + this.inputs.toMonth))
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Từ tháng không thể lớn hớn đến tháng")
+          this.toast.error("Từ tháng không thể lớn hớn đến tháng")
           return false
         }
 
         fromDate.setMonth(fromDate.getMonth() + 12)
 
         if(fromDate < toDate) {
-          this.popToast('danger', "Thời gian không được quá 12 tháng")
+          this.toast.error("Thời gian không được quá 12 tháng")
           return false
         }
       }
@@ -398,30 +426,6 @@ export default {
       return result
     },
 
-    // /**
-    //  * Convert db data to chart data
-    //  */
-    // convertDbDataToChartData(datas) {
-    //   let data = []
-    //   let listDay = this.getListDateFromDateInput()
-    //   for (let i in listDay) {
-    //     let item =  {
-    //       "time": listDay[i],
-    //       "revenue": 0,
-    //       "fee": 0,
-    //       "profit": 0
-    //     }
-    //     for (let j in datas) {
-    //       if(listDay[i] == datas[j].time) {
-    //         item = datas[j]
-    //         break
-    //       }
-    //     }
-    //     data.push(item)
-    //   }
-    //   this.datas = data
-    // },
-
     /**
      * Search
      */
@@ -432,11 +436,9 @@ export default {
 
       // Check validate
       if(!this.checkValidate()) {
-        this.chartData = []
         return
       }
       if(!this.checkFromDateAndToDate()) {
-        this.chartData = []
         return
       }
 
@@ -456,7 +458,6 @@ export default {
       // Search
       adminAPI.getProfitReport(params).then(res => {
         if(res && res.data && res.data.data) {
-          // this.convertDbDataToChartData(res.data.data)
           this.datas = res.data.data.data
           this.totalRevenue = res.data.data.total_revenue
           this.totalRevenueOther = res.data.data.total_revenue_other
@@ -469,9 +470,8 @@ export default {
         this.loading = false
       }).catch(err => {
         console.log(err)
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.firstSearch = false
         this.onSearch = false
@@ -487,67 +487,10 @@ export default {
       let result = commonFunc.inputDateOnly(valueInput)
       item.value = result
     },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num == 0) {
-          return 0
-        }
-      }
-      return result
-    },
   }
 }
 </script>
 
 <style lang="css" scoped>
-  .total {
-    color: #ed592a;
-  }
-
-  table {
-   margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
+/* Scoped styles if needed */
 </style>

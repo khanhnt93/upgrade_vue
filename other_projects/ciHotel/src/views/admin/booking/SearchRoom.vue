@@ -1,182 +1,165 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='4'>
-              <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="goBack">
-                Quay lại
-              </b-button>
-            </b-col>
-            <b-col md='8'>
-              <h4 class="text-center text-header">TÌM KIẾM PHÒNG TRỐNG</h4>
-            </b-col>
-          </b-row>
-          <hr>
+  <div class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+        <button class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 w-32 mb-2 md:mb-0" @click.prevent="goBack">
+          Quay lại
+        </button>
+        <h4 class="text-xl font-bold text-center text-[#F85F36] flex-grow">TÌM KIẾM PHÒNG TRỐNG</h4>
+        <div class="w-32"></div>
+      </div>
+      <hr class="my-4">
 
-          <b-row>
-            <b-col md="3">
-              <label> Loại phòng </label>
-              <b-form-select
-                :options="optionsRoomType"
-                id="status"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.room_type"></b-form-select>
-            </b-col>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Loại phòng</label>
+          <select
+            v-model="inputs.room_type"
+            id="status"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option v-for="option in optionsRoomType" :key="option.value" :value="option.value">{{ option.text }}</option>
+          </select>
+        </div>
 
-            <b-col md="3">
-              <label> Ngày nhận phòng </label>
-              <input
-                id="fromDate"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.fromDate"
-                maxlength="16"
-                :disabled="onSearch">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                Mục từ ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
-            <b-col md="3">
-              <label> Ngày trả phòng </label>
-              <input
-                id="toDate"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.toDate"
-                maxlength="16"
-                :disabled="onSearch">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                Mục đến ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Ngày nhận phòng</label>
+          <input
+            id="fromDate"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :class="errorFromDate ? 'border-red-500' : 'border-gray-300'"
+            v-model="inputs.fromDate"
+            maxlength="16"
+            :disabled="onSearch">
+          <p v-if="errorFromDate" class="text-red-500 text-xs mt-1">Mục từ ngày không đúng</p>
+        </div>
 
-            <b-col md="3">
-              <label class="label-width text-white">
-                 Tìm kiếm
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Ngày trả phòng</label>
+          <input
+            id="toDate"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :class="errorToDate ? 'border-red-500' : 'border-gray-300'"
+            v-model="inputs.toDate"
+            maxlength="16"
+            :disabled="onSearch">
+          <p v-if="errorToDate" class="text-red-500 text-xs mt-1">Mục đến ngày không đúng</p>
+        </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2 invisible">Tìm kiếm</label>
+          <button
+            class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="onSearch"
+            @click.prevent="prepareToSearch">
+            Tìm Kiếm
+          </button>
+        </div>
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(price)="data">
-              <p  v-for="price in data.item.price" :key="price.id">{{"- " + price.name + ": " + currencyFormat(price.room_price)}}</p>
-            </template>
-            <template v-slot:cell(room_info)="data">
-              <p  v-for="room_info in data.item.room_info" :key="room_info.id">{{"- " + room_info.name + ": " + room_info.room_info_count}}</p>
-            </template>
-            <template v-slot:cell(room_device)="data">
-              <p  v-for="room_device in data.item.room_device" :key="room_device.id">{{"- " + room_device.name + ": " + room_device.device}}</p>
-            </template>
-            <template v-slot:cell(room_status_name)="data">
-              <p class="text-header">{{data.item.room_status_name}}</p>
-              <div v-if="data.item.room_status_id == 2">
-                <p class="text-left">Nhận phòng: {{data.item.time_in}}</p>
-                <p class="text-left">Trả phòng:  {{data.item.time_out}}</p>
-              </div>
-            </template>
-            <template v-slot:cell(action)="dataId">
-              <b-row class="mt-1">
-                <b-col>
-                  <b-button variant="outline-primary" class="btn btn-width-160"  @click="$router.push ('/booking/add/' + dataId.item.id)" style=" margin-right: 5px;">
-                  Đặt phòng
-                </b-button>
-                </b-col>
-              </b-row>
-              <b-row class="mt-1">
-                <b-col>
-                  <b-button variant="outline-success" class="btn btn-width-160"  @click="$router.push ('/check-in/' + dataId.item.id)">
+      <div class="mb-4">
+        <p class="text-sm text-gray-600">Số kết quả: {{totalRow}}</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Tên phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Loại phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Giá phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Trạng thái phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Tầng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Thông tin phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r border-gray-300">Thiết bị trong phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"></th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="px-4 py-3 text-sm border-r border-gray-300">{{ item.stt }}</td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">{{ item.name }}</td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">{{ item.room_type_name }}</td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">
+                <p v-for="price in item.price" :key="price.id" class="mb-1">{{ "- " + price.name + ": " + formatCurrency(price.room_price) }}</p>
+              </td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">
+                <p class="font-semibold text-[#F85F36]">{{ item.room_status_name }}</p>
+                <div v-if="item.room_status_id == 2">
+                  <p class="text-left">Nhận phòng: {{ item.time_in }}</p>
+                  <p class="text-left">Trả phòng: {{ item.time_out }}</p>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">{{ item.floor_name }}</td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">
+                <p v-for="room_info in item.room_info" :key="room_info.id" class="mb-1">{{ "- " + room_info.name + ": " + room_info.room_info_count }}</p>
+              </td>
+              <td class="px-4 py-3 text-sm border-r border-gray-300">
+                <p v-for="room_device in item.room_device" :key="room_device.id" class="mb-1">{{ "- " + room_device.name + ": " + room_device.device }}</p>
+              </td>
+              <td class="px-4 py-3 text-sm">
+                <div class="flex flex-col gap-2">
+                  <button
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm w-40"
+                    @click="router.push('/booking/add/' + item.id)">
+                    Đặt phòng
+                  </button>
+                  <button
+                    class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm w-40"
+                    @click="router.push('/check-in/' + item.id)">
                     Nhận phòng nhanh
-                  </b-button>
-                </b-col>
-              </b-row>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-            </template>
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <div v-show="loading" class="text-center mt-4">
+        <i class="fas fa-spinner fa-spin fa-3x text-blue-500"></i>
+      </div>
+      <p class="text-center text-gray-500 mt-4">--Hết--</p>
+    </div>
   </div>
 </template>
 
-
 <script>
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-
 export default {
-  data () {
+  setup() {
+    const router = useRouter()
+    const toast = useToast()
+    const { formatCurrency, formatDate, formatDateTime } = useFormatters()
+
+    return {
+      router,
+      toast,
+      formatCurrency,
+      formatDate,
+      formatDateTime
+    }
+  },
+  data() {
     return {
       inputs: {
         room_type: null,
         fromDate: null,
         toDate: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên phòng'
-        },
-        {
-          key: 'room_type_name',
-          label: 'Loại phòng'
-        },
-        {
-          key: 'price',
-          label: 'Giá phòng'
-        },
-        {
-          key: 'room_status_name',
-          label: 'Trạng thái phòng'
-        },
-        {
-          key: 'floor_name',
-          label: 'Tầng'
-        },
-        {
-          key: 'room_info',
-          label: 'Thông tin phòng'
-        },
-        {
-          key: 'room_device',
-          label: 'Thiết bị trong phòng'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       optionsRoomType: [{value: null, text: ''}],
       items: [],
       offset: 0,
@@ -185,75 +168,46 @@ export default {
       loadByScroll: false,
       loading: false,
       totalRow: 0,
-      setting: null,
+      setting: null
     }
   },
   computed: {
-    errorFromDate: function () {
+    authStore() {
+      return useAuthStore()
+    },
+    errorFromDate() {
       return this.checkDate(this.inputs.fromDate)
     },
-    errorToDate: function () {
+    errorToDate() {
       return this.checkDate(this.inputs.toDate)
-    },
-    // errorFromMonth: function () {
-    //   return this.checkMonth(this.inputs.fromMonth)
-    // },
-    // errorToMonth: function () {
-    //   return this.checkMonth(this.inputs.toMonth)
-    // },
+    }
   },
   mounted() {
-
-      // Get setting time
-      this.getSystemConfig()
-
-
-    // window.addEventListener('scroll', this.onScroll)
+    this.getSystemConfig()
     this.getOptionsRoomType()
-
-   //  let dateNow = new Date()
-   // // this.inputs.fromDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-   // //  let toDate = new Date(dateNow.setDate(dateNow.getDate() + 1))
-   // //  this.inputs.toDate = commonFunc.formatDate(toDate.toJSON().slice(0,10))
-   //    this.inputs.fromDate = dateNow.toJSON().slice(0,16).replace("T", " ")
-   //  let toDate = new Date(dateNow.setDate(dateNow.getDate() + 1))
-   //  this.inputs.toDate = toDate.toJSON().slice(0,16).replace("T", " ")
-
-
   },
   methods: {
-    checkDate (dateInput) {
+    checkDate(dateInput) {
       return (this.click && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
     },
-    // checkMonth (monthInput) {
-    //   return (this.click && (monthInput == "" || monthInput == null || commonFunc.dateFormatCheck("01-" + monthInput) == false))
-    // },
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
+
+    /**
+     * Get hotel config
+     */
+    getSystemConfig() {
+      commonFunc.getTimeConfig().then(cfg => {
+        let dateNow = new Date()
+        this.inputs.fromDate = dateNow.toJSON().slice(0,10) + " " + cfg.startDate.value
+        let toDate = new Date(dateNow.setDate(dateNow.getDate() + 1))
+        this.inputs.toDate = toDate.toJSON().slice(0,10) + " " + cfg.endDate.value
+
+        // Search
+        this.search()
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
       })
     },
-
-      /**
-       * Get hotel config
-       */
-    getSystemConfig () {
-        commonFunc.getTimeConfig().then(cfg =>{
-            let dateNow = new Date()
-            this.inputs.fromDate = dateNow.toJSON().slice(0,10) + " " + cfg.startDate.value
-            let toDate = new Date(dateNow.setDate(dateNow.getDate() + 1))
-            this.inputs.toDate = toDate.toJSON().slice(0,10) + " " + cfg.endDate.value
-
-            // Search
-            this.search()
-        }).catch(err =>{
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      },
 
     /**
      * Prepare to search
@@ -267,8 +221,9 @@ export default {
     },
 
     getDaysInMonth(month, year) {
-      return new Date(year, month, 0).getDate();
+      return new Date(year, month, 0).getDate()
     },
+
     getDayByMonthInput(monthInput) {
       if(monthInput) {
         let toMonths = monthInput.split("-")
@@ -276,8 +231,9 @@ export default {
         return daysOfMonth
       }
     },
+
     /**
-     *  Search
+     * Search
      */
     search() {
       this.loading = true
@@ -305,7 +261,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -325,42 +281,16 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
-
-    // changeChartBy() {
-    //   let dateNow = new Date()
-    //
-    //   if(this.inputs.chartBy == "Day") {
-    //     // Get default date
-    //     this.inputs.fromDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-    //     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 7))
-    //     this.inputs.toDate = commonFunc.formatDate(toDate.toJSON().slice(0,10))
-    //   }
-    //
-    //   if(this.inputs.chartBy == "Hour") {
-    //     // Get default week
-    //     this.inputs.fromDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-    //     let toDate = new Date(dateNow.setHours(dateNow.getHours() + 2))
-    //     this.inputs.toDate = commonFunc.formatDate(toDate.toJSON().slice(0,10))
-    //   }
-    //
-    //   if(this.inputs.chartBy == "Month") {
-    //     // Get default month
-    //     this.inputs.fromMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-    //     dateNow.setMonth(dateNow.getMonth() + 11)
-    //     this.inputs.toMonth = commonFunc.formatDate(dateNow.toJSON().slice(0,10)).substring(3, 10)
-    //
-    //   }
-    // },
 
     checkFromDateAndToDate() {
       let fromDate = new Date(this.inputs.fromDate)
       let toDate = new Date(this.inputs.toDate)
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        this.toast.error("Từ ngày không thể lớn hơn đến ngày")
         return false
       }
 
@@ -371,7 +301,7 @@ export default {
      * Go to table list
      */
     goBack() {
-      this.$router.push('/booking/list-room')
+      this.router.push('/booking/list-room')
     },
 
     /**
@@ -381,15 +311,7 @@ export default {
       let valueInput = item.value
       let result = commonFunc.inputDateOnly(valueInput)
       item.value = result
-    },
-
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
+    }
   }
 }
 </script>

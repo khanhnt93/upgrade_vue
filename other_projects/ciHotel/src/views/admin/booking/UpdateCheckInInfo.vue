@@ -1,270 +1,313 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="secondary" class="pull-left px-4" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="save" :disabled="saving">
-                  Sửa
-                </button>
-              </b-col>
-            </b-row>
+  <div class="container mx-auto px-4">
+    <div class="w-full">
+      <div class="bg-white shadow-md rounded-lg">
+        <div class="p-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="flex justify-start">
+              <button
+                type="button"
+                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                @click="back"
+              >
+                Quay lại
+              </button>
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="button"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                @click="save"
+                :disabled="saving"
+              >
+                Sửa
+              </button>
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center">Nhận phòng {{booking.room_name}}</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+          <div class="mb-4">
+            <h4 class="mt-2 text-center text-xl font-semibold">Nhận phòng {{booking.room_name}}</h4>
+          </div>
+          <hr class="mb-4"/>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <!-- Loading -->
+          <div v-show="loading" class="flex justify-center items-center py-8">
+            <icon name="loading" width="60" />
+          </div>
 
-            <b-row>
-            <b-col md="6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
 
-              <b-row class="form-row">
-                  <b-col md="12">
-                    <span> Đoàn </span>
-                    <div class="input-group">
-                      <b-form-select
-                        id="group_customer"
-                        v-model="booking.customer_group_id"
-                        :options="customerGroups"
-                      ></b-form-select>
-                    </div>
-                  </b-col>
-                </b-row>
+              <div class="mb-4">
+                <label for="group_customer" class="block mb-2"> Đoàn </label>
+                <select
+                  id="group_customer"
+                  v-model="booking.customer_group_id"
+                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option v-for="option in customerGroups" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
 
-                <b-row class="form-row">
-                  <b-col md="12">
-                    <span> Tên người nhận phòng </span><span class="error-sybol"></span>
-                    <div class="input-group">
+              <div class="mb-4">
+                <label for="customer_name" class="block mb-2">
+                  Tên người nhận phòng <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="customer_name"
+                  type="text"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="errorName ? 'border-red-500' : 'border-gray-300'"
+                  v-model="booking.customer_name"
+                >
+                <p v-if="errorName" class="text-red-500 text-sm mt-1">
+                  Đây là mục bắt buộc nhập
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="phone" class="block mb-2">
+                  Số điện thoại <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="phone"
+                  type="text"
+                  class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="(errorPhone || !phoneNumberCheckFlag) ? 'border-red-500' : 'border-gray-300'"
+                  v-model="booking.phone_number"
+                  @keyup="integerOnly($event.target)"
+                  autocomplete="new-password"
+                  maxlength="20"
+                  @change="checkPhoneNumberFormat($event.target.value)"
+                >
+                <p v-if="errorPhone" class="text-red-500 text-sm mt-1">
+                  Đây là mục bắt buộc nhập
+                </p>
+                <p v-if="!phoneNumberCheckFlag" class="text-red-500 text-sm mt-1">
+                  Số điện thoại không đúng
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="booking_time" class="block mb-2"> Thời gian đặt phòng theo </label>
+                <select
+                  id="booking_time"
+                  v-model="booking.booking_time"
+                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option v-for="option in bookingTime" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="mb-4">
+                <label for="check_in" class="block mb-2">
+                  Thời gian nhận phòng <span class="text-red-500">*</span>
+                </label>
+                <div id="check_in">
+                  <Datepicker
+                    v-model="booking.check_in"
+                    :enable-time-picker="true"
+                    class="w-full"
+                    @update:model-value="changeCheckInCheckOut()"
+                  />
+                </div>
+                <p v-if="errorCheckIn" class="text-red-500 text-sm mt-1">
+                  Đây là mục bắt buộc nhập
+                </p>
+                <p v-if="validateCheckInCheckOut" class="text-red-500 text-sm mt-1">
+                  Thời gian nhận phòng không hợp lệ
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="check_out" class="block mb-2">
+                  Thời gian trả phòng <span class="text-red-500">*</span>
+                </label>
+                <div id="check_out">
+                  <Datepicker
+                    v-model="booking.check_out"
+                    :enable-time-picker="true"
+                    class="w-full"
+                    @update:model-value="changeCheckInCheckOut()"
+                  />
+                </div>
+                <p v-if="errorCheckOut" class="text-red-500 text-sm mt-1">
+                  Đây là mục bắt buộc nhập
+                </p>
+                <p v-if="validateCheckInCheckOut" class="text-red-500 text-sm mt-1">
+                  Thời gian trả phòng không hợp lệ
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="adult" class="block mb-2">
+                  Người lớn <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="adult"
+                  type="number"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="errorAdult ? 'border-red-500' : 'border-gray-300'"
+                  v-model="booking.adult"
+                >
+                <p v-if="errorAdult" class="text-red-500 text-sm mt-1">
+                  Đây là mục bắt buộc nhập
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="children" class="block mb-2"> Trẻ em </label>
+                <input
+                  id="children"
+                  type="number"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="booking.children"
+                >
+              </div>
+
+            </div>
+
+            <div>
+              <div class="mb-4">
+                <span class="font-medium"> Phòng: {{booking.room_name}} </span>
+              </div>
+
+              <div class="mb-4">
+                <span class="font-medium"> Loại phòng: {{booking.room_type_name}} </span>
+              </div>
+
+              <div class="mb-4">
+                <span class="font-medium block mb-2"> Giá </span>
+                <p v-for="price in booking.price" :key="price.id" class="pl-2">
+                  - {{ price.name }}: {{ currencyFormat(price.room_price) }}vnđ
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <label for="description" class="block mb-2"> Ghi chú </label>
+                <textarea
+                  id="description"
+                  rows="3"
+                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  v-model="booking.note"
+                ></textarea>
+              </div>
+
+              <div class="mb-4">
+                <label for="cmnd" class="block mb-2"> CCCD/CMND </label>
+                <input
+                  id="cmnd"
+                  type="text"
+                  @keyup="integerOnly($event.target)"
+                  autocomplete="new-password"
+                  maxlength="20"
+                  class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Chứng minh nhân dân"
+                  v-model="booking.cmnd_number"
+                >
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label class="block mb-2">Mặt trước</label>
+                    <div
+                      @click="$refs.file_cmnd_image_front.click()"
+                      class="flex items-center border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-500 transition-colors"
+                    >
                       <input
-                          id="customer_name"
-                          type="text"
-                          autocomplete="new-password"
-                          class="form-control"
-                          v-model="booking.customer_name">
-                      <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                        Đây là mục bắt buộc nhập
-                      </b-form-invalid-feedback>
-                    </div>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="12">
-                    <span> Số điện thoại </span><span class="error-sybol"></span>
-                    <div class="input-group">
-                      <input
-                        id="phone"
                         type="text"
-                        class="form-control"
-                        v-model="booking.phone_number"
-                        @keyup="integerOnly($event.target)"
-                        autocomplete="new-password"
-                        maxlength="20"
-                        v-on:change="checkPhoneNumberFormat($event.target.value)">
-                      <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                        Đây là mục bắt buộc nhập
-                      </b-form-invalid-feedback>
-                      <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                        Số điện thoại không đúng
-                      </b-form-invalid-feedback>
+                        readonly
+                        :value="booking.cmnd_image_front"
+                        class="flex-1 px-3 py-2 bg-white cursor-pointer"
+                        placeholder="Chọn file"
+                      >
+                      <span class="px-4 py-2 bg-gray-200 hover:bg-gray-300">Browse</span>
                     </div>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="12" >
-                    <span> Thời gian đặt phòng theo </span>
-                    <b-form-select
-                      :options="bookingTime"
-                      type="text"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="booking.booking_time">
-                    </b-form-select>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="12">
-                    <span> Thời gian nhận phòng </span><span class="error-sybol"></span>
-                    <div id="check_in">
-                      <Datepicker
-                        v-model="booking.check_in"
-                        format="YYYY-MM-DD H:i:s" width="100%"
-                        @input="changeCheckInCheckOut()"
-                      />
-                    </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCheckIn">
-                      Đây là mục bắt buộc nhập
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!validateCheckInCheckOut">
-                      Thời gian nhận phòng không hợp lệ
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
-                <b-row class="form-row">
-                  <b-col md="12">
-                    <span> Thời gian trả phòng </span><span class="error-sybol"></span>
-                    <div id="check_out">
-                      <Datepicker
-                        v-model="booking.check_out"
-                        format="YYYY-MM-DD H:i:s" width="100%"
-                        @input="changeCheckInCheckOut()"
-                      />
-                    </div>
-                  </b-col>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCheckOut">
-                    Đây là mục bắt buộc nhập
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!validateCheckInCheckOut">
-                    Thời gian trả phòng không hợp lệ
-                  </b-form-invalid-feedback>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="12" >
-                    <span> Người lớn </span><span class="error-sybol"></span>
                     <input
-                      id="adult"
-                      type="number"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="booking.adult"
-                    >
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAdult">
-                      Đây là mục bắt buộc nhập
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                      class="hidden"
+                      type="file"
+                      id="file_cmnd_image_front"
+                      ref="file_cmnd_image_front"
+                      accept="image/*"
+                      @change="handleCMNDImageFrontUpload"
+                    />
 
-                <b-row class="form-row">
-                  <b-col md="12" >
-                    <span> Trẻ em </span>
-                    <input
-                      id="children"
-                      type="number"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="booking.children"
-                    >
-                  </b-col>
-                </b-row>
-
-              </b-col>
-
-            <b-col md="6">
-              <b-row class="form-row">
-                <b-col md="12" >
-                  <span> Phòng: {{booking.room_name}} </span>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="12">
-                  <span> Loại phòng: {{booking.room_type_name}} </span>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="12" >
-                  <span> Giá </span>
-                  <p  v-for="price in booking.price" :key="price.id" class="pl-2">{{"- " + price.name + ": " + currencyFormat(price.room_price)}}vnđ</p>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="12">
-                  <span> Ghi chú </span>
-                  <b-form-textarea
-                    id="description"
-                    style="width:100%;"
-                    rows="3"
-                    v-model="booking.note"
-                  ></b-form-textarea>
-                </b-col>
-              </b-row>
-
-              <b-row class="form-row">
-                <b-col md="12">
-                  <span> CCCD/CMND </span>
-                  <div class="input-group">
-                  <input
-                    id="cmnd"
-                    type="text"
-                    @keyup="integerOnly($event.target)"
-                    autocomplete="new-password"
-                    maxlength="20"
-                    class="form-control"
-                    placeholder="Chứng minh nhân dân"
-                    v-model="booking.cmnd_number">
+                    <div v-if="booking.cmnd_image_front_preview" class="mt-2">
+                      <img :src="booking.cmnd_image_front_preview" class="w-full h-auto rounded border">
+                    </div>
                   </div>
 
-                  <b-row>
-                    <b-col md="6">
-                      Mặt trước
-                      <b-input-group @click="$refs.file_cmnd_image_front.click()" append="Browse" class="pointer">
-                        <b-input v-model="booking.cmnd_image_front"></b-input>
-                      </b-input-group>
-                      <input class="d-none" type="file" id="file_cmnd_image_front" ref="file_cmnd_image_front" accept="image/*" v-on:change="handleCMNDImageFrontUpload"/>
+                  <div>
+                    <label class="block mb-2">Mặt sau</label>
+                    <div
+                      @click="$refs.file_cmnd_image_back.click()"
+                      class="flex items-center border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-500 transition-colors"
+                    >
+                      <input
+                        type="text"
+                        readonly
+                        :value="booking.cmnd_image_back"
+                        class="flex-1 px-3 py-2 bg-white cursor-pointer"
+                        placeholder="Chọn file"
+                      >
+                      <span class="px-4 py-2 bg-gray-200 hover:bg-gray-300">Browse</span>
+                    </div>
+                    <input
+                      class="hidden"
+                      type="file"
+                      id="file_cmnd_image_back"
+                      ref="file_cmnd_image_back"
+                      accept="image/*"
+                      @change="handleCMNDImageBackUpload"
+                    />
 
-                      <b-row>
-                        <b-col v-if="booking.cmnd_image_front_preview">
-                          <img  :src="booking.cmnd_image_front_preview" style="width: 100%; height: auto">
-                        </b-col>
-                      </b-row>
-                    </b-col>
+                    <div v-if="booking.cmnd_image_back_preview" class="mt-2">
+                      <img :src="booking.cmnd_image_back_preview" class="w-full h-auto rounded border">
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                    <b-col md="6">
-                      Mặt sau
-                      <b-input-group @click="$refs.file_cmnd_image_back.click()" append="Browse" class="pointer">
-                        <b-input v-model="booking.cmnd_image_back"></b-input>
-                      </b-input-group>
-                      <input class="d-none" type="file" id="file_cmnd_image_back" ref="file_cmnd_image_back" accept="image/*" v-on:change="handleCMNDImageBackUpload"/>
-
-                      <b-row>
-                        <b-col v-if="booking.cmnd_image_back_preview">
-                          <img  :src="booking.cmnd_image_back_preview" style="width: 100%; height: auto">
-                        </b-col>
-                      </b-row>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-
-            </b-col>
-            </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 
 <script>
+  import { useRouter, useRoute } from 'vue-router'
+  import { useToast } from '@/composables/useToast'
   import adminAPI from '@/api/admin'
-  import customerManagerApi from "@/api/customerManager";
+  import customerManagerApi from "@/api/customerManager"
   import VueCropper from 'vue-cropperjs'
   import 'cropperjs/dist/cropper.css'
   import commonFunc from '@/common/commonFunc'
-  import Datepicker from 'vuejs-datetimepicker'
+  import Datepicker from 'vue3-datepicker'
 
   export default {
     components: {
       VueCropper,
       Datepicker
+    },
+    setup() {
+      const router = useRouter()
+      const route = useRoute()
+      const { popToast } = useToast()
+
+      return {
+        router,
+        route,
+        popToast
+      }
     },
     data () {
       return {
@@ -310,8 +353,8 @@
     mounted() {
       let dateNow = new Date()
       dateNow.setTime(dateNow.getTime() + (7*60*60*1000));
-      this.booking.check_in = dateNow.toISOString().replace(/T/, ' ').replace(/\..+/, '')
-      this.check_in_show = dateNow.toISOString().replace(/T/, ' ').replace(/\..+/, '') //dateNow.toJSON().slice(0,19)
+      this.booking.check_in = dateNow
+      this.check_in_show = dateNow.toISOString().replace(/T/, ' ').replace(/\..+/, '')
 
       // Get list group customer
       this.getListGroupCustomer()
@@ -335,9 +378,6 @@
       errorAdult: function () {
         return this.checkInfo(this.booking.adult)
       },
-      errorCMND: function () {
-        return this.checkInfo(this.booking.cmnd)
-      },
     },
     methods: {
       checkInfo (info) {
@@ -346,18 +386,6 @@
       checkValidate () {
         return !(this.errorName || this.errorCheckIn || this.errorCheckOut ||
             this.errorAdult || !this.phoneNumberCheckFlag)
-      },
-
-      /**
-       * Make toast without title
-       */
-      popToast(variant, content) {
-        this.$bvToast.toast(content, {
-          toastClass: 'my-toast',
-          noCloseButton: true,
-          variant: variant,
-          autoHideDelay: 3000
-        })
       },
 
         /**
@@ -444,9 +472,26 @@
         }
 
         // Check time checkin checkout
-        if(this.booking.check_in > this.booking.check_out) {
+        let checkInDate = this.booking.check_in instanceof Date ? this.booking.check_in : new Date(this.booking.check_in)
+        let checkOutDate = this.booking.check_out instanceof Date ? this.booking.check_out : new Date(this.booking.check_out)
+
+        if(checkInDate > checkOutDate) {
             this.validateCheckInCheckOut = true
+            this.saving = false
             return
+        }
+
+        // Format dates to string format expected by API (YYYY-MM-DD HH:mm:ss)
+        const formatDateTime = (date) => {
+          if (!date) return null
+          const d = date instanceof Date ? date : new Date(date)
+          const year = d.getFullYear()
+          const month = String(d.getMonth() + 1).padStart(2, '0')
+          const day = String(d.getDate()).padStart(2, '0')
+          const hours = String(d.getHours()).padStart(2, '0')
+          const minutes = String(d.getMinutes()).padStart(2, '0')
+          const seconds = String(d.getSeconds()).padStart(2, '0')
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
         }
 
         // Init data
@@ -456,12 +501,11 @@
         formData.append("customer_group_id", this.booking.customer_group_id)
         formData.append("customer_name", this.booking.customer_name)
         formData.append("phone_number", this.booking.phone_number)
-        formData.append("check_in", this.booking.check_in)
+        formData.append("check_in", formatDateTime(this.booking.check_in))
         formData.append("room_type_id", this.booking.room_type_id)
         formData.append("deposit", this.booking.deposit)
-        formData.append("check_in", this.booking.check_in)
-        formData.append("actual_check_in", this.booking.actual_check_in)
-        formData.append("check_out", this.booking.check_out)
+        formData.append("actual_check_in", formatDateTime(this.booking.actual_check_in))
+        formData.append("check_out", formatDateTime(this.booking.check_out))
         formData.append("adult", this.booking.adult)
         formData.append("children", this.booking.children)
         formData.append("booking_time", this.booking.booking_time)
@@ -483,7 +527,7 @@
             this.saving = false
             if(res != null && res.data != null){
               // Go to list
-              this.$router.push('/booking/search-check-in-info')
+              this.router.push('/booking/search-check-in-info')
             } else{
               // Show notify add fail
               this.popToast('danger', 'Lưu thông tin check in thất bại!!! ')
@@ -501,7 +545,7 @@
        */
       back() {
         // Go to list
-        this.$router.push('/booking/search-check-in-info')
+        this.router.push('/booking/search-check-in-info')
       },
 
       /**
@@ -527,15 +571,27 @@
        * Get booking detail
        */
       getBookingDetail() {
-        let booking_id = this.$route.params.id
+        let booking_id = this.route.params.id
         if(booking_id){
           adminAPI.getBookingDetail(booking_id).then(res => {
             if(res != null && res.data != null && res.data.data != null) {
               this.booking = res.data.data
-                this.booking.cmnd_image_front_preview = null
-                this.booking.cmnd_image_front = null
-                this.booking.cmnd_image_back_preview = null
-                this.booking.cmnd_image_back = null
+
+              // Convert date strings to Date objects for vue3-datepicker
+              if(this.booking.check_in) {
+                this.booking.check_in = new Date(this.booking.check_in)
+              }
+              if(this.booking.check_out) {
+                this.booking.check_out = new Date(this.booking.check_out)
+              }
+              if(this.booking.actual_check_in) {
+                this.booking.actual_check_in = new Date(this.booking.actual_check_in)
+              }
+
+              this.booking.cmnd_image_front_preview = null
+              this.booking.cmnd_image_front = null
+              this.booking.cmnd_image_back_preview = null
+              this.booking.cmnd_image_back = null
             }
           }).catch(err => {
             // Handle error
@@ -549,11 +605,12 @@
        * Event change check in check out
        */
       changeCheckInCheckOut() {
-          if(this.booking.check_out) {
-              this.booking.check_out = this.booking.check_out.substring(0, this.booking.check_out.length - 2) + "59"
-          }
           if(this.booking.check_in && this.booking.check_out) {
-              if(this.booking.check_in > this.booking.check_out) {
+              // Convert to dates for comparison if they are strings
+              let checkInDate = this.booking.check_in instanceof Date ? this.booking.check_in : new Date(this.booking.check_in)
+              let checkOutDate = this.booking.check_out instanceof Date ? this.booking.check_out : new Date(this.booking.check_out)
+
+              if(checkInDate > checkOutDate) {
                   this.validateCheckInCheckOut = true
               } else {
                   this.validateCheckInCheckOut = false
@@ -564,17 +621,10 @@
   }
 </script>
 
-<style lang="scss">
-
-  .width-33 {
-    width: 31%;
-    float: left;
-  }
+<style scoped>
   #check_in, #check_out {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
   }
 </style>

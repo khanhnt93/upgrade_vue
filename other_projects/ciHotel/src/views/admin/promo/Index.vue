@@ -1,158 +1,166 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="grid grid-cols-1">
+      <div>
+        <div class="bg-white rounded-lg shadow-md">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <button
+                  class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 float-left w-30"
+                  @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+              <div>
+                <button
+                  class="px-4 py-2 border border-green-500 text-green-600 rounded hover:bg-green-50 float-right w-30"
+                  @click="save"
+                  :disabled="saving">
+                  Lưu
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-1 text-center text-header">KHUYẾN MÃI</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+            <div class="grid grid-cols-1 mt-4">
+              <div>
+                <h4 class="mt-1 text-center text-xl font-semibold">KHUYẾN MÃI</h4>
+              </div>
+            </div>
+            <hr class="my-4"/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-3 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="col-span-9">
                   <input
                   id="name"
                   type="text"
                   autocomplete="new-password"
-                  class="form-control"
+                  :class="['form-control', {'border-red-500': errorName}]"
                   v-model="promo.name"
                   maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div class="text-red-500 text-sm mt-1" v-if="errorName">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Code </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     type="text"
                     autocomplete="new-password"
                     class="form-control"
                     v-model="promo.code"
                     maxlength="50">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Loại </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="typeOptions"
+                  </div>
+                  <div class="col-span-9">
+                    <select
                     id="status"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.type"></b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorType">
+                    :class="['form-control', {'border-red-500': errorType}]"
+                    v-model="promo.type">
+                      <option v-for="option in typeOptions" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                      </option>
+                    </select>
+                    <div class="text-red-500 text-sm mt-1" v-if="errorType">
                       Vui lòng nhập loại
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount' || promo.type == 'discount_with_max_value' || promo.type == 'discount_on_item'">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4" v-if="promo.type == 'discount' || promo.type == 'discount_with_max_value' || promo.type == 'discount_on_item'">
+                  <div class="col-span-3 mt-2">
                     <label> Phần trăm giảm giá (%) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="discount_percent"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorPercentDiscount}]"
                     v-model="promo.discount_percent"
                     maxlength="3"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPercentDiscount">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorPercentDiscount">
                       Vui lòng nhập phần trăm giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4" v-if="promo.type == 'discount_with_max_value'">
+                  <div class="col-span-3 mt-2">
                     <label> Giảm giá tối đa </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="max_discount"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorMaxDiscount}]"
                     v-model="promo.max_discount"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMaxDiscount">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorMaxDiscount">
                       Vui lòng nhập giảm giá tối đa
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4" v-if="promo.type == 'discount_with_max_value'">
+                  <div class="col-span-3 mt-2">
                     <label> Trên tổng giá </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="discount_on_amount"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorDiscountOnAmount}]"
                     v-model="promo.discount_on_amount"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDiscountOnAmount">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorDiscountOnAmount">
                       Vui lòng nhập trên tổng giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'voucher'">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4" v-if="promo.type == 'voucher'">
+                  <div class="col-span-3 mt-2">
                     <label> Giá trị voucher </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="value_of_voucher"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorValueOfVoucher}]"
                     v-model="promo.value_of_voucher"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorValueOfVoucher">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorValueOfVoucher">
                       Vui lòng nhập giá trị voucher
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
 <!--                <b-row class="form-row" v-if="promo.type == 'free_item'">-->
 <!--                  <b-col md="3" class="mt-2">-->
@@ -190,105 +198,105 @@
 <!--                  </b-col>-->
 <!--                </b-row>-->
 
-                <b-row class="form-row" v-show="promo.method == 'trade_point'">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4" v-show="promo.method == 'trade_point'">
+                  <div class="col-span-3 mt-2">
                     <label> Giá mua(điểm) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="price"
                     type="text"
                     maxlength="100"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorCost}]"
                     v-model="promo.cost"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorCost">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorCost">
                       Vui lòng nhập giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Hiệu lực từ </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <div class="input-group">
+                  </div>
+                  <div class="col-span-9">
+                    <div class="flex">
                     <input
                     id="expiredDateFrom"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorExpiredDateFrom}]"
                     v-model="promo.expired_date_from"
                     maxlength="10"
                     @keyup="inputDateOnly($event.target)">
                     </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateFrom">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorExpiredDateFrom">
                       Ngày bắt đầu hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Hiệu lực đến </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <div class="input-group">
+                  </div>
+                  <div class="col-span-9">
+                    <div class="flex">
                     <input
                     id="expiredDateTo"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorExpiredDateTo}]"
                     v-model="promo.expired_date_to"
                     maxlength="10"
                     @keyup="inputDateOnly($event.target)">
                     </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateTo">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorExpiredDateTo">
                       Ngày hết hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Số Lượng </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <input
                     id="number"
                     type="text"
                     autocomplete="new-password"
-                    class="form-control"
+                    :class="['form-control', {'border-red-500': errorQuantity}]"
                     maxlength="100"
                     v-model="promo.quantity"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
+                    <div class="text-red-500 text-sm mt-1" v-if="errorQuantity">
                       Vui lòng nhập số lượng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row v-show="promo.method == 'other'">
-                  <b-col>
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-1" v-show="promo.method == 'other'">
+                  <div>
+                    <div class="grid grid-cols-12 gap-4 mb-4">
+                      <div class="col-span-3 mt-2">
                         <label> Khung giờ tự động áp dụng </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="col-span-9">
                         <input type="radio" id="auto_apply_yes" value="true" v-model="promo.auto_apply">
                         <label for="auto_apply_yes">Có</label>
                         <input type="radio" id="auto_apply_no" value="false" v-model="promo.auto_apply">
                         <label for="auto_apply_no">Không</label>
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
+                    <div class="grid grid-cols-12 gap-4 mb-4" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
+                      <div class="col-span-3 mt-2">
                         <label> Các ngày trong tuần </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="col-span-9">
                         <input type="checkbox" id="t2" value="1" v-model="promo.day_of_week">
                         <label for="t2">Thứ 2</label>
                         <input type="checkbox" id="t3" value="2" v-model="promo.day_of_week">
@@ -303,14 +311,14 @@
                         <label for="t7">Thứ 7</label>
                         <input type="checkbox" id="cn" value="7" v-model="promo.day_of_week">
                         <label for="cn">Chủ nhật</label>
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
+                    <div class="grid grid-cols-12 gap-4 mb-4" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
+                      <div class="col-span-3 mt-2">
                         <label> Khung giờ </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="col-span-9">
                         <div class="form-inline">
                           <input
                             id="start_time"
@@ -331,41 +339,43 @@
                             maxlength="5"
                             >
                         </div>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="grid grid-cols-12 gap-4 mb-4">
+                  <div class="col-span-3 mt-2">
                     <label> Mô tả </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="col-span-9">
                     <div class="form-inline">
-                      <b-form-textarea
+                      <textarea
                         id="description"
                         style="width:100%;"
                         rows="3"
+                        class="form-control"
                         v-model="promo.description"
-                      ></b-form-textarea>
+                      ></textarea>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="grid grid-cols-12 gap-4 mb-4">
+                <div class="col-span-3 mt-2">
                   <label> Hình ảnh </label>
-                </b-col>
-                <b-col md="9">
-                  <b-input-group @click="$refs.file.click()" append="Browse" class="pointer">
-                    <b-input v-model="promo.image"></b-input>
-                  </b-input-group>
-                  <input class="d-none" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
-                </b-col>
-              </b-row>
+                </div>
+                <div class="col-span-9">
+                  <div @click="$refs.file.click()" class="flex cursor-pointer">
+                    <input v-model="promo.image" class="form-control flex-1">
+                    <button type="button" class="px-4 py-2 bg-gray-200 border border-gray-300 rounded-r hover:bg-gray-300">Browse</button>
+                  </div>
+                  <input class="hidden" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
+                </div>
+              </div>
 
-              <b-row class="form-row">
+              <div class="grid grid-cols-1 mb-4">
                 <div v-if="promo.image_preview" class="preview-box text-center"  :style="{height: computedWidth, width: '100%'}">
                     <vue-cropper
                       ref="cropper"
@@ -385,12 +395,12 @@
                     >
                     </vue-cropper>
                 </div>
-              </b-row>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -398,11 +408,24 @@ import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { useRouter, useRoute } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
   components: {
     VueCropper
+  },
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const toast = useToast()
+
+    return {
+      router,
+      route,
+      toast
+    }
   },
   data () {
     return {
@@ -568,7 +591,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -588,11 +611,11 @@ export default {
     //   })
     // },
 
-    /**
+   /**
      * Get detail
      */
     getPromoDetail() {
-      let promoId = this.$route.params.id
+      let promoId = this.route.params.id
       if(promoId){
         this.loading = true
 
@@ -617,7 +640,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast.error(errorMess)
         })
       }
     },
@@ -652,7 +675,7 @@ export default {
         let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_to))
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Ngày bắt đầu hiệu lực không thể lớn hớn ngày hết hiệu lực")
+          this.toast.error("Ngày bắt đầu hiệu lực không thể lớn hớn ngày hết hiệu lực")
           return false
         }
       }
@@ -733,7 +756,7 @@ export default {
         if(res != null && res.data != null){
           if (res.data.status == 200) {
             // show popup success
-            this.popToast('success', 'Cập nhật khuyến mãi thành công!!! ')
+            this.toast.success('Cập nhật khuyến mãi thành công!!! ')
           }
         }
       }).catch(err => {
@@ -741,7 +764,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.makeToast('danger', "Cập nhật thất bại!!!", errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -817,7 +840,7 @@ export default {
         this.saving = false
         if(res != null && res.data != null){
           if (res.data.status == 200) {
-            this.$router.push("/promo/list")
+            this.router.push("/promo/list")
           }
         }
       }).catch(err => {
@@ -825,7 +848,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.makeToast('danger', "Thêm mới thất bại!!!", errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -851,7 +874,7 @@ export default {
       dataPost.expired_date_from = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_from)
       dataPost.expired_date_to = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_to)
 
-      let promoId = this.$route.params.id
+      let promoId = this.route.params.id
       if(promoId){
         // Edit
         dataPost.id = promoId
@@ -902,7 +925,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/promo/list")
+      this.router.push("/promo/list")
     },
 
     /**

@@ -1,304 +1,260 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center text-header">BÁO CÁO SỬA BILL CŨ</h4>
-            <b-row>
-              <b-col md="4">
-                <label> Từ ngày </label><span class="error-sybol"></span>
-                <input
-                  id="fromDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="4">
-                <label> Đến ngày </label><span class="error-sybol"></span>
-                <input
-                  id="toDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+  <div class="p-6">
+    <!-- Page Header -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Báo cáo sửa bill cũ</h2>
+    </div>
 
-              <b-col md="4">
-                <label class="label-width text-white">
-                 Xem
-                </label>
+    <!-- Filters Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- From Date -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Từ ngày <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="inputs.fromDate"
+            type="text"
+            placeholder="dd-mm-yyyy"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+              errorFromDate ? 'border-red-500' : 'border-gray-300'
+            ]"
+          />
+          <p v-if="errorFromDate" class="text-red-500 text-xs mt-1">{{ errorFromDate }}</p>
+        </div>
 
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
-                  Xem
-                </b-button>
-              </b-col>
+        <!-- To Date -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Đến ngày <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="inputs.toDate"
+            type="text"
+            placeholder="dd-mm-yyyy"
+            :class="[
+              'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+              errorToDate ? 'border-red-500' : 'border-gray-300'
+            ]"
+          />
+          <p v-if="errorToDate" class="text-red-500 text-xs mt-1">{{ errorToDate }}</p>
+        </div>
 
-            </b-row>
+        <!-- Search Button -->
+        <div class="flex items-end">
+          <button
+            @click="search"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+          >
+            <i class="fa fa-search mr-2"></i>
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Excel Export Button -->
+      <div class="mt-4">
+        <download-excel
+          :data="excelData"
+          :fields="excelFields"
+          type="csv"
+          name="bao_cao_sua_bill_cu.xls"
+          class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+        >
+          <i class="fa fa-file-excel-o mr-2"></i>
+          Xuất Excel
+        </download-excel>
+      </div>
+    </div>
 
-            <b-row v-show="items.length > 0">
-              <b-col md="4">
-                Số kết quả: {{items.length}}
-              </b-col>
-              <b-col md="8" class="text-right">
-                <download-excel
-                  class   = "btn btn-default text-header"
-                  :data   = "items"
-                  :fields = "excel_statistic_fields"
-                  worksheet = "data"
-                  name    = "bao_cao_sua_bill_cu.xls">
-                  <b>Xuất Excel</b>
-                </download-excel>
-              </b-col>
-            </b-row>
+    <!-- Results Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-8">
+        <i class="fa fa-spinner fa-spin fa-3x text-blue-500"></i>
+        <p class="text-gray-600 mt-4">Đang tải dữ liệu...</p>
+      </div>
 
-            <b-row class="mt-2 mb-2" v-show="click == true">
-              <b-col md="12">
-                <b-table
-                  hover
-                  bordered
-                  stacked="md"
-                  :fields="fields"
-                  :items="items"
-                  v-show="items.length > 0">
-                  <template v-slot:cell(old_total)="dataOldTotal">{{ currencyFormat(dataOldTotal.item.old_total) }}</template>
-                  <template v-slot:cell(new_total)="dataNewTotal">{{ currencyFormat(dataNewTotal.item.new_total) }}</template>
-                </b-table>
+      <!-- Data Table -->
+      <div v-else-if="data.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số bill</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thành tiền bill gốc</th>
+              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thành tiền bill sửa</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày sửa</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người sửa</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="(item, index) in data" :key="index" class="hover:bg-gray-50">
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.stt }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.bill_number }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.old_total) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-right text-gray-900">{{ formatCurrency(item.new_total) }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.created_at }}</td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ item.staff_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-                <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
-
+      <!-- Empty State -->
+      <div v-else class="text-center py-8">
+        <i class="fa fa-inbox fa-3x text-gray-400 mb-4"></i>
+        <p class="text-gray-600">Không có dữ liệu</p>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-
-Vue.component('downloadExcel', JsonExcel)
-
 
 export default {
-  data () {
+  name: 'EditOldBillReport',
+  setup() {
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      toast,
+      formatCurrency
+    }
+  },
+  data() {
     return {
       inputs: {
-        "fromDate": null,
-        "toDate": null
+        fromDate: '',
+        toDate: ''
       },
-      onSearch: false,
-      click: false,
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT',
-          tdClass: 'text-center',
-          thClass: 'text-center'
-        },
-        {
-          key: 'bill_number',
-          label: 'Số bill',
-          tdClass: 'text-center',
-          thClass: 'text-center'
-        },
-        {
-          key: 'old_total',
-          label: 'Thành tiền bill gốc',
-          tdClass: 'text-right',
-          thClass: 'text-center'
-        },
-        {
-          key: 'new_total',
-          label: 'Thành tiền bill sửa',
-          tdClass: 'text-right',
-          thClass: 'text-center'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày sửa',
-          tdClass: 'text-center',
-          thClass: 'text-center'
-        },
-        {
-          key: 'staff_name',
-          label: 'Người sửa',
-          tdClass: 'text-center',
-          thClass: 'text-center'
-        },
-      ],
-      items: [],
+      data: [],
       loading: false,
-      excel_statistic_fields: {
+      firstSearch: true
+    }
+  },
+  computed: {
+    errorFromDate() {
+      if (!this.inputs.fromDate) {
+        return 'Vui lòng chọn từ ngày'
+      }
+      if (!commonFunc.checkDate(this.inputs.fromDate)) {
+        return 'Ngày không đúng định dạng dd-mm-yyyy'
+      }
+      return ''
+    },
+    errorToDate() {
+      if (!this.inputs.toDate) {
+        return 'Vui lòng chọn đến ngày'
+      }
+      if (!commonFunc.checkDate(this.inputs.toDate)) {
+        return 'Ngày không đúng định dạng dd-mm-yyyy'
+      }
+      return ''
+    },
+    excelData() {
+      return this.data.map(item => ({
+        stt: item.stt,
+        bill_number: item.bill_number,
+        old_total: item.old_total,
+        new_total: item.new_total,
+        created_at: item.created_at,
+        staff_name: item.staff_name
+      }))
+    },
+    excelFields() {
+      return {
         'STT': 'stt',
         'Số bill': 'bill_number',
-        'Thành tiền bill gốc' : 'old_total',
-        'Thành tiền bill sửa' : 'new_total',
-        'Ngày sửa' : 'created_at',
-        'Người sửa' : 'staff_name'
-      },
-      firstSearch: true,
+        'Thành tiền bill gốc': 'old_total',
+        'Thành tiền bill sửa': 'new_total',
+        'Ngày sửa': 'created_at',
+        'Người sửa': 'staff_name'
+      }
     }
   },
   mounted() {
-    // Get default date
-    let dateNow = new Date()
-    this.inputs.toDate = commonFunc.formatDate(dateNow.toJSON().slice(0,10))
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-    this.inputs.fromDate = commonFunc.formatDate(fromDate.toJSON().slice(0,10))
-
-    // Load data
-    this.search()
-
-  },
-  computed: {
-    errorFromDate: function () {
-      return this.checkDate(this.inputs.fromDate)
-    },
-    errorToDate: function () {
-      return this.checkDate(this.inputs.toDate)
-    },
+    // Set default date range (last 7 days)
+    const today = new Date()
+    const lastWeek = new Date(today)
+    lastWeek.setDate(lastWeek.getDate() - 7)
+    
+    this.inputs.toDate = this.formatDateInput(today)
+    this.inputs.fromDate = this.formatDateInput(lastWeek)
   },
   methods: {
-    checkDate (dateInput) {
-      return (this.click && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
+    formatDateInput(date) {
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = date.getFullYear()
+      return `${day}-${month}-${year}`
     },
-    checkValidate () {
-      return !(this.errorFromDate || this.errorToDate)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Only input integer
-     */
-     intergerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Check valid from date and to date
-     */
     checkFromDateAndToDate() {
-
-      let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
-      let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
-
-      if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+      if (this.errorFromDate || this.errorToDate) {
         return false
       }
 
-      fromDate.setDate(fromDate.getDate() + 62)
+      const fromParts = this.inputs.fromDate.split('-')
+      const toParts = this.inputs.toDate.split('-')
+      const fromDate = new Date(fromParts[2], fromParts[1] - 1, fromParts[0])
+      const toDate = new Date(toParts[2], toParts[1] - 1, toParts[0])
 
-      if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+      if (fromDate > toDate) {
+        this.toast.error('Từ ngày phải nhỏ hơn đến ngày')
+        return false
+      }
+
+      // Check max 62 days
+      const diffTime = Math.abs(toDate - fromDate)
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      if (diffDays > 62) {
+        this.toast.error('Khoảng thời gian không được vượt quá 62 ngày')
         return false
       }
 
       return true
     },
-
-    /**
-     * Search
-     */
-    search() {
-      if (this.loading) { return }
-      this.click = true
-
-      // Check validate
-      if(!this.checkValidate()) {
-        this.items = []
+    async search() {
+      if (!this.checkFromDateAndToDate()) {
         return
       }
-      if(!this.checkFromDateAndToDate()) {
-        this.items = []
-        return
-      }
+
+      this.firstSearch = false
       this.loading = true
-      this.onSearch = true
 
-      let params = {
-        "fromDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate),
-        "toDate": commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate)
+      const params = {
+        from_date: this.inputs.fromDate,
+        to_date: this.inputs.toDate
       }
 
-      // Search
-      adminAPI.getEditOldBillReport(params).then(res => {
-        if(res && res.data && res.data.data) {
-          this.items = res.data.data
-        }
-
-        this.firstSearch = false
-        this.onSearch = false
+      try {
+        const response = await adminAPI.getEditOldBillReport(params)
+        const items = response.data.data || []
+        
+        // Add stt (sequence number) to each item
+        this.data = items.map((item, index) => ({
+          ...item,
+          stt: index + 1
+        }))
+      } catch (error) {
+        console.error('Error fetching edit old bill report:', error)
+        this.toast.error('Không thể tải dữ liệu. Vui lòng thử lại.')
+        this.data = []
+      } finally {
         this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.firstSearch = false
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
-    },
+      }
+    }
   }
 }
 </script>
 
-<style lang="css" scoped>
-  .label-width {
-    width: 100%;
-  }
+<style scoped>
+/* Custom styles if needed */
 </style>

@@ -1,118 +1,145 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <h4 class="text-center text-header">THỐNG KÊ</h4>
-            <b-row>
-              <b-col md="3">
-                <label> Từ ngày </label><span class="error-sybol"></span>
-                <input
-                  id="fromDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.fromDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                  Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
-                <label> Đến ngày </label><span class="error-sybol"></span>
-                <input
-                  id="toDate"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.toDate"
-                  maxlength="10"
-                  @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                  Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
-                <label> Sắp xếp theo </label>
-                <b-form-select
-                  :options="orderByOption"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="inputs.orderBy">
-                </b-form-select>
-              </b-col>
+    <div class="grid grid-cols-1">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-center text-xl font-semibold mb-4">THỐNG KÊ</h4>
 
-              <b-col md="3">
-                <label class="label-width text-white">
-                   Xem
-                </label>
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
-                  Thống kê
-                </b-button>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 items-end mb-4">
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2"> Từ ngày </label>
+            <input
+              id="fromDate"
+              type="text"
+              autocomplete="new-password"
+              :class="['w-full border rounded px-3 py-2', errorFromDate ? 'border-red-500' : 'border-gray-300']"
+              v-model="inputs.fromDate"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)">
+            <div v-if="errorFromDate" class="text-red-500 text-sm mt-1">
+              Mục từ ngày không đúng
+            </div>
+          </div>
 
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2"> Đến ngày </label>
+            <input
+              id="toDate"
+              type="text"
+              autocomplete="new-password"
+              :class="['w-full border rounded px-3 py-2', errorToDate ? 'border-red-500' : 'border-gray-300']"
+              v-model="inputs.toDate"
+              maxlength="10"
+              @keyup="inputDateOnly($event.target)">
+            <div v-if="errorToDate" class="text-red-500 text-sm mt-1">
+              Mục đến ngày không đúng
+            </div>
+          </div>
 
-            <b-row v-show="items.length > 0">
-              <b-col md="4">
-                Số kết quả: {{items.length}}
-              </b-col>
-              <b-col md="8" class="text-right">
-                <download-excel
-                  class   = "btn btn-default text-header"
-                  :data   = "items"
-                  :fields = "excel_statistic_fields"
-                  worksheet = "Thống kê"
-                  name    = "thong_ke.xls">
-                  <b>Xuất Excel</b>
-                </download-excel>
-              </b-col>
-            </b-row>
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2"> Sắp xếp theo </label>
+            <select
+              id="status"
+              type="text"
+              autocomplete="new-password"
+              class="w-full border border-gray-300 rounded px-3 py-2"
+              v-model="inputs.orderBy">
+              <option v-for="option in orderByOption" :key="option.value" :value="option.value">
+                {{option.text}}
+              </option>
+            </select>
+          </div>
 
-            <b-row class="mt-2 mb-2" v-show="click == true">
-              <b-col md="12">
-                <b-table
-                  hover
-                  bordered
-                  stacked="md"
-                  :fields="fields"
-                  :items="items"
-                  v-show="items.length > 0">
-                  <template v-slot:cell(amount)="data">
-                    <span> {{ currencyFormat(data.item.amount) }} </span>
-                  </template>
-                </b-table>
+          <div class="col-span-12 md:col-span-3">
+            <label class="block mb-2 text-white">
+              Xem
+            </label>
+            <button 
+              class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" 
+              :disabled="onSearch" 
+              @click.prevent="search"
+              style="min-width: 120px"
+            >
+              Thống kê
+            </button>
+          </div>
+        </div>
 
-                <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
-              </b-col>
-            </b-row>
+        <!-- Loading -->
+        <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <div v-show="items.length > 0">
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-4">
+              Số kết quả: {{items.length}}
+            </div>
+            <div class="col-span-12 md:col-span-8 text-right">
+              <download-excel
+                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 inline-block font-semibold"
+                :data="items"
+                :fields="excel_statistic_fields"
+                worksheet="Thống kê"
+                name="thong_ke.xls">
+                Xuất Excel
+              </download-excel>
+            </div>
+          </div>
+        </div>
 
+        <div class="mt-4 mb-4 overflow-x-auto" v-show="click == true">
+          <table v-show="items.length > 0" class="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-center">STT</th>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-left">Phòng</th>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-center">Số lượng đặt phòng</th>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-center">% Số lượng</th>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-right">Doanh thu</th>
+                <th class="border border-gray-300 px-4 py-3 bg-blue-100 text-center">% Doanh thu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.stt">
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.stt}}</td>
+                <td class="border border-gray-300 px-4 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.quantity}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.percent_quantity}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{formatCurrency(item.amount)}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.percent_amount}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
+        </div>
+
+      </div>
+    </div>
 
   </div>
 </template>
 
 
 <script>
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
 import JsonExcel from 'vue-json-excel'
-
-Vue.component('downloadExcel', JsonExcel)
 
 
 export default {
+  components: {
+    'downloadExcel': JsonExcel
+  },
+  setup() {
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       inputs: {
@@ -128,37 +155,6 @@ export default {
         {value: 'quantityDesc', text: 'Số lượng giảm dần'},
         {value: 'amountAsc', text: 'Doanh thu tăng dần'},
         {value: 'amountDesc', text: 'Doanh thu giảm dần'}
-      ],
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT',
-          tdClass: 'text-center'
-        },
-        {
-          key: 'name',
-          label: 'Phòng'
-        },
-        {
-          key: 'quantity',
-          label: 'Số lượng đặt phòng',
-          tdClass: 'text-center'
-        },
-        {
-          key: 'percent_quantity',
-          label: '% Số lượng',
-          tdClass: 'text-center'
-        },
-        {
-          key: 'amount',
-          label: 'Doanh thu',
-          tdClass: 'text-right'
-        },
-        {
-          key: 'percent_amount',
-          label: '% Doanh thu',
-          tdClass: 'text-center'
-        },
       ],
       items: [],
       loading: false,
@@ -179,7 +175,7 @@ export default {
     this.inputs.toDate = commonFunc.formatDate(dateNow)
     this.inputs.fromDate = commonFunc.formatDate(dateNow)
 
-      this.search()
+    this.search()
   },
   computed: {
     errorFromDate: function () {
@@ -195,18 +191,6 @@ export default {
     },
     checkValidate () {
       return !(this.errorFromDate || this.errorToDate)
-    },
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**
@@ -236,14 +220,14 @@ export default {
       let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        this.toast.error("Từ ngày không thể lớn hơn đến ngày")
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
 
       if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+        this.toast.error("Thời gian không quá 62 ngày")
         return false
       }
 
@@ -290,24 +274,16 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.firstSearch = false
         this.onSearch = false
         this.loading = false
       })
     },
-
-      /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = 0
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
   }
 }
 </script>
+
+<style lang="css" scoped>
+</style>

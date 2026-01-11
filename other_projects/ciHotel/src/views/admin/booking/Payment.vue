@@ -1,654 +1,673 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-              <b-row>
-                <b-col cols="6" class="pt-2">
-                  <b-button variant="secondary" class="pull-left px-4" @click="goBack()">
-                    Quay lại
-                  </b-button>
-                </b-col>
-                <b-col cols="6" v-show="loading == false" class="pt-2">
-                  <b-button v-show="!isPayment" variant="outline-success" class="pull-right btn-width-140"
-                          @click="showModalConfirmPayment()" :disabled="paymentInfo.length == 0">
-                    Thanh toán
-                  </b-button>
-                  <h5 v-show="isPayment" class="text-header">Đã thanh toán</h5>
-                </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col cols="12" class="pt-2">
-                  <b-button v-show="!isPayment"  variant="outline-primary" class="pull-left btn-width-160"
-                          @click="printBill()" :disabled="paymentInfo.length == 0">
-                    In HĐ tạm tính
-                  </b-button>
-                </b-col>
-                <!--<b-col cols="6" class="pt-2">-->
-                  <!--<button v-show="!isPayment" class="btn btn-primary pull-right px-4 default-btn-bg fix-width-btn-200"-->
-                          <!--@click="getPaymentInfo()" :disabled="paymentInfo.length == 0">-->
-                    <!--Làm mới thông tin-->
-                  <!--</button>-->
-                <!--</b-col>-->
-              </b-row>
-
-              <b-row>
-                <b-col class="text-center">
-                  <h5 class="text-header mt-2">THÔNG TIN THANH TOÁN</h5>
-                </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col>
-                  <!-- Loading -->
-                  <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-                </b-col>
-              </b-row>
-
-              <b-row class="mt-3 pb-3">
-
-                <b-col md="6">
-                  <h4 class="col-12 mt-3"><b>Tên phòng:</b> {{this.paymentInfo.room_name}}</h4>
-                  <p class="col-12 mt-3"><b>Loại phòng: </b>{{this.paymentInfo.room_type_name}}</p>
-                  <p class="col-12 mt-3"><b>Khách hàng: </b>{{this.paymentInfo.customer_name}}</p>
-                  <p class="col-12 mt-3">
-                    <b>Số lượng khách: </b>
-                    <span v-if="this.paymentInfo.adult && this.paymentInfo.adult > 0">{{this.paymentInfo.adult}} người lớn</span>
-                    <span class="ml-2" v-if="this.paymentInfo.children && this.paymentInfo.children > 0">{{this.paymentInfo.children}} trẻ em</span>
-                  </p>
-                  <p class="col-12 mt-3"><b>Booking giờ đến:</b> {{this.paymentInfo.time_in}}</p>
-                  <p class="col-12 mt-3"><b>Booking giờ đi:</b> {{this.paymentInfo.time_out}}</p>
-                  <p class="col-12 mt-3"><b>Giờ khách đến thực tế:</b> {{this.formattedActualCheckIn}}</p>
-                  <p class="col-12 mt-3"><b>Giờ khách đi thực tế:</b> {{this.formattedActualCheckOut}}<i class="fa fa-edit" style="margin-left:5px" @click="showModalEditActualCheckOut"></i></p>
-                  <p class="col-12 mt-3"><b>Giờ khách ở:</b> {{this.paymentInfo.time_at}}</p>
-                </b-col>
-
-                <b-col md="6">
-                  <h4 class="col-12 mt-3"><b>Thành tiền: </b>
-                    <p class="pull-right">
-                      <b-button class="width-icon ml-2 btn-sm" title="Tính tiền thừa" variant="secondary" type="button" @click="showModalCalMoneyRefund" :disabled="isPayment">
-                        <i class="fa fa-calculator"></i>
-                      </b-button>
-                      <b>{{currencyFormat(this.paymentInfo.total)}}</b>
-                    </p>
-                  </h4>
-
-                  <b-row v-show="paymentInfo.money_receive">
-                    <b-col>
-                      <p class="pull-right">Số tiền khách đưa: <b>{{currencyFormat(paymentInfo.money_receive)}}</b> | Số tiền trả khách: <b>{{currencyFormat(paymentInfo.money_receive - paymentInfo.total)}}</b></p>
-                    </b-col>
-                  </b-row>
-
-                  <p class="col-12 mt-2">
-                    <b>Tổng tiền phòng:</b>
-                    <span class="pull-right">{{currencyFormat(this.paymentInfo.sub_total)}}</span>
-                  </p>
-                  <p class="col-12 mt-2" v-show="this.paymentInfo.service_amount">
-                    <b>Phí dịch vụ/Phụ thu:</b>
-                    <span class="pull-right">{{currencyFormat(this.paymentInfo.service_amount)}}</span>
-                  </p>
-                  <p class="col-12 mt-2" v-show="this.paymentInfo.discount_amount">
-                    <b>Tổng giảm giá:</b>
-                    <span class="pull-right">{{currencyFormat(this.paymentInfo.discount_amount)}}</span>
-                  </p>
-                  <p class="col-12 mt-2">
-                    <b>Thành tiền trước thuế:</b>
-                    <span class="pull-right">{{currencyFormat(this.paymentInfo.total - this.paymentInfo.vat_value)}}</span>
-                  </p>
-                  <p class="col-12 mt-2">
-                    <b>Thuế VAT: </b>
-                    <input class="largerCheckbox mr-2" type="checkbox" name="open"
-                           v-model="paymentInfo.apply_vat" @change="applyVat" :disabled="isPayment"/>
-                    <input
-                        id="vat_percent"
-                        type="text"
-                        style="width: 40px; height: 25px"
-                        v-model="paymentInfo.vat_percent"
-                        autocomplete="new-password"
-                        @keyup="integerOnly($event.target)"
-                        maxlength="3"
-                        @change="applyVat">%
-                    <span class="pull-right">{{currencyFormat(this.paymentInfo.vat_value)}}</span>
-                  </p>
-
-                  <b-row class="col-12">
-                    <b-col>
-
-                      <b-row class="form-row">
-                        <b-col md="12">
-                          <label><b>Loại tiền: </b> </label>
-                          <b-button class="width-icon ml-2 btn-sm" variant="secondary" type="button" @click="showModalExtendMoney" :disabled="isPayment">
-                            <i class="fa fa-plus "/>
-                          </b-button>
-                        </b-col>
-                      </b-row>
-
-                      <b-row class="form-row ml-3">
-                        <b-col>
-                          <p>Tiền mặt: {{currencyFormat(this.paymentInfo.cash)}}</p>
-                          <p>Chuyển khoản: {{currencyFormat(this.paymentInfo.credit)}}</p>
-                          <p>Tiền điện tử: {{currencyFormat(this.paymentInfo.e_money)}}</p>
-                        </b-col>
-                      </b-row>
-
-                      <b-row class="form-row">
-                        <b-col md="12" class="mt-2">
-                          <div class="input-group">
-                            <label><b>Khuyến mãi: </b> </label>
-                            <b-button class="width-icon ml-2 btn-sm" variant="secondary" type="button"
-                                      @click="showModalApplyPmt" :disabled="isPayment">
-                              <i class="fa fa-plus "/>
-                            </b-button>
-                          </div>
-                        </b-col>
-                      </b-row>
-
-                      <b-row class="form-row ml-3" v-show="this.paymentInfo.pmts && this.paymentInfo.pmts.length > 0">
-                        <b-col md="12" class="mt-2">
-                          <label>Khuyến mãi đang áp dụng: </label>
-                          <p v-for="(pmt, index) in this.paymentInfo.pmts" :key="pmt.name + index">
-                            {{pmt.quantity_apply + " x " + pmt.name}}
-                            <i v-show="pmt.method != 'auto'" class="fa fa-trash" @click="deletePromotion(pmt.id)"/>
-                          </p>
-                        </b-col>
-                      </b-row>
-
-                    </b-col>
-                  </b-row>
-
-                  <b-row class="col-12">
-                    <b-col>
-
-                      <b-row class="form-row">
-                        <b-col md="12">
-                          <div class="input-group">
-                            <label><b>Phí dịch vụ, phụ thu: </b> </label>
-                            <b-button class="width-icon ml-2 btn-sm" variant="secondary" type="button" @click="showModalServiceFee" :disabled="isPayment">
-                              <i class="fa fa-plus "/>
-                            </b-button>
-                          </div>
-                        </b-col>
-                      </b-row>
-
-                      <b-row class="form-row ml-3" v-show="this.paymentInfo.service && this.paymentInfo.service.length > 0">
-                        <b-col md="12" class="mt-2">
-                          <label>Dịch vụ, phụ thu đang áp dụng: </label>
-                          <table class="table table-bordered table-striped fixed_header">
-                            <thead>
-                              <tr>
-                                <th>STT</th>
-                                <th>Ngày</th>
-                                <th>DV/Phụ thu</th>
-                                <th>Đơn giá</th>
-                                <th>Số lượng</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="(service, index) in this.paymentInfo.service" :key="service.name + index">
-                                <td>{{index + 1}}</td>
-                                <td>{{service.created_at}}</td>
-                                <td>{{service.name}}</td>
-                                <td class="text-right">{{currencyFormat(service.price)}}</td>
-                                <td class="text-right">{{currencyFormat(service.quantity)}}</td>
-                                <td><i class="fa fa-trash" @click="deleteService(service.name, service.price)"/></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </b-col>
-                      </b-row>
-
-                      </b-col>
-                  </b-row>
-
-                  <p class="col-12 mt-3"><b>Chi tiết thời gian: </b></p>
-                  <ul v-if="paymentInfo && paymentInfo.payment_split_times && paymentInfo.payment_split_times.length>0">
-                    <li v-for="(item,index) in paymentInfo.payment_split_times" :key ="index">
-                      <p class="col-12 mt-3">
-                        Từ {{item.start_time.substring(0, 16)}} đến {{item.end_time.substring(0, 16)}}{{item.unit_number>1?` (${item.unit_number})`:''}}: <b>{{currencyFormat(item.amount)}}</b>
-                        <i class="fa fa-edit" style="margin-left:5px" @click="showModalSplitBill($event,index)"/>
-                      </p>
-                      <EditSplitBillModal
-                        :title="'Thay đổi giá trị bill tách số '+ item.payment_split_time_id"
-                        :handle-submit="confirmEditSplitBill"
-                        :id="index"
-                      />
-                    </li>
-                  </ul>
-
-                  <p class="col-12 mt-3"><b>Ghi chú: </b></p>
-                  <b-row>
-                    <b-col md="12">
-                      <b-form-textarea
-                        placeholder="Ghi chú"
-                        rows="3"
-                        v-model="paymentInfo.note">
-                      </b-form-textarea>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col md="12" class="text-center mt-2">
-                      <b-button variant="outline-success" class="btn-width-180" @click="updateNote()">
-                        Cập nhật ghi chú
-                      </b-button>
-                    </b-col>
-                  </b-row>
-
-                </b-col>
-
-
-              </b-row>
-        </b-card>
-      </b-col>
-    </b-row>
-
-    <!-- Modal edit actual check out -->
-    <b-modal centered hide-footer hide-header id="modal-edit-actual-checkout">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Nhập thời gian khách đi thực tế:</h5>
-        </b-col>
-      </b-row>
-      <hr>
-        <b-row class="form-row" style="margin-bottom: 5px">
-          <b-col md="12">
-            <span> Thời gian cũ:</span>
-            <input
-              class="form-control"
-              id="check_in_time"
-              type="text"
-              v-model="this.formattedActualCheckOut"
-              :readonly="true"
-            />
-          </b-col>
-        </b-row>
-          <b-row class="form-row" style="margin-bottom: 5px">
-            <b-col md="12">
-            <span> Thời gian mới:</span>
-            <Datepicker
-              :value="this.newActualCheckOut"
-              ref="editActualCheckOut"
-              format="DD-MM-YYYY H:i:s"
-            />
-            </b-col>
-          </b-row>
-          <b-row class="d-flex justify-content-center">
-            <button class="btn btn-primary px-4 default-btn-bg" style="margin-right: 5px" @click="confirmEditActualCheckOut">
-              Xác nhận
-            </button>
-            <b-button @click="cancelEditActualCheckOut">
-              Hủy bỏ
-            </b-button>
-          </b-row>
-
-      </b-modal>
-
-    <!-- Modal apply pmt -->
-    <b-modal title="Áp dụng khuyến mãi" centered hide-header hide-footer no-close-on-backdrop id="modal-apply-pmt" size="xl">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Áp dụng khuyến mãi</h5>
-        </b-col>
-      </b-row>
-      <hr>
-
-      <b-row>
-
-        <b-col>
-          <p class="col-12" v-for="pmt in this.pmtOfStore" :key="pmt.id">
-            <b>- </b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span>
-            <b-list-group horizontal>
-              <b-list-group-item @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)">
-                <i class="fa fa-plus"/>
-              </b-list-group-item>
-              <b-list-group-item>
-                <span :id="'pmtStore' + pmt.id">0</span>
-              </b-list-group-item>
-              <b-list-group-item @click="minusQuantityPmt(pmt.id, pmt)">
-                <i class="fa fa-minus"/>
-              </b-list-group-item>
-            </b-list-group>
-          </p>
-        </b-col>
-
-      </b-row>
-
-      <!--<b-row v-show="this.pmtTemp.length > 0">-->
-        <!--<b-col>-->
-          <!--Khuyến mãi:-->
-          <!--<p class="col-12" v-for="pmt in this.pmtTemp" :key="pmt.pk">-->
-            <!--{{" - " + pmt.quantity_apply + " x " + pmt.name}}-->
-            <!--<i v-show="pmt.method != 'auto'" class="fa fa-trash" @click="deletePromotionTemp(pmt.id)"/>-->
-          <!--</p>-->
-        <!--</b-col>-->
-      <!--</b-row>-->
-
-      <b-row class="mt-2">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" @click="cancelApplyPmt()">
-            Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmPmt"><icon name="loading" width="60" /></span>
-
-          <button v-show="!isPayment && !loadingConfirmPmt" class="btn btn-primary pull-right px-4 default-btn-bg"
-                  @click="confirmApplyPmt()">
-            Xác nhận &nbsp;
-          </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
-
-    <!-- Modal service fee -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop id="modal-service-fee" @hide="hideModalServiceFee">
-
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Thêm phí dịch vụ, phụ thu</h5>
-        </b-col>
-      </b-row>
-      <br>
-
-      <b-row>
-        <b-col>
-          <b-tabs content-class="mt-3">
-              <b-tab title="Phí dịch vụ" active>
-                <div class="form-group">
-                  <label>Tên dịch vụ</label><span class="error-sybol"></span>
-                  <input
-                    id="serviceName"
-                    type="text"
-                    class="form-control"
-                    maxlength="100">
-                </div>
-                <div class="form-group">
-                  <label>Giá dịch vụ</label><span class="error-sybol"></span>
-                  <input
-                    id="servicePrice"
-                    type="text"
-                    class="form-control"
-                    maxlength="11"
-                    @keyup="integerOnly($event.target)">
-                </div>
-
-                <b-row>
-                  <b-col>
-                    <label class="text-danger" v-show="serviceError">Hãy nhập đủ các trường bắt buộc</label>
-                  </b-col>
-                </b-row>
-
-                <b-row>
-                  <b-col class="text-center">
-                    <button class="btn btn-primary px-4 default-btn-bg" @click="addNewService()">
-                      Thêm &nbsp;
-                    </button>
-                  </b-col>
-                </b-row>
-              </b-tab>
-
-              <b-tab title="Phụ thu">
-                <div class="form-group">
-                  <label>Tên phụ thu</label>
-                  <input
-                    id="surchargeName"
-                    type="text"
-                    class="form-control"
-                    maxlength="100">
-                </div>
-                <div class="form-group">
-                  <label>Số tiền phụ thu</label>
-                  <input
-                    id="surchargePrice"
-                    type="text"
-                    class="form-control"
-                    maxlength="11"
-                    @keyup="integerOnly($event.target)">
-                </div>
-
-                <b-row>
-                  <b-col>
-                    <label class="text-danger" v-show="surchargeError">Hãy nhập đủ các trường bắt buộc</label>
-                  </b-col>
-                </b-row>
-
-                <b-row>
-                  <b-col class="text-center">
-                    <button class="btn btn-primary px-4 default-btn-bg" @click="addNewSurcharge()">
-                      Thêm &nbsp;
-                    </button>
-                  </b-col>
-                </b-row>
-              </b-tab>
-
-              <b-tab title="Dịch vụ có sẵn">
-                <b-row style="margin-bottom:10px; padding-left:15px">
-                  <b-form-input placeholder="Lọc" v-model="roomServiceFilter" style="width:50%"/>
-                </b-row>
-                <b-row>
-                  <p class="col-12" v-for="service in filteredRoomService" :key="service.id">
-                    <b>- </b> {{service.name + " (" + currencyFormat(service.price) + ")"}}
-                    <b-list-group horizontal>
-                      <b-list-group-item @click="plusQuantityRoomService(service.id)">
-                        <i class="fa fa-plus"/>
-                      </b-list-group-item>
-                      <b-list-group-item>
-                        <span :id="'RoomService' + service.id">{{service.quantity}}</span>
-                      </b-list-group-item>
-                      <b-list-group-item @click="minusQuantityRoomService(service.id)">
-                        <i class="fa fa-minus"/>
-                      </b-list-group-item>
-                    </b-list-group>
-                  </p>
-                </b-row>
-
-                <b-row>
-                  <b-col class="text-center">
-                    <button class="btn btn-primary px-4 default-btn-bg" @click="addNewRoomService()">
-                      Thêm &nbsp;
-                    </button>
-                  </b-col>
-                </b-row>
-              </b-tab>
-          </b-tabs>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-           <p class="col-12" v-for="service in this.paymentInfo.service" :key="service.name">
-             - <b>Loại</b>: <span v-if="service.type == 'service'">Dịch vụ</span><span v-if="service.type == 'surcharge'">Phụ thu</span><span v-if="service.type == 'roomService'">Dịch vụ có sẵn</span>, <b>Tên</b>: {{service.name}}, <span v-show="service.price"><b>Số tiền</b>: {{currencyFormat(service.price)}}vnđ</span>
-              <i class="fa fa-trash" @click="deleteServiceTemp(service.type, service.name, service.price)"/>
-           </p>
-           <b-form-invalid-feedback
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-4">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" @click="cancelServiceFee()">
-            Quay lại
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmService"><icon name="loading" width="60" /></span>
-
-          <button v-show="!isPayment && !loadingConfirmService" class="btn btn-primary pull-right px-4 default-btn-bg" @click="confirmServiceFee()">
-            Xác nhận &nbsp;
-          </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
-
-    <!-- Modal extend money -->
-    <b-modal title="Loại tiền thanh toán" centered hide-footer id="modal-extend-money">
-        <b-row>
-          <b-col>
-            Tổng tiền: {{currencyFormat(this.paymentInfo.total)}}
-          </b-col>
-        </b-row>
-
-      <b-row>
-        <b-col>
-          <b-tabs content-class="mt-3">
-              <b-tab title="Tiền mặt" active>
-                <input
-                  id="cash"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="11"
-                  v-model="paymentInfo.cash"
-                  @keyup="intergerOnly($event.target)">
-              </b-tab>
-
-              <b-tab title="Chuyển khoản">
-                <div>
-                  <input
-                  id="credit"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="11"
-                  v-model="paymentInfo.credit"
-                  @keyup="intergerOnly($event.target)">
-                </div>
-              </b-tab>
-
-              <b-tab title="Tiền điện tử">
-                <input
-                  id="e_money"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="11"
-                  v-model="paymentInfo.e_money"
-                  @keyup="intergerOnly($event.target)">
-              </b-tab>
-          </b-tabs>
-          <b-form-invalid-feedback  class="invalid-feedback" :state="!errorTotalMoney">
-            Tổng số tiền nhập khác tổng tiển
-          </b-form-invalid-feedback>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <p> - Tiền mặt: {{currencyFormat(paymentInfo.cash)}}</p>
-          <p> - Chuyển khoản: {{currencyFormat(paymentInfo.credit)}}</p>
-          <p> - Tiền điện tử: {{currencyFormat(paymentInfo.e_money)}}</p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmMoneyType"><icon name="loading" width="60" /></span>
-
+  <div class="container mx-auto px-4">
+    <!-- Header Buttons -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
           <button
-                  v-show="!isPayment && !loadingConfirmMoneyType"
-                  class="btn btn-primary pull-right px-4 default-btn-bg"
-                  @click="confirmExtendMoney()"
-                  :disabled="parseInt(paymentInfo.total) != parseInt(paymentInfo.cash) + parseInt(paymentInfo.credit) + parseInt(paymentInfo.e_money)">
-            Xác nhận &nbsp;
+            class="w-full md:w-auto px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="goBack()"
+          >
+            Quay lại
           </button>
-        </b-col>
-      </b-row>
+        </div>
+        <div v-show="!loading" class="flex justify-end">
+          <button
+            class="w-full md:w-auto px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            @click="showModalConfirmPayment()"
+            :disabled="paymentInfo.length == 0"
+          >
+            Thanh toán
+          </button>
+        </div>
+      </div>
+    </div>
 
-    </b-modal>
+    <!-- Title -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <h5 class="text-2xl font-bold text-center text-gray-800">Thông Tin Thanh Toán</h5>
+    </div>
 
-    <!-- Modal calculate money refund -->
-    <b-modal title="Tính tiền trả khách" centered hide-header hide-footer no-close-on-backdrop id="modal-calculate-money-refund" size="sm">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Tính tiền thừa</h5>
-        </b-col>
-      </b-row>
-      <hr>
+    <!-- Loading -->
+    <div v-show="loading" class="flex justify-center py-8">
+      <i class="fa fa-spinner fa-spin text-4xl text-blue-600"></i>
+    </div>
 
-      <b-row>
-        <b-col>
-          <p class="ml-5">- Số tiền phải trả: <b>{{currencyFormat(paymentInfo.total)}}</b> vnđ</p>
-          <p class="ml-5">- Số tiền khách đưa:
-            <input
-            id="moneyReceive"
-            v-model="paymentInfo.money_receive"
-            type="text"
-            class="form-control"
-            maxlength="11"
-            @keyup="calculateMoneyRefund">
+    <!-- Main Content -->
+    <div v-show="!loading" class="bg-white rounded-lg shadow-md p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left Column - Room Info -->
+        <div>
+          <h4 class="text-xl font-bold mb-3">Tên phòng: {{paymentInfo.room_name}}</h4>
+          <p class="mb-2"><b>Loại phòng:</b> {{paymentInfo.room_type_name}}</p>
+          <p class="mb-2"><b>Khách hàng:</b> {{paymentInfo.customer_name}}</p>
+          <p class="mb-2">
+            <b>Số lượng khách:</b>
+            <span v-if="paymentInfo.adult && paymentInfo.adult > 0">{{paymentInfo.adult}} người lớn</span>
+            <span class="ml-2" v-if="paymentInfo.children && paymentInfo.children > 0">{{paymentInfo.children}} trẻ em</span>
           </p>
-          <p class="ml-5">- Số tiền trả khách: <b>{{currencyFormat(paymentInfo.money_refunds)}}</b> vnđ</p>
-        </b-col>
-      </b-row>
+          <p class="mb-2"><b>Booking giờ đến:</b> {{paymentInfo.time_in}}</p>
+          <p class="mb-2"><b>Booking giờ đi:</b> {{paymentInfo.time_out}}</p>
+          <p class="mb-2"><b>Giờ khách đến thực tế:</b> {{formattedActualCheckIn}}</p>
+          <p class="mb-2">
+            <b>Giờ khách đi thực tế:</b> {{formattedActualCheckOut}}
+            <i class="fa fa-edit ml-2 cursor-pointer text-blue-600 hover:text-blue-800" @click="showModalEditActualCheckOut"></i>
+          </p>
+          <p class="mb-2"><b>Giờ khách ở:</b> {{paymentInfo.time_at}}</p>
+        </div>
 
-      <b-row class="mt-2">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" @click="cancelMoneyRefund()">
-            Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingCalMoneyRefund"><icon name="loading" width="60" /></span>
+        <!-- Right Column - Payment Info -->
+        <div>
+          <h4 class="text-xl font-bold mb-3 flex justify-between items-center">
+            <span>Thành tiền:</span>
+            <span>
+              <button
+                class="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition"
+                title="Tính tiền thừa"
+                @click="showModalCalMoneyRefund"
+                :disabled="isPayment"
+              >
+                <i class="fa fa-calculator"></i>
+              </button>
+              <span class="ml-2">{{formatCurrency(paymentInfo.total)}}</span>
+            </span>
+          </h4>
 
-          <button v-show="!isPayment && !loadingCalMoneyRefund" class="btn btn-primary pull-right px-4 default-btn-bg" @click="confirmMoneyRefund()">
-            Xác nhận &nbsp;
-          </button>
-        </b-col>
-      </b-row>
+          <div v-show="paymentInfo.money_receive" class="mb-2 text-right">
+            <p>Số tiền khách đưa: <b>{{formatCurrency(paymentInfo.money_receive)}}</b> | Số tiền trả khách: <b>{{formatCurrency(paymentInfo.money_receive - paymentInfo.total)}}</b></p>
+          </div>
 
-    </b-modal>
+          <p class="mb-2 flex justify-between">
+            <b>Tổng tiền phòng:</b>
+            <span>{{formatCurrency(paymentInfo.sub_total)}}</span>
+          </p>
+          <p class="mb-2 flex justify-between" v-show="paymentInfo.service_amount">
+            <b>Phí dịch vụ/Phụ thu:</b>
+            <span>{{formatCurrency(paymentInfo.service_amount)}}</span>
+          </p>
+          <p class="mb-2 flex justify-between" v-show="paymentInfo.discount_amount">
+            <b>Tổng giảm giá:</b>
+            <span>{{formatCurrency(paymentInfo.discount_amount)}}</span>
+          </p>
+          <p class="mb-2 flex justify-between">
+            <b>Thành tiền trước thuế:</b>
+            <span>{{formatCurrency(paymentInfo.total - paymentInfo.vat_value)}}</span>
+          </p>
+          <p class="mb-2 flex justify-between items-center" v-if="paymentInfo.vat_percent">
+            <span>
+              <b>Thuế VAT:</b>
+              <input
+                type="checkbox"
+                v-model="paymentInfo.apply_vat"
+                @change="applyVat"
+                :disabled="isPayment"
+                class="ml-2 mr-2 w-5 h-5 align-middle"
+              />
+              <input
+                id="vat_percent"
+                type="text"
+                v-model="paymentInfo.vat_percent"
+                autocomplete="new-password"
+                @keyup="integerOnly($event.target)"
+                maxlength="3"
+                @change="applyVat"
+                class="w-12 px-2 py-1 border border-gray-300 rounded"
+              />%
+            </span>
+            <span>{{formatCurrency(paymentInfo.vat_value)}}</span>
+          </p>
 
-    <!-- Modal confirm payment -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop id="modal-confirm-payment">
+          <!-- Money Types -->
+          <div class="mt-4 p-4 bg-gray-50 rounded">
+            <div class="flex justify-between items-center mb-2">
+              <label class="font-bold">Loại tiền:</label>
+              <button
+                class="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition"
+                @click="showModalExtendMoney"
+                :disabled="isPayment"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <div class="ml-3">
+              <p>Tiền mặt: {{formatCurrency(paymentInfo.cash)}}</p>
+              <p>Chuyển khoản: {{formatCurrency(paymentInfo.credit)}}</p>
+              <p>E_money: {{formatCurrency(paymentInfo.e_money)}}</p>
+            </div>
+          </div>
 
-      <b-row class="boder-bottom mb-2">
-        <b-col md="12" class="text-center text-header">
-          <h5>Thanh toán phòng: [{{this.paymentInfo.room_name}}]</h5>
-        </b-col>
-      </b-row>
+          <!-- Promotions -->
+          <div class="mt-4 p-4 bg-gray-50 rounded">
+            <div class="flex justify-between items-center mb-2">
+              <label class="font-bold">Khuyến mãi:</label>
+              <button
+                class="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition"
+                @click="showModalApplyPmt"
+                :disabled="isPayment"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <div v-show="paymentInfo.pmts && paymentInfo.pmts.length > 0" class="ml-3">
+              <label class="font-semibold">Khuyến mãi đang áp dụng:</label>
+              <p v-for="(pmt, index) in paymentInfo.pmts" :key="pmt.name + index" class="flex justify-between items-center">
+                <span>{{pmt.quantity_apply + " x " + pmt.name}}</span>
+                <i v-show="pmt.method != 'auto'" class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" @click="deletePromotion(pmt.id)"></i>
+              </p>
+            </div>
+          </div>
 
-      <b-row class="boder-top mt-3">
-        <b-col cols="6">
-          <b-button v-show="!loadingConfirmPayment" variant="secondary" class="pull-left px-4 btn-width-120" block @click="hideModalConfirmPayment">
-            Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmPayment"><icon name="loading" width="60" /></span>
-          <button v-show="!loadingConfirmPayment" class="btn btn-primary btn-width-120 px-4 default-btn-bg pull-right" @click="confirmPayment">
+          <!-- Service Fees -->
+          <div class="mt-4 p-4 bg-gray-50 rounded">
+            <div class="flex justify-between items-center mb-2">
+              <label class="font-bold">Phí dịch vụ, phụ thu:</label>
+              <button
+                class="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition"
+                @click="showModalServiceFee"
+                :disabled="isPayment"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <div v-show="paymentInfo.service && paymentInfo.service.length > 0" class="ml-3">
+              <label class="font-semibold">Dịch vụ, phụ thu đang áp dụng:</label>
+              <p v-for="(service, index) in paymentInfo.service" :key="service.name + index" class="flex justify-between items-center">
+                <span>{{service.quantity + " x " + service.name + " (" + formatCurrency(service.price) + ") = " + formatCurrency(service.price * service.quantity)}}</span>
+                <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" @click="deleteService(service.name, service.price)"></i>
+              </p>
+            </div>
+          </div>
+
+          <!-- Split Payment Times -->
+          <p class="mt-4 mb-2 font-bold">Chi tiết thời gian:</p>
+          <ul v-if="paymentInfo && paymentInfo.payment_split_times && paymentInfo.payment_split_times.length > 0">
+            <li v-for="(item, index) in paymentInfo.payment_split_times" :key="index">
+              <p class="mb-2 flex justify-between items-center">
+                <span>Từ {{item.start_time.substring(0, 16)}} đến {{item.end_time.substring(0, 16)}}{{item.unit_number > 1 ? ` (${item.unit_number})` : ''}}: <b>{{formatCurrency(item.amount)}}</b></span>
+                <i class="fa fa-edit cursor-pointer text-blue-600 hover:text-blue-800" @click="showModalSplitBill($event, index)"></i>
+              </p>
+              <EditSplitBillModal
+                :title="'Thay đổi giá trị bill tách số ' + item.payment_split_time_id"
+                :handle-submit="confirmEditSplitBill"
+                :id="index"
+              />
+            </li>
+          </ul>
+
+          <!-- Note -->
+          <p class="mt-4 mb-2 font-bold">Ghi chú:</p>
+          <div>
+            <textarea
+              placeholder="Ghi chú"
+              rows="3"
+              v-model="paymentInfo.note"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
+          </div>
+          <div class="text-center mt-2">
+            <button
+              class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              @click="updateNote()"
+            >
+              Cập nhật ghi chú
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Edit Actual Check Out -->
+    <div v-if="showActualCheckOutModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <h5 class="text-center text-lg font-bold mb-3">Nhập thời gian khách đi thực tế:</h5>
+        <hr class="mb-4"/>
+
+        <div class="mb-4">
+          <span class="block mb-2">Thời gian cũ:</span>
+          <input
+            class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
+            type="text"
+            v-model="formattedActualCheckOut"
+            readonly
+          />
+        </div>
+
+        <div class="mb-4">
+          <span class="block mb-2">Thời gian mới:</span>
+          <Datepicker
+            :value="newActualCheckOut"
+            ref="editActualCheckOut"
+            format="DD-MM-YYYY H:i:s"
+            class="w-full"
+          />
+        </div>
+
+        <div class="flex justify-center gap-2">
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            @click="confirmEditActualCheckOut"
+          >
             Xác nhận
           </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+          <button
+            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="cancelEditActualCheckOut"
+          >
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Modal: Apply Promotions -->
+    <div v-if="showApplyPmtModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-10 mx-auto p-5 border max-w-4xl shadow-lg rounded-md bg-white">
+        <h5 class="text-center text-lg font-bold mb-3">Áp dụng khuyến mãi</h5>
+        <hr class="mb-4"/>
 
+        <div class="max-h-96 overflow-y-auto mb-4">
+          <p class="mb-3 flex justify-between items-center" v-for="pmt in pmtOfStore" :key="pmt.id">
+            <span><b>-</b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span></span>
+            <div class="flex items-center gap-2">
+              <button
+                class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)"
+              >
+                <i class="fa fa-plus"></i>
+              </button>
+              <span class="w-12 text-center" :id="'pmtStore' + pmt.id">0</span>
+              <button
+                class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                @click="minusQuantityPmt(pmt.id, pmt)"
+              >
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+          </p>
+        </div>
+
+        <div class="flex justify-between items-center gap-2 mt-4">
+          <button
+            class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="cancelApplyPmt()"
+          >
+            Hủy
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span v-show="loadingConfirmPmt"><i class="fa fa-spinner fa-spin text-xl"></i></span>
+            <button
+              v-show="!isPayment && !loadingConfirmPmt"
+              class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              @click="confirmApplyPmt()"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Service Fee -->
+    <div v-if="showServiceFeeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-10 mx-auto p-5 border max-w-2xl shadow-lg rounded-md bg-white">
+        <h5 class="text-center text-lg font-bold mb-3">Thêm phí dịch vụ, phụ thu</h5>
+        <hr class="mb-4"/>
+
+        <!-- Custom Tabs -->
+        <div class="mb-4">
+          <div class="flex border-b">
+            <button
+              :class="['px-4 py-2 font-semibold', activeServiceTab === 'service' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeServiceTab = 'service'"
+            >
+              Phí dịch vụ
+            </button>
+            <button
+              :class="['px-4 py-2 font-semibold', activeServiceTab === 'surcharge' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeServiceTab = 'surcharge'"
+            >
+              Phụ thu
+            </button>
+            <button
+              :class="['px-4 py-2 font-semibold', activeServiceTab === 'roomService' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeServiceTab = 'roomService'"
+            >
+              Dịch vụ có sẵn
+            </button>
+          </div>
+
+          <!-- Service Tab Content -->
+          <div v-if="activeServiceTab === 'service'" class="mt-4">
+            <div class="mb-3">
+              <label class="block mb-1">Tên dịch vụ <span class="text-red-600">*</span></label>
+              <input
+                id="serviceName"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded"
+                maxlength="100"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="block mb-1">Giá dịch vụ <span class="text-red-600">*</span></label>
+              <input
+                id="servicePrice"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded"
+                maxlength="11"
+                @keyup="integerOnly($event.target)"
+              />
+            </div>
+            <label v-show="serviceError" class="text-red-600">Hãy nhập đủ các trường bắt buộc</label>
+            <div class="text-center mt-3">
+              <button
+                class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                @click="addNewService()"
+              >
+                Thêm
+              </button>
+            </div>
+          </div>
+
+          <!-- Surcharge Tab Content -->
+          <div v-if="activeServiceTab === 'surcharge'" class="mt-4">
+            <div class="mb-3">
+              <label class="block mb-1">Tên phụ thu</label>
+              <input
+                id="surchargeName"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded"
+                maxlength="100"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="block mb-1">Số tiền phụ thu</label>
+              <input
+                id="surchargePrice"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded"
+                maxlength="11"
+                @keyup="integerOnly($event.target)"
+              />
+            </div>
+            <label v-show="surchargeError" class="text-red-600">Hãy nhập đủ các trường bắt buộc</label>
+            <div class="text-center mt-3">
+              <button
+                class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                @click="addNewSurcharge()"
+              >
+                Thêm
+              </button>
+            </div>
+          </div>
+
+          <!-- Room Service Tab Content -->
+          <div v-if="activeServiceTab === 'roomService'" class="mt-4">
+            <div class="mb-3">
+              <input
+                placeholder="Lọc"
+                v-model="roomServiceFilter"
+                class="w-1/2 px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div class="max-h-64 overflow-y-auto">
+              <p class="mb-3 flex justify-between items-center" v-for="service in filteredRoomService" :key="service.id">
+                <span><b>-</b> {{service.name + " (" + formatCurrency(service.price) + ")"}}</span>
+                <div class="flex items-center gap-2">
+                  <button
+                    class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                    @click="plusQuantityRoomService(service.id)"
+                  >
+                    <i class="fa fa-plus"></i>
+                  </button>
+                  <span class="w-12 text-center" :id="'RoomService' + service.id">{{service.quantity}}</span>
+                  <button
+                    class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                    @click="minusQuantityRoomService(service.id)"
+                  >
+                    <i class="fa fa-minus"></i>
+                  </button>
+                </div>
+              </p>
+            </div>
+            <div class="text-center mt-3">
+              <button
+                class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                @click="addNewRoomService()"
+              >
+                Thêm
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Services List -->
+        <div class="mt-4 p-3 bg-gray-50 rounded">
+          <p class="mb-2" v-for="service in paymentInfo.service" :key="service.name">
+            - <b>Loại</b>: <span v-if="service.type == 'service'">Dịch vụ</span><span v-if="service.type == 'surcharge'">Phụ thu</span><span v-if="service.type == 'roomService'">Dịch vụ có sẵn</span>, <b>Tên</b>: {{service.name}}, <span v-show="service.price"><b>Số tiền</b>: {{formatCurrency(service.price)}}vnđ</span>
+            <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800 ml-2" @click="deleteServiceTemp(service.type, service.name, service.price)"></i>
+          </p>
+        </div>
+
+        <div class="flex justify-between items-center gap-2 mt-4">
+          <button
+            class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="cancelServiceFee()"
+          >
+            Quay lại
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span v-show="loadingConfirmService"><i class="fa fa-spinner fa-spin text-xl"></i></span>
+            <button
+              v-show="!isPayment && !loadingConfirmService"
+              class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              @click="confirmServiceFee()"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Extend Money (Payment Types) -->
+    <div v-if="showExtendMoneyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <h5 class="text-center text-lg font-bold mb-3">Loại tiền thanh toán</h5>
+
+        <div class="mb-4">
+          <p class="mb-3">Tổng tiền: {{formatCurrency(paymentInfo.total)}}</p>
+        </div>
+
+        <!-- Custom Tabs for Money Types -->
+        <div class="mb-4">
+          <div class="flex border-b">
+            <button
+              :class="['flex-1 py-2 font-semibold', activeMoneyTab === 'cash' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeMoneyTab = 'cash'"
+            >
+              Tiền mặt
+            </button>
+            <button
+              :class="['flex-1 py-2 font-semibold', activeMoneyTab === 'credit' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeMoneyTab = 'credit'"
+            >
+              Chuyển khoản
+            </button>
+            <button
+              :class="['flex-1 py-2 font-semibold', activeMoneyTab === 'e_money' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600']"
+              @click="activeMoneyTab = 'e_money'"
+            >
+              Tiền điện tử
+            </button>
+          </div>
+
+          <div class="mt-4">
+            <input
+              v-if="activeMoneyTab === 'cash'"
+              id="cash"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded"
+              maxlength="11"
+              v-model="paymentInfo.cash"
+              @keyup="intergerOnly($event.target)"
+            />
+            <input
+              v-if="activeMoneyTab === 'credit'"
+              id="credit"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded"
+              maxlength="11"
+              v-model="paymentInfo.credit"
+              @keyup="intergerOnly($event.target)"
+            />
+            <input
+              v-if="activeMoneyTab === 'e_money'"
+              id="e_money"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded"
+              maxlength="11"
+              v-model="paymentInfo.e_money"
+              @keyup="intergerOnly($event.target)"
+            />
+          </div>
+        </div>
+
+        <div v-if="errorTotalMoney" class="mb-3 text-red-600">
+          Tổng số tiền nhập khác tổng tiền
+        </div>
+
+        <div class="mb-4 p-3 bg-gray-50 rounded">
+          <p>- Tiền mặt: {{formatCurrency(paymentInfo.cash)}}</p>
+          <p>- Chuyển khoản: {{formatCurrency(paymentInfo.credit)}}</p>
+          <p>- Tiền điện tử: {{formatCurrency(paymentInfo.e_money)}}</p>
+        </div>
+
+        <div class="flex justify-end gap-2">
+          <span v-show="loadingConfirmMoneyType"><i class="fa fa-spinner fa-spin text-xl"></i></span>
+          <button
+            v-show="!isPayment && !loadingConfirmMoneyType"
+            class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            @click="confirmExtendMoney()"
+            :disabled="parseInt(paymentInfo.total) != parseInt(paymentInfo.cash) + parseInt(paymentInfo.credit) + parseInt(paymentInfo.e_money)"
+          >
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Calculate Money Refund -->
+    <div v-if="showCalMoneyRefundModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <h5 class="text-center text-lg font-bold mb-3">Tính tiền thừa</h5>
+        <hr class="mb-4"/>
+
+        <div class="ml-5 space-y-2">
+          <p>- Số tiền phải trả: <b>{{formatCurrency(paymentInfo.total)}}</b> vnđ</p>
+          <div>
+            <p class="mb-1">- Số tiền khách đưa:</p>
+            <input
+              id="moneyReceive"
+              v-model="paymentInfo.money_receive"
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded"
+              maxlength="11"
+              @keyup="calculateMoneyRefund"
+            />
+          </div>
+          <p>- Số tiền trả khách: <b>{{formatCurrency(paymentInfo.money_refunds)}}</b> vnđ</p>
+        </div>
+
+        <div class="flex justify-between items-center gap-2 mt-4">
+          <button
+            class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="cancelMoneyRefund()"
+          >
+            Hủy
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span v-show="loadingCalMoneyRefund"><i class="fa fa-spinner fa-spin text-xl"></i></span>
+            <button
+              v-show="!isPayment && !loadingCalMoneyRefund"
+              class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              @click="confirmMoneyRefund()"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Confirm Payment -->
+    <div v-if="showConfirmPaymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="border-b pb-3 mb-3">
+          <h5 class="text-center text-lg font-bold">Thanh toán phòng: [{{paymentInfo.room_name}}]</h5>
+        </div>
+
+        <div class="flex justify-between gap-2 mt-4">
+          <button
+            v-show="!loadingConfirmPayment"
+            class="flex-1 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            @click="hideModalConfirmPayment"
+          >
+            Hủy
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span v-show="loadingConfirmPayment"><i class="fa fa-spinner fa-spin text-xl"></i></span>
+            <button
+              v-show="!loadingConfirmPayment"
+              class="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              @click="confirmPayment"
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import adminAPI from '@/api/admin'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Cookies from 'js-cookie'
 import moment from 'moment'
-import Datepicker from "vuejs-datetimepicker"
-import EditSplitBillModal from "../../../components/EditSplitBillModal";
-
+import Datepicker from 'vue3-datepicker'
+import EditSplitBillModal from "../../../components/EditSplitBillModal"
+import { useRouter, useRoute } from 'vue-router'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
   components: {
     EditSplitBillModal,
     Datepicker
   },
-  data () {
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      router,
+      route,
+      toast,
+      formatCurrency
+    }
+  },
+  data() {
     return {
       tableId: null,
       storeId: null,
@@ -658,54 +677,48 @@ export default {
       pmtApplying: [],
       serviceApplying: [],
       roomService: [],
-      roomServiceFilter:"",
+      roomServiceFilter: "",
       isPayment: false,
       loading: false,
       loadingConfirmPmt: false,
       loadingConfirmService: false,
       loadingConfirmMoneyType: false,
       loadingCalMoneyRefund: false,
+      loadingConfirmPayment: false,
       pmtOfStore: [],
       serviceError: false,
       surchargeError: false,
-      loadingConfirmPayment: false,
+      // Modal states
+      showActualCheckOutModal: false,
+      showApplyPmtModal: false,
+      showServiceFeeModal: false,
+      showExtendMoneyModal: false,
+      showCalMoneyRefundModal: false,
+      showConfirmPaymentModal: false,
+      // Tab states
+      activeServiceTab: 'service',
+      activeMoneyTab: 'cash'
     }
   },
   computed: {
-    filteredRoomService(){
-      if (this.roomServiceFilter.trim().length===0) return this.roomService
+    filteredRoomService() {
+      if (this.roomServiceFilter.trim().length === 0) return this.roomService
       else {
         return this.roomService.filter(e => e.name.toLowerCase().includes(this.roomServiceFilter.toLowerCase()))
       }
     },
-    formattedActualCheckIn: function (){
+    formattedActualCheckIn() {
       return moment(this.paymentInfo.actual_check_in).format("HH:mm DD-MM-YYYY")
     },
-    formattedActualCheckOut: function (){
+    formattedActualCheckOut() {
       return moment(this.paymentInfo.actual_check_out).format("HH:mm DD-MM-YYYY")
     },
-    errorTotalMoney: function () {
+    errorTotalMoney() {
       return this.checkTotalMoney()
     },
-    errorPayingMoney: function () {
-      console.log(this.checkPayingMoney())
+    errorPayingMoney() {
       return this.checkPayingMoney()
-    },
-    errorName () {
-      return this.checkInfo(this.inputs.name)
-    },
-    errorPhone () {
-      return this.checkPhoneNumber(this.inputs.phone_number)
-    },
-    errorGender () {
-      return this.checkInfo(this.inputs.gender)
-    },
-    errorCity () {
-      return this.checkInfo(this.inputs.city_id)
-    },
-    errorDistrict () {
-      return this.checkInfo(this.inputs.district_id)
-    },
+    }
   },
   mounted() {
     this.storeId = Cookies.get(Constant.STORE_ID)
@@ -719,42 +732,28 @@ export default {
 
     // Get pmt of store
     this.getPmtOfStore()
-
-    // Get option city
-    // this.getOptionCity()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      * Check total money
      */
     checkTotalMoney() {
-
       this.paymentInfo.total == this.paymentInfo.cash + this.paymentInfo.credit + this.paymentInfo.e_money
       return (this.clickConfirmExtend && this.paymentInfo.total == null)
     },
+
     checkPayingMoney() {
-      return (this.clickConfirmPayingMoney && (this.paymentInfo.paying == null ))
+      return (this.clickConfirmPayingMoney && (this.paymentInfo.paying == null))
     },
+
     /**
      * Check validate total money
      */
-    checkValidateTotalMoney () {
+    checkValidateTotalMoney() {
       return !(this.errorTotalMoney)
     },
-    checkValidatePayingMoney () {
+
+    checkValidatePayingMoney() {
       return !(this.errorPayingMoney)
     },
 
@@ -772,11 +771,11 @@ export default {
      */
     getPaymentInfo() {
       this.loading = true
-      let paymentId = this.$route.params.id
+      let paymentId = this.route.params.id
 
       // Call api get payment info
       adminAPI.getPaymentInfo(paymentId).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
+        if (res != null && res.data != null && res.data.data != null) {
           this.paymentInfo = res.data.data
           this.paymentInfo.refund = 0
         }
@@ -785,7 +784,7 @@ export default {
         this.loading = false
         console.log(err)
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -795,25 +794,41 @@ export default {
     getPmtOfStore() {
       // Call api get payment info
       adminAPI.getPmtOfStore().then(res => {
-        if(res != null && res.data != null) {
+        if (res != null && res.data != null) {
           this.pmtOfStore = res.data.data
           this.pmtStoreOld = JSON.parse(JSON.stringify(this.pmtOfStore))
         }
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
+    /**
+     * Get room service
+     */
+    getRoomService() {
+      adminAPI.getRoomService().then(res => {
+        if (res != null && res.data != null) {
+          this.roomService = res.data.data
+          this.roomService.forEach(element => {
+            element.quantity = 0
+          })
+        }
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
+      })
+    },
 
     /**
      * Get in by id
      */
     getIndexByValue(valueInput, arrayInput) {
       let index = 0
-      for(var i in arrayInput) {
-        if(arrayInput[i] == valueInput) {
+      for (var i in arrayInput) {
+        if (arrayInput[i] == valueInput) {
           return index
         }
         index += 1
@@ -822,12 +837,12 @@ export default {
     },
 
     /**
-     * Remove pmt code from list pmt code apllied
+     * Remove pmt code from list pmt code applied
      */
     removeCodeFromListCodeAppiled(index) {
       let indexList = 0
       for (let i in this.pmtCodeApply) {
-        if(this.pmtCodeApply[i].index == index) {
+        if (this.pmtCodeApply[i].index == index) {
           this.pmtCodeApply.splice(indexList, 1)
           break
         }
@@ -840,8 +855,8 @@ export default {
      */
     deletePromotionTemp(id) {
       // Get index pmt by id
-      for(let i in this.pmtTemp) {
-        if(this.pmtTemp[i].id == id) {
+      for (let i in this.pmtTemp) {
+        if (this.pmtTemp[i].id == id) {
           this.pmtTemp.splice(i, 1)
           break
         }
@@ -852,24 +867,23 @@ export default {
      * Remove promotion
      */
     deletePromotion(id) {
-
       // Get index pmt by id
       let indexTemp = this.getIndexById(id)
 
-      if(indexTemp !== false) {
+      if (indexTemp !== false) {
         this.paymentInfo.pmts.splice(indexTemp, 1)
       }
 
       // Call api confirm payment
       adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công')
+        this.toast.success('Lưu thông tin thành công')
 
         // Update new info
         this.paymentInfo = res.data.data
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       }).finally(() => {
         this.getPaymentInfo()
       })
@@ -880,8 +894,8 @@ export default {
      */
     deleteService(name, price) {
       // Remove service
-      for(let i in this.paymentInfo.service) {
-        if(this.paymentInfo.service[i].name == name && this.paymentInfo.service[i].price == price) {
+      for (let i in this.paymentInfo.service) {
+        if (this.paymentInfo.service[i].name == name && this.paymentInfo.service[i].price == price) {
           this.paymentInfo.service.splice(i, 1)
           break
         }
@@ -889,28 +903,35 @@ export default {
 
       // Call api confirm payment
       adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công')
+        this.toast.success('Lưu thông tin thành công')
         this.getPaymentInfo()
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
     /**
-     * Show modal add customer
+     * Delete service temp (in modal)
      */
-    showModalEditActualCheckOut() {
-      this.newActualCheckOut = moment().format("DD-MM-YYYY HH:mm:ss");
-      this.$bvModal.show('modal-edit-actual-checkout')
+    deleteServiceTemp(type, name, price) {
+      for (let i in this.paymentInfo.service) {
+        if (this.paymentInfo.service[i].type == type &&
+            this.paymentInfo.service[i].name == name &&
+            this.paymentInfo.service[i].price == price) {
+          this.paymentInfo.service.splice(i, 1)
+          break
+        }
+      }
     },
 
     /**
-     * Show modal add customer
+     * Show modal edit actual check out
      */
-    showModalAddCustomer() {
-      this.$bvModal.show('modal-add-customer')
+    showModalEditActualCheckOut() {
+      this.newActualCheckOut = moment().format("DD-MM-YYYY HH:mm:ss")
+      this.showActualCheckOutModal = true
     },
 
     /**
@@ -918,102 +939,93 @@ export default {
      */
     showModalApplyPmt() {
       this.pmtTemp = JSON.parse(JSON.stringify(this.paymentInfo.pmts))
-
-      this.$bvModal.show('modal-apply-pmt')
-
+      this.showApplyPmtModal = true
 
       setTimeout(this.updatePmtAllyToModal, 1000)
     },
 
-      updatePmtAllyToModal() {
-        if(this.pmtTemp.length > 0 && this.pmtOfStore.length > 0) {
-            for(let itemTemp of this.pmtTemp) {
-                for(let itemStore of this.pmtOfStore) {
-                    if(itemTemp.id == itemStore.id) {
-                        document.getElementById("pmtStore" + itemTemp.id).innerHTML = itemTemp.quantity_apply
-                    }
-                }
+    updatePmtAllyToModal() {
+      if (this.pmtTemp.length > 0 && this.pmtOfStore.length > 0) {
+        for (let itemTemp of this.pmtTemp) {
+          for (let itemStore of this.pmtOfStore) {
+            if (itemTemp.id == itemStore.id) {
+              document.getElementById("pmtStore" + itemTemp.id).innerHTML = itemTemp.quantity_apply
             }
+          }
         }
-      },
+      }
+    },
 
     /**
      * Show modal calculate
      */
     showModalCalMoneyRefund() {
-      this.$bvModal.show('modal-calculate-money-refund')
+      this.showCalMoneyRefundModal = true
     },
 
     /**
      * Show modal service fee
      */
     showModalServiceFee() {
-      this.getRoomService();
-      this.$bvModal.show('modal-service-fee')
+      this.getRoomService()
+      this.showServiceFeeModal = true
+    },
+
+    /**
+     * Hide modal service fee
+     */
+    hideModalServiceFee() {
+      this.roomService.forEach(element => {
+        element.quantity = 0
+      })
     },
 
     /**
      * Show modal extend money
      */
     showModalExtendMoney() {
-      this.$bvModal.show('modal-extend-money')
-    },
-    showModalPayingMoney() {
-      this.$bvModal.show('modal-paying-money')
+      this.showExtendMoneyModal = true
     },
 
     /**
      * Go to table list
      */
     goBack() {
-      this.$router.push('/booking/list-room')
+      this.router.push('/booking/list-room')
     },
 
-      /**
+    /**
      * Show modal confirm payment
      */
     showModalConfirmPayment() {
-      this.$bvModal.show('modal-confirm-payment')
+      this.showConfirmPaymentModal = true
     },
 
-      /**
+    /**
      * Hide modal confirm payment
      */
     hideModalConfirmPayment() {
-      this.$bvModal.hide('modal-confirm-payment')
+      this.showConfirmPaymentModal = false
     },
 
     /**
      * Confirm payment
      */
     confirmPayment() {
-        this.loadingConfirmPayment = true
+      this.loadingConfirmPayment = true
 
       // Call api confirm payment
       adminAPI.confirmPaymentBooking(this.paymentInfo).then(res => {
-        if(res != null && res.data != null) {
-            this.loadingConfirmPayment = false
-          this.$router.push('/booking/list-room')
+        if (res != null && res.data != null) {
+          this.loadingConfirmPayment = false
+          this.router.push('/booking/list-room')
         }
       }).catch(err => {
-          this.loadingConfirmPayment = false
-
+        this.loadingConfirmPayment = false
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-    },
-
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      let result = num
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-
-      return result
     },
 
     /**
@@ -1026,74 +1038,66 @@ export default {
     },
 
     /**
+     * Only input integer (different method name)
+     */
+    intergerOnly(item) {
+      this.integerOnly(item)
+    },
+
+    /**
      * Mapping system config
      */
     mappingSystemConfig(settings) {
       for (var index in settings) {
-
         // Setting is quantity pmt
-        if(settings[index].fields.code == Constant.QUANTITY_PMT) {
+        if (settings[index].fields.code == Constant.QUANTITY_PMT) {
           this.quantityPmt = settings[index].fields.value
         }
 
         // Setting is quantity discount
-        if(settings[index].fields.code == Constant.QUANTITY_DISCOUNT) {
+        if (settings[index].fields.code == Constant.QUANTITY_DISCOUNT) {
           this.quantityDiscount = settings[index].fields.value
         }
 
         // Setting is quantity voucher
-        if(settings[index].fields.code == Constant.QUANTITY_VOUCHER) {
+        if (settings[index].fields.code == Constant.QUANTITY_VOUCHER) {
           this.quantityVoucher = settings[index].fields.value
         }
 
         // Setting is quantity free item
-        if(settings[index].fields.code == Constant.QUANTITY_FREE_ITEM) {
+        if (settings[index].fields.code == Constant.QUANTITY_FREE_ITEM) {
           this.quantityFreeItem = settings[index].fields.value
         }
-
-        // Setting is waiter payment
-        // let user = Cookies.get(Constant.APP_USR)
-        // if(user) {
-        //   user = JSON.parse(user)
-        //   if(user.role == Constant.ROLE_STAFF) {
-        //     // If user is waiter, check store setting
-        //     if(settings[index].fields.code == Constant.IS_WAITER_PAY) {
-        //       this.isWaiterPay = settings[index].fields.value
-        //     }
-        //   }
-        // }
-
       }
     },
 
     /**
      * Get system config
      */
-    getSystemConfig () {
+    getSystemConfig() {
       adminAPI.getSystemConfig().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
+        if (res != null && res.data != null && res.data.data != null) {
           this.mappingSystemConfig(res.data.data)
         }
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
-
 
     /**
      * Confirm apply promotion
      */
-    confirmApplyPmt () {
+    confirmApplyPmt() {
       this.loadingConfirmPmt = true
 
       // Call api confirm update payment
       this.paymentInfo.pmts = JSON.parse(JSON.stringify(this.pmtTemp))
       adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        if(res != null && res.data != null) {
-          this.popToast('success', 'Lưu thông tin thành công')
-          this.$bvModal.hide('modal-apply-pmt')
+        if (res != null && res.data != null) {
+          this.toast.success('Lưu thông tin thành công')
+          this.showApplyPmtModal = false
 
           this.loadingConfirmPmt = false
           this.getPaymentInfo()
@@ -1103,19 +1107,8 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-    },
-
-    /**
-     * Check add pmt
-     */
-    checkAddPromotion() {
-      if(this.quantityPmt == 1) {
-        this.popToast('danger', 'Chỉ có thể áp dụng một khuyến mãi trên một hóa đơn, chỉnh sửa cài đặt để áp dụng nhiều khuyến mãi hơn')
-      } else {
-        this.numberOfPmtRow += 1
-      }
     },
 
     /**
@@ -1131,46 +1124,18 @@ export default {
      */
     minusOne(id) {
       let currentNumber = document.getElementById(id).textContent
-      if(parseInt(currentNumber) > 0) {
+      if (parseInt(currentNumber) > 0) {
         document.getElementById(id).textContent = parseInt(currentNumber) - 1
       }
     },
-
-    /**
-     * Check system config pmt
-     */
-    // checkSystemConfigPmt(nextIndex, type) {
-    //   if(this.quantityPmt == 1 && this.pmtApplying.length >= this.quantityPmt) {
-    //     this.popToast('danger', 'Chỉ có thể áp dụng một khuyến mãi trên một hóa đơn, chỉnh sửa cài đặt để áp dụng nhiều khuyến mãi hơn')
-    //     return false
-    //   }
-    //
-    //   if((type == 'discount' || type == 'discount_with_max_value') && this.quantityDiscount == 1 && nextIndex > this.quantityDiscount) {
-    //     this.popToast('danger', 'Chỉ có thể áp dụng một discount trên một hóa đơn, chỉnh sửa cài đặt để áp dụng nhiều discount hơn')
-    //     return false
-    //   }
-    //
-    //   if(type == 'voucher' && this.quantityVoucher == 1 && nextIndex > this.quantityVoucher) {
-    //     this.popToast('danger', 'Chỉ có thể áp dụng một voucher trên một hóa đơn, chỉnh sửa cài đặt để áp dụng nhiều voucher hơn')
-    //     return false
-    //   }
-    //
-    //   if(type == 'free_item' && this.quantityFreeItem == 1 && nextIndex > this.quantityFreeItem) {
-    //     this.popToast('danger', 'Chỉ có thể áp dụng một free item trên một hóa đơn, chỉnh sửa cài đặt để áp dụng nhiều free item hơn')
-    //     return false
-    //   }
-    //
-    //   return true
-    //
-    // },
 
     /**
      * Get index by id
      */
     getIndexById(pmtId) {
       let index = 0
-      for(var i in this.paymentInfo.pmts) {
-        if(this.paymentInfo.pmts[i].id == pmtId) {
+      for (var i in this.paymentInfo.pmts) {
+        if (this.paymentInfo.pmts[i].id == pmtId) {
           return index
         }
         index += 1
@@ -1182,38 +1147,17 @@ export default {
      * Add pmt to list
      */
     addPmtToList(pmtInfo) {
-      // // Add pmt to pmt list
-      // let flagCheckExist = false
-      // for (let i = 0; i < this.paymentInfo.pmts.length; i++) {
-      //   if(parseInt(this.paymentInfo.pmts[i].id) === parseInt(pmtInfo.id)) {
-      //     this.paymentInfo.pmts[index].quantity_apply = parseInt(this.paymentInfo.pmts[i].quantity_apply) + 1
-      //     flagCheckExist = true
-      //     break
-      //   }
-      // }
-      //
-      // if(!flagCheckExist) {
-      //   // let pmtTemp = {
-      //   //   "id": pmtInfo.id,
-      //   //   "name": pmtInfo.name,
-      //   //   "pmt_quantity": 1
-      //   // }
-      //   let pmtTemp = pmtInfo
-      //   pmtTemp.quantity_apply = 1
-      //   this.paymentInfo.pmts.push(pmtTemp)
-      // }
-
       // Add pmt to temp list
       let flagCheckExistTemp = false
       for (let i = 0; i < this.pmtTemp.length; i++) {
-        if(parseInt(this.pmtTemp[i].id) === parseInt(pmtInfo.id)) {
+        if (parseInt(this.pmtTemp[i].id) === parseInt(pmtInfo.id)) {
           this.pmtTemp[i].quantity_apply = parseInt(this.pmtTemp[i].quantity_apply) + 1
           flagCheckExistTemp = true
           break
         }
       }
 
-      if(!flagCheckExistTemp) {
+      if (!flagCheckExistTemp) {
         let pmtTemp = pmtInfo
         pmtTemp.quantity_apply = 1
         this.pmtTemp.push(pmtTemp)
@@ -1226,7 +1170,7 @@ export default {
     getQuantityOfPmtApplyingById(pmtId) {
       let result = 0
       for (let index in this.paymentInfo.pmts) {
-        if(parseInt(this.paymentInfo.pmts[index].id) === parseInt(pmtId)) {
+        if (parseInt(this.paymentInfo.pmts[index].id) === parseInt(pmtId)) {
           result = parseInt(this.paymentInfo.pmts[index].pmt_quantity)
         }
       }
@@ -1237,18 +1181,10 @@ export default {
      * Plus quantity pmt of store
      */
     plusQuantityPmt(pmtId, type, remaining, pmtInfo) {
-
-      // let nextIndex = parseInt(document.getElementById(elementId).textContent) + 1
-
-      // Check system config
-      let currentQuantity = this.getQuantityOfPmtApplyingById(pmtId)
-      // if(!this.checkSystemConfigPmt(nextIndex, type)) {
-      //   return
-      // }
-
       // Check remaining of pmt
-      if(currentQuantity == parseInt(remaining)) {
-        this.popToast('danger', 'Vượt quá số lượng còn lại của khuyến mãi')
+      let currentQuantity = this.getQuantityOfPmtApplyingById(pmtId)
+      if (currentQuantity == parseInt(remaining)) {
+        this.toast.error('Vượt quá số lượng còn lại của khuyến mãi')
         return
       }
 
@@ -1258,12 +1194,6 @@ export default {
 
       // Add pmt to list
       this.addPmtToList(pmtInfo)
-      //   for(let itemTemp of this.pmtTemp) {
-      //       if(itemTemp.id == pmtId) {
-      //           itemTemp.quantity_apply += 1
-      //       }
-      //   }
-
     },
 
     /**
@@ -1273,465 +1203,188 @@ export default {
       let elementId = 'pmtStore' + pmtId
 
       let currentNumber = parseInt(document.getElementById(elementId).textContent)
-      if(currentNumber > 0) {
+      if (currentNumber > 0) {
         let nextIndex = currentNumber - 1
         document.getElementById(elementId).textContent = nextIndex
 
-        // Minus pmt in list
-        // this.addPmtToList(pmtId, nextIndex, pmtInfo)
-
-          if(nextIndex == 0) {
-              this.deletePromotionTemp(pmtId)
-          } else {
-              for(let itemTemp of this.pmtTemp) {
-                  if(itemTemp.id == pmtId) {
-                      itemTemp.quantity_apply = nextIndex
-                  }
-              }
-          }
-      }
-    },
-
-    /**
-     * Calculated free item
-     */
-    calculatedFreeItem() {
-      let totalDiscount = 0
-      for (let i in this.pmtApplying) {
-        if(this.pmtApplying[i].type == 'free_item') {
-          for (let j in this.paymentInfo.foods) {
-            if(this.pmtApplying[i].item_free == this.paymentInfo.foods[j].foodId) {
-              this.paymentInfo.total = this.paymentInfo.total - (this.paymentInfo.foods[j].price * this.pmtApplying[i].quantity_apply)
-              totalDiscount += this.paymentInfo.foods[j].price * this.pmtApplying[i].quantity_apply
+        if (nextIndex == 0) {
+          this.deletePromotionTemp(pmtId)
+        } else {
+          for (let itemTemp of this.pmtTemp) {
+            if (itemTemp.id == pmtId) {
+              itemTemp.quantity_apply = nextIndex
             }
           }
         }
       }
-
-      return totalDiscount
     },
 
     /**
-     * Calculated discount
+     * Plus quantity room service
      */
-    calculatedDiscount() {
-      let totalDiscount = 0
-      let totalDiscountPercent = 0
-      for (var i in this.pmtApplying) {
-        if(this.pmtApplying[i].type == 'discount') {
-          totalDiscountPercent += this.pmtApplying[i].discount_percent * this.pmtApplying[i].quantity_apply
+    plusQuantityRoomService(serviceId) {
+      for (let service of this.roomService) {
+        if (service.id == serviceId) {
+          service.quantity += 1
+          break
         }
       }
-      if(totalDiscountPercent > 0) {
-        if(totalDiscountPercent > 100) {
-          totalDiscountPercent = 100
-        }
-        // Discount
-        totalDiscount = this.paymentInfo.total * totalDiscountPercent / 100
-        this.paymentInfo.total = this.paymentInfo.total - totalDiscount
-      }
-
-      return totalDiscount
     },
 
     /**
-     * Calculated discount with max value
+     * Minus quantity room service
      */
-    calculatedDiscountWithMaxValue() {
-      let totalDiscount = 0
-      let totalDiscountPercent = 0
-      let totalDiscountAmount = 0
-
-      for (var i in this.pmtApplying) {
-        // Discount with max value
-        if(this.pmtApplying[i].type == 'discount_with_max_value') {
-          if(this.paymentInfo.sub_total >= this.pmtApplying[i].discount_on_amount) {
-            let discountAmount = this.paymentInfo.sub_total * this.pmtApplying[i].discount_percent / 100
-            if(discountAmount >= this.pmtApplying[i].max_discount) {
-              totalDiscountAmount += this.pmtApplying[i].max_discount * this.pmtApplying[i].quantity_apply
-            } else {
-              totalDiscountPercent += this.pmtApplying[i].discount_percent * this.pmtApplying[i].quantity_apply
-            }
-
-          }
+    minusQuantityRoomService(serviceId) {
+      for (let service of this.roomService) {
+        if (service.id == serviceId && service.quantity > 0) {
+          service.quantity -= 1
+          break
         }
       }
+    },
 
-      // Discount
-      if(totalDiscountPercent > 0) {
-        if(totalDiscountPercent > 100) {
-          totalDiscountPercent = 100
+    /**
+     * Add new service
+     */
+    addNewService() {
+      let serviceName = document.getElementById('serviceName').value
+      let servicePrice = document.getElementById('servicePrice').value
+
+      if (!serviceName || !servicePrice) {
+        this.serviceError = true
+        return
+      }
+
+      this.serviceError = false
+
+      let service = {
+        "type": "service",
+        "name": serviceName,
+        "price": servicePrice,
+        "quantity": 1
+      }
+
+      this.paymentInfo.service.push(service)
+
+      // Clear inputs
+      document.getElementById('serviceName').value = ''
+      document.getElementById('servicePrice').value = ''
+    },
+
+    /**
+     * Add new surcharge
+     */
+    addNewSurcharge() {
+      let surchargeName = document.getElementById('surchargeName').value
+      let surchargePrice = document.getElementById('surchargePrice').value
+
+      if (!surchargeName || !surchargePrice) {
+        this.surchargeError = true
+        return
+      }
+
+      this.surchargeError = false
+
+      let surcharge = {
+        "type": "surcharge",
+        "name": surchargeName,
+        "price": surchargePrice,
+        "quantity": 1
+      }
+
+      this.paymentInfo.service.push(surcharge)
+
+      // Clear inputs
+      document.getElementById('surchargeName').value = ''
+      document.getElementById('surchargePrice').value = ''
+    },
+
+    /**
+     * Add new room service
+     */
+    addNewRoomService() {
+      const newRoomService = this.roomService.filter(e => e.quantity != 0)
+      for (const item of newRoomService) {
+        let roomService = {
+          "type": "roomService",
+          "id": item.id,
+          "quantity": item.quantity,
+          "name": item.name,
+          "price": item.price
         }
-        this.paymentInfo.total = this.paymentInfo.total * totalDiscountPercent / 100
-        totalDiscount += this.paymentInfo.total * totalDiscountPercent / 100
+        this.paymentInfo.service.push(roomService)
       }
-
-      if(totalDiscountAmount > 0) {
-        this.paymentInfo.total = this.paymentInfo.total - totalDiscountAmount
-        totalDiscount += totalDiscountAmount
-      }
-
-      return totalDiscount
-    },
-
-    /**
-     * Calculated voucher
-     */
-    calculatedVoucher() {
-      let totalDiscount = 0
-
-      for (var i in this.pmtApplying) {
-        // Voucher
-        if(this.pmtApplying[i].type == 'voucher') {
-          this.paymentInfo.total = this.paymentInfo.total - ( this.pmtApplying[i].value_of_voucher * this.pmtApplying[i].quantity_apply)
-          totalDiscount += this.pmtApplying[i].value_of_voucher * this.pmtApplying[i].quantity_apply
-        }
-      }
-
-      return totalDiscount
-    },
-
-    /**
-     * Calculated VAT value
-     */
-    calculatedVatValue(total, vatValue, vatPercent) {
-      let result = 0
-      if(vatPercent != 0) {
-        result = parseInt(parseInt(total) * parseInt(vatPercent) / 100)
-      }
-      return result
-    },
-
-    /**
-     * Calculated payment info
-     */
-    calculatedPaymentInfo() {
-      this.paymentInfo.total = this.oldInfoStorate.sub_total
-
-      let totalDiscount = 0
-      // Check free Item
-      totalDiscount += this.calculatedFreeItem()
-
-      // Check discount
-      totalDiscount += this.calculatedDiscount()
-
-      // Check discount with max value
-      totalDiscount += this.calculatedDiscountWithMaxValue()
-
-      // Check voucher
-      totalDiscount += this.calculatedVoucher()
-
-      if(this.paymentInfo.total < 0) {
-        this.paymentInfo.total = 0
-      }
-
-      // Calculator VAT
-      this.paymentInfo.vat_value = this.calculatedVatValue(this.paymentInfo.total, this.paymentInfo.vat_value, this.paymentInfo.vat_percent)
-      this.paymentInfo.total = this.paymentInfo.total + this.paymentInfo.vat_value
-
-      // Calculated service fee
-      this.calculatedServiceFee()
-
-      // Calculated total discount amount
-      if(totalDiscount > this.paymentInfo.sub_total + this.paymentInfo.vat_value) {
-        totalDiscount = this.paymentInfo.sub_total + this.paymentInfo.vat_value
-      }
-      this.paymentInfo.discount_amount = totalDiscount
-
-      // Set money type
-      this.changeDefaultMoneyType()
-    },
-
-    /**
-     * Calculated service fee
-     */
-    calculatedServiceFee() {
-      for(let i in this.paymentInfo.service) {
-        this.paymentInfo.total += parseInt(this.paymentInfo.service[i].price)
-      }
+      this.roomService.forEach(element => {
+        element.quantity = 0
+      })
     },
 
     /**
      * Confirm service fee
      */
     confirmServiceFee() {
-      this.clickConfirmExtend = true
       this.loadingConfirmService = true
 
-      // Call api confirm payment
+      // Call api update payment
       adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công')
-        this.$bvModal.hide('modal-service-fee')
-
+        this.toast.success('Lưu thông tin thành công')
+        this.showServiceFeeModal = false
         this.loadingConfirmService = false
-        this.getPaymentInfo();
+        this.getPaymentInfo()
       }).catch(err => {
         this.loadingConfirmService = false
-
-        // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-
-    },
-
-    /**
-     * Apply VAT
-     */
-    applyVat() {
-        if (!this.paymentInfo.apply_vat) {
-            this.paymentInfo.vat_value = 0
-            this.paymentInfo.vat_percent = 0
-        } else {
-            if(this.paymentInfo.vat_percent == 0) {
-                this.paymentInfo.vat_percent = 10
-            }
-        }
-      // Call api confirm payment
-      adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công')
-        this.$bvModal.hide('modal-extend-money')
-
-        this.loadingConfirmMoneyType = false
-      }).catch(err => {
-        this.loadingConfirmMoneyType = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      }).finally(()=>{
-        this.getPaymentInfo();
-      })
-
-    },
-
-    /**
-     * Confirm extend money
-     */
-    confirmExtendMoney() {
-      this.clickConfirmExtend = true
-      this.loadingConfirmMoneyType = true
-
-      let result = this.checkValidateTotalMoney()
-      if (result) {
-
-        // Call api confirm payment
-        adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-          this.popToast('success', 'Lưu thông tin thành công')
-          this.$bvModal.hide('modal-extend-money')
-
-          this.loadingConfirmMoneyType = false
-          this.getPaymentInfo();
-        }).catch(err => {
-          this.loadingConfirmMoneyType = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-
-      }
-    },
-
-    /**
-     * Print bill
-     */
-    printBill() {
-      Cookies.set("printFrom", "payment")
-      this.$router.push('/print-bill/' + this.paymentInfo.id)
-    },
-
-    /**
-     * Get id of auto pmt
-     */
-    getIdAutoPmt() {
-      for(let i in this.pmtApplying) {
-        if(this.pmtApplying[i].method == "auto") {
-          return this.pmtApplying[i].id
-        }
-      }
-      return null
-    },
-
-    /**
-     * Add new service fee
-     */
-    addNewService() {
-      let type = "service"
-      let name = document.getElementById("serviceName").value
-      let price = document.getElementById("servicePrice").value
-
-      if(!name || !price) {
-        this.serviceError = true
-        return
-      } else {
-        this.serviceError = false
-      }
-
-      let service = {
-        "type": type,
-        "quantity": 1,
-        "name": name,
-        "price": price
-      }
-      this.paymentInfo.service.push(service)
-
-      document.getElementById("serviceName").value = ""
-      document.getElementById("servicePrice").value = ""
-
-      // Calculated service fee
-      //this.calculatedTotalServiceFee()
-    },
-
-    /**
-     * Calculate service fee
-     */
-    // calculatedTotalServiceFee() {
-    //   this.serviceFee = 0
-    //   for(let index in this.paymentInfo.service) {
-    //     this.serviceFee += parseInt(this.paymentInfo.service[index].price)
-    //   }
-    // },
-
-    /**
-     * Add new surcharge
-     */
-    addNewSurcharge() {
-      let type = "surcharge"
-      let name = document.getElementById("surchargeName").value
-      let price = document.getElementById("surchargePrice").value
-
-      if(!name || !price) {
-        this.surchargeError = true
-        return
-      } else {
-        this.surchargeError = false
-      }
-
-      let service = {
-        "type": type,
-        "quantity": 1,
-        "name": name,
-        "price": price
-      }
-      this.paymentInfo.service.push(service)
-
-      document.getElementById("surchargeName").value = ""
-      document.getElementById("surchargePrice").value = ""
-
-      // Calculated service fee
-      // this.calculatedTotalServiceFee()
-    },
-
-    /**
-     * Delete service
-     */
-    deleteServiceTemp(type, name, price) {
-      let index = 0
-      for (let i in this.paymentInfo.service) {
-        if(this.paymentInfo.service[i].type == type && this.paymentInfo.service[i].name == name && this.paymentInfo.service[i].price == price) {
-          this.paymentInfo.service.splice(index, 1)
-        }
-        index += 1
-      }
-    },
-
-    /**
-     * Hide modal service fee
-     */
-    hideModalServiceFee() {
-      this.serviceError = false
-      this.surchargeError = false
-
-      // Calculated payment info
-      this.calculatedPaymentInfo()
     },
 
     /**
      * Cancel service fee
      */
     cancelServiceFee() {
-      this.$bvModal.hide('modal-service-fee')
+      this.showServiceFeeModal = false
+      this.hideModalServiceFee()
     },
-
-     /**
-     * Get room services
-     */
-    getRoomService() {
-      this.loading = true
-      adminAPI.getRoomService().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.roomService = res.data.data.map(e => {return {...e,quantity:0}})
-        }
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-    plusQuantityRoomService(id){
-      let index = this.roomService.findIndex(e => e.id == id)
-      this.roomService[index].quantity++
-    },
-    minusQuantityRoomService(id){
-      let index = this.roomService.findIndex(e => e.id == id)
-      if (this.roomService[index].quantity === 0) return;
-      this.roomService[index].quantity--
-    },
-    addNewRoomService(){
-      const newRoomService = this.roomService.filter(e=>e.quantity!=0);
-      for (const item of newRoomService){
-          let roomService = {
-            "type": "roomService",
-            "id": item.id,
-            "quantity": item.quantity,
-            "name": item.name,
-            "price": item.price
-          }
-          this.paymentInfo.service.push(roomService)
-      }
-      this.roomService.forEach(element => {
-        element.quantity = 0
-      });
-    },
-
 
     /**
-     * Format date
+     * Confirm extend money
      */
-    formatDate(dateInput) {
-      let result = dateInput
-      if(dateInput) {
-        let temp = dateInput.split("-")
-        if(temp.length == 1) {
-          temp = dateInput.split("/")
-        }
-        result = temp[2] + "-" + temp[1] + "-" + temp[0]
-      }
-      return result
+    confirmExtendMoney() {
+      this.loadingConfirmMoneyType = true
+
+      // Call api update payment
+      adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
+        this.toast.success('Lưu thông tin thành công')
+        this.showExtendMoneyModal = false
+        this.loadingConfirmMoneyType = false
+        this.getPaymentInfo()
+      }).catch(err => {
+        this.loadingConfirmMoneyType = false
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
+      })
+    },
+
+    /**
+     * Apply VAT
+     */
+    applyVat() {
+      // Call api update payment
+      adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
+        this.toast.success('Lưu thông tin thành công')
+        this.getPaymentInfo()
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
+      })
     },
 
     /**
      * Cancel apply promotion
      */
-    cancelApplyPmt () {
-      // Remove pmt from list
-      // for(let i in this.pmtTemp) {
-      //   for(let j in this.paymentInfo.pmts) {
-      //     if(this.pmtTemp[i].id == this.paymentInfo.pmts[j].id) {
-      //       this.paymentInfo.pmts[j].pmt_quantity = parseInt(this.paymentInfo.pmts[j].pmt_quantity) - parseInt(this.pmtTemp[i].pmt_quantity)
-      //       if(this.paymentInfo.pmts[j].pmt_quantity == 0) {
-      //         this.paymentInfo.pmts.splice(j, 1)
-      //       }
-      //     }
-      //   }
-      // }
+    cancelApplyPmt() {
       this.pmtTemp = []
-
-      this.$bvModal.hide('modal-apply-pmt')
+      this.showApplyPmtModal = false
     },
 
     /**
@@ -1745,30 +1398,31 @@ export default {
      * Cancel modal money refund
      */
     cancelMoneyRefund() {
-      this.$bvModal.hide('modal-calculate-money-refund')
+      this.showCalMoneyRefundModal = false
     },
 
     /**
      * Cancel modal edit actual check out
      */
     cancelEditActualCheckOut() {
-        this.$bvModal.hide('modal-edit-actual-checkout')
+      this.showActualCheckOutModal = false
     },
+
     /**
-     * Confirm money refund
+     * Confirm edit actual check out
      */
-    confirmEditActualCheckOut(){
+    confirmEditActualCheckOut() {
       if (this.$refs.editActualCheckOut.date) {
-        this.$bvModal.hide('modal-edit-actual-checkout');
-        this.paymentInfo.actual_check_out = moment(this.$refs.editActualCheckOut.date, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+        this.showActualCheckOutModal = false
+        this.paymentInfo.actual_check_out = moment(this.$refs.editActualCheckOut.date, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
 
         adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-          this.popToast('success', 'Lưu thông tin thành công');
-          this.getPaymentInfo();
+          this.toast.success('Lưu thông tin thành công')
+          this.getPaymentInfo()
         }).catch(err => {
-          let errorMess = commonFunc.handleStaffError(err);
-          this.popToast('danger', errorMess);
-        });
+          let errorMess = commonFunc.handleStaffError(err)
+          this.toast.error(errorMess)
+        })
       }
     },
 
@@ -1784,122 +1438,81 @@ export default {
         "money_refunds": this.paymentInfo.money_refunds
       }
 
-      if(dataPost.money_receive == "") {
+      if (dataPost.money_receive == "") {
         dataPost.money_receive = 0
       }
-      if(dataPost.money_refunds == "") {
+      if (dataPost.money_refunds == "") {
         dataPost.money_refunds = 0
       }
 
       // Call api confirm payment
       adminAPI.saveMoneyRefund(dataPost).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công')
-
-        this.$bvModal.hide('modal-calculate-money-refund')
-
+        this.toast.success('Lưu thông tin thành công')
+        this.showCalMoneyRefundModal = false
         this.loadingCalMoneyRefund = false
       }).catch(err => {
         this.loadingCalMoneyRefund = false
-
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
-    showModalSplitBill(event,id){
-      this.$bvModal.show("payment-split-bill"+id)
+
+    /**
+     * Show modal split bill
+     */
+    showModalSplitBill(event, id) {
+      // This will trigger the EditSplitBillModal component
+      // Implementation depends on how EditSplitBillModal works
     },
-    confirmEditSplitBill(index,newAmount) {
+
+    /**
+     * Confirm edit split bill
+     */
+    confirmEditSplitBill(index, newAmount) {
       this.paymentInfo.payment_split_times[index].amount = newAmount
 
       // Call api update payment
       adminAPI.updatePaymentInfo(this.paymentInfo).then(res => {
-        this.popToast('success', 'Lưu thông tin thành công');
-        this.$bvModal.hide('modal-service-fee');
-        this.loadingConfirmService = false;
-        this.getPaymentInfo();
+        this.toast.success('Lưu thông tin thành công')
+        this.showServiceFeeModal = false
+        this.loadingConfirmService = false
+        this.getPaymentInfo()
       }).catch(err => {
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-
     },
 
-      /**
-       * Cập nhật ghi chú
-       */
+    /**
+     * Update note
+     */
     updateNote() {
-        let params = {
-            'payment_id': this.paymentInfo.id,
-            'note': this.paymentInfo.note
-        }
+      let params = {
+        'payment_id': this.paymentInfo.id,
+        'note': this.paymentInfo.note
+      }
 
       // Call api update payment note
       adminAPI.updatePaymentNote(params).then(res => {
-          if(res != null && res.data != null) {
-              this.popToast('success', 'Cập nhật ghi chú thành công');
-          }
-
+        if (res != null && res.data != null) {
+          this.toast.success('Cập nhật ghi chú thành công')
+        }
       }).catch(err => {
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-    },
-
-      integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
+    }
   }
 }
 </script>
 
 <style lang="css" scoped>
-  .width-icon {
-    width: 40px;
-  }
-  .largerCheckbox {
-      width: 20px;
-      height: 20px;
-  }
-
-  table {
-   margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
+.width-icon {
+  width: 40px;
+}
+.largerCheckbox {
+  width: 20px;
+  height: 20px;
+}
 </style>

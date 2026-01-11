@@ -1,113 +1,125 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Lịch sử kho hàng</h4>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Lịch sử kho hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div v-if="resourceOptions.length > 0">
+          <label class="block mb-2">Nguyên liệu</label>
+          <select
+            id="resource"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.resource">
+            <option v-for="resource in resourceOptions" :key="resource.value" :value="resource.value">{{ resource.text }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2">Loại</label>
+          <select
+            id="type"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.type">
+            <option v-for="type in typeOptions" :key="type.value" :value="type.value">{{ type.text }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block mb-2">Từ ngày</label>
+          <input
+            id="fromDate"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :class="{ 'border-red-500': errorFromDate }"
+            v-model="inputs.fromDate"
+            maxlength="10"
+            @keyup="inputDateOnly($event.target)">
+          <div v-if="errorFromDate" class="text-red-500 text-sm mt-1">
+            Mục từ ngày không đúng
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2">Đến ngày</label>
+          <input
+            id="toDate"
+            type="text"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :class="{ 'border-red-500': errorToDate }"
+            v-model="inputs.toDate"
+            maxlength="10"
+            @keyup="inputDateOnly($event.target)">
+          <div v-if="errorToDate" class="text-red-500 text-sm mt-1">
+            Mục đến ngày không đúng
+          </div>
+        </div>
+      </div>
 
-          <b-row>
-            <b-col md="3" v-if="resourceOptions.length > 0">
-              <label> Nguyên liệu </label>
-              <b-form-select
-              :options="resourceOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.resource"></b-form-select>
-            </b-col>
-            <b-col md="3">
-              <label> Loại </label>
-              <b-form-select
-              :options="typeOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
-            <b-col md="3">
-              <label> Từ ngày </label>
-              <input
-                id="fromDate"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.fromDate"
-                maxlength="10"
-                @keyup="inputDateOnly($event.target)">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
-                Mục từ ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
-            <b-col md="3">
-              <label> Đến ngày </label>
-              <input
-                id="toDate"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.toDate"
-                maxlength="10"
-                @keyup="inputDateOnly($event.target)">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
-                Mục đến ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
-          </b-row>
+      <div class="flex justify-end mb-4">
+        <button 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50" 
+          :disabled="onSearch"
+          @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
-                        @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+      <div class="mb-4">
+        Số kết quả: {{totalRow}}
+      </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">STT</th>
+              <th class="border border-gray-300 px-4 py-2">Nguyên Liệu - Mặt hàng</th>
+              <th class="border border-gray-300 px-4 py-2">Nội dung</th>
+              <th class="border border-gray-300 px-4 py-2">Ghi chú</th>
+              <th class="border border-gray-300 px-4 py-2">Thời gian</th>
+              <th class="border border-gray-300 px-4 py-2">Tạo bởi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item.id">
+              <td class="border border-gray-300 px-4 py-2 text-center">{{ item.stt }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.resource_name }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-right">
+                <b v-if="item.type == 'plus'">+</b><b v-if="item.type == 'minus'">-</b>{{ formatCurrency(item.quantity) }}
+              </td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.reason }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-center">{{ item.created_at }}</td>
+              <td class="border border-gray-300 px-4 py-2">{{ item.staff_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(quantity)="data" >
-              <b v-if="data.item.type == 'plus'">+</b><b v-if="data.item.type == 'minus'">-</b>{{ currencyFormat(data.item.quantity) }}
-            </template>
-
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-if="hasNext === false">--Hết--</span>
+      <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
+    </div>
   </div>
 </template>
-
 
 <script>
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
+  setup() {
+    const toast = useToast()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      toast,
+      formatCurrency
+    }
+  },
   data () {
     return {
       resourceOptions: [{value: null, text: ''}],
@@ -122,32 +134,6 @@ export default {
         fromDate: null,
         toDate: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'resource_name',
-          label: 'Nguyên Liệu - Mặt hàng'
-        },
-        {
-          key: 'quantity',
-          label: 'Nội dung'
-        },
-        {
-          key: 'reason',
-          label: 'Ghi chú'
-        },
-        {
-          key: 'created_at',
-          label: 'Thời gian'
-        },
-        {
-          key: 'staff_name',
-          label: 'Tạo bởi',
-        }
-      ],
       items: [],
       pageLimit: Constant.PAGE_LIMIT,
       offset: 0,
@@ -169,7 +155,6 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
-
     window.addEventListener('resize', this.delete)
 
     // Load option resource
@@ -181,24 +166,16 @@ export default {
     // Load list when load page
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('resize', this.delete)
+  },
   methods: {
     checkDate (dateInput) {
       return (this.click && (dateInput == "" || dateInput == null || commonFunc.dateFormatCheck(dateInput) == false))
     },
     checkValidate () {
       return !(this.errorFromDate || this.errorToDate || !this.checkFromDateAndToDate())
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**
@@ -240,14 +217,14 @@ export default {
         let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+          this.toast.error("Từ ngày không thể lớn hớn đến ngày")
           return false
         }
 
         fromDate.setFullYear(fromDate.getFullYear() + 1)
 
         if(fromDate < toDate) {
-          this.popToast('danger', "Thời gian không quá 1 năm")
+          this.toast.error("Thời gian không quá 1 năm")
           return false
         }
 
@@ -311,7 +288,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -332,17 +309,8 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
-    },
-
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      return result
     },
 
     /**

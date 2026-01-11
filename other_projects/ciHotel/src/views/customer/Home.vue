@@ -2,7 +2,7 @@
   <div class="bg-white" ref="scrollParent">
     <header class="header-area" id="bodyHome">
       <div id="home" >
-        <img src="/static/img/project/home/banner-bg.jpg" style="width: 100%"/>
+        <img src="/img/project/home/banner-bg.jpg" style="width: 100%"/>
       </div>
     </header>
     <section id="features" class="services-area pt-120">
@@ -28,12 +28,12 @@
               <div class="services-icon">
                 <img
                   class="shape"
-                  src="/static/img/project/home/services-shape.svg"
+                  src="/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
                   class="shape-1"
-                  src="/static/img/project/home/services-shape-2.svg"
+                  src="/img/project/home/services-shape-2.svg"
                   alt="shape"
                 />
                 <i class="lni-cog"></i>
@@ -57,12 +57,12 @@
               <div class="services-icon">
                 <img
                   class="shape"
-                  src="/static/img/project/home/services-shape.svg"
+                  src="/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
                   class="shape-1"
-                  src="/static/img/project/home/services-shape-1.svg"
+                  src="/img/project/home/services-shape-1.svg"
                   alt="shape"
                 />
                 <i class="lni-baloon"></i>
@@ -86,12 +86,12 @@
               <div class="services-icon">
                 <img
                   class="shape"
-                  src="/static/img/project/home/services-shape.svg"
+                  src="/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
                   class="shape-1"
-                  src="/static/img/project/home/services-shape-3.svg"
+                  src="/img/project/home/services-shape-3.svg"
                   alt="shape"
                 />
                 <i class="lni-bolt-alt"></i>
@@ -130,19 +130,19 @@
             <div
               class="about-image text-center mt-50 fadeInRightBig"
             >
-              <img src="/static/img/project/home/loai_nha_hang.jpg" alt="Loại hình nhà hàng, quán ăn" />
+              <img src="/img/project/home/loai_nha_hang.jpg" alt="Loại hình nhà hàng, quán ăn" />
             </div>
           </div>
         </div>
       </div>
       <!--<div class="about-shape-1">-->
-        <!--<img src="/static/img/project/home/about-shape-1.svg" alt="shape" />-->
+        <!--<img src="/img/project/home/about-shape-1.svg" alt="shape" />-->
       <!--</div>-->
     </section>
 
     <section class="about-area pt-70">
       <!--<div class="about-shape-2">-->
-        <!--<img src="/static/img/project/home/about-shape-2.svg" alt="shape" />-->
+        <!--<img src="/img/project/home/about-shape-2.svg" alt="shape" />-->
       <!--</div>-->
       <div class="container">
         <div class="row">
@@ -167,7 +167,7 @@
             <div
               class="about-image text-center mt-50 fadeInRightBig"
             >
-              <img src="/static/img/project/home/header-hero.jpg" alt="about" />
+              <img src="/img/project/home/header-hero.jpg" alt="about" />
             </div>
           </div>
         </div>
@@ -192,19 +192,19 @@
             <div
               class="about-image text-center mt-50 fadeInRightBig"
             >
-              <img src="/static/img/project/home/giao_dien_don_gian.PNG" alt="about" />
+              <img src="/img/project/home/giao_dien_don_gian.PNG" alt="about" />
             </div>
           </div>
         </div>
       </div>
       <!--<div class="about-shape-1">-->
-        <!--<img src="/static/img/project/home/about-shape-1.svg" alt="shape" />-->
+        <!--<img src="/img/project/home/about-shape-1.svg" alt="shape" />-->
       <!--</div>-->
     </section>
 
     <section class="about-area pt-70">
       <div class="about-shape-2">
-        <img src="/static/img/project/home/about-shape-2.svg" alt="shape" />
+        <img src="/img/project/home/about-shape-2.svg" alt="shape" />
       </div>
       <div class="container">
         <div class="row">
@@ -226,7 +226,7 @@
             <div
               class="about-image text-center mt-50 fadeInRightBig"
             >
-              <img src="/static/img/project/home/best_choose.jpg" alt="Best choose" />
+              <img src="/img/project/home/best_choose.jpg" alt="Best choose" />
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@
                 class="footer-about mt-50 fadeIn"
               >
                 <a class="logo" href="#">
-                  <img src="/static/img/project/logo.png" alt="logo" />
+                  <img src="/img/project/logo.png" alt="logo" />
                 </a>
                 <p class="text">
                   ciHotel - Giải pháp chọn vẹn cho khách sạn, nhà nghỉ, nhà trọ cao cấp.
@@ -317,14 +317,12 @@
 </template>
 
 <script>
-
 export default {
-  data() {
-    return {
-    }
-  },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
     onScroll() {
@@ -1156,7 +1154,7 @@ export default {
     left: 0;
     height: 100%;
     width: 100%;
-    background-image: url("/static/img/project/home/footer-bg.jpg");
+    background-image: url("/img/project/home/footer-bg.jpg");
     background-position: top center;
     z-index: -1;
     background-size: cover;

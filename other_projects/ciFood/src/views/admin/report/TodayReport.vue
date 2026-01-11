@@ -6,23 +6,23 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="bg-gray-50 rounded-lg p-4 text-center">
           <div class="text-sm text-gray-600 mb-2">Số lượng hoá đơn</div>
-          <h3 class="text-2xl font-bold">{{ formatters.currency(billNumber) }}</h3>
+          <h3 class="text-2xl font-bold">{{ formatters.formatCurrency(billNumber) }}</h3>
         </div>
         <div class="bg-gray-50 rounded-lg p-4 text-center">
           <div class="text-sm text-gray-600 mb-2">Tổng doanh thu</div>
-          <h3 class="text-2xl font-bold">{{ formatters.currency(revenue) }}</h3>
+          <h3 class="text-2xl font-bold">{{ formatters.formatCurrency(revenue) }}</h3>
         </div>
         <div class="bg-gray-50 rounded-lg p-4 text-center">
           <div class="text-sm text-gray-600 mb-2">Tổng chi phí</div>
-          <h3 class="text-2xl font-bold">{{ formatters.currency(fee) }}</h3>
+          <h3 class="text-2xl font-bold">{{ formatters.formatCurrency(fee) }}</h3>
         </div>
         <div class="bg-gray-50 rounded-lg p-4 text-center">
           <div class="text-sm text-gray-600 mb-2">Tổng lợi nhuận</div>
-          <h3 class="text-2xl font-bold">{{ formatters.currency(profit) }}</h3>
+          <h3 class="text-2xl font-bold">{{ formatters.formatCurrency(profit) }}</h3>
         </div>
         <div class="bg-gray-50 rounded-lg p-4 text-center">
           <div class="text-sm text-gray-600 mb-2">Tiền vốn đầu ngày</div>
-          <h3 class="text-2xl font-bold">{{ formatters.currency(fund) }}</h3>
+          <h3 class="text-2xl font-bold">{{ formatters.formatCurrency(fund) }}</h3>
         </div>
       </div>
     </div>
@@ -72,30 +72,30 @@
             <tbody class="bg-white divide-y divide-gray-200">
               <tr class="bg-orange-50">
                 <td colspan="4" class="px-4 py-3 text-center font-bold text-orange-600">Tổng</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(totalPrice) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(totalServicePrice) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(totalDiscount) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(totalPrice) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(totalServicePrice) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(totalDiscount) }}</td>
                 <td></td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(totalVat) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(totalAmount) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(total_cash) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(total_credit) }}</td>
-                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.currency(total_emoney) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(totalVat) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(totalAmount) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(total_cash) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(total_credit) }}</td>
+                <td class="px-4 py-3 text-right font-bold text-orange-600">{{ formatters.formatCurrency(total_emoney) }}</td>
               </tr>
               <tr v-for="(bill, index) in bills" :key="index" class="hover:bg-gray-50">
                 <td class="px-4 py-3 text-sm">{{ index + 1 }}</td>
                 <td class="px-4 py-3 text-sm">{{ bill.created_at }}</td>
                 <td class="px-4 py-3 text-sm">{{ bill.bill_number }}</td>
                 <td class="px-4 py-3 text-sm">{{ bill.table_name }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.sub_total) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.service_price) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.discount_amount) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.sub_total) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.service_price) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.discount_amount) }}</td>
                 <td class="px-4 py-3 text-sm text-right">{{ bill.vat_percent }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.vat_value) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.total) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.cash) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.credit) }}</td>
-                <td class="px-4 py-3 text-sm text-right">{{ formatters.currency(bill.e_money) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.vat_value) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.total) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.cash) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.credit) }}</td>
+                <td class="px-4 py-3 text-sm text-right">{{ formatters.formatCurrency(bill.e_money) }}</td>
               </tr>
             </tbody>
           </table>

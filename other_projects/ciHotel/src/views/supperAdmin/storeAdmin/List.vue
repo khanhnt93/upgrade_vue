@@ -1,192 +1,206 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <div class="grid grid-cols-1 gap-4">
+          <div class="flex justify-end">
+            <button
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+              @click="gotoAdd()">
+              Thêm
+            </button>
+          </div>
 
-          <b-row>
-            <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="gotoAdd()">
-                  Thêm
-                </b-button>
-            </b-col>
-          </b-row>
+          <div class="col-span-1">
+            <h4 class="mt-2 text-center">Admin Store</h4>
+          </div>
+        </div>
+        <hr />
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Admin Store</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <!-- Search filters -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-3">
+          <div>
+            <label>Tên</label>
+            <input
+              id="name"
+              type="text"
+              class="form-control"
+              v-model="inputs.name"
+              maxlength="100" />
+          </div>
 
-            <b-row>
-              <b-col md="3">
-                <label>Tên</label>
-                <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.name"
-                  maxlength="100">
-              </b-col>
-            <b-col md="3">
-                <label>Số Điện Thoại</label>
-                <input
-                  id="phone"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.phone_number"
-                  @keyup="integerOnly($event.target)"
-                  maxlength="20">
-              </b-col>
-            <b-col md="2">
-                <label>Quyền</label>
-                <b-form-select
-                  :options="options"
-                  id="phone"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.role_id"></b-form-select>
-              </b-col>
-              <b-col md="2">
-                <label>Tên Cửa Hàng</label>
-                <input
-                  id="nameStore"
-                  type="text"
-                  class="form-control"
-                  maxlength="100"
-                  v-model="inputs.store_name">
-              </b-col>
+          <div>
+            <label>Số Điện Thoại</label>
+            <input
+              id="phone"
+              type="text"
+              class="form-control"
+              v-model="inputs.phone_number"
+              @keyup="integerOnly($event.target)"
+              maxlength="20" />
+          </div>
 
-              <b-col md="2">
-                <label>Thương hiệu</label>
-                <b-form-select
-                  :options="optionsBrand"
-                  id="brand_id"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.brand_id"></b-form-select>
-              </b-col>
-          </b-row>
+          <div>
+            <label>Quyền</label>
+            <select
+              id="role"
+              class="form-control"
+              v-model="inputs.role_id">
+              <option v-for="opt in options" :key="opt.value" :value="opt.value">
+                {{ opt.text }}
+              </option>
+            </select>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
-              Tìm Kiếm
-            </b-button>
-            </b-col>
-            </b-row>
+          <div>
+            <label>Tên Cửa Hàng</label>
+            <input
+              id="nameStore"
+              type="text"
+              class="form-control"
+              maxlength="100"
+              v-model="inputs.store_name" />
+          </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Reset password" @click="showModalConfirmResetPass(dataId.item)">
-                <i class="fa fa-refresh" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">Hết</span>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div>
+            <label>Thương hiệu</label>
+            <select
+              id="brand_id"
+              class="form-control"
+              v-model="inputs.brand_id">
+              <option v-for="brand in optionsBrand" :key="brand.value" :value="brand.value">
+                {{ brand.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-    <!-- Modal xác nhận reset pass -->
-    <b-modal centered hide-footer hide-header id="modal-confirm-reset-pass">
-      <b-row>
-        <b-col>
-          <h5 class="text-center text-header">Reset password</h5>
-          <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
-          <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col class="text-center mt-3" v-show="!resetting">
-          <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
-            Đóng
+        <div class="flex justify-end mt-4 mb-4">
+          <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+            :disabled="onSearch"
+            @click.prevent="prepareToSearch">
+            Tìm Kiếm
           </button>
-          <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
-            Xác nhận
-          </button>
-        </b-col>
-        <b-col v-show="resetting">
-          <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
 
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-4 py-2 border">STT</th>
+                <th class="px-4 py-2 border">Tên</th>
+                <th class="px-4 py-2 border">Số Điện Thoại</th>
+                <th class="px-4 py-2 border">Thương hiệu</th>
+                <th class="px-4 py-2 border">Cửa Hàng</th>
+                <th class="px-4 py-2 border">Quyền</th>
+                <th class="px-4 py-2 border">Ngày Tạo</th>
+                <th class="px-4 py-2 border">Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+                <td class="px-4 py-2 border text-center">{{ item.stt }}</td>
+                <td class="px-4 py-2 border">{{ item.name }}</td>
+                <td class="px-4 py-2 border text-center">{{ item.phone_number }}</td>
+                <td class="px-4 py-2 border">{{ item.brand_name }}</td>
+                <td class="px-4 py-2 border">{{ item.store_name }}</td>
+                <td class="px-4 py-2 border">{{ item.role_name }}</td>
+                <td class="px-4 py-2 border text-center">{{ item.created_at }}</td>
+                <td class="px-4 py-2 border text-center">
+                  <div class="flex justify-center space-x-2">
+                    <button
+                      class="text-blue-600 hover:text-blue-800"
+                      @click="edit(item.id)"
+                      title="Edit">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button
+                      class="text-red-600 hover:text-red-800"
+                      @click="deleted(item.id, item.name, item.stt)"
+                      title="Delete">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button
+                      class="text-green-600 hover:text-green-800"
+                      @click="showModalConfirmResetPass(item)"
+                      title="Reset password">
+                      <i class="fa fa-refresh"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mt-4">
+          <i class="fa fa-spinner fa-spin fa-3x"></i>
+        </div>
+        <div v-if="hasNext === false" class="text-center mt-4">Hết</div>
+      </div>
+    </div>
+
+    <!-- Modal reset password -->
+    <div v-if="showResetModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+          <h5 class="text-center text-lg font-semibold">Reset password</h5>
+          <hr class="my-3" />
+
+          <div class="space-y-2">
+            <p>Nhân viên: <strong>{{ currentStaff.name }}</strong></p>
+            <p>Số điện thoại: <strong>{{ currentStaff.phone_number }}</strong></p>
+          </div>
+
+          <div class="flex justify-center space-x-2 mt-4" v-show="!resetting">
+            <button
+              class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+              @click="hideModalConfirmResetPass()">
+              Đóng
+            </button>
+            <button
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+              @click="resetPass()">
+              Xác nhận
+            </button>
+          </div>
+
+          <div v-show="resetting" class="text-center mt-4">
+            <i class="fa fa-spinner fa-spin fa-3x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import superAdminAPI from '@/api/superAdmin'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 export default {
-  data () {
+  setup() {
+    const toast = useToast()
+    const router = useRouter()
+
     return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số Điện Thoại'
-        },
-        {
-          key: 'brand_name',
-          label: 'Thương hiệu'
-        },
-        {
-          key: 'store_name',
-          label: 'Cửa Hàng'
-        },
-        {
-          key: 'role_name',
-          label: 'Quyền'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày Tạo'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
+      toast,
+      router
+    }
+  },
+  data() {
+    return {
       items: [],
       options: [
-        {value: '', text: 'Tất cả'},
-        {value: '1', text: 'Staff'},
-        {value: '2', text: 'Admin'},
+        { value: '', text: 'Tất cả' },
+        { value: '1', text: 'Staff' },
+        { value: '2', text: 'Admin' }
       ],
       optionsBrand: [],
       inputs: {
@@ -205,60 +219,38 @@ export default {
       listIdDeleted: [],
       currentStaff: {},
       resetting: false,
-    }
-  },
-  computed: {
-    rows() {
-      return this.items.length
+      showResetModal: false
     }
   },
   mounted() {
-    // Get brand options
     this.getOptionBrand()
-
     window.addEventListener('scroll', this.onScroll)
     this.search()
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Event scroll
-     */
-    onScroll (event) {
-      if(this.onSearch) {
+    onScroll(event) {
+      if (this.onSearch) {
         return
       }
       event.preventDefault()
       var body = document.body
       var html = document.documentElement
       if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
+        if (this.hasNext) {
           this.offset = this.offset + 10
           this.loadByScroll = true
-          this.search ()
+          this.search()
         }
       }
     },
 
-    /**
-     * Get brand options
-     */
     getOptionBrand() {
       superAdminAPI.getBrandOption().then(res => {
-        this.optionsBrand = [{"value": null, "text": ""}]
-        if(res && res.data && res.data.data) {
+        this.optionsBrand = [{ value: null, text: "" }]
+        if (res && res.data && res.data.data) {
           let brands = res.data.data
           for (var index in brands) {
             let brand = {
@@ -268,90 +260,63 @@ export default {
             this.optionsBrand.push(brand)
           }
         }
-
       }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
       })
     },
 
-    /**
-     * Prepare to search
-     */
     prepareToSearch() {
       this.offset = 0
       this.items = []
       this.hasNext = true
-
       this.search()
     },
 
-    /**
-     * Delete
-     */
-    deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa [' + name + "]. Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          superAdminAPI.deleteAdminStore(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
+    deleted(id, name, rowIndex) {
+      if (confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+        superAdminAPI.deleteAdminStore(id).then(res => {
+          let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+          this.items.splice(indexTemp, 1)
+          this.listIdDeleted.push(rowIndex - 1)
+        }).catch(err => {
+          let errorMess = commonFunc.handleStaffError(err)
+          this.toast.error(errorMess)
+        })
+      }
     },
 
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/admin-store/index/' + id)
+    edit(id) {
+      this.router.push('/admin-store/index/' + id)
     },
 
-    /**
-     * Go to add
-     */
-    gotoAdd () {
-      this.$router.push('/admin-store/index/')
+    gotoAdd() {
+      this.router.push('/admin-store/index/')
     },
 
-    /**
-     * Search
-     */
-    search () {
-      if (this.loading) { return }
+    search() {
+      if (this.loading) {
+        return
+      }
 
       this.onSearch = true
       this.loading = true
 
       let req = {
-        "name": this.inputs.name,
-        "phone_number": this.inputs.phone_number,
-        "role_id": this.inputs.role_id,
-        "store_name": this.inputs.store_name,
-        "brand_id": this.inputs.brand_id,
-        "limit": this.pageLimit,
-        "offset": this.offset
+        name: this.inputs.name,
+        phone_number: this.inputs.phone_number,
+        role_id: this.inputs.role_id,
+        store_name: this.inputs.store_name,
+        brand_id: this.inputs.brand_id,
+        limit: this.pageLimit,
+        offset: this.offset
       }
 
       superAdminAPI.searchAdminStore(req, this.offset).then(res => {
         if (res != null && res.data != null && res.data.data != null) {
           let it = res.data.data.staffs
 
-          // Update items
-          if(this.loadByScroll) {
+          if (this.loadByScroll) {
             let temp = this.items
             var newArray = temp.concat(it)
             this.items = newArray
@@ -360,29 +325,23 @@ export default {
           }
           this.loadByScroll = false
 
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
+          if (this.offset + this.pageLimit >= res.data.data.total_row) {
             this.hasNext = false
           }
         } else {
           this.items = []
         }
-          this.onSearch = false
-          this.loading = false
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-
-          this.onSearch = false
-          this.loading = false
+        this.onSearch = false
+        this.loading = false
+      }).catch(err => {
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
+        this.onSearch = false
+        this.loading = false
       })
     },
 
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
+    integerOnly(item) {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
@@ -390,49 +349,38 @@ export default {
 
     showModalConfirmResetPass(staff) {
       this.currentStaff = staff
-      this.$bvModal.show('modal-confirm-reset-pass')
+      this.showResetModal = true
     },
 
     hideModalConfirmResetPass() {
-      this.$bvModal.hide('modal-confirm-reset-pass')
+      this.showResetModal = false
     },
 
-    /**
-     * Go to edit
-     * @param id
-     */
-     resetPass() {
-      if (this.resetting) { return }
+    resetPass() {
+      if (this.resetting) {
+        return
+      }
 
       this.resetting = true
 
       let params = {
-        "id": this.currentStaff.id,
-        "phone": this.currentStaff.phone_number
+        id: this.currentStaff.id,
+        phone: this.currentStaff.phone_number
       }
 
       superAdminAPI.resetPass(params).then(res => {
         if (res != null && res.data != null && res.data.status == 200) {
           this.hideModalConfirmResetPass()
-
           let message = "Mật khẩu mới: " + this.currentStaff.phone_number
-          this.$bvModal.msgBoxOk(message, {
-            title: "Reset Mật Khẩu Thành Công",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-success',
-          })
+          alert("Reset Mật Khẩu Thành Công\n" + message)
         }
-
         this.resetting = false
-        }).catch(err => {
-          this.resetting = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+      }).catch(err => {
+        this.resetting = false
+        let errorMess = commonFunc.handleStaffError(err)
+        this.toast.error(errorMess)
       })
-    },
+    }
   }
 }
 </script>

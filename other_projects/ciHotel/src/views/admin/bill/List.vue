@@ -1,150 +1,158 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+  <div class="container mx-auto px-4 py-6">
+    <!-- Search Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="mb-6">
+        <h4 class="text-2xl font-bold text-center text-gray-800">QUẢN LÝ HÓA ĐƠN</h4>
+      </div>
+      <hr class="mb-6">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="text-center text-header">QUẢN LÝ HÓA ĐƠN</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Từ ngày</label>
+          <input
+            id="fromDate"
+            type="text"
+            maxlength="10"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.fromDate"
+            @keyup="inputDateOnly($event.target)">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Đến ngày</label>
+          <input
+            id="toDate"
+            type="text"
+            maxlength="10"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.toDate"
+            @keyup="inputDateOnly($event.target)">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Số hóa đơn</label>
+          <input
+            id="bill-number"
+            type="text"
+            maxlength="20"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            v-model="inputs.billNumber"
+            @keyup="integerOnly($event.target)">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2 invisible">Tìm kiếm</label>
+          <button
+            @click.prevent="search"
+            :disabled="onSearch"
+            class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            Tìm Kiếm
+          </button>
+        </div>
+      </div>
+    </div>
 
-          <b-row class="form-row">
-            <b-col md="3">
-              <label> Từ ngày </label>
-              <input
-                id="fromDate"
-                type="text"
-                maxlength="10"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.fromDate"
-                @keyup="inputDateOnly($event.target)"
-              >
-            </b-col>
-            <b-col md="3">
-              <label> Đến ngày </label>
-              <input
-                id="toDate"
-                type="text"
-                maxlength="10"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.toDate"
-                @keyup="inputDateOnly($event.target)"
-              >
-            </b-col>
-            <b-col md="3">
-              <label> Số hóa đơn </label>
-              <input
-                id="bill-number"
-                type="text"
-                maxlength="20"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.billNumber"
-                @keyup="integerOnly($event.target)">
-            </b-col>
+    <!-- Results Card -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div v-show="loading" class="text-center py-4">
+        <i class="fa fa-spinner fa-spin text-4xl text-blue-600"></i>
+      </div>
+      
+      <div class="mb-4">
+        <p class="text-gray-700">Số kết quả: <span class="font-semibold">{{ bills.length }}</span></p>
+      </div>
 
-            <b-col md="3">
-              <label class="label-width text-white">
-                 Tìm kiếm
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
-                        @click.prevent="search">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
-
-        </b-card>
-
-        <b-card>
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <b-row>
-            <b-col>
-              Số kết quả: {{ bills.length }}
-            </b-col>
-          </b-row>
-
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+          <thead class="bg-blue-100">
             <tr>
-              <th>STT</th>
-              <th>Ngày</th>
-              <th>Số Bill</th>
-              <th>Phòng</th>
-              <th>Tổng tiền phòng</th>
-              <th>Phí dv, phụ thu</th>
-              <th>Giảm Giá</th>
-              <th>% Thuế</th>
-              <th>Số Tiền Thuế</th>
-              <th>Thành Tiền</th>
-              <th>Tiền mặt</th>
-              <th>Chuyển khoản</th>
-              <th>Tiền điện tử</th>
-              <th></th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Ngày</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Số Bill</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Tổng tiền phòng</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Phí dv, phụ thu</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Giảm Giá</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">% Thuế</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Số Tiền Thuế</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Thành Tiền</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Tiền mặt</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Chuyển khoản</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase border border-gray-300">Tiền điện tử</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase border border-gray-300">Thao tác</th>
             </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="total text-center font-weight-bold" colspan="4">Tổng</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(totalPrice)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(totalServicePrice)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(totalDiscount)}}</td>
-                <td></td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(totalVat)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(totalAmount)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(total_cash)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(total_credit)}}</td>
-                <td class="text-right total font-weight-bold">{{currencyFormat(total_emoney)}}</td>
-                <td></td>
-              </tr>
-              <tr v-for="(bill, index) in bills">
-                <td>{{index + 1}}</td>
-                <td>{{bill.created_at}}</td>
-                <td>{{bill.bill_number}}</td>
-                <td>{{bill.room_name}}</td>
-                <td class="text-right">{{currencyFormat(bill.sub_total)}}</td>
-                <td class="text-right">{{currencyFormat(bill.service_price)}}</td>
-                <td class="text-right">{{currencyFormat(bill.discount_amount)}}</td>
-                <td class="text-right">{{bill.vat_percent}}</td>
-                <td class="text-right">{{currencyFormat(bill.vat_value)}}</td>
-                <td class="text-right">{{currencyFormat(bill.total)}}</td>
-                <td class="text-right">{{currencyFormat(bill.cash)}}</td>
-                <td class="text-right">{{currencyFormat(bill.credit)}}</td>
-                <td class="text-right">{{currencyFormat(bill.e_money)}}</td>
-                <td class="justify-content-center"><b-list-group horizontal>
-                  <b-list-group-item v-b-tooltip.hover title="Sửa" @click="edit(bill.id)">
-                    <i class="fa fa-edit" />
-                  </b-list-group-item>
-                  <b-list-group-item v-b-tooltip.hover title="Xóa"
-                                     @click="deleteBill(bill.id, bill.bill_number)">
-                    <i class="fa fa-trash" />
-                  </b-list-group-item>
-                  <b-list-group-item v-b-tooltip.hover title="In"
-                                     @click="printBill(bill.id)">
-                    <i class="fa fa-print" />
-                  </b-list-group-item>
-                </b-list-group></td>
-              </tr>
-
-
-            </tbody>
-          </table>
-
-        </b-card>
-      </b-col>
-    </b-row>
+          </thead>
+          <tbody class="bg-white">
+            <!-- Total Row -->
+            <tr class="bg-orange-50">
+              <td class="px-4 py-3 text-center font-bold text-orange-600 border border-gray-300" colspan="4">Tổng</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(totalPrice) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(totalServicePrice) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(totalDiscount) }}</td>
+              <td class="px-4 py-3 border border-gray-300"></td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(totalVat) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(totalAmount) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(total_cash) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(total_credit) }}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(total_emoney) }}</td>
+              <td class="px-4 py-3 border border-gray-300"></td>
+            </tr>
+            
+            <!-- Data Rows -->
+            <tr v-for="(bill, index) in bills" :key="bill.id" class="hover:bg-gray-50">
+              <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">{{ index + 1 }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">{{ bill.created_at }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">{{ bill.bill_number }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">{{ bill.room_name }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.sub_total) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.service_price) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.discount_amount) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ bill.vat_percent }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.vat_value) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.total) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.cash) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.credit) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.e_money) }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">
+                <div class="flex justify-center gap-2">
+                  <button 
+                    @click="edit(bill.id)"
+                    title="Sửa"
+                    class="text-blue-600 hover:text-blue-800">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button 
+                    @click="deleteBill(bill.id, bill.bill_number)"
+                    title="Xóa"
+                    class="text-red-600 hover:text-red-800">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <button 
+                    @click="printBill(bill.id)"
+                    title="In"
+                    class="text-green-600 hover:text-green-800">
+                    <i class="fa fa-print"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
-import moment from "moment";
-import commonFunc from "../../../common/commonFunc";
+import moment from "moment"
+import commonFunc from "@/common/commonFunc"
 import adminAPI from '@/api/admin'
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
+import { useRouter } from 'vue-router'
 
 export default {
   data() {
@@ -164,8 +172,13 @@ export default {
       total_cash: 0,
       total_credit: 0,
       total_emoney: 0,
-      loading:false,
-      onSearch:false
+      loading: false,
+      onSearch: false
+    }
+  },
+  computed: {
+    authStore() {
+      return useAuthStore()
     }
   },
   mounted() {
@@ -177,10 +190,9 @@ export default {
 
     this.search()
   },
-  computed: {
-
-  },
   methods: {
+    ...useFormatters(),
+    
     /**
      * Only input integer
      */
@@ -200,58 +212,40 @@ export default {
     },
 
     /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      let result = null
-      if (num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-    /**
      * Check valid from date and to date
      */
     checkFromDateAndToDate() {
+      const { error } = useToast()
+      
       if(this.inputs.fromDate == "" || this.inputs.fromDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục từ ngày không đúng")
+        error("Mục từ ngày không đúng")
         return false
       }
       if(this.inputs.toDate == "" || this.inputs.toDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục đến ngày không đúng")
+        error("Mục đến ngày không đúng")
         return false
       }
       let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
       let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        error("Từ ngày không thể lớn hơn đến ngày")
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
 
       if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+        error("Thời gian không quá 62 ngày")
         return false
       }
 
       return true
     },
+    
     search() {
-
+      const { error } = useToast()
+      
       // Check validate
       if(!this.checkFromDateAndToDate()) {
         this.bills = []
@@ -286,88 +280,45 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        error(errorMess)
         this.onSearch = false
         this.loading = false
       })
     },
+    
     edit(id) {
-      this.$router.push(`/bill/edit/${id}`);
+      const router = useRouter()
+      router.push(`/bill/edit/${id}`)
     },
-    printBill(id){
+    
+    printBill(id) {
+      const router = useRouter()
       if (Cookies.get(id)) {
         console.log(Cookies.get(id))
         Cookies.remove(id)
       }
       Cookies.set("printFrom", "bill-list")
-      this.$router.push(`/bill/print/${id}`)
+      router.push(`/bill/print/${id}`)
     },
+    
     deleteBill(id, bill_number) {
-      this.$bvModal.msgBoxConfirm(`Xóa hóa đơn ${bill_number}. Bạn có chắc không?`, {
-        title: false,
-        buttonSize: 'lg',
-        centered: true, size: 'lg',
-        footerClass: 'p-2'
-      }).then(res => {
-          if (res) {
-            adminAPI.deleteOldBill({id}).then(res => {
-              if (res.data.status == 200) {
-                this.popToast('success', 'Xóa thành công')
-                this.search()
-              }
-            }).catch(err => {
-              this.popToast('danger', err.message)
-            })
+      const { success, error } = useToast()
+      
+      if (confirm(`Xóa hóa đơn ${bill_number}. Bạn có chắc không?`)) {
+        adminAPI.deleteOldBill({id}).then(res => {
+          if (res.data.status == 200) {
+            success('Xóa thành công')
+            this.search()
           }
+        }).catch(err => {
+          error(err.message)
         })
-      },
-
+      }
+    }
   }
 }
 </script>
 
-
-<style lang="css" scoped>
-  .total {
-    color: #ed592a;
-  }
-
-  table {
-    margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
-  }
+<style scoped>
+  /* No custom styles needed - all using Tailwind */
 </style>

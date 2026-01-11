@@ -1,259 +1,251 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-
-          <b-row>
-            <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="gotoAdd()">
+    <div class="row">
+      <div class="col">
+        <div class="bg-white shadow-sm rounded p-4">
+          <div class="row mb-3">
+            <div class="col text-right">
+              <button
+                @click="gotoAdd"
+                class="btn btn-primary px-4">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="row mb-3">
+            <div class="col-md-12">
               <h4 class="mt-2 text-center">Thương Hiệu</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row>
-            <b-col>
+          <div class="row mb-3">
+            <div class="col">
               <label>Tên</label>
               <input
-                id="name"
                 type="text"
-                class="form-control"
                 v-model="inputs.name"
-                maxlength="100">
-            </b-col>
+                maxlength="100"
+                class="form-control" />
+            </div>
+          </div>
 
-          </b-row>
-           <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
+          <div class="row mt-2 mb-3">
+            <div class="col-md-12 text-right">
+              <button
+                @click.prevent="prepareToSearch"
+                :disabled="onSearch"
+                class="btn btn-primary px-4">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-            </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="bg-blue-100">
+              <tr>
+                <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index">
+                <td>{{ item.stt }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.created_at }}</td>
+                <td class="actions-cell">
+                  <div class="d-flex gap-2">
+                    <button
+                      @click="edit(item.id)"
+                      class="btn btn-sm btn-outline-primary"
+                      title="Edit">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button
+                      @click="deleted(item.id, item.name, item.stt)"
+                      class="btn btn-sm btn-outline-danger"
+                      title="Delete">
+                      <i class="fa fa-trash" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">Hết</span>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div v-show="loading" class="text-center py-4">
+            <icon name="loading" width="60" />
+          </div>
+          <div v-if="hasNext === false" class="text-center py-2">Hết</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import superAdminAPI from '@/api/superAdmin'
-import Mapper from '@/mapper/store'
-import MasterApi from '@/api/master'
-import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
-import {Constant} from '@/common/constant'
-
+import { Constant } from '@/common/constant'
 
 export default {
-  data () {
-    return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'description',
-          label: 'Mô tả'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày Tạo'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      inputs: {
-        name: ''
-      },
-      loadByScroll: false,
-      onSearch: false,
-      hasNext: true,
-      loading: false,
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      listIdDeleted: [],
-    }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
+  name: 'BrandList',
+  setup() {
+    const router = useRouter()
+    const { showToast, confirmDelete } = useToast()
 
-    this.search()
-  },
-  methods: {
+    const fields = ref([
+      { key: 'stt', label: 'STT' },
+      { key: 'name', label: 'Tên' },
+      { key: 'description', label: 'Mô tả' },
+      { key: 'created_at', label: 'Ngày Tạo' },
+      { key: 'actions', label: '', class: 'actions-cell' }
+    ])
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+    const items = ref([])
+    const inputs = reactive({
+      name: ''
+    })
 
-    /**
-     * Scroll event
-     */
-    onScroll (event) {
-      if(this.onSearch) {
+    const loadByScroll = ref(false)
+    const onSearch = ref(false)
+    const hasNext = ref(true)
+    const loading = ref(false)
+    const pageLimit = ref(Constant.PAGE_LIMIT)
+    const offset = ref(0)
+    const listIdDeleted = ref([])
+
+    const rows = computed(() => items.value.length)
+
+    const onScroll = (event) => {
+      if (onSearch.value) {
         return
       }
       event.preventDefault()
       var body = document.body
       var html = document.documentElement
       if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + 10
-          this.loadByScroll = true
-          this.search ()
+        if (hasNext.value) {
+          offset.value = offset.value + 10
+          loadByScroll.value = true
+          search()
         }
       }
-    },
+    }
 
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
+    const prepareToSearch = () => {
+      offset.value = 0
+      items.value = []
+      hasNext.value = true
+      search()
+    }
 
-      this.search()
-    },
-
-    /**
-     * Delete
-     */
-    deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          superAdminAPI.deleteBrand(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
+    const deleted = async (id, name, rowIndex) => {
+      const confirmed = await confirmDelete(`Xóa ${name}. Bạn có chắc không?`)
+      if (confirmed) {
+        try {
+          await superAdminAPI.deleteBrand(id)
+          let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+          items.value.splice(indexTemp, 1)
+          listIdDeleted.value.push(rowIndex - 1)
+        } catch (err) {
+          const errorMess = commonFunc.handleStaffError(err)
+          showToast('danger', errorMess)
         }
-      })
-    },
+      }
+    }
 
-    /**
-     *  Go to edit
-     */
-    edit (id) {
-      this.$router.push('/brand/index/' + id)
-    },
+    const edit = (id) => {
+      router.push('/brand/index/' + id)
+    }
 
-    /**
-     *  Go to add
-     */
-    gotoAdd () {
-      this.$router.push('/brand/index/')
-    },
+    const gotoAdd = () => {
+      router.push('/brand/index/')
+    }
 
-    /**
-     * Search
-     */
-    search () {
-      if (this.loading) { return }
+    const search = async () => {
+      if (loading.value) { return }
 
-      this.onSearch = true
-      this.loading = true
+      onSearch.value = true
+      loading.value = true
 
       let dataPost = {
-        "name": this.inputs.name,
-        "limit": this.pageLimit,
-        "offset": this.offset
+        "name": inputs.name,
+        "limit": pageLimit.value,
+        "offset": offset.value
       }
 
-      superAdminAPI.getBrandList(dataPost).then(res => {
+      try {
+        const res = await superAdminAPI.getBrandList(dataPost)
         if (res != null && res.data != null && res.data.data != null) {
           let it = res.data.data.data
 
-          // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
+          if (loadByScroll.value) {
+            let temp = items.value
             var newArray = temp.concat(it)
-            this.items = newArray
+            items.value = newArray
           } else {
-            this.items = it
+            items.value = it
           }
-          this.loadByScroll = false
+          loadByScroll.value = false
 
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
+          if (offset.value + pageLimit.value >= res.data.data.total_row) {
+            hasNext.value = false
           }
         } else {
-          this.items = []
+          items.value = []
         }
-          this.onSearch = false
-          this.loading = false
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+        onSearch.value = false
+        loading.value = false
+      } catch (err) {
+        const errorMess = commonFunc.handleStaffError(err)
+        showToast('danger', errorMess)
+        onSearch.value = false
+        loading.value = false
+      }
+    }
 
-          this.onSearch = false
-          this.loading = false
-      })
-    },
+    onMounted(() => {
+      window.addEventListener('scroll', onScroll)
+      search()
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll)
+    })
+
+    return {
+      fields,
+      items,
+      inputs,
+      onSearch,
+      hasNext,
+      loading,
+      rows,
+      prepareToSearch,
+      deleted,
+      edit,
+      gotoAdd
+    }
   }
 }
 </script>
+
+<style scoped>
+.actions-cell {
+  width: 120px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+</style>

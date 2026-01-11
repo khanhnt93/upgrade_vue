@@ -1,74 +1,92 @@
 <template>
   <div class="container-fluid">
-    <b-card-group>
-      <b-card no-body>
-        <b-card-body>
-          <b-form>
-            <b-row>
-              <b-col cols="8">
-                <h4>Thông Tin Cá Nhân</h4>
-              </b-col>
-              <b-col cols="4">
-                <b-button v-if="onEdit" variant="primary" class="px-4 float-right" @click="save">
-                  Save
-                </b-button>
-                <b-button v-else variant="primary" class="px-4 float-right" @click="edit">
-                  Edit
-                </b-button>
-              </b-col>
-            </b-row>
-
-            <div class="form-group">
-              <label>Tên</label><span class="error-sybol"></span>
-              <input
-                id="name"
-                v-model="inputs.name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="100"
-                :disabled="!onEdit">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                  Vui lòng nhập tên
-                </b-form-invalid-feedback>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <form @submit.prevent>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+            <div class="md:col-span-8">
+              <h4 class="text-xl font-semibold">Thông Tin Cá Nhân</h4>
             </div>
-
-            <div class="form-group">
-              <label>Số Điện Thoại</label><span class="error-sybol"></span>
-              <input
-                id="phone"
-                v-model="inputs.phone_number"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="15"
-                @keyup="integerOnly($event.target)"
-                :disabled="!onEdit"
-                v-on:change="checkPhoneNumberFormat($event.target)">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!phoneNumberCheckFlag || !errorPhone">
-                  Vui lòng nhập số điện thoại
-                </b-form-invalid-feedback>
-                <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                  Số điện thoại không đúng
-                </b-form-invalid-feedback>
+            <div class="md:col-span-4">
+              <button
+                v-if="onEdit"
+                type="button"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition float-right"
+                @click="save"
+              >
+                Save
+              </button>
+              <button
+                v-else
+                type="button"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition float-right"
+                @click="edit"
+              >
+                Edit
+              </button>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label>Quyền</label><span class="error-sybol"></span>
-              <input
-                id="role"
-                v-model="inputs.role_name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="15"
-                readonly
-                >
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tên<span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="name"
+              v-model="inputs.name"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorName }"
+              maxlength="100"
+              :disabled="!onEdit"
+            />
+            <div v-if="errorName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập tên
             </div>
-          </b-form>
-        </b-card-body>
-      </b-card>
-    </b-card-group>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Số Điện Thoại<span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="phone"
+              v-model="inputs.phone_number"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': !phoneNumberCheckFlag || errorPhone }"
+              maxlength="15"
+              :disabled="!onEdit"
+              @keyup="integerOnly($event.target)"
+              @change="checkPhoneNumberFormat($event.target)"
+            />
+            <div v-if="errorPhone && !phoneNumberCheckFlag" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập số điện thoại
+            </div>
+            <div v-else-if="!phoneNumberCheckFlag" class="text-red-500 text-sm mt-1">
+              Số điện thoại không đúng
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Quyền<span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="role"
+              v-model="inputs.role_name"
+              type="text"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+              maxlength="15"
+              readonly
+            />
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,12 +95,17 @@ import CustomerAPI from '@/api/customer'
 import StaffAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
 import commonFunc from '@/common/commonFunc'
-import 'vue2-datepicker/index.css'
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   name: 'Register',
-  data () {
+  setup() {
+    const authStore = useAuthStore()
+    return {
+      authStore
+    }
+  },
+  data() {
     return {
       inputs: {
         name: '',
@@ -99,52 +122,40 @@ export default {
       return this.checkInfo(this.inputs.name)
     },
     errorPhone: function () {
-      return this.checkInfo(this.inputs.phone)
+      return this.checkInfo(this.inputs.phone_number)
     },
   },
-  mounted () {
+  mounted() {
     this.getStaffInfo()
   },
   methods: {
-    checkInfo (info) {
+    checkInfo(info) {
       return (this.click && (info == null || info.length <= 0))
     },
-    checkValidate () {
+    checkValidate() {
       return !(this.errorName || this.errorPhone || !this.phoneNumberCheckFlag)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**
      * Get staff information
      */
-    getStaffInfo () {
-      let staffId = this.$store.state.user.id
+    getStaffInfo() {
+      let staffId = this.authStore.user?.id
       StaffAPI.getStaffDetail(staffId).then(res => {
         if(res != null && res.data != null && res.data.data != null){
           this.inputs = Mapper.mapStaffDetailModelToDto(res.data.data)
         }
       }).catch(err => {
         // Handle error
-          let errorMess = commonFunc.handleCusError(err)
-          this.popToast('danger', errorMess)
+        let errorMess = commonFunc.handleCusError(err)
+        this.$toast.error(errorMess)
       })
     },
 
     /**
      * Only input integer
      */
-     integerOnly(item) {
+    integerOnly(item) {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
@@ -157,7 +168,6 @@ export default {
       this.onEdit = true
     },
 
-
     /**
      * Save infor
      */
@@ -165,30 +175,22 @@ export default {
       this.click = true
       let result = this.checkValidate()
       if(result) {
-        this.formatBirthday()
-         CustomerAPI.updateInfo(this.inputs).then(res => {
-           this.formatBirthday()
+        CustomerAPI.updateInfo(this.inputs).then(res => {
           if(res != null && res.data != null) {
             if (res.data.status == 200) {
               // show popup success
-              this.popToast('success', 'Cập nhật thông tin thành công!!! ')
+              this.$toast.success('Cập nhật thông tin thành công!!!')
               this.onEdit = false
             }
           }
         }).catch(err => {
-          this.formatBirthday()
           let message = ""
           if(err.response.data.status == 422) {
             message = err.response.data.mess
           } else {
             message = "Lỗi hệ thống"
           }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập Nhật Thông Tin",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
+          this.$toast.error(message)
         })
       }
     },
@@ -205,7 +207,7 @@ export default {
           this.phoneNumberCheckFlag = false
         }
       } else if(this.errorPhone) {
-          this.phoneNumberCheckFlag = false
+        this.phoneNumberCheckFlag = false
       } else {
         this.phoneNumberCheckFlag = true
       }

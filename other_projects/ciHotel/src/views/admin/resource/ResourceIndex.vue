@@ -1,117 +1,118 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between mb-4">
+        <button class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 w-[120px]" @click="back">
+          Quay lại
+        </button>
+        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-[120px]" @click="save" :disabled="saving">
+          Lưu
+        </button>
+      </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Nguyên liệu - Mặt hàng</h4>
+      <hr class="mb-4"/>
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center">Nguyên liệu - Mặt hàng</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Loading -->
+      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <div class="md:col-span-3">
+            <label>Tên<span class="error-sybol"></span></label>
+          </div>
+          <div class="md:col-span-9">
+            <input
+              id="name"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorName }"
+              v-model="resource.name">
+            <div v-if="errorName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập tên
+            </div>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Đơn vị </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="units"
-                  id="status"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.unit">
-                  </b-form-select>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <div class="md:col-span-3">
+            <label>Đơn vị</label>
+          </div>
+          <div class="md:col-span-9">
+            <select
+              id="unit"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              v-model="resource.unit">
+              <option v-for="unit in units" :key="unit.value" :value="unit.value">{{ unit.text }}</option>
+            </select>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số lượng </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="quantity"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.quantity"
-                  :disabled="this.$route.params.id"
-                  @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
-                    Vui lòng nhập số lượng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <div class="md:col-span-3">
+            <label>Số lượng<span class="error-sybol"></span></label>
+          </div>
+          <div class="md:col-span-9">
+            <input
+              id="quantity"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorQuantity }"
+              v-model="resource.quantity"
+              :disabled="this.route.params.id"
+              @keyup="integerAndPointOnly($event.target)">
+            <div v-if="errorQuantity" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập số lượng
+            </div>
+          </div>
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số lượng tối thiểu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="min_quantity"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="resource.min_quantity"
-                  @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMinQuantity">
-                    Vui lòng nhập số lượng tối thiểu
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          <div class="md:col-span-3">
+            <label>Số lượng tối thiểu<span class="error-sybol"></span></label>
+          </div>
+          <div class="md:col-span-9">
+            <input
+              id="min_quantity"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{ 'border-red-500': errorMinQuantity }"
+              v-model="resource.min_quantity"
+              @keyup="integerAndPointOnly($event.target)">
+            <div v-if="errorMinQuantity" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập số lượng tối thiểu
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-
+import { useRouter, useRoute } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const toast = useToast()
+
+    return {
+      router,
+      route,
+      toast
+    }
+  },
   data () {
     return {
       resource: {
@@ -152,18 +153,6 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Load list option group menu
      */
     getUnitOptions () {
@@ -177,7 +166,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast.error(errorMess)
       })
     },
 
@@ -185,7 +174,7 @@ export default {
      * Get detail
      */
     getUnitDetail() {
-      let Id = this.$route.params.id
+      let Id = this.route.params.id
       if(Id){
         this.loading = true
 
@@ -200,7 +189,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast.error(errorMess)
         })
       }
     },
@@ -210,7 +199,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/resource/list')
+      this.router.push('/resource/list')
     },
 
     /**
@@ -221,7 +210,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {
-        let id = this.$route.params.id
+        let id = this.route.params.id
         if(id){
           // Edit
           let resource = this.resource
@@ -231,7 +220,7 @@ export default {
             if(res != null && res.data != null){
               if (res.data.status == 200) {
                 // show popup success
-                this.popToast('success', 'Cập nhật nguyên liệu thành công!!! ')
+                this.toast.success('Cập nhật nguyên liệu thành công!!! ')
               }
             }
           }).catch(err => {
@@ -239,7 +228,7 @@ export default {
 
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.toast.error(errorMess)
           })
         } else {
           // Add
@@ -247,14 +236,14 @@ export default {
             this.saving = false
             if(res != null && res.data != null){
               if (res.data.status == 200) {
-                this.$router.push("/resource/list")
+                this.router.push("/resource/list")
               }
             }
           }).catch(err => {
             this.saving = false
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.toast.error(errorMess)
           })
         }
       } else {

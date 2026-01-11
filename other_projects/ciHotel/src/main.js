@@ -1,43 +1,70 @@
-import Vue from 'vue'
-import App from './App'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import App from './App.vue'
 import router from './router'
-import store from './store'
 
-Vue.config.productionTip = false
+// Import Tailwind CSS
+import './assets/scss/style.scss'
 
-// Import VueBoostrap
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// Import Font Awesome CSS
+import '@fortawesome/fontawesome-free/css/all.css'
 
-Vue.use(BootstrapVue)
+// Import Toast Notification
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
+// Import Google Charts
+import VueGoogleCharts from 'vue-google-charts'
 
-// Import Global Filters
-import '@/filters'
+// Import Sidebar Menu
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
-// svg: loading
-import * as svgicon from 'vue-svgicon'
-import './icons.js'
+// Import composables
+import { useFormatters } from '@/composables/useFormatters'
+import { useToastNotification } from '@/composables/useToast'
 
-Vue.use(svgicon, {
-  tagName: 'icon'
+// Create Vue app
+const app = createApp(App)
+
+// Create Pinia store
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+// Use plugins
+app.use(pinia)
+app.use(router)
+app.use(VueGoogleCharts)
+app.use(VueSidebarMenu)
+
+// Configure Toast
+app.use(Toast, {
+  transition: "Vue-Toastification__bounce",
+  maxToasts: 3,
+  newestOnTop: true,
+  position: "top-right",
+  timeout: 3000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: "button",
+  icon: true,
+  rtl: false
 })
 
-// Some middleware to help us ensure the user is authenticated.
+// Global properties (replaces Vue 2 filters)
+app.config.globalProperties.$formatters = useFormatters()
+
+// Router guard
 router.beforeEach((to, from, next) => {
-    next()
-});
+  // Add your authentication logic here
+  next()
+})
 
-// Init chart
-import VueGoogleCharts from 'vue-google-charts'
-Vue.use(VueGoogleCharts)
-
-
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-});
+// Mount app
+app.mount('#app')
