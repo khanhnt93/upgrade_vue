@@ -68,16 +68,13 @@
 
       <!-- Excel Export Button -->
       <div class="mt-4">
-        <download-excel
-          :data="excelData"
-          :fields="excelFields"
-          type="csv"
-          name="bao_cao_sua_gia.xls"
+        <button
+          @click="handleExportExcel"
           class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
         >
           <i class="fa fa-file-excel-o mr-2"></i>
           Xuất Excel
-        </download-excel>
+        </button>
       </div>
     </div>
 
@@ -145,16 +142,19 @@ import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   name: 'EditPriceReport',
   setup() {
     const toast = useToast()
     const { formatCurrency } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     }
   },
   data() {
@@ -269,6 +269,15 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.excelData,
+        this.excelFields,
+        'Báo Cáo Sửa Giá',
+        'bao_cao_sua_gia.xls'
+      )
     }
   }
 }

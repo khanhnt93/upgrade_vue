@@ -25,8 +25,14 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import { useFormatters } from '@/composables/useFormatters'
 import { useToastNotification } from '@/composables/useToast'
 
+// Import global components
+import LoadingIcon from '@/components/common/LoadingIcon.vue'
+
 // Create Vue app
 const app = createApp(App)
+
+// Register global components
+app.component('icon', LoadingIcon)
 
 // Create Pinia store
 const pinia = createPinia()

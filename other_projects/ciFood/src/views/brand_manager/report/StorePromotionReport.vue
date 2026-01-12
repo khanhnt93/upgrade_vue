@@ -79,14 +79,11 @@
           <div class="text-gray-700">
             Số kết quả: <span class="font-semibold">{{ orders.length }}</span>
           </div>
-          <download-excel
+          <button
             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-gray-700 font-semibold"
-            :data="excel_bill_data"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Khuyến Mãi"
-            name="bao_cao_khuyen_mai.xls">
+            @click="exportToExcel(excel_bill_data, excel_bill_fields, 'bao_cao_khuyen_mai', 'Báo Cáo Khuyến Mãi')">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -164,16 +161,14 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
 
 // Composables
 const { showToast } = useToast()
 const { formatCurrency } = useFormatters()
-
-// Register component
-const DownloadExcel = JsonExcel
+const { exportToExcel } = useExcelExport()
 
 // Reactive state
 const optionsStore = ref([])

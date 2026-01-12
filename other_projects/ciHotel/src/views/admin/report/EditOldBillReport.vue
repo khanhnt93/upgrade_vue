@@ -56,16 +56,13 @@
 
       <!-- Excel Export Button -->
       <div class="mt-4">
-        <download-excel
-          :data="excelData"
-          :fields="excelFields"
-          type="csv"
-          name="bao_cao_sua_bill_cu.xls"
+        <button
+          @click="handleExportExcel"
           class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
         >
           <i class="fa fa-file-excel-o mr-2"></i>
           Xuất Excel
-        </download-excel>
+        </button>
       </div>
     </div>
 
@@ -117,16 +114,19 @@ import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   name: 'EditOldBillReport',
   setup() {
     const toast = useToast()
     const { formatCurrency } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     }
   },
   data() {
@@ -185,7 +185,7 @@ export default {
     const today = new Date()
     const lastWeek = new Date(today)
     lastWeek.setDate(lastWeek.getDate() - 7)
-    
+
     this.inputs.toDate = this.formatDateInput(today)
     this.inputs.fromDate = this.formatDateInput(lastWeek)
   },
@@ -237,7 +237,7 @@ export default {
       try {
         const response = await adminAPI.getEditOldBillReport(params)
         const items = response.data.data || []
-        
+
         // Add stt (sequence number) to each item
         this.data = items.map((item, index) => ({
           ...item,
@@ -250,6 +250,15 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.excelData,
+        this.excelFields,
+        'Báo Cáo Sửa Bill Cũ',
+        'bao_cao_sua_bill_cu.xls'
+      )
     }
   }
 }

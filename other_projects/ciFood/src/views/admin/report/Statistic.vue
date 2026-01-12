@@ -77,14 +77,11 @@
           <div class="text-gray-700">
             Số kết quả: <span class="font-semibold">{{ items.length }}</span>
           </div>
-          <download-excel
+          <button
             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
-            :data="items"
-            :fields="excel_statistic_fields"
-            worksheet="Thống kê"
-            name="thong_ke.xls">
+            @click="exportToExcel(items, excel_statistic_fields, 'thong_ke', 'Thống kê')">
             Xuất Excel
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -127,8 +124,10 @@ import { ref, computed, onMounted } from 'vue'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 const { popToast } = useToast()
+const { exportToExcel } = useExcelExport()
 
 const orderByOption = [
   { value: 'quantityAsc', text: '' },
@@ -253,16 +252,6 @@ onMounted(() => {
   inputs.value.toDate = commonFunc.formatDate(dateNow)
   inputs.value.fromDate = commonFunc.formatDate(dateNow)
 })
-</script>
-
-<script>
-import JsonExcel from 'vue-json-excel'
-
-export default {
-  components: {
-    downloadExcel: JsonExcel
-  }
-}
 </script>
 
 <style scoped>

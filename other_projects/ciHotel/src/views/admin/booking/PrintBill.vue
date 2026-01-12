@@ -40,30 +40,32 @@
               <div class="bill-title"><h3>Hóa đơn</h3></div>
               <div>
                 <table style="width: 100%;">
-                  <tr>
-                    <td>Ngày đến:</td>
-                    <td>{{ paymentInfo.actual_check_in }}</td>
-                    <td>Ngày đi:</td>
-                    <td>{{ paymentInfo.actual_check_out }}</td>
-                    <td>Booking ID:</td>
-                    <td>{{ pad(paymentInfo.booking_id, 8) }}</td>
-                  </tr>
-                  <tr>
-                    <td>Tên khách hàng:</td>
-                    <td>{{ paymentInfo.customer_name }}</td>
-                    <td>Số điện thoại:</td>
-                    <td>{{ paymentInfo.phone_number }}</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>Số hoá đơn:</td>
-                    <td>{{ paymentInfo.bill_number }}</td>
-                    <td>Phòng:</td>
-                    <td>{{ paymentInfo.room_name }}</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>Ngày đến:</td>
+                      <td>{{ paymentInfo.actual_check_in }}</td>
+                      <td>Ngày đi:</td>
+                      <td>{{ paymentInfo.actual_check_out }}</td>
+                      <td>Booking ID:</td>
+                      <td>{{ pad(paymentInfo.booking_id, 8) }}</td>
+                    </tr>
+                    <tr>
+                      <td>Tên khách hàng:</td>
+                      <td>{{ paymentInfo.customer_name }}</td>
+                      <td>Số điện thoại:</td>
+                      <td>{{ paymentInfo.phone_number }}</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Số hoá đơn:</td>
+                      <td>{{ paymentInfo.bill_number }}</td>
+                      <td>Phòng:</td>
+                      <td>{{ paymentInfo.room_name }}</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>

@@ -68,16 +68,13 @@
 
       <!-- Excel Export Button -->
       <div class="mt-4">
-        <download-excel
-          :data="excelData"
-          :fields="excelFields"
-          type="csv"
-          name="hoa_don_bi_xoa.xls"
+        <button
+          @click="handleExportExcel"
           class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
         >
           <i class="fa fa-file-excel-o mr-2"></i>
           Xuất Excel
-        </download-excel>
+        </button>
       </div>
     </div>
 
@@ -145,16 +142,19 @@ import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   name: 'DeleteBillReport',
   setup() {
     const toast = useToast()
     const { formatCurrency } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     }
   },
   data() {
@@ -222,7 +222,7 @@ export default {
     const today = new Date()
     const lastMonth = new Date(today)
     lastMonth.setMonth(lastMonth.getMonth() - 1)
-    
+
     this.inputs.toDate = this.formatDateInput(today)
     this.inputs.fromDate = this.formatDateInput(lastMonth)
   },
@@ -282,6 +282,15 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.excelData,
+        this.excelFields,
+        'Hóa Đơn Bị Xóa',
+        'hoa_don_bi_xoa.xls'
+      )
     }
   }
 }

@@ -3,7 +3,7 @@
     <!-- Filters Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h4 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO THEO NHÂN VIÊN</h4>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <!-- Date Range -->
         <div class="md:col-span-7">
@@ -67,15 +67,12 @@
       <div v-show="firstSearch == false && items.length > 0">
         <div class="flex flex-col md:flex-row justify-between items-center mb-4">
           <div class="mb-2 md:mb-0">Số kết quả: {{ items.length }}</div>
-          <download-excel
+          <button
+            @click="handleExportExcel"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold rounded border border-gray-300"
-            :data="items"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Theo Nhân Viên"
-            name="bao_cao_theo_nhan_vien.xls"
           >
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -114,21 +111,20 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
+import { useExcelExport } from '@/composables/useExcelExport'
 import { useToast } from '@/composables/useToast';
 import { useFormatters } from '@/composables/useFormatters';
 
 export default {
-  components: {
-    'downloadExcel': JsonExcel
-  },
   setup() {
     const { toast } = useToast();
     const { formatCurrency } = useFormatters();
-    
+    const { exportToExcel } = useExcelExport();
+
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     };
   },
   data () {
@@ -256,6 +252,15 @@ export default {
       let result = commonFunc.inputDateOnly(valueInput)
       item.value = result
     },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.items,
+        this.excel_bill_fields,
+        'Báo Cáo Theo Nhân Viên',
+        'bao_cao_theo_nhan_vien.xls'
+      )
+    }
   }
 }
 </script>

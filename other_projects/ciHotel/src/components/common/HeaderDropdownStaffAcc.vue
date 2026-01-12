@@ -5,7 +5,7 @@
       type="button"
       @click="isOpen = !isOpen"
     >
-      <img src="/static/img/icons/sticker_5.png" class="iconsCustom"/>
+      <img src="/img/icons/sticker_5.png" class="iconsCustom"/>
     </button>
     <div class="dropdown-menu" :class="{ show: isOpen }" style="right: 0; left: auto;">
       <a class="dropdown-item" href="#" @click.prevent="goToChangePass">Đổi Mật Khẩu</a>

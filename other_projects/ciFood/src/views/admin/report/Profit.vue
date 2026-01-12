@@ -102,14 +102,11 @@
           <div v-if="click && datas.length > 0" class="mt-6">
             <div class="flex justify-between items-center mb-4">
               <div class="text-sm text-gray-600">Số kết quả: {{ datas.length }}</div>
-              <download-excel
+              <button
                 class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :data="datas"
-                :fields="excel_bill_fields"
-                worksheet="Báo Cáo Lợi Nhuận"
-                name="bao_cao_loi_nhuan.xls">
+                @click="exportToExcel(datas, excel_bill_fields.value, 'bao_cao_loi_nhuan', 'Báo Cáo Lợi Nhuận')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
 
             <div class="overflow-x-auto">
@@ -151,24 +148,17 @@
   </div>
 </template>
 
-<script>
-import JsonExcel from 'vue-json-excel'
-export default {
-  components: {
-    'downloadExcel': JsonExcel,
-  }
-}
-</script>
-
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 
 const { showToast } = useToast()
 const { formatCurrency } = useFormatters()
+const { exportToExcel } = useExcelExport()
 
 const dataByOption = ref([
   { value: 'Day', text: '' },

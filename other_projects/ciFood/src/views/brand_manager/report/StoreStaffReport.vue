@@ -83,14 +83,11 @@
           <div class="text-gray-700">
             Số kết quả: <span class="font-semibold">{{ items.length }}</span>
           </div>
-          <download-excel
+          <button
             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-gray-700 font-semibold"
-            :data="items"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Theo Nhân Viên"
-            name="bao_cao_theo_nhan_vien.xls">
+            @click="exportToExcel(items, excel_bill_fields, 'bao_cao_theo_nhan_vien', 'Báo Cáo Theo Nhân Viên')">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -156,10 +153,12 @@ import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { useFormatters } from '@/composables/useFormatters'
 import { useToast } from '@/composables/useToast'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 // Composables
 const { formatCurrency } = useFormatters()
 const { popToast } = useToast()
+const { exportToExcel } = useExcelExport()
 
 // Store Options
 const optionsStore = ref([])

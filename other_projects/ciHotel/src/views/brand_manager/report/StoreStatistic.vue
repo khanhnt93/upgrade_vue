@@ -88,14 +88,11 @@
               Số kết quả: {{ items.length }}
             </div>
             <div class="col-md-8 text-right">
-              <download-excel
-                class="btn btn-default font-weight-bold"
-                :data="items"
-                :fields="excel_statistic_fields"
-                worksheet="Thống kê"
-                name="filename.xls">
+              <button
+                @click="handleExportExcel"
+                class="btn btn-default font-weight-bold">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -135,15 +132,13 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   name: 'StoreStatistic',
-  components: {
-    'downloadExcel': JsonExcel
-  },
   setup() {
     const { showToast } = useToast()
+    const { exportToExcel } = useExcelExport()
 
     const inputs = reactive({
       store_id: null,
@@ -303,7 +298,15 @@ export default {
       errorFromDate,
       errorToDate,
       search,
-      inputDateOnly
+      inputDateOnly,
+      handleExportExcel: () => {
+        exportToExcel(
+          items.value,
+          excel_statistic_fields.value,
+          'Thống kê',
+          'thong_ke.xls'
+        )
+      }
     }
   }
 }

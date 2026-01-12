@@ -69,14 +69,11 @@
           <div class="text-gray-700">
             Số kết quả: <span class="font-semibold">{{ orders.length }}</span>
           </div>
-          <download-excel
+          <button
             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
-            :data="excel_bill_data"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Khuyến Mãi"
-            name="bao_cao_khuyen_mai.xls">
+            @click="exportToExcel(excel_bill_data, excel_bill_fields, 'bao_cao_khuyen_mai', 'Báo Cáo Khuyến Mãi')">
             Xuất Excel
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -135,9 +132,11 @@ import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 const { popToast } = useToast()
 const formatters = useFormatters()
+const { exportToExcel } = useExcelExport()
 
 const orderByOption = [
   { value: 't.payment_at asc', text: '' },
@@ -309,16 +308,6 @@ onMounted(() => {
   // Search
   search()
 })
-</script>
-
-<script>
-import JsonExcel from 'vue-json-excel'
-
-export default {
-  components: {
-    downloadExcel: JsonExcel
-  }
-}
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <!-- Summary Cards Section -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h2 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO THEO NGÀY</h2>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         <!-- Số lượng hoá đơn -->
         <div class="bg-gray-50 rounded-lg shadow p-4 text-center">
@@ -48,15 +48,12 @@
       <div v-show="bills.length > 0">
         <div class="flex flex-col md:flex-row justify-between items-center mb-4">
           <div class="mb-2 md:mb-0">Số kết quả: {{ bills.length }}</div>
-          <download-excel
+          <button
+            @click="handleExportExcel"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold rounded border border-gray-300"
-            :data="bills"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Theo Ngày"
-            name="bao_cao_theo_ngay.xls"
           >
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <!-- Bills Table -->
@@ -163,15 +160,18 @@ import commonFunc from "@/common/commonFunc";
 import moment from 'moment';
 import { useToast } from '@/composables/useToast';
 import { useFormatters } from '@/composables/useFormatters';
+import { useExcelExport } from '@/composables/useExcelExport';
 
 export default {
   setup() {
     const { toast } = useToast();
     const { formatCurrency } = useFormatters();
-    
+    const { exportToExcel } = useExcelExport();
+
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     };
   },
   data() {
@@ -260,6 +260,14 @@ export default {
           this.toast.error(errorMess);
           this.loading = false;
         });
+    },
+    handleExportExcel() {
+      this.exportToExcel(
+        this.bills,
+        this.excel_bill_fields,
+        'Báo Cáo Theo Bill',
+        'bao_cao_theo_bill.xls'
+      );
     }
   }
 };

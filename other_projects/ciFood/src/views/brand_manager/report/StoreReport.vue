@@ -74,22 +74,18 @@
 
           <!-- Excel Export Buttons -->
           <div class="mt-6">
-            <download-excel
+            <button
               v-if="!firstSearch && !loading && inputs.reportBy == 'bill'"
               class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :data="bills"
-              :fields="excel_bill_fields"
-              name="store_bill_report.xls">
+              @click="exportToExcel(bills, excel_bill_fields.value, 'store_bill_report', 'Bill Report')">
               Xuất Excel
-            </download-excel>
-            <download-excel
+            </button>
+            <button
               v-if="!firstSearch && !loading && inputs.reportBy == 'food'"
               class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :data="foods"
-              :fields="excel_food_fields"
-              name="store_food_report.xls">
+              @click="exportToExcel(foods, excel_food_fields.value, 'store_food_report', 'Food Report')">
               Xuất Excel
-            </download-excel>
+            </button>
             <div v-if="loading" class="text-center mt-3">
               <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
             </div>
@@ -212,24 +208,17 @@
   </div>
 </template>
 
-<script>
-import JsonExcel from 'vue-json-excel'
-export default {
-  components: {
-    'downloadExcel': JsonExcel,
-  }
-}
-</script>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 
 const { showToast } = useToast()
 const { formatCurrency } = useFormatters()
+const { exportToExcel } = useExcelExport()
 
 const storeOptions = ref([
   { value: '', name: 'Tất cả' }

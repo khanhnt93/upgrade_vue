@@ -100,14 +100,11 @@
                 Số kết quả: {{ bills.length }}
               </div>
               <div class="col-md-8 text-right">
-                <download-excel
-                  class="btn btn-default font-weight-bold"
-                  :data="bills"
-                  :fields="excel_bill_fields"
-                  worksheet="Báo Cáo Theo Bill"
-                  name="filename.xls">
+                <button
+                  @click="handleExportBillExcel"
+                  class="btn btn-default font-weight-bold">
                   <b>Xuất Excel</b>
-                </download-excel>
+                </button>
               </div>
             </div>
 
@@ -193,14 +190,11 @@
                 Số kết quả: {{ foods.length }}
               </div>
               <div class="col-md-8 text-right">
-                <download-excel
-                  class="btn btn-default font-weight-bold"
-                  :data="foods"
-                  :fields="excel_food_fields"
-                  worksheet="Báo Cáo Theo Món"
-                  name="filename.xls">
+                <button
+                  @click="handleExportFoodExcel"
+                  class="btn btn-default font-weight-bold">
                   <b>Xuất Excel</b>
-                </download-excel>
+                </button>
               </div>
             </div>
 
@@ -268,16 +262,14 @@ import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   name: 'StoreReport',
-  components: {
-    'downloadExcel': JsonExcel
-  },
   setup() {
     const { showToast } = useToast()
     const { formatCurrency } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     const inputs = reactive({
       store_id: null,
@@ -479,7 +471,23 @@ export default {
       search,
       inputDateOnly,
       changeReportBy,
-      formatCurrency
+      formatCurrency,
+      handleExportBillExcel: () => {
+        exportToExcel(
+          bills.value,
+          excel_bill_fields.value,
+          'Báo Cáo Theo Bill',
+          'bao_cao_bill.xls'
+        )
+      },
+      handleExportFoodExcel: () => {
+        exportToExcel(
+          foods.value,
+          excel_food_fields.value,
+          'Báo Cáo Theo Món',
+          'bao_cao_mon.xls'
+        )
+      }
     }
   }
 }

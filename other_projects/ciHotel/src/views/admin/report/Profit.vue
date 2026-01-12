@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <h4 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO LỢI NHUẬN</h4>
-      
+
       <!-- Filters -->
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
         <!-- Xem theo -->
@@ -38,7 +38,7 @@
               Mục từ ngày không đúng
             </div>
           </div>
-          
+
           <div class="md:col-span-3">
             <label class="block text-sm font-medium text-gray-700 mb-1">
               Đến ngày <span class="text-red-500">*</span>
@@ -75,7 +75,7 @@
               Mục từ tháng không đúng
             </div>
           </div>
-          
+
           <div class="md:col-span-3">
             <label class="block text-sm font-medium text-gray-700 mb-1">
               Đến tháng <span class="text-red-500">*</span>
@@ -116,15 +116,12 @@
       <div v-show="click && datas.length > 0">
         <div class="flex flex-col md:flex-row justify-between items-center mb-4">
           <div class="mb-2 md:mb-0">Số kết quả: {{ datas.length }}</div>
-          <download-excel
+          <button
+            @click="handleExportExcel"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold rounded border border-gray-300"
-            :data="datas"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Lợi Nhuận"
-            name="bao_cao_loi_nhuan.xls"
           >
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -188,21 +185,20 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
+import { useExcelExport } from '@/composables/useExcelExport'
 import { useToast } from '@/composables/useToast';
 import { useFormatters } from '@/composables/useFormatters';
 
 export default {
-  components: {
-    'downloadExcel': JsonExcel
-  },
   setup() {
     const { toast } = useToast();
     const { formatCurrency } = useFormatters();
-    
+    const { exportToExcel } = useExcelExport();
+
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     };
   },
   data () {
@@ -487,6 +483,15 @@ export default {
       let result = commonFunc.inputDateOnly(valueInput)
       item.value = result
     },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.datas,
+        this.excel_bill_fields,
+        'Báo Cáo Lợi Nhuận',
+        'bao_cao_loi_nhuan.xls'
+      )
+    }
   }
 }
 </script>

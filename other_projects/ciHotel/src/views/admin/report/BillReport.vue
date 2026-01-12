@@ -54,9 +54,9 @@
             <label class="block mb-2 text-white">
               Xem
             </label>
-            <button 
-              class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" 
-              :disabled="onSearch" 
+            <button
+              class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              :disabled="onSearch"
               @click.prevent="search"
               style="min-width: 120px"
             >
@@ -78,14 +78,11 @@
               Số kết quả: {{bills.length}}
             </div>
             <div class="col-span-12 md:col-span-8 text-right">
-              <download-excel
-                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 inline-block font-semibold"
-                :data="bills"
-                :fields="excel_bill_fields"
-                worksheet="Báo Cáo Theo Bill"
-                name="bao_cao_theo_bill.xls">
+              <button
+                @click="handleExportExcel"
+                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 inline-block font-semibold">
                 Xuất Excel
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -156,20 +153,19 @@ import { useFormatters } from '@/composables/useFormatters'
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 export default {
-  components: {
-    'downloadExcel': JsonExcel
-  },
   setup() {
     const toast = useToast()
     const { formatCurrency } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
-      formatCurrency
+      formatCurrency,
+      exportToExcel
     }
   },
   data () {
@@ -334,6 +330,15 @@ export default {
       this.bills = []
       this.foods = []
       this.firstSearch = true
+    },
+
+    handleExportExcel() {
+      this.exportToExcel(
+        this.bills,
+        this.excel_bill_fields,
+        'Báo Cáo Theo Bill',
+        'bao_cao_theo_bill.xls'
+      )
     }
 
   }

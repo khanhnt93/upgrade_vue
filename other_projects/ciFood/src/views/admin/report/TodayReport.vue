@@ -38,15 +38,11 @@
         <!-- Header with Count and Export -->
         <div class="flex justify-between items-center mb-4">
           <span class="text-sm text-gray-600">Số kết quả: {{ bills.length }}</span>
-          <download-excel
+          <button
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-semibold cursor-pointer"
-            :data="bills"
-            :fields="excel_bill_fields"
-            worksheet="Báo Cáo Theo Bill"
-            name="bao_cao_theo_bill.xls"
-          >
+            @click="exportToExcel(bills, excel_bill_fields, 'bao_cao_theo_bill.xls')">
             Xuất Excel
-          </download-excel>
+          </button>
         </div>
 
         <!-- Table -->
@@ -113,12 +109,13 @@
 import { ref, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import JsonExcel from 'vue-json-excel'
 
 const { popToast } = useToast()
 const formatters = useFormatters()
+const { exportToExcel } = useExcelExport()
 
 const revenue = ref(0)
 const billNumber = ref(0)
@@ -192,14 +189,4 @@ onMounted(() => {
   getReportToday()
   getTotalBill()
 })
-</script>
-
-<script>
-// Component registration for vue-json-excel
-import JsonExcel from 'vue-json-excel'
-export default {
-  components: {
-    'downloadExcel': JsonExcel
-  }
-}
 </script>
