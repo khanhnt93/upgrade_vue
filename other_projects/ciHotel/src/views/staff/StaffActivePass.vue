@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row items-center fixed top-0 left-0 right-0 bottom-0 bg-gray-100">
-    <div class="container mx-auto px-4">
+    <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-1/2 lg:w-2/5">
           <div class="bg-white rounded-lg shadow-md">
@@ -82,7 +82,7 @@ export default {
       this.click = true
       let result = this.checkValidate()
       const { success, error } = useToast()
-      
+
       if(result) {
         // get id account
         this.onConfirm = true
@@ -97,7 +97,7 @@ export default {
               // show popup success
               message = "Tài khoản của bạn đã được kích hoạt"
               success(message)
-              
+
               setTimeout(() => {
                 this.$router.push('/staff-login')
               }, 1500)

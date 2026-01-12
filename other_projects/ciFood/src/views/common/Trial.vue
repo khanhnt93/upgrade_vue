@@ -1,10 +1,10 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <div class="flex justify-center">
       <div class="w-full md:w-2/3">
         <div class="bg-white rounded-lg shadow-lg p-6">
           <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Đăng Ký Dùng Thử</h1>
-          
+
           <form @submit.prevent="update">
             <!-- Tên nhà hàng -->
             <div class="mb-4">
@@ -303,7 +303,7 @@ const checkInfo = (info) => {
 }
 
 const checkValidate = () => {
-  return !(errorStoreName.value || errorUserName.value || errorPhoneNumber.value || 
+  return !(errorStoreName.value || errorUserName.value || errorPhoneNumber.value ||
            errorCiti.value || errorDistrict.value || errorAddress.value)
 }
 

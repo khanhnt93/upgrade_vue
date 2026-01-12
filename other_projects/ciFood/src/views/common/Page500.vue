@@ -1,6 +1,6 @@
 <template>
   <div class="app flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="container mx-auto px-4">
+    <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-2/3 lg:w-1/2">
           <div class="bg-white rounded-lg shadow-lg p-8">
@@ -11,11 +11,11 @@
                 <p class="text-gray-600">The page you are looking for is temporarily unavailable.</p>
               </div>
             </div>
-            
+
             <div class="flex gap-2">
               <div class="flex-shrink-0">
                 <div class="flex items-center justify-center h-10 w-10 bg-gray-100 rounded-l-md">
-                  <font-awesome-icon icon="search" class="text-gray-500" />
+                  <i class="fa fa-search text-gray-500"></i>
                 </div>
               </div>
               <input
@@ -30,7 +30,7 @@
 
             <div class="mt-6 text-center">
               <router-link to="/" class="text-primary-500 hover:text-primary-600">
-                <font-awesome-icon icon="home" class="mr-2" />
+                <i class="fa fa-home mr-2"></i>
                 Go Home
               </router-link>
             </div>

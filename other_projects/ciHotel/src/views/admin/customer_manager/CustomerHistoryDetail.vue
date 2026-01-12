@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="text-center mb-4">
         <h4 class="text-xl font-semibold mt-1">Sửa lịch sử khách</h4>
@@ -78,12 +78,12 @@
       </div>
 
       <div class="flex justify-end space-x-2 mt-6">
-        <button 
+        <button
           class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 border border-gray-600 min-w-[120px]"
           @click="back()">
           Quay lại
         </button>
-        <button 
+        <button
           class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
           :disabled="onSave"
           @click="save()">

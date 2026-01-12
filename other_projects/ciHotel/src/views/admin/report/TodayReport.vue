@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <!-- Summary Cards Section -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h2 class="text-center text-2xl font-bold text-orange-600 mb-6">BÁO CÁO THEO NGÀY</h2>

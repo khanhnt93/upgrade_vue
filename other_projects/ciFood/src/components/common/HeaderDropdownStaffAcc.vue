@@ -24,7 +24,7 @@
                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
               ]"
             >
-              <font-awesome-icon icon="key" class="mr-2 h-4 w-4" />
+              <i class="fa fa-key mr-2 h-4 w-4"></i>
               Đổi Mật Khẩu
             </button>
           </MenuItem>
@@ -36,7 +36,7 @@
                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
               ]"
             >
-              <font-awesome-icon icon="sign-out-alt" class="mr-2 h-4 w-4" />
+              <i class="fa fa-sign-out-alt mr-2 h-4 w-4"></i>
               Thoát
             </button>
           </MenuItem>

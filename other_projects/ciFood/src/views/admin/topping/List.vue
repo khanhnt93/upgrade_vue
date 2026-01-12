@@ -5,15 +5,15 @@
         <div class="border-b border-gray-200 px-6 py-4">
           <div class="flex justify-between items-center">
             <h2 class="text-xl font-semibold text-gray-800">Danh Sách Topping</h2>
-            <button 
-              @click="goToAdd" 
+            <button
+              @click="goToAdd"
               class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
               Thêm
             </button>
           </div>
         </div>
         <div class="p-6">
-          
+
           <!-- Loading -->
           <div v-if="loading" class="text-center mt-3">
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -39,14 +39,14 @@
                   <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ item.status }}</td>
                   <td class="px-4 py-2 whitespace-nowrap text-center text-sm">
                     <div class="flex justify-center gap-2">
-                      <button 
-                        @click="edit(item.actions)" 
+                      <button
+                        @click="edit(item.actions)"
                         class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         title="Edit">
                         <i class="fa fa-edit"></i>
                       </button>
-                      <button 
-                        @click="deleted(item.actions, item.name, item.stt)" 
+                      <button
+                        @click="deleted(item.actions, item.name, item.stt)"
                         class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                         title="Delete">
                         <i class="fa fa-trash"></i>
@@ -152,9 +152,6 @@ const search = () => {
 table {
   margin: auto;
   border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
 }
 </style>

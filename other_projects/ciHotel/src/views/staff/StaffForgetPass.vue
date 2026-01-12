@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row items-center fixed top-0 left-0 right-0 bottom-0 bg-gray-100">
-    <div class="container mx-auto px-4">
+    <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-1/2 lg:w-2/5">
           <div class="bg-white rounded-lg shadow-md">
@@ -12,7 +12,7 @@
                   <label class="block text-gray-700 text-sm font-bold mb-2">
                     Số Điện Thoại<span class="text-red-500"></span>
                   </label>
-                  <input 
+                  <input
                     id="phone"
                     type="text"
                     autocomplete="new-password"
@@ -34,7 +34,7 @@
                   <label class="block text-gray-700 text-sm font-bold mb-2">
                     Mật Khẩu Mới<span class="text-red-500"></span>
                   </label>
-                  <input 
+                  <input
                     id="newPassword"
                     type="password"
                     v-model="inputs.new_pass"
@@ -53,7 +53,7 @@
                   <label class="block text-gray-700 text-sm font-bold mb-2">
                     Nhắc lại mật khẩu mới<span class="text-red-500"></span>
                   </label>
-                  <input 
+                  <input
                     id="confirmPassword"
                     type="password"
                     v-model="confirmPassword"
@@ -173,7 +173,7 @@ export default {
     changePass (recapchaToken) {
       this.inputs.captcha = recapchaToken
       const { success, error } = useToast()
-      
+
       AuthenticationAPI.staffUpdatePass(this.inputs).then(res => {
         if(res && res.data && res.data.status == 200) {
           success('Cập nhật mật khẩu thành công!')

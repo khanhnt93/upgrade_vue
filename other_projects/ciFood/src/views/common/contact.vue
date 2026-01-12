@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Liên Hệ</h4>
       <hr class="mb-6" />
@@ -12,8 +12,8 @@
         <p class="mb-2"><span class="font-semibold text-gray-700">Zalo:</span> 0969.675.819</p>
         <p class="mb-4">
           <span class="font-semibold text-gray-700">Facebook:</span>
-          <a 
-            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" 
+          <a
+            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364"
             target="_blank"
             class="text-primary-500 hover:text-primary-600 underline ml-2"
           >
@@ -30,8 +30,8 @@
         <p class="mb-2"><span class="font-semibold text-gray-700">Zalo:</span> 0969.675.819</p>
         <p class="mb-4">
           <span class="font-semibold text-gray-700">Facebook:</span>
-          <a 
-            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364" 
+          <a
+            href="https://www.facebook.com/CiinTech-Co-Ltd-110706387220364"
             target="_blank"
             class="text-primary-500 hover:text-primary-600 underline ml-2"
           >

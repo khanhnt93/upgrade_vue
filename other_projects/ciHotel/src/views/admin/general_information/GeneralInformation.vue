@@ -1,5 +1,5 @@
 <template>
-  <div id="general-information" class="container mx-auto px-4 py-6">
+  <div id="general-information" class="container-fluid mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="mb-6">
         <h4 class="text-2xl font-bold text-center text-gray-800">THÔNG TIN CHUNG</h4>
@@ -76,8 +76,8 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr 
-              v-for="(row, index) in filteredRows" 
+            <tr
+              v-for="(row, index) in filteredRows"
               :key="index"
               class="hover:bg-gray-50">
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     ...useFormatters(),
-    
+
     fetchGuestInformations() {
       const { error } = useToast()
       this.filterString = ""
@@ -194,22 +194,22 @@ export default {
           error(errorMess)
         })
     },
-    
+
     switchToArrivals() {
       this.selectedGuestState = "ARRIVALS"
       this.fetchGuestInformations()
     },
-    
+
     switchToDepartures() {
       this.selectedGuestState = "DEPARTURES"
       this.fetchGuestInformations()
     },
-    
+
     switchToStayOvers() {
       this.selectedGuestState = "STAY_OVERS"
       this.fetchGuestInformations()
     },
-    
+
     switchToInhouseGuest() {
       this.selectedGuestState = "INHOUSE_GUEST"
       this.fetchGuestInformations()
@@ -222,7 +222,7 @@ export default {
       if(!valueInput) {
         valueInput = ""
       }
-      
+
       if(this.selectedFilter == "customerName") {
         items = items.filter( i => i.customer_name.includes(valueInput) )
       }

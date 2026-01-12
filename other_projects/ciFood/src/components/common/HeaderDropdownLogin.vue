@@ -2,7 +2,7 @@
   <Menu as="div" class="relative inline-block text-left">
     <div>
       <MenuButton class="flex items-center text-gray-700 hover:text-gray-900 focus:outline-none">
-        <font-awesome-icon icon="user" class="text-2xl" />
+        <i class="fa fa-user text-2xl"></i>
       </MenuButton>
     </div>
 
@@ -24,7 +24,7 @@
                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
               ]"
             >
-              <font-awesome-icon icon="sign-in-alt" class="mr-2 h-4 w-4" />
+              <i class="fa fa-sign-in-alt mr-2 h-4 w-4"></i>
               Đăng nhập
             </router-link>
           </MenuItem>
@@ -36,7 +36,7 @@
                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
               ]"
             >
-              <font-awesome-icon icon="user-plus" class="mr-2 h-4 w-4" />
+              <i class="fa fa-user-plus mr-2 h-4 w-4"></i>
               Đăng ký
             </router-link>
           </MenuItem>
@@ -48,7 +48,7 @@
                 'group flex w-full items-center rounded-md px-2 py-2 text-sm'
               ]"
             >
-              <font-awesome-icon icon="user-tie" class="mr-2 h-4 w-4" />
+              <i class="fa fa-user-tie mr-2 h-4 w-4"></i>
               Nhân viên
             </router-link>
           </MenuItem>

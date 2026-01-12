@@ -1,10 +1,10 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-end mb-4">
-        <button 
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]" 
-          @click="save()" 
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+          @click="save()"
           :disabled="saving">
           Lưu
         </button>
@@ -14,7 +14,7 @@
         <h4 class="text-xl font-semibold mt-2">Thiết lập thành viên</h4>
       </div>
       <hr class="mb-4">
-      
+
       <!-- Loading -->
       <div v-show="loading" class="text-center py-4">
         <icon name="loading" width="60" />
@@ -41,20 +41,20 @@
       <div class="mb-4">
         <label class="block mb-2">Áp dụng khuyến mãi theo số tiền tích lũy<span class="text-red-500">*</span></label>
         <div class="flex items-center">
-          <input 
-            type="radio" 
-            v-model="setting.discountByMoney.value" 
-            name="discountByMoney" 
-            value="true" 
-            class="mt-1" 
+          <input
+            type="radio"
+            v-model="setting.discountByMoney.value"
+            name="discountByMoney"
+            value="true"
+            class="mt-1"
             @change="changeDiscountByMoney">
           <label class="ml-4 mt-1">Có</label>
-          <input 
-            type="radio" 
-            v-model="setting.discountByMoney.value" 
-            name="discountByMoney" 
-            value="false" 
-            class="ml-5 mt-1" 
+          <input
+            type="radio"
+            v-model="setting.discountByMoney.value"
+            name="discountByMoney"
+            value="false"
+            class="ml-5 mt-1"
             @change="changeDiscountByMoney">
           <label class="ml-4 mt-1">Không</label>
         </div>
@@ -90,9 +90,9 @@
           </div>
 
           <div class="text-center mt-2">
-            <button 
-              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]" 
-              @click="addListDiscount()" 
+            <button
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+              @click="addListDiscount()"
               :disabled="saving">
               Thêm
             </button>

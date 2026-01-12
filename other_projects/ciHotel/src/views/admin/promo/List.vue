@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <!-- Add Button -->
       <div class="mb-4 flex justify-end">
@@ -160,7 +160,7 @@ export default {
   setup() {
     const router = useRouter()
     const toast = useToast()
-    
+
     return {
       router,
       toast

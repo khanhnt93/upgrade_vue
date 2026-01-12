@@ -1,11 +1,11 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-end mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="saving" 
+            :disabled="saving"
             @click="save">
             Lưu
           </button>
@@ -353,14 +353,14 @@
           </div>
 
           <div class="mt-6 flex justify-end space-x-2">
-            <button 
+            <button
               class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
               @click="back">
               Quay lại
             </button>
-            <button 
+            <button
               class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="saving" 
+              :disabled="saving"
               @click="save">
               Lưu
             </button>
@@ -422,44 +422,44 @@ const errorMethod = computed(() => click.value && (promo.value.method == null ||
 const errorName = computed(() => click.value && (promo.value.name == null || promo.value.name.length <= 0))
 const errorType = computed(() => click.value && (promo.value.type == null || promo.value.type.length <= 0))
 const errorPercentDiscount = computed(() => {
-  return click.value && 
-    (promo.value.type === 'discount' || promo.value.type === 'discount_with_max_value' || promo.value.type === 'discount_on_item') && 
+  return click.value &&
+    (promo.value.type === 'discount' || promo.value.type === 'discount_with_max_value' || promo.value.type === 'discount_on_item') &&
     (promo.value.discount_percent == null || promo.value.discount_percent.length <= 0)
 })
 const errorMaxDiscount = computed(() => {
-  return click.value && promo.value.type === 'discount_with_max_value' && 
+  return click.value && promo.value.type === 'discount_with_max_value' &&
     (promo.value.max_discount == null || promo.value.max_discount.length <= 0)
 })
 const errorDiscountOnAmount = computed(() => {
-  return click.value && promo.value.type === 'discount_with_max_value' && 
+  return click.value && promo.value.type === 'discount_with_max_value' &&
     (promo.value.discount_on_amount == null || promo.value.discount_on_amount.length <= 0)
 })
 const errorValueOfVoucher = computed(() => {
-  return click.value && promo.value.type === 'voucher' && 
+  return click.value && promo.value.type === 'voucher' &&
     (promo.value.value_of_voucher == null || promo.value.value_of_voucher.length <= 0)
 })
 const errorFreeItem = computed(() => {
-  return click.value && promo.value.type === 'free_item' && 
+  return click.value && promo.value.type === 'free_item' &&
     (promo.value.item_free == null || promo.value.item_free.length <= 0)
 })
 const errorCost = computed(() => {
-  return click.value && promo.value.method === 'trade_point' && 
+  return click.value && promo.value.method === 'trade_point' &&
     (promo.value.cost == null || promo.value.cost.length <= 0)
 })
 const errorExpiredDateFrom = computed(() => {
-  return click.value && (promo.value.expired_date_from === "" || promo.value.expired_date_from == null || 
+  return click.value && (promo.value.expired_date_from === "" || promo.value.expired_date_from == null ||
     commonFunc.dateFormatCheck(promo.value.expired_date_from) === false)
 })
 const errorExpiredDateTo = computed(() => {
-  return click.value && (promo.value.expired_date_to === "" || promo.value.expired_date_to == null || 
+  return click.value && (promo.value.expired_date_to === "" || promo.value.expired_date_to == null ||
     commonFunc.dateFormatCheck(promo.value.expired_date_to) === false)
 })
 const errorQuantity = computed(() => click.value && (promo.value.quantity == null || promo.value.quantity.length <= 0))
 
 const checkValidate = () => {
-  return !(errorMethod.value || errorName.value || errorType.value || errorCost.value || 
-    errorExpiredDateFrom.value || errorExpiredDateTo.value || errorQuantity.value || 
-    errorPercentDiscount.value || errorMaxDiscount.value || errorDiscountOnAmount.value || 
+  return !(errorMethod.value || errorName.value || errorType.value || errorCost.value ||
+    errorExpiredDateFrom.value || errorExpiredDateTo.value || errorQuantity.value ||
+    errorPercentDiscount.value || errorMaxDiscount.value || errorDiscountOnAmount.value ||
     errorValueOfVoucher.value || errorFreeItem.value)
 }
 
@@ -715,7 +715,7 @@ const save = () => {
     saving.value = false
     return
   }
-  
+
   const dataPost = JSON.parse(JSON.stringify(promo.value))
 
   // Reformat date

@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-end mb-4">
-        <button 
+        <button
           class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
           @click="goToAdd">
           Thêm mới
@@ -35,13 +35,13 @@
             <td class="border border-gray-300 px-4 py-2">{{ item.quantity }}</td>
             <td class="border border-gray-300 px-4 py-2">
               <div class="flex space-x-2 justify-center">
-                <button 
+                <button
                   class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                   @click="edit(item.id)"
                   title="Edit">
                   <i class="fa fa-edit" />
                 </button>
-                <button 
+                <button
                   class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                   @click="deleted(item.id, item.name)"
                   title="Delete">

@@ -1,14 +1,14 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-between mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors min-w-[120px]"
             @click="openModalImportFile">
             Upload
           </button>
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px]"
             @click="goToAdd">
             Thêm
@@ -64,9 +64,9 @@
         </div>
 
         <div class="mt-4 mb-4 flex justify-end">
-          <button 
+          <button
             class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="onSearch" 
+            :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm
           </button>
@@ -97,13 +97,13 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.status}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm border">
                   <div class="flex space-x-2">
-                    <button 
+                    <button
                       class="p-2 text-yellow-600 hover:text-yellow-800"
                       @click="edit(item.action)"
                       title="Edit">
                       <i class="fa fa-edit" />
                     </button>
-                    <button 
+                    <button
                       class="p-2 text-red-600 hover:text-red-800"
                       @click="deleted(item.action, item.name, item.stt)"
                       title="Delete">
@@ -123,7 +123,7 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        
+
         <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
         <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
           <i class="fa fa-angle-double-down text-2xl"></i>
@@ -175,11 +175,11 @@
 
                 <div class="mb-4">
                   <label class="block mb-2 font-medium">Chọn file excel bạn muốn upload</label>
-                  <input 
-                    type="file" 
-                    id="file" 
-                    ref="fileInput" 
-                    @change="handleFileUpload" 
+                  <input
+                    type="file"
+                    id="file"
+                    ref="fileInput"
+                    @change="handleFileUpload"
                     accept=".xlsx"
                     class="block w-full text-sm text-gray-500
                       file:mr-4 file:py-2 file:px-4
@@ -217,7 +217,7 @@
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   </div>
-                  
+
                   <button
                     v-show="!uploading"
                     type="button"
@@ -320,7 +320,7 @@ const search = async () => {
 
   onSearch.value = true
   loading.value = true
-  
+
   // Define params
   const param = {
     name: inputs.value.name,
@@ -388,12 +388,12 @@ const deleted = async (id, name, rowIndex) => {
     if (confirmed) {
       try {
         await adminAPI.deleteMenu(id)
-        
+
         // Remove item in list
         const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
         items.value.splice(indexTemp, 1)
         listIdDeleted.value.push(rowIndex - 1)
-        
+
         totalRow.value = totalRow.value - 1
       } catch (err) {
         const errorMess = commonFunc.handleStaffError(err)
@@ -457,7 +457,7 @@ const importMenuFromExcelFile = async () => {
   uploading.value = true
   const form_data = new FormData()
   form_data.append("importFile", fileUpload.value)
-  
+
   try {
     const res = await adminAPI.importMenuFromExcelFile(form_data)
     if (res != null && res.data != null) {
@@ -480,10 +480,10 @@ const importMenuFromExcelFile = async () => {
 onMounted(() => {
   window.addEventListener('scroll', onScroll)
   window.addEventListener('resize', deleted)
-  
+
   // Load option group menu
   getGroupMenuOptions()
-  
+
   // Load list when load page
   search()
 })

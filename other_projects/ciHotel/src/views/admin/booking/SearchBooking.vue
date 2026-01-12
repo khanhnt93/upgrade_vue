@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid mx-auto p-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <button class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 w-32 mb-2 md:mb-0" @click.prevent="goBack">

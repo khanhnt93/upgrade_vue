@@ -39,14 +39,14 @@
                     class="text-primary-500 hover:text-primary-700 p-2"
                     title="Sửa"
                   >
-                    <font-awesome-icon icon="edit" />
+                    <i class="fa fa-edit"></i>
                   </button>
                   <button
                     @click="deleted(item.id, item.name, item.stt)"
                     class="text-danger-500 hover:text-danger-700 p-2"
                     title="Xóa"
                   >
-                    <font-awesome-icon icon="trash" />
+                    <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </td>
@@ -57,7 +57,7 @@
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-4">
-        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+        <i class="fa fa-spinner fa-spin text-4xl text-primary-500"></i>
       </div>
       <p v-else class="text-center text-gray-500 mt-4">--Hết--</p>
     </div>

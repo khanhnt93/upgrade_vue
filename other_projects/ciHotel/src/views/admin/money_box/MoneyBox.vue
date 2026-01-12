@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <!-- Header -->
       <div class="mb-4">
@@ -97,7 +97,7 @@
       @click.self="cancelChangeMoney">
       <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
         <h3 class="text-xl font-bold mb-4">{{ modalTitle }}</h3>
-        
+
         <!-- Money Number -->
         <div class="mb-4">
           <label class="block mb-2 font-medium">{{ moneyNumber }}<span class="text-red-500">*</span></label>
@@ -158,7 +158,7 @@
               maxlength="11"
               @keyup="intergerOnly($event.target)"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            
+
             <input
               v-if="activeTab === 'credit'"
               v-model="inputs.credit"
@@ -167,7 +167,7 @@
               maxlength="11"
               @keyup="intergerOnly($event.target)"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            
+
             <input
               v-if="activeTab === 'e_money'"
               v-model="inputs.e_money"
@@ -216,7 +216,7 @@ export default {
     const router = useRouter()
     const toast = useToast()
     const { formatCurrency } = useFormatters()
-    
+
     return {
       router,
       toast,

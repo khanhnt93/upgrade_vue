@@ -1,11 +1,11 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-end mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="saving" 
+            :disabled="saving"
             @click="save">
             Lưu
           </button>
@@ -134,18 +134,18 @@
                   <p class="text-center">{{store.phone_number}}</p>
                   <br>
                   <p class="text-center">
-                    <input 
-                      class="text-center font-h4 border-b border-gray-300 w-full focus:outline-none focus:border-blue-500" 
-                      type="text" 
+                    <input
+                      class="text-center font-h4 border-b border-gray-300 w-full focus:outline-none focus:border-blue-500"
+                      type="text"
                       v-model="printer.template.title"/>
                   </p>
                   <p class="text-center">Số hóa đơn: 001:00000001</p>
-                  
+
                   <div class="clearfix">
                     <div class="width-50">Bàn: 01</div>
                     <div class="width-50 text-right">Ngày: {{store.bill_date}}</div>
                   </div>
-                  
+
                   <div class="clearfix">
                     <div class="width-50">Nhân viên: {{store.staff_name}}</div>
                     <div class="width-50 text-right">Giờ: {{store.bill_time}}</div>
@@ -217,9 +217,9 @@
                   <p>Tiền khách đưa: 200,000đ</p>
                   <p>Tiền trả khách: 800đ</p>
                   <p class="text-center mb-5">
-                    <input 
-                      class="text-center width-100 border-b border-gray-300 focus:outline-none focus:border-blue-500" 
-                      type="text" 
+                    <input
+                      class="text-center width-100 border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                      type="text"
                       v-model="printer.template.footer"/>
                   </p>
 
@@ -229,8 +229,8 @@
                   </div>
 
                   <div v-show="bonusItem.length > 0" class="text-center mt-4">
-                    <button 
-                      @click="deleteBonusTemplate" 
+                    <button
+                      @click="deleteBonusTemplate"
                       class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
                       Xóa mục thêm trên mẫu in
                     </button>
@@ -245,20 +245,20 @@
                       <label class="block mb-2 font-medium">Loại</label>
                       <div class="flex items-center space-x-4">
                         <label class="inline-flex items-center">
-                          <input 
-                            type="radio" 
+                          <input
+                            type="radio"
                             class="form-radio h-4 w-4 text-blue-600"
-                            value="text" 
-                            v-model="bonusTemplate.type" 
+                            value="text"
+                            v-model="bonusTemplate.type"
                             @click="choseTemplateType">
                           <span class="ml-2">Chữ</span>
                         </label>
                         <label class="inline-flex items-center">
-                          <input 
-                            type="radio" 
+                          <input
+                            type="radio"
                             class="form-radio h-4 w-4 text-blue-600"
-                            value="image" 
-                            v-model="bonusTemplate.type" 
+                            value="image"
+                            v-model="bonusTemplate.type"
                             @click="choseTemplateType">
                           <span class="ml-2">Hình ảnh</span>
                         </label>
@@ -269,26 +269,26 @@
                       <label class="block mb-2 font-medium">Căn</label>
                       <div class="flex items-center space-x-4">
                         <label class="inline-flex items-center">
-                          <input 
-                            type="radio" 
+                          <input
+                            type="radio"
                             class="form-radio h-4 w-4 text-blue-600"
-                            value="left" 
+                            value="left"
                             v-model="bonusTemplate.align">
                           <span class="ml-2">Trái</span>
                         </label>
                         <label class="inline-flex items-center">
-                          <input 
-                            type="radio" 
+                          <input
+                            type="radio"
                             class="form-radio h-4 w-4 text-blue-600"
-                            value="center" 
+                            value="center"
                             v-model="bonusTemplate.align">
                           <span class="ml-2">Giữa</span>
                         </label>
                         <label class="inline-flex items-center">
-                          <input 
-                            type="radio" 
+                          <input
+                            type="radio"
                             class="form-radio h-4 w-4 text-blue-600"
-                            value="right" 
+                            value="right"
                             v-model="bonusTemplate.align">
                           <span class="ml-2">Phải</span>
                         </label>
@@ -296,9 +296,9 @@
                     </div>
 
                     <div v-show="bonusTemplate.type === 'text'" class="mb-4">
-                      <input 
-                        :class="'text-' + bonusTemplate.align + ' width-100 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'" 
-                        type="text" 
+                      <input
+                        :class="'text-' + bonusTemplate.align + ' width-100 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'"
+                        type="text"
                         v-model="bonusTemplate.textValue"/>
                     </div>
 
@@ -316,11 +316,11 @@
                           Browse
                         </button>
                       </div>
-                      <input 
-                        class="hidden" 
-                        type="file" 
-                        ref="file" 
-                        accept="image/*" 
+                      <input
+                        class="hidden"
+                        type="file"
+                        ref="file"
+                        accept="image/*"
                         @change="handleFileUpload"/>
                     </div>
 
@@ -329,8 +329,8 @@
                     </div>
 
                     <div class="text-center">
-                      <button 
-                        @click="addBonusTemplate" 
+                      <button
+                        @click="addBonusTemplate"
                         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                         Thêm vào mẫu in
                       </button>

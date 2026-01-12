@@ -50,11 +50,11 @@
           </template>
         </ul>
       </nav>
-      
+
       <!-- Toggle Button -->
       <div class="sidebar-toggle-wrapper">
-        <button 
-          class="sidebar-toggle-btn" 
+        <button
+          class="sidebar-toggle-btn"
           @click="$emit('toggle')"
           :title="collapsed ? 'Mở rộng menu' : 'Thu gọn menu'">
           <i :class="collapsed ? 'fa fa-chevron-right' : 'fa fa-chevron-left'" class="toggle-icon" aria-hidden="true"></i>
@@ -103,7 +103,7 @@ const getIconClass = (icon) => {
   } else if (typeof icon === 'object' && icon.class) {
     iconClass = icon.class
   }
-  
+
   // Map Font Awesome 4 icons to Font Awesome 5+ icons
   const iconMap = {
     'fa-plus-square-o': 'far fa-plus-square',
@@ -117,7 +117,7 @@ const getIconClass = (icon) => {
     'fa-heart-o': 'far fa-heart',
     'fa-star-o': 'far fa-star'
   }
-  
+
   // Check if icon needs mapping
   for (const [oldIcon, newIcon] of Object.entries(iconMap)) {
     if (iconClass.includes(oldIcon)) {
@@ -125,7 +125,7 @@ const getIconClass = (icon) => {
       break
     }
   }
-  
+
   return iconClass
 }
 
@@ -148,8 +148,8 @@ const toggleMenu = (title) => {
 
 // Handle menu click - close sidebar on mobile
 const handleMenuClick = () => {
-  // Check if on mobile/tablet (screen width < 992px)
-  if (window.innerWidth < 992 && props.visible) {
+  // Close sidebar when menu item is clicked
+  if (props.visible) {
     emit('close')
   }
 }
@@ -183,7 +183,7 @@ watch(() => route.path, () => {
 
   &.collapsed {
     width: 60px !important;
-    
+
     .sidebar-title {
       opacity: 0;
       visibility: hidden;
@@ -200,22 +200,22 @@ watch(() => route.path, () => {
       pointer-events: none;
       transition: opacity 0.2s ease, visibility 0.2s ease;
     }
-    
+
     .sidebar-arrow {
       display: none !important;
     }
-    
+
     .sidebar-submenu {
       display: none !important;
     }
-    
+
     .sidebar-link {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 12px 0;
       position: relative;
-      
+
       &:hover {
         .sidebar-title {
           opacity: 1;
@@ -223,13 +223,13 @@ watch(() => route.path, () => {
         }
       }
     }
-    
+
     .sidebar-icon {
       margin-right: 0;
       width: 30px;
       height: 30px;
     }
-    
+
     .has-children {
       .sidebar-link {
         padding-right: 0;
@@ -274,16 +274,16 @@ watch(() => route.path, () => {
   transition: background-color 0.2s ease;
   font-size: 14px;
   gap: 10px;
-  
+
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .toggle-icon {
     font-size: 16px;
     transition: transform 0.3s ease;
   }
-  
+
   .toggle-text {
     font-weight: 500;
   }
@@ -331,6 +331,12 @@ watch(() => route.path, () => {
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
     font-weight: 600;
+    border-left: 4px solid #ff8c42;
+
+    .sidebar-icon,
+    .sidebar-title {
+      color: #fff !important;
+    }
   }
 
   &.open {

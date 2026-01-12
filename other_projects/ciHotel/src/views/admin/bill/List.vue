@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <!-- Search Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="mb-6">
@@ -58,7 +58,7 @@
       <div v-show="loading" class="text-center py-4">
         <i class="fa fa-spinner fa-spin text-4xl text-blue-600"></i>
       </div>
-      
+
       <div class="mb-4">
         <p class="text-gray-700">Số kết quả: <span class="font-semibold">{{ bills.length }}</span></p>
       </div>
@@ -98,7 +98,7 @@
               <td class="px-4 py-3 text-right font-bold text-orange-600 border border-gray-300">{{ formatCurrency(total_emoney) }}</td>
               <td class="px-4 py-3 border border-gray-300"></td>
             </tr>
-            
+
             <!-- Data Rows -->
             <tr v-for="(bill, index) in bills" :key="bill.id" class="hover:bg-gray-50">
               <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">{{ index + 1 }}</td>
@@ -116,19 +116,19 @@
               <td class="px-4 py-2 whitespace-nowrap text-sm text-right border border-gray-300">{{ formatCurrency(bill.e_money) }}</td>
               <td class="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">
                 <div class="flex justify-center gap-2">
-                  <button 
+                  <button
                     @click="edit(bill.id)"
                     title="Sửa"
                     class="text-blue-600 hover:text-blue-800">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button 
+                  <button
                     @click="deleteBill(bill.id, bill.bill_number)"
                     title="Xóa"
                     class="text-red-600 hover:text-red-800">
                     <i class="fa fa-trash"></i>
                   </button>
-                  <button 
+                  <button
                     @click="printBill(bill.id)"
                     title="In"
                     class="text-green-600 hover:text-green-800">
@@ -192,7 +192,7 @@ export default {
   },
   methods: {
     ...useFormatters(),
-    
+
     /**
      * Only input integer
      */
@@ -216,7 +216,7 @@ export default {
      */
     checkFromDateAndToDate() {
       const { error } = useToast()
-      
+
       if(this.inputs.fromDate == "" || this.inputs.fromDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
         error("Mục từ ngày không đúng")
         return false
@@ -242,10 +242,10 @@ export default {
 
       return true
     },
-    
+
     search() {
       const { error } = useToast()
-      
+
       // Check validate
       if(!this.checkFromDateAndToDate()) {
         this.bills = []
@@ -285,12 +285,12 @@ export default {
         this.loading = false
       })
     },
-    
+
     edit(id) {
       const router = useRouter()
       router.push(`/bill/edit/${id}`)
     },
-    
+
     printBill(id) {
       const router = useRouter()
       if (Cookies.get(id)) {
@@ -300,10 +300,10 @@ export default {
       Cookies.set("printFrom", "bill-list")
       router.push(`/bill/print/${id}`)
     },
-    
+
     deleteBill(id, bill_number) {
       const { success, error } = useToast()
-      
+
       if (confirm(`Xóa hóa đơn ${bill_number}. Bạn có chắc không?`)) {
         adminAPI.deleteOldBill({id}).then(res => {
           if (res.data.status == 200) {

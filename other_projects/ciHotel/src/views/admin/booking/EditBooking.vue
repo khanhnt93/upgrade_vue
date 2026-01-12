@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid mx-auto p-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-between mb-4">
         <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="back">

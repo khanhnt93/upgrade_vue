@@ -1,14 +1,14 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-end mb-4 space-x-4">
-        <button 
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[120px]" 
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 min-w-[120px]"
           @click="openModalImportFile()">
           <span class="oi mr-1" data-glyph="data-transfer-upload"></span> Upload
         </button>
-        <button 
-          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]" 
+        <button
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
           @click="goToAdd()">
           Thêm
         </button>
@@ -44,9 +44,9 @@
       </div>
 
       <div class="flex justify-end mb-4">
-        <button 
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]" 
-          :disabled="onSearch" 
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+          :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
         </button>
@@ -91,9 +91,9 @@
               <td class="border border-gray-300 px-4 py-2 text-right">{{ formatCurrency(item.remaining) }}</td>
               <td class="border border-gray-300 px-4 py-2">
                 <div class="flex justify-center space-x-2">
-                  <button 
-                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" 
-                    @click="edit(item.id)" 
+                  <button
+                    class="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                    @click="edit(item.id)"
                     title="Edit">
                     <i class="fa fa-edit" />
                   </button>
@@ -124,11 +124,11 @@
           <form method="post" id="formImport" enctype="multipart/form-data">
             <div class="mb-4">
               <label class="block mb-2">Chọn file excel bạn muốn upload</label>
-              <input 
-                type="file" 
-                id="file" 
-                ref="file" 
-                @change="handleFileUpload()" 
+              <input
+                type="file"
+                id="file"
+                ref="file"
+                @change="handleFileUpload()"
                 accept=".xlsx"
                 class="w-full px-3 py-2 border border-gray-300 rounded">
             </div>
@@ -136,8 +136,8 @@
         </div>
 
         <div class="flex justify-end space-x-2">
-          <button 
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" 
+          <button
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
             @click="showImportModal = false"
             v-show="!uploading">
             Đóng
@@ -145,10 +145,10 @@
           <div v-show="uploading" class="inline-block">
             <icon name="loading" width="30" />
           </div>
-          <button 
-            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" 
-            v-show="!uploading" 
-            @click="importCustomerFromExcelFile()" 
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            v-show="!uploading"
+            @click="importCustomerFromExcelFile()"
             :disabled="!fileUpload || uploading">
             Upload
           </button>

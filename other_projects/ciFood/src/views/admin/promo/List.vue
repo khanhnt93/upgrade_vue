@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-end mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px]"
             @click="goToAdd">
             Thêm
@@ -62,9 +62,9 @@
         </div>
 
         <div class="mt-4 mb-4 flex justify-end">
-          <button 
+          <button
             class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="onSearch" 
+            :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm
           </button>
@@ -113,13 +113,13 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.expired_date_to}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm border">
                   <div class="flex space-x-2">
-                    <button 
+                    <button
                       class="p-2 text-yellow-600 hover:text-yellow-800"
                       @click="edit(item.id)"
                       title="Edit">
                       <i class="fa fa-edit" />
                     </button>
-                    <button 
+                    <button
                       class="p-2 text-red-600 hover:text-red-800"
                       @click="deleted(item.id, item.name, item.stt, item.method)"
                       title="Delete">
@@ -139,7 +139,7 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        
+
         <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
         <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
           <i class="fa fa-angle-double-down text-2xl"></i>
@@ -226,12 +226,12 @@ const deleted = async (id, name, rowIndex, method) => {
           method: method
         }
         await adminAPI.deletePromo(dataPost)
-        
+
         // Remove item in list
         const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
         items.value.splice(indexTemp, 1)
         listIdDeleted.value.push(rowIndex - 1)
-        
+
         totalRow.value = totalRow.value - 1
       } catch (err) {
         const errorMess = commonFunc.handleStaffError(err)
@@ -299,7 +299,7 @@ const getPromoList = async () => {
 
   onSearch.value = true
   loading.value = true
-  
+
   // Define params
   const param = {
     name: inputs.value.name,
@@ -356,10 +356,10 @@ const integerOnly = (item) => {
 onMounted(() => {
   window.addEventListener('scroll', onScroll)
   window.addEventListener('resize', deleted)
-  
+
   // Load list option promotion type
   getPromotionTypeList()
-  
+
   // Get list promotion
   getPromoList()
 })

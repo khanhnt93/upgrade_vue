@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <!-- Today's Stats Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="mb-4">
@@ -64,18 +64,18 @@
       <div class="mb-4">
         <div class="flex items-center gap-4 mb-4">
           <label class="flex items-center cursor-pointer">
-            <input 
-              type="radio" 
-              name="room" 
-              @click="showRoomAmount = true" 
+            <input
+              type="radio"
+              name="room"
+              @click="showRoomAmount = true"
               checked
               class="mr-2">
             <span>Doanh thu</span>
           </label>
           <label class="flex items-center cursor-pointer">
-            <input 
-              type="radio" 
-              name="room" 
+            <input
+              type="radio"
+              name="room"
               @click="showRoomAmount = false"
               class="mr-2">
             <span>Số lượng</span>
@@ -159,7 +159,7 @@ export default {
   },
   methods: {
     ...useFormatters(),
-    
+
     /**
      * Define input
      */
@@ -214,7 +214,7 @@ export default {
      */
     getOverView() {
       const { error } = useToast()
-      
+
       // Search
       adminAPI.getOverView().then(res => {
         if(res && res.data && res.data.data) {

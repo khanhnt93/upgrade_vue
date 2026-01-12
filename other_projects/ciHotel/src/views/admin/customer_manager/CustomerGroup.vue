@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-end mb-4">
-        <button 
+        <button
           class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 border border-green-600 min-w-[120px]"
           @click="goToAdd()">
           Thêm
@@ -50,7 +50,7 @@
         </div>
         <div class="md:col-span-3">
           <label class="block mb-2 text-white">Tìm kiếm</label>
-          <button 
+          <button
             class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 border border-blue-600 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
             :disabled="onSearch"
             @click.prevent="prepareToSearch">
@@ -84,15 +84,15 @@
               <td class="border border-gray-300 px-4 py-2">{{ formatState(item.state) }}</td>
               <td class="border border-gray-300 px-4 py-2">
                 <div class="flex justify-center space-x-2">
-                  <button 
-                    class="p-2 text-blue-600 hover:bg-blue-50 rounded" 
-                    @click="edit(item.id)" 
+                  <button
+                    class="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                    @click="edit(item.id)"
                     title="Edit">
                     <i class="fa fa-edit" />
                   </button>
-                  <button 
-                    class="p-2 text-red-600 hover:bg-red-50 rounded" 
-                    @click="deleted(item.id, item.name)" 
+                  <button
+                    class="p-2 text-red-600 hover:bg-red-50 rounded"
+                    @click="deleted(item.id, item.name)"
                     title="Delete">
                     <i class="fa fa-trash" />
                   </button>

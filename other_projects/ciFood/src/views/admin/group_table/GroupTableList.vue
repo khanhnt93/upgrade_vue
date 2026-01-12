@@ -24,10 +24,10 @@
               <td class="px-4 py-2 border-b">
                 <div class="flex justify-center gap-2">
                   <button @click="edit(item.id)" class="text-primary-500 hover:text-primary-700 p-2" title="Sửa">
-                    <font-awesome-icon icon="edit" />
+                    <i class="fa fa-edit"></i>
                   </button>
                   <button @click="deleted(item.id, item.name, item.stt)" class="text-danger-500 hover:text-danger-700 p-2" title="Xóa">
-                    <font-awesome-icon icon="trash" />
+                    <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </td>
@@ -36,7 +36,7 @@
         </table>
       </div>
       <div v-if="loading" class="text-center py-4">
-        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+        <i class="fa fa-spinner fa-spin text-4xl text-primary-500"></i>
       </div>
       <p v-else class="text-center text-gray-500 mt-4">--Hết--</p>
     </div>
@@ -58,7 +58,7 @@ const loading = ref(false)
 
 const search = () => {
   loading.value = true
-  adminAPI.searchGroupTable().then(res => {
+  adminAPI.getGroupTableList().then(res => {
     if (res != null && res.data != null && res.data.data != null) {
       items.value = res.data.data
     }
@@ -89,7 +89,7 @@ const edit = (id) => {
 }
 
 const goToAdd = () => {
-  router.push('/group-table/add')
+  router.push('/group-table/index')
 }
 
 onMounted(() => {

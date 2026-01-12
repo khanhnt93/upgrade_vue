@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <!-- Back Button -->
       <div class="mb-4">
@@ -128,7 +128,7 @@ export default {
     const router = useRouter()
     const toast = useToast()
     const { formatCurrency } = useFormatters()
-    
+
     return {
       router,
       toast,

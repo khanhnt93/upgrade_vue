@@ -1,18 +1,18 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="grid grid-cols-12 gap-4 mb-4">
           <div class="col-span-12">
-            <button 
+            <button
               class="px-4 py-2 border border-gray-600 text-gray-600 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
               @click="back">
               Quay lại
             </button>
 
-            <button 
+            <button
               class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] float-right disabled:opacity-50 disabled:cursor-not-allowed"
-              @click="save" 
+              @click="save"
               :disabled="saving">
               Lưu
             </button>
@@ -92,7 +92,7 @@
             <label class="font-medium">Lựa chọn</label>
           </div>
           <div class="col-span-12 md:col-span-9">
-            <button 
+            <button
               class="p-2 border border-gray-300 rounded hover:bg-gray-50"
               @click="showModalOption">
               <i class="fa fa-plus"/>
@@ -117,7 +117,7 @@
             <label class="font-medium">Topping</label>
           </div>
           <div class="col-span-12 md:col-span-9">
-            <button 
+            <button
               class="p-2 border border-gray-300 rounded hover:bg-gray-50"
               @click="showModalTopping">
               <i class="fa fa-plus"/>
@@ -139,7 +139,7 @@
             <label class="font-medium">Nguyên liệu</label>
           </div>
           <div class="col-span-12 md:col-span-9">
-            <button 
+            <button
               class="p-2 border border-gray-300 rounded hover:bg-gray-50"
               @click="showModalResource">
               <i class="fa fa-plus"/>
@@ -246,23 +246,23 @@
           </div>
           <div class="col-span-12 md:col-span-9">
             <div class="flex cursor-pointer" @click="$refs.fileInput.click()">
-              <input 
-                v-model="menu.image" 
+              <input
+                v-model="menu.image"
                 class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 readonly
               >
-              <button 
+              <button
                 type="button"
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-md hover:bg-gray-300">
                 Browse
               </button>
             </div>
-            <input 
-              class="hidden" 
-              type="file" 
-              id="file" 
-              ref="fileInput" 
-              accept="image/*" 
+            <input
+              class="hidden"
+              type="file"
+              id="file"
+              ref="fileInput"
+              accept="image/*"
               @change="handleFileUpload"
             />
           </div>
@@ -381,16 +381,16 @@
                 </div>
 
                 <div class="text-center mb-4">
-                  <button 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                  <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     @click="addNewRowChooseOption">
                     Thêm
                   </button>
                 </div>
 
                 <div class="flex justify-end">
-                  <button 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                  <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     @click="confirmOption">
                     Xác nhận
                   </button>
@@ -436,10 +436,10 @@
                 <div class="mb-4">
                   <div v-for="topping in toppings" :key="topping.name" class="mb-2">
                     <label class="flex items-center">
-                      <input 
-                        type="checkbox" 
-                        v-model="menu.toppings" 
-                        name="toppingName" 
+                      <input
+                        type="checkbox"
+                        v-model="menu.toppings"
+                        name="toppingName"
                         :value="topping.id"
                         class="mr-2">
                       {{ topping.name }}   +{{formatCurrency(topping.price)}}
@@ -448,8 +448,8 @@
                 </div>
 
                 <div class="flex justify-end">
-                  <button 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                  <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     @click="confirmTopping">
                     Xác nhận
                   </button>
@@ -529,16 +529,16 @@
                 </div>
 
                 <div class="text-center mb-4">
-                  <button 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                  <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     @click="addGroupResource">
                     Thêm
                   </button>
                 </div>
 
                 <div class="flex justify-end">
-                  <button 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors" 
+                  <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     @click="confirmResource">
                     Xác nhận
                   </button>
@@ -737,7 +737,7 @@ const handleFileUpload = () => {
   reader.addEventListener("load", function () {
     menu.value.image_preview = reader.result
   }, false)
-  
+
   if (file.value) {
     reader.readAsDataURL(file.value)
     height.value = '300px'
@@ -801,7 +801,7 @@ const save = () => {
 const doSave = async (formData) => {
   saving.value = true
   const menuId = route.params.id
-  
+
   try {
     if (menuId) {
       // Edit

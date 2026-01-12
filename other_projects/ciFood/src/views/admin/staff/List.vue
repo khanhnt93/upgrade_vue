@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-end mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px]"
             @click="gotoAdd">
             Thêm
@@ -48,9 +48,9 @@
         </div>
 
         <div class="mb-4 flex justify-end">
-          <button 
+          <button
             class="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="onSearch" 
+            :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm
           </button>
@@ -81,19 +81,19 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border">{{item.createDate}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm border">
                   <div class="flex space-x-2">
-                    <button 
+                    <button
                       class="p-2 text-yellow-600 hover:text-yellow-800"
                       @click="edit(item.id)"
                       title="Edit">
                       <i class="fa fa-edit" />
                     </button>
-                    <button 
+                    <button
                       class="p-2 text-red-600 hover:text-red-800"
                       @click="deleted(item.id, item.name, item.stt)"
                       title="Delete">
                       <i class="fa fa-trash" />
                     </button>
-                    <button 
+                    <button
                       v-if="isRoot"
                       class="p-2 text-blue-600 hover:text-blue-800"
                       @click="showModalConfirmResetPass(item)"
@@ -114,7 +114,7 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        
+
         <div v-if="hasNext === false" class="text-center py-4">--Hết--</div>
         <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
           <i class="fa fa-angle-double-down text-2xl"></i>
@@ -151,7 +151,7 @@
                   Reset password
                 </DialogTitle>
                 <hr class="my-4"/>
-                
+
                 <div class="mt-2">
                   <p class="text-sm text-gray-900">
                     Nhân viên: <b>{{currentStaff.name}}</b>
@@ -175,7 +175,7 @@
                     Xác nhận
                   </button>
                 </div>
-                
+
                 <div v-if="reseting" class="flex justify-center items-center py-4">
                   <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -251,7 +251,7 @@ const getRoleOption = async () => {
     const res = await adminAPI.getRoleOption()
     if (res != null && res.data != null && res.data.data != null) {
       roleOptions.value = [{value: null, text: ''}]
-      
+
       const roles = res.data.data
       if (roles) {
         for (let i in roles) {
@@ -277,12 +277,12 @@ const deleted = async (id, name, rowIndex) => {
     if (confirmed) {
       try {
         await adminAPI.deleteStaff(id)
-        
+
         // Remove item in list
         const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
         items.value.splice(indexTemp, 1)
         listIdDeleted.value.push(rowIndex - 1)
-        
+
         totalRow.value = totalRow.value - 1
       } catch (err) {
         const errorMess = commonFunc.handleStaffError(err)
@@ -314,7 +314,7 @@ const search = async () => {
     "limit": pageLimit.value,
     "offset": offset.value
   }
-  
+
   try {
     const res = await adminAPI.searchStaff(req, offset.value)
     if (res != null && res.data != null && res.data.data != null) {
@@ -366,12 +366,12 @@ const resetPass = async () => {
     "id": currentStaff.value.id,
     "phone": currentStaff.value.phone
   }
-  
+
   try {
     const res = await staffAPI.resetPass(params)
     if (res != null && res.data != null && res.data.status === 200) {
       hideModalConfirmResetPass()
-      
+
       const message = "Mật khẩu mới: " + currentStaff.value.phone
       alert("Reset Mật Khẩu Thành Công\n\n" + message)
     }
@@ -393,7 +393,7 @@ onMounted(() => {
   if (authStore.user && authStore.user.isRoot) {
     isRoot.value = true
   }
-  
+
   getRoleOption()
   window.addEventListener('scroll', onScroll)
   window.addEventListener('resize', deleted)

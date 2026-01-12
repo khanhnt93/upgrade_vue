@@ -1,22 +1,22 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="grid grid-cols-1 gap-4">
       <div class="w-full">
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <!-- Header buttons -->
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="w-full md:col-span-6 pt-2">
-              <button 
-                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-full sm:w-auto min-w-[180px]" 
+              <button
+                class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-full sm:w-auto min-w-[180px]"
                 @click="goBack()">
                 Quay lại
               </button>
             </div>
             <div class="w-full md:col-span-6 pt-2" v-show="!loading">
-              <button 
-                v-show="!isPayment" 
+              <button
+                v-show="!isPayment"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded float-right min-w-[180px]"
-                @click="printBill()" 
+                @click="printBill()"
                 :disabled="paymentInfo.length == 0">
                 In
               </button>
@@ -25,9 +25,9 @@
 
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="w-full md:col-span-12 pt-2">
-              <button 
+              <button
                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded float-right min-w-[180px]"
-                @click="getPaymentInfoForEditBill()" 
+                @click="getPaymentInfoForEditBill()"
                 :disabled="paymentInfo.length == 0">
                 Làm mới thông tin
               </button>
@@ -91,10 +91,10 @@
                 <b>Thành tiền: </b>
                 <span class="float-right">
                   <i class="fa fa-edit cursor-pointer" @click="showModalEditTotal = true"></i>
-                  <button 
-                    class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm" 
-                    title="Tính tiền thừa" 
-                    @click="showModalCalculateMoneyRefundHandler" 
+                  <button
+                    class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm"
+                    title="Tính tiền thừa"
+                    @click="showModalCalculateMoneyRefundHandler"
                     :disabled="isPayment">
                     <i class="fa fa-calculator"></i>
                   </button>
@@ -105,7 +105,7 @@
               <div class="grid grid-cols-1 gap-4" v-show="paymentInfo.money_receive">
                 <div class="w-full">
                   <p class="text-right">
-                    Số tiền khách đưa: <b>{{currencyFormat(paymentInfo.money_receive)}}</b> | 
+                    Số tiền khách đưa: <b>{{currencyFormat(paymentInfo.money_receive)}}</b> |
                     Số tiền trả khách: <b>{{currencyFormat(paymentInfo.money_receive - paymentInfo.total)}}</b>
                   </p>
                 </div>
@@ -129,11 +129,11 @@
               </p>
               <p class="mt-2" v-if="paymentInfo.vat_percent">
                 <b>Thuế VAT: </b>
-                <input 
-                  class="w-5 h-5 mr-2 align-middle" 
-                  type="checkbox" 
+                <input
+                  class="w-5 h-5 mr-2 align-middle"
+                  type="checkbox"
                   v-model="paymentInfo.apply_vat"
-                  @change="applyVat" 
+                  @change="applyVat"
                   :disabled="isPayment"/>
                 <input
                     id="vat_percent"
@@ -151,9 +151,9 @@
                 <div class="grid grid-cols-1 gap-2">
                   <div class="w-full">
                     <label><b>Loại tiền: </b></label>
-                    <button 
-                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm" 
-                      @click="showModalExtendMoneyHandler" 
+                    <button
+                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm"
+                      @click="showModalExtendMoneyHandler"
                       :disabled="isPayment">
                       <i class="fa fa-plus"></i>
                     </button>
@@ -167,9 +167,9 @@
 
                   <div class="w-full mt-2">
                     <label><b>Khuyến mãi: </b></label>
-                    <button 
-                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm" 
-                      @click="showModalApplyPmtHandler" 
+                    <button
+                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm"
+                      @click="showModalApplyPmtHandler"
                       :disabled="isPayment">
                       <i class="fa fa-plus"></i>
                     </button>
@@ -189,9 +189,9 @@
                 <div class="grid grid-cols-1 gap-2">
                   <div class="w-full">
                     <label><b>Phí dịch vụ, phụ thu: </b></label>
-                    <button 
-                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm" 
-                      @click="showModalServiceFeeHandler" 
+                    <button
+                      class="inline-flex items-center justify-center w-10 h-8 ml-2 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm"
+                      @click="showModalServiceFeeHandler"
                       :disabled="isPayment">
                       <i class="fa fa-plus"></i>
                     </button>
@@ -265,13 +265,13 @@
                   </div>
 
                   <div class="flex justify-center gap-2 mt-4">
-                    <button 
-                      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" 
+                    <button
+                      class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
                       @click="confirmEditTotal">
                       Xác nhận
                     </button>
-                    <button 
-                      class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded" 
+                    <button
+                      class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded"
                       @click="showModalEditTotal = false">
                       Hủy bỏ
                     </button>
@@ -551,7 +551,7 @@
               <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
                 <DialogPanel class="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <h5 class="text-center text-lg font-semibold mb-4">Thêm phí dịch vụ, phụ thu</h5>
-                  
+
                   <!-- Tab Navigation -->
                   <div class="border-b border-gray-200 mb-4">
                     <nav class="flex space-x-4">

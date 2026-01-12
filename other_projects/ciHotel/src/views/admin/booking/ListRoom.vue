@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid mx-auto p-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <h4 class="text-xl font-bold text-center text-[#F85F36] mb-4">DANH SÁCH PHÒNG</h4>
 

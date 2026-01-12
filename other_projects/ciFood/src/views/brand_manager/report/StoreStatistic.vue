@@ -83,7 +83,7 @@
 
       <!-- Loading -->
       <div v-show="loading" class="flex justify-center items-center py-8">
-        <font-awesome-icon icon="spinner" spin class="text-blue-500 text-4xl" />
+        <i class="fa fa-spinner fa-spin text-blue-500 text-4xl"></i>
       </div>
 
       <div v-show="!loading && items.length > 0">

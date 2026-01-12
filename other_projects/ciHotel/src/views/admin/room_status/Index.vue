@@ -1,15 +1,15 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex justify-between mb-4">
-        <button 
+        <button
           class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 border border-gray-600 min-w-[120px]"
           @click="back">
           Quay lại
         </button>
-        <button 
+        <button
           class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 border border-blue-600 min-w-[120px]"
-          @click="save" 
+          @click="save"
           :disabled="saving">
           Lưu
         </button>
@@ -88,7 +88,7 @@ export default {
     checkInfo(info) {
       return this.click && (info == null || info.length <= 0);
     },
-    
+
     checkValidate() {
       return !this.errorName;
     },

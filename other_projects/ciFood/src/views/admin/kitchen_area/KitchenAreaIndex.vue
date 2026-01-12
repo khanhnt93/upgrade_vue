@@ -13,7 +13,7 @@
       <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Khu Vực Chế Biến</h4>
       <hr class="mb-6" />
       <div v-if="loading" class="text-center py-8">
-        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+        <i class="fa fa-spinner fa-spin text-4xl text-primary-500"></i>
       </div>
       <div v-else class="max-w-2xl mx-auto">
         <div class="grid grid-cols-12 gap-4 mb-4">
@@ -90,7 +90,7 @@ const save = () => {
     adminAPI.addKitchenArea(inputs.value).then(res => {
       saving.value = false
       if (res != null && res.data != null && res.data.status == 200) {
-        router.push('/kitchen-area/list')
+        router.push('/kitchen-area')
       }
     }).catch(err => {
       saving.value = false
@@ -101,7 +101,7 @@ const save = () => {
 }
 
 const back = () => {
-  router.push('/kitchen-area/list')
+  router.push('/kitchen-area')
 }
 
 onMounted(() => {

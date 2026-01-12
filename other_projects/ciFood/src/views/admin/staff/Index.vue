@@ -1,16 +1,16 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-between mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
             @click="back">
             Quay lại
           </button>
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="saving" 
+            :disabled="saving"
             @click="save">
             Lưu
           </button>
@@ -143,7 +143,7 @@ const errorLengthPassword = computed(() => {
 })
 
 const checkValidate = () => {
-  return !(errorName.value || errorPhone.value || errorRole.value || errorPassword.value || 
+  return !(errorName.value || errorPhone.value || errorRole.value || errorPassword.value ||
     errorLengthPassword.value || !phoneNumberCheckFlag.value)
 }
 
@@ -152,7 +152,7 @@ const getRoleOption = async () => {
     const res = await adminAPI.getRoleOption()
     if (res != null && res.data != null && res.data.data != null) {
       roleOptions.value = [{value: null, text: ''}]
-      
+
       const roles = res.data.data
       if (roles) {
         for (let i in roles) {
@@ -188,13 +188,13 @@ const save = async () => {
   click.value = true
   saving.value = true
   checkPhoneNumberFormat(staff.value.phone_number)
-  
+
   const result = checkValidate()
   if (result) {
     const staffId = route.params.id
     const staffData = staff.value
     staffData.id = staffId
-    
+
     try {
       if (staffId) {
         // Edit

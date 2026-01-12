@@ -24,7 +24,7 @@
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-8">
-        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+        <i class="fa fa-spinner fa-spin text-4xl text-primary-500"></i>
       </div>
 
       <!-- Form -->
@@ -108,7 +108,7 @@ const save = () => {
   click.value = true
   saving.value = true
   let result = checkValidate()
-  
+
   if (result) {
     let unitId = route.params.id
     if (unitId) {

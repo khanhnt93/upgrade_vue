@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-md p-6">
       <!-- Save Button -->
       <div class="flex justify-end mb-4">

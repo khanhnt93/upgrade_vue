@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="container-fluid mx-auto px-4">
     <div class="w-full">
       <div class="bg-white shadow-md rounded-lg">
         <div class="p-4">

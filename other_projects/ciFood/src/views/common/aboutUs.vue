@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Giới thiệu</h4>
       <hr class="mb-6" />

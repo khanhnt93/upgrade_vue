@@ -1,18 +1,18 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="grid grid-cols-12 gap-4 mb-4">
           <div class="col-span-12">
-            <button 
+            <button
               class="px-4 py-2 border border-gray-600 text-gray-600 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
               @click="back">
               Quay lại
             </button>
 
-            <button 
+            <button
               class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] float-right disabled:opacity-50 disabled:cursor-not-allowed"
-              @click="save" 
+              @click="save"
               :disabled="saving">
               Lưu
             </button>
@@ -210,10 +210,10 @@ const save = async () => {
   click.value = true
   saving.value = true
   const result = checkValidate()
-  
+
   if (result) {
     const tableId = route.params.id
-    
+
     try {
       if (tableId) {
         // Edit
@@ -263,7 +263,7 @@ const integerOnly = (item) => {
 onMounted(() => {
   // Get list options group table
   getListGroupTableOptions()
-  
+
   // Get table detail
   getTableDetail()
 })

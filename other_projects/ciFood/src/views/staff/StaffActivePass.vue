@@ -1,12 +1,12 @@
 <template>
   <div class="app flex items-center justify-center is-fixed-page bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4">
+    <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-1/2 lg:w-1/3">
           <div class="bg-white rounded-lg shadow-lg">
             <div class="p-6">
               <h1 class="text-2xl font-bold text-center mb-6">Kích Hoạt Mật khẩu mới</h1>
-              
+
               <form @submit.prevent="confirm">
                 <div class="mb-6">
                   <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -78,7 +78,7 @@ function checkValidate() {
 function confirm() {
   click.value = true
   let result = checkValidate()
-  
+
   if (result) {
     onConfirm.value = true
     inputs.value.phone_number = Cookies.get('staffPhoneNumber')
@@ -88,7 +88,7 @@ function confirm() {
         let message = ''
         if (res.data.status == 200) {
           Cookies.remove('staffPhoneNumber')
-          
+
           message = 'Tài khoản của bạn đã được kích hoạt'
           toast.success(message)
           router.push('/staff-login')

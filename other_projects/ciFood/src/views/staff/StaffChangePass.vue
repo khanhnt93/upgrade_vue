@@ -1,12 +1,12 @@
 <template>
   <div class="app flex items-center justify-center is-fixed-page bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4">
+    <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-1/2 lg:w-1/3">
           <div class="bg-white rounded-lg shadow-lg">
             <div class="p-6">
               <h1 class="text-2xl font-bold text-center mb-6">Đổi Mật Khẩu</h1>
-              
+
               <form @submit.prevent="update">
                 <div class="mb-4">
                   <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -123,7 +123,7 @@ function checkConfirmPass() {
 }
 
 function comparePass() {
-  return (click.value && 
+  return (click.value &&
     (inputs.value.new_password != null && inputs.value.new_password.length > 0) &&
     (inputs.value.old_password != null || inputs.value.old_password.length > 0) &&
     (inputs.value.new_password === inputs.value.old_password))
@@ -145,7 +145,7 @@ function update() {
   click.value = true
   let result = checkValidate()
   errorMatch.value = !checkConfirmPass()
-  
+
   if (result && !errorMatch.value) {
     onUpdate.value = true
 

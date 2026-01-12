@@ -240,6 +240,11 @@ const routes = [
       component: ListRoom
     },
     {
+      path: '/booking/smart-room-arrangement',
+      name: 'SmartRoomArrangement',
+      component: ListRoom
+    },
+    {
       path: '/booking/add/:id',
       name: 'AddBooking',
       component: AddBooking

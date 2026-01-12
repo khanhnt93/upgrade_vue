@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <div class="container-fluid mx-auto px-4 py-6">
     <!-- Header Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h4 class="text-center text-xl font-bold text-blue-600 mb-6">Tổng chuỗi</h4>

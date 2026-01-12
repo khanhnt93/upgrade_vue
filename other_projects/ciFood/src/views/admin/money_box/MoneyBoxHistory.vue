@@ -119,11 +119,11 @@
         <!-- Loading / Pagination -->
         <div class="text-center mt-4">
           <span v-show="loading" class="loading-more">
-            <font-awesome-icon icon="spinner" spin size="2x" />
+            <i class="fa fa-spinner fa-spin fa-2x"></i>
           </span>
           <span v-if="hasNext === false" class="loading-more">--Hết--</span>
           <span v-if="hasNext === true && totalRow != 0" class="loading-more">
-            <font-awesome-icon icon="angle-double-down" class="has-next" />
+            <i class="fa fa-angle-double-down has-next"></i>
           </span>
         </div>
       </div>

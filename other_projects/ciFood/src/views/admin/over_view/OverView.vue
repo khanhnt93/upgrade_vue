@@ -13,7 +13,7 @@
               <div class="bg-blue-50 border border-blue-500 rounded-lg p-6 text-center">
                 <h5 class="text-lg font-semibold mb-4">Số hóa đơn</h5>
                 <div class="flex items-center justify-center">
-                  <font-awesome-icon icon="clipboard" class="text-6xl text-blue-400 mr-4" />
+                  <i class="fa fa-clipboard text-6xl text-blue-400 mr-4"></i>
                   <div class="text-4xl font-bold">{{ formatCurrency(toDayBillNumber) }}</div>
                 </div>
               </div>
@@ -23,7 +23,7 @@
               <div class="bg-orange-50 border border-orange-500 rounded-lg p-6 text-center">
                 <h5 class="text-lg font-semibold mb-4">Doanh thu</h5>
                 <div class="flex items-center justify-center">
-                  <font-awesome-icon icon="plus" class="text-6xl text-orange-300 mr-4" />
+                  <i class="fa fa-plus text-6xl text-orange-300 mr-4"></i>
                   <div class="text-4xl font-bold">{{ formatCurrency(toDayRevenue) }}</div>
                 </div>
               </div>
@@ -33,7 +33,7 @@
               <div class="bg-purple-50 border border-purple-500 rounded-lg p-6 text-center">
                 <h5 class="text-lg font-semibold mb-4">Chi phí</h5>
                 <div class="flex items-center justify-center">
-                  <font-awesome-icon icon="minus" class="text-6xl text-purple-300 mr-4" />
+                  <i class="fa fa-minus text-6xl text-purple-300 mr-4"></i>
                   <div class="text-4xl font-bold">{{ formatCurrency(toDayFee) }}</div>
                 </div>
               </div>

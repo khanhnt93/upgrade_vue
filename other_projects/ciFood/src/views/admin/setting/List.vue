@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="grid grid-cols-12 gap-4">
@@ -288,9 +288,9 @@
         </div>
 
         <div class="mt-6 flex justify-end space-x-2">
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="saving" 
+            :disabled="saving"
             @click="save">
             Lưu
           </button>

@@ -22,7 +22,7 @@
       <hr class="mb-6" />
 
       <div v-if="loading" class="text-center py-8">
-        <font-awesome-icon icon="spinner" spin class="text-4xl text-primary-500" />
+        <i class="fa fa-spinner fa-spin text-4xl text-primary-500"></i>
       </div>
 
       <div v-else class="max-w-2xl mx-auto">
@@ -128,7 +128,7 @@ const save = () => {
   saving.value = true
   click.value = true
   let result = checkValidate()
-  
+
   if (result) {
     let groupMenuId = route.params.id
     if (groupMenuId) {

@@ -1,16 +1,16 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-between mb-4">
-          <button 
+          <button
             class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors min-w-[120px]"
             @click="back">
             Quay lại
           </button>
-          <button 
+          <button
             class="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed"
-            :disabled="saving" 
+            :disabled="saving"
             @click="save">
             Lưu
           </button>
@@ -69,15 +69,15 @@
             <div v-for="group in groupScreen" :key="group.group_name" class="mb-6">
               <p class="font-bold mb-3">{{ group.group_name }}</p>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <label 
-                  v-for="screen in group.screen" 
+                <label
+                  v-for="screen in group.screen"
                   :key="screen.screen_id"
                   class="inline-flex items-center">
-                  <input 
-                    :id="screen.screen_id" 
-                    type="checkbox" 
+                  <input
+                    :id="screen.screen_id"
+                    type="checkbox"
                     class="form-checkbox h-4 w-4 text-blue-600 rounded"
-                    v-model="role.screen" 
+                    v-model="role.screen"
                     :value="screen.screen_id">
                   <span class="ml-2">{{ screen.screen_name }}</span>
                 </label>

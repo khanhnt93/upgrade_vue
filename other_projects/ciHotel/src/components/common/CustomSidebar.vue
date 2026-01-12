@@ -146,10 +146,10 @@ const toggleMenu = (title) => {
   openMenus.value[title] = !openMenus.value[title]
 }
 
-// Handle menu click - close sidebar on mobile
+// Handle menu click - close sidebar
 const handleMenuClick = () => {
-  // Check if on mobile/tablet (screen width < 992px)
-  if (window.innerWidth < 992 && props.visible) {
+  // Close sidebar when menu item is clicked
+  if (props.visible) {
     emit('close')
   }
 }
@@ -331,6 +331,7 @@ watch(() => route.path, () => {
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
     font-weight: 600;
+    border-left: 3px solid #ed592a;
   }
 
   &.open {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <b-card-group>
       <b-card no-body>
         <b-card-body>
