@@ -52,6 +52,7 @@
             <b-row class="mt-2 mb-2">
               <b-col md="12" class="table-cus">
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:2%">STT</th>
                       <th style="width:18%">Chi tiết các khoản Thu Chi</th>
@@ -69,6 +70,8 @@
                       <th style="width:6%">Tháng 11</th>
                       <th style="width:6%">Tháng 12</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in items" v-bind:class="(item.stt + '').includes('.') ? '' : 'bg-row-main'">
                       <td>{{item.stt}}</td>
                       <td>{{item.name}}</td>
@@ -86,6 +89,7 @@
                       <td class="text-right">{{currencyFormat(item.month_11)}}</td>
                       <td class="text-right">{{currencyFormat(item.month_12)}}</td>
                     </tr>
+                    </tbody>
                 </table>
               </b-col>
             </b-row>
@@ -103,9 +107,13 @@
 <script>
 import reportApi from '@/api/report'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       year_input: "2024",
@@ -165,18 +173,6 @@ export default {
     // this.getSummaryData()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     prepareDateInput() {
       let dateNow = new Date()

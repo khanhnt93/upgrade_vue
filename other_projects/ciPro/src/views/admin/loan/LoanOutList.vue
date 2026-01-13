@@ -100,6 +100,7 @@
           <b-row>
             <b-col class="table-cus">
               <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                   <tr>
                     <th style="width:3%" class="text-center">STT</th>
                     <th style="width:12%" class="text-center">Tên K.H</th>
@@ -117,6 +118,8 @@
                     <th style="width:8%" class="text-center">Còn lại</th>
                     <th style="width:5%" class="text-center"></th>
                   </tr>
+                  </thead>
+                  <tbody>
                   <tr v-for="(item, index) in items">
                     <td>{{index + 1}}</td>
                     <td>
@@ -159,6 +162,7 @@
                       </b-button>
                     </td>
                   </tr>
+                  </tbody>
               </table>
             </b-col>
           </b-row>
@@ -214,10 +218,16 @@ import loanApi from '@/api/loan'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
-import Datepicker from 'vuejs-datepicker'
-
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   components: {
     Multiselect,
     Datepicker
@@ -328,7 +338,7 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
-    if(this.$store.state.user.isRoot) {
+    if(this.authStore.user.isRoot) {
       this.isRoot = true
     }
 
@@ -365,17 +375,7 @@ export default {
 
       this.search()
     },
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Processing on scroll: use for paging

@@ -281,10 +281,15 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
   components: {
+  },
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
   },
   data () {
     return {
@@ -361,17 +366,6 @@ export default {
     this.widowHeight = window.innerHeight;
   },
   methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Get store options

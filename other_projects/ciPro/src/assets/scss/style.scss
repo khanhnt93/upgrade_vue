@@ -1,14 +1,14 @@
-// If you want to override variables do it here
-@import "variables";
+// Tailwind CSS - imported in main.js
+// Import this file: import '@/assets/scss/style.scss' in main.js
 
-// Import styles
-@import "~@coreui/coreui/scss/coreui";
+// Custom SCSS variables
+@use "variables";
 
-// If you want to add something do it here
-// @import "coreui_dark";
+// IE fixes for legacy browser support
+@use "ie-fix";
 
-// ie fixes
-@import "ie-fix";
+// Custom styles below
+// ==================
 
 .input-date {
     width: 100%;

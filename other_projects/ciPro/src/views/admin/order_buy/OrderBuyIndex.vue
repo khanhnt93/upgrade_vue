@@ -77,6 +77,7 @@
                     <col style="width:6%">
                     <col style="width:6%">
                   </colgroup>
+                  <thead>
                   <tr>
                       <th style="width:3%" class="text-center font-weight-bold">STT</th>
                       <th style="width:3%" class="text-center">
@@ -93,6 +94,7 @@
                       <th style="width:5%" class="text-center font-weight-bold">SL hàng trong kho</th>
                       <th style="width:5%" class="text-center font-weight-bold">SL hàng đang tạm giữ</th>
                     </tr>
+                    </thead>
                   <tbody>
                     <tr v-for="(item, index) in productOfOrderSell">
                       <td>{{index + 1}}</td>
@@ -175,6 +177,7 @@
             <b-row class="mt-2" v-show="orderSells.length > 0" >
               <b-col md="12" class="table-cus">
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                   <tr>
                     <th class="text-center font-weight-bold">STT</th>
                     <th class="text-center font-weight-bold">Ngày Lập</th>
@@ -182,6 +185,7 @@
                     <th class="text-center font-weight-bold">Khách hàng</th>
                     <th></th>
                   </tr>
+                  </thead>
                   <tbody>
                   <tr v-for="(item, index) in orderSells">
                     <td>{{index + 1}}</td>
@@ -230,6 +234,7 @@
                         <col style="width:13%">
                         <col style="width:7%">
                       </colgroup>
+                      <thead>
                       <tr>
                           <th class="text-center font-weight-bold">STT</th>
                           <th class="text-center font-weight-bold">Mã sản phẩm(*)</th>
@@ -242,6 +247,7 @@
                           <th class="text-center font-weight-bold">Ghi Chú</th>
                           <th></th>
                         </tr>
+                        </thead>
                       <tbody>
                       <tr v-for="(product, indexPro) in orderBuy.products">
                         <td>{{indexPro + 1}}</td>
@@ -495,10 +501,15 @@
 import orderBuyApi from '@/api/orderBuy'
 import supplierApi from '@/api/supplier'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -584,19 +595,6 @@ export default {
     this.getOptionOrderSell()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      * Back to list
      */

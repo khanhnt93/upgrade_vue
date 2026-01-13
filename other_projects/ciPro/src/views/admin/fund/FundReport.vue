@@ -169,7 +169,7 @@
               track-by="text">
             </multiselect>
           </b-col>
-          
+
           <b-col md="3" class="mt-2">
             <label>Ngày hoạch toán</label>
             <div class="input-group">
@@ -228,20 +228,23 @@
             <b-row>
               <b-col md="12" class="table-cus">
                 <table class="table table-bordered table-striped fixed_header">
-                  <tr>
-                    <th style="width:3%" class="text-center">STT</th>
-                    <th style="width:7%" class="text-center">Ngày phát sinh</th>
-                    <th style="width:7%" class="text-center">Ngày hạch toán</th>
-                    <th style="width:6%" class="text-center">Số Phiếu</th>
-                    <th style="width:14%" class="text-center">Loại sổ thu - chi</th>
-                    <th style="width:13%" class="text-center">Nhóm khoản thu-chi</th>
-                    <th style="width:13%" class="text-center">Loại khoản thu-chi</th>
-                    <th style="width:14%" class="text-center">Diễn giải nội dung</th>
-                    <th style="width:14%" class="text-center">Đối tượng</th>
-                    <th style="width:10%" class="text-center">Tiền thu-chi</th>
-                    <th style="width:10%" class="text-center">Tồn quỹ</th>
-                    <th style="width:3%" class="text-center"></th>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th style="width:3%" class="text-center">STT</th>
+                      <th style="width:7%" class="text-center">Ngày phát sinh</th>
+                      <th style="width:7%" class="text-center">Ngày hạch toán</th>
+                      <th style="width:6%" class="text-center">Số Phiếu</th>
+                      <th style="width:14%" class="text-center">Loại sổ thu - chi</th>
+                      <th style="width:13%" class="text-center">Nhóm khoản thu-chi</th>
+                      <th style="width:13%" class="text-center">Loại khoản thu-chi</th>
+                      <th style="width:14%" class="text-center">Diễn giải nội dung</th>
+                      <th style="width:14%" class="text-center">Đối tượng</th>
+                      <th style="width:10%" class="text-center">Tiền thu-chi</th>
+                      <th style="width:10%" class="text-center">Tồn quỹ</th>
+                      <th style="width:3%" class="text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
                   <tr v-for="(item) in items">
                     <td>{{item.stt}}</td>
                     <td>{{item.date_input}}</td>
@@ -263,6 +266,7 @@
                          @click="deleteFund(item.id, item.fund_number)" />
                     </td>
                   </tr>
+                  </tbody>
                 </table>
 
                 <!-- Loading -->
@@ -313,13 +317,20 @@
 </template>
 
 <script>
-import fundApi from "@/api/fund"
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import fundAPI from '@/api/fund'
 import {Constant} from '@/common/constant'
-import commonFunc from "@/common/commonFunc"
-import Datepicker from 'vuejs-datepicker'
+import commonFunc from '@/common/commonFunc'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -443,7 +454,7 @@ export default {
     };
   },
   mounted() {
-    if(this.$store.state.user && this.$store.state.user.isRoot) {
+    if(this.authStore.user && this.authStore.user.isRoot) {
       this.isUserRoot = true
     } else {
       this.isUserRoot = false
@@ -460,14 +471,6 @@ export default {
     this.search();
   },
   methods: {
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
-    },
 
     /**
      * Scroll event

@@ -207,6 +207,7 @@
                         <col style="width:13%">
                         <col style="width:7%">
                       </colgroup>
+                      <thead>
                       <tr>
                           <th class="text-center font-weight-bold">STT</th>
                           <th class="text-center font-weight-bold">Mã sản phẩm(*)</th>
@@ -219,6 +220,7 @@
                           <th class="text-center font-weight-bold">Ghi Chú</th>
                           <th></th>
                         </tr>
+                        </thead>
                       <tbody>
                       <tr v-for="(item, index) in orderBuy.products">
                         <td>{{index + 1}}</td>
@@ -533,11 +535,16 @@ import supplierApi from '@/api/supplier'
 import productApi from '@/api/product'
 import orderSellApi from '@/api/orderSell'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -671,18 +678,6 @@ export default {
     this.getOptionRelatedProduct()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Back to list

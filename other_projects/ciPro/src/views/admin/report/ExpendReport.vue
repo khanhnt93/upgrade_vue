@@ -87,6 +87,7 @@
             <b-row>
               <b-col class="table-cus">
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:5%" class="text-center">STT</th>
                       <th style="width:12%" class="text-center">Ngày phát sinh</th>
@@ -97,6 +98,8 @@
                       <th style="width:12%" class="text-center">Số tiền</th>
                       <th style="width:17%" class="text-center">Nội dung chi</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item, index) in items" :key="index">
                       <td class="text-center">{{index + 1}}</td>
                       <td>{{item.accounting_date}}</td>
@@ -107,6 +110,7 @@
                       <td class="text-right">{{currencyFormat(item.amount)}}</td>
                       <td>{{item.description}}</td>
                     </tr>
+                    </tbody>
                 </table>
               </b-col>
             </b-row>
@@ -128,7 +132,7 @@
 import reportApi from '@/api/report'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 
@@ -237,18 +241,6 @@ export default {
     this.prepareToSearch()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Scroll event

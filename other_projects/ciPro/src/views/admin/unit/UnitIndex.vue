@@ -54,9 +54,13 @@
 <script>
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       prefix_title: "Thêm Mới",
@@ -75,7 +79,7 @@ export default {
     } else {
       this.prefix_title = "Thêm Mới"
     }
-    
+
     this.getUnitDetail()
   },
   computed: {
@@ -89,18 +93,6 @@ export default {
     },
     checkValidate () {
       return !(this.errorName)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**

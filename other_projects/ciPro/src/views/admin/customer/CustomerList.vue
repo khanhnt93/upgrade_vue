@@ -161,6 +161,7 @@
                       <col style="width:5%">
                       <col style="width:5%">
                     </colgroup> -->
+                    <thead>
                     <tr>
                       <th style="width:2%" class="text-center font-weight-bold">STT</th>
                       <th style="width:4%" class="text-center font-weight-bold">Loại</th>
@@ -178,6 +179,8 @@
                       <th style="width:5%" class="text-center font-weight-bold">Ngày thêm</th>
                       <th style="width:5%" class="text-center font-weight-bold"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr v-for="(item) in items" v-bind:class="item.row_class">
                       <td>{{item.stt}}</td>
                       <td>{{item.type}}</td>
@@ -206,6 +209,7 @@
                         </b-list-group>
                       </td>
                     </tr>
+                    </tbody>
                 </table>
 
               <!-- <b-table
@@ -306,7 +310,7 @@ import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 
 
 export default {
@@ -438,7 +442,7 @@ export default {
   },
   mounted() {
       // Check delete
-      if(this.$store.state.user && this.$store.state.user.isRoot) {
+      if(this.authStore.user && this.authStore.user.isRoot) {
           this.isShowDelete = true
           this.isUserRoot = true
       } else {
@@ -470,17 +474,7 @@ export default {
   },
   methods: {
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Processing on scroll: use for paging

@@ -177,10 +177,10 @@
 
                   <div class="w-full ml-6" v-show="paymentInfo.pmts && paymentInfo.pmts.length > 0">
                     <label>Khuyến mãi đang áp dụng: </label>
-                    <p v-for="(pmt, index) in paymentInfo.pmts" :key="pmt.name + index">
+                    <div v-for="(pmt, index) in paymentInfo.pmts" :key="pmt.name + index">
                       {{pmt.quantity_apply + " x " + pmt.name}}
                       <i v-show="pmt.method != 'auto'" class="fa fa-trash cursor-pointer" @click="deletePromotion(pmt.id)"></i>
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -199,10 +199,10 @@
 
                   <div class="w-full ml-6" v-show="paymentInfo.service && paymentInfo.service.length > 0">
                     <label>Dịch vụ, phụ thu đang áp dụng: </label>
-                    <p v-for="(service, index) in paymentInfo.service" :key="service.name + index">
+                    <div v-for="(service, index) in paymentInfo.service" :key="service.name + index">
                       {{service.quantity + " x " + service.name + " (" + currencyFormat(service.price) + ") = " + currencyFormat(service.price * service.quantity) }}
                       <i class="fa fa-trash cursor-pointer" @click="deleteService(service.name, service.price)"></i>
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -497,7 +497,7 @@
                   <hr class="mb-4">
 
                   <div class="space-y-3 mb-4">
-                    <p v-for="pmt in pmtOfStore" :key="pmt.id" class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
+                    <div v-for="pmt in pmtOfStore" :key="pmt.id" class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
                       <span><b>- </b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span></span>
                       <div class="flex items-center space-x-2">
                         <button @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)" class="w-8 h-8 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white rounded">
@@ -508,15 +508,15 @@
                           <i class="fa fa-minus"></i>
                         </button>
                       </div>
-                    </p>
+                    </div>
                   </div>
 
                   <div v-show="pmtTemp.length > 0" class="mb-4 p-3 bg-blue-50 rounded">
-                    <p class="font-semibold mb-2">Khuyến mãi:</p>
-                    <p v-for="pmt in pmtTemp" :key="pmt.pk" class="flex items-center justify-between">
+                    <div class="font-semibold mb-2">Khuyến mãi:</div>
+                    <div v-for="pmt in pmtTemp" :key="pmt.pk" class="flex items-center justify-between">
                       <span>{{" - " + pmt.quantity_apply + " x " + pmt.name}}</span>
                       <i v-show="pmt.method != 'auto'" class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deletePromotionTemp(pmt.id)"></i>
-                    </p>
+                    </div>
                   </div>
 
                   <div class="flex justify-between mt-4">
@@ -595,7 +595,7 @@
                   <div v-show="serviceTab === 'roomService'" class="space-y-4">
                     <input v-model="roomServiceFilter" placeholder="Lọc" class="w-1/2 px-3 py-2 border border-gray-300 rounded-md mb-3" />
                     <div class="space-y-3 max-h-64 overflow-y-auto">
-                      <p v-for="service in filteredRoomService" :key="service.id" class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
+                      <div v-for="service in filteredRoomService" :key="service.id" class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
                         <span><b>- </b> {{service.name + " (" + currencyFormat(service.price) + ")"}}</span>
                         <div class="flex items-center space-x-2">
                           <button @click="plusQuantityRoomService(service.id)" class="w-8 h-8 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white rounded">
@@ -606,7 +606,7 @@
                             <i class="fa fa-minus"></i>
                           </button>
                         </div>
-                      </p>
+                      </div>
                     </div>
                     <div class="text-center mt-3">
                       <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded" @click="addNewRoomService">Thêm</button>
@@ -615,10 +615,10 @@
 
                   <!-- Current Services List -->
                   <div v-if="paymentInfo.service && paymentInfo.service.length > 0" class="mt-4 p-3 bg-gray-50 rounded">
-                    <p v-for="service in paymentInfo.service" :key="service.name" class="flex items-center justify-between py-1">
+                    <div v-for="service in paymentInfo.service" :key="service.name" class="flex items-center justify-between py-1">
                       <span>- <b>Loại</b>: <span v-if="service.type == 'service'">Dịch vụ</span><span v-if="service.type == 'surcharge'">Phụ thu</span><span v-if="service.type == 'roomService'">Dịch vụ có sẵn</span>, <b>Tên</b>: {{service.name}}, <span v-show="service.price"><b>Số tiền</b>: {{currencyFormat(service.price)}}vnđ</span></span>
                       <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" @click="deleteServiceTemp(service.type, service.name, service.price)"></i>
-                    </p>
+                    </div>
                   </div>
 
                   <div class="flex justify-between mt-6">

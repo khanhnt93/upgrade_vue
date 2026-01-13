@@ -98,18 +98,22 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Tổng giá trị báo giá (chưa VAT) theo nhóm sản phẩm</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:25%">Nhóm SP</th>
                       <th style="width:25%">Tổng giá trị BG</th>
                       <th style="width:25%">Thành công</th>
                       <th style="width:25%">Thất bại</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in quotation_detail_report.group_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.total)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_success)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <b-row v-show="quotation_detail_report.group_products_full_item.length > show_more_item">
                   <b-col class="text-center">
@@ -122,18 +126,22 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Tổng giá trị báo giá (chưa VAT) theo loại sản phẩm</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:25%">Loại SP</th>
                       <th style="width:25%">Tổng giá trị BG</th>
                       <th style="width:25%">Thành công</th>
                       <th style="width:25%">Thất bại</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in quotation_detail_report.type_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.total)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_success)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <b-row v-show="quotation_detail_report.type_products_full_item.length > show_more_item">
                   <b-col class="text-center">
@@ -146,18 +154,22 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Tổng giá trị báo giá (chưa VAT) theo hãng sản phẩm</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:25%">Hãng SP</th>
                       <th style="width:25%">Tổng giá trị BG</th>
                       <th style="width:25%">Thành công</th>
                       <th style="width:25%">Thất bại</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in quotation_detail_report.brand_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.total)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_success)}}</td>
                       <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <b-row v-show="quotation_detail_report.brand_products_full_item.length > 10">
                   <b-col class="text-center">
@@ -190,16 +202,20 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Doanh thu/lợi nhuận theo nhóm sp</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:40%">Nhóm sp</th>
                       <th style="width:30%">Doanh thu</th>
                       <th style="width:30%">Lợi nhuận</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in revenue_profit_detail_report.group_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.revenue)}}</td>
                       <td class="text-right">{{currencyFormat(item.profit)}}</td>
                     </tr>
+                  </tbody>
                 </table>
                 <b-row v-show="revenue_profit_detail_report.group_products_full_item.length > show_more_item">
                   <b-col class="text-center">
@@ -212,16 +228,20 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Doanh thu/lợi nhuận theo loại sp</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:40%">Loại sp</th>
                       <th style="width:30%">Doanh thu</th>
                       <th style="width:30%">Lợi nhuận</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in revenue_profit_detail_report.type_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.revenue)}}</td>
                       <td class="text-right">{{currencyFormat(item.profit)}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <b-row v-show="revenue_profit_detail_report.type_products_full_item.length > show_more_item">
                   <b-col class="text-center">
@@ -234,16 +254,20 @@
               <b-col md="4" class="mt-2 table-cus" :style="{ height: max_table_height + 'px; overflow-y: auto; overflow-x: auto;'}">
                 <p>Doanh thu/lợi nhuận theo hãng sp</p>
                 <table class="table table-bordered table-striped fixed_header">
+                  <thead>
                     <tr>
                       <th style="width:40%">Hãng sp</th>
                       <th style="width:30%">Doanh thu</th>
                       <th style="width:30%">Lợi nhuận</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in revenue_profit_detail_report.brand_products" :key="item.name">
                       <td>{{item.name}}</td>
                       <td class="text-right">{{currencyFormat(item.revenue)}}</td>
                       <td class="text-right">{{currencyFormat(item.profit)}}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <b-row v-show="revenue_profit_detail_report.brand_products_full_item.length > show_more_item">
                   <b-col class="text-center">
@@ -278,7 +302,7 @@
 <script>
 import reportApi from '@/api/report'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 
@@ -410,18 +434,6 @@ export default {
     this.search()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     prepareDateInput() {
       let dateNow = new Date()

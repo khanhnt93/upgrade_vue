@@ -95,6 +95,7 @@
                         <col style="width:15%">
                         <col style="width:8%">
                       </colgroup>
+                      <thead>
                       <tr>
                           <th class="text-center font-weight-bold">STT</th>
                           <th class="text-center font-weight-bold">Mã sản phẩm(*)</th>
@@ -106,6 +107,7 @@
                           <th class="text-center font-weight-bold">Thành tiền</th>
                           <th class="text-center font-weight-bold">Ghi Chú</th>
                         </tr>
+                        </thead>
                       <tbody>
                       <tr v-for="(item, index) in orderBuy.products">
                         <td>{{index + 1}}</td>
@@ -210,9 +212,14 @@
 <script>
 import orderBuyApi from '@/api/orderBuy'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       showPartnerInfo: true,
@@ -241,18 +248,6 @@ export default {
     this.getOrderBuyDetail()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Back to list

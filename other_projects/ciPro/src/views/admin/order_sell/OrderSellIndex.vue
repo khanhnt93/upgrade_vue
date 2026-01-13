@@ -1840,10 +1840,17 @@ import customerApi from '@/api/customer'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -1998,7 +2005,7 @@ export default {
         "is_available_in_repo": true,
         "properties": [],
         "note": null,
-        "target_unit_id": null, 
+        "target_unit_id": null,
         "target_unit_name": null,
         "conversion_value": null,
         "quantity_root": null
@@ -2246,18 +2253,6 @@ export default {
   methods: {
 
     /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      *  Get customer options
      */
     getCustomerOptions() {
@@ -2470,14 +2465,14 @@ export default {
 
       reformatProductItem(product) {
         product.price_list = this.currencyFormat((product.price_list + '').replaceAll(",", ""))
-        
+
         product.price = this.currencyFormat((product.price + '').replaceAll(",", ""))
-        
+
         product.profit_on_item = this.currencyFormat((product.profit_on_item + '').replaceAll(",", ""))
         if(product.profit_on_item == "" || product.profit_on_item == "null" || product.profit_on_item == "NaN") {
             product.profit_on_item = 0
         }
-        
+
         product.price_sell = this.currencyFormat((product.price_sell + '').replaceAll(",", ""))
         product.quantity = this.currencyFormat((product.quantity + '').replaceAll(",", ""))
         product.amount = this.currencyFormat((product.amount + '').replaceAll(",", ""))
@@ -3295,7 +3290,7 @@ export default {
      * Get detail
      */
     getStoreDetail() {
-      let storeId = this.$store.state.user.storeId
+      let storeId = this.authStore.user.storeId
       if(storeId){
         superAdminAPI.getStoreDetail(storeId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -3322,7 +3317,7 @@ export default {
           this.popToast('danger', errorMess)
         })
       } else {
-        this.$store.commit('removeToken')
+        this.authStore.logout()
         this.$router.push('/staff-login')
       }
     },

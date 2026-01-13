@@ -148,6 +148,7 @@
             <b-row class="mt-2 mb-2">
               <b-col md="12" class="table-cus">
                 <table class="table table-bordered table-striped fixed_header" v-show="items.length > 0">
+                  <thead>
                     <tr class="text-center">
                       <th colspan="9"></th>
                       <th colspan="2">Doanh thu</th>
@@ -171,6 +172,8 @@
                       <th style="width:7%">Lợi nhuận</th>
                       <th style="width:5%">Tỉ suất lợi nhuận</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr v-for="(item) in items">
                       <td>{{item.stt}}</td>
                       <td>{{item.finished_date}}</td>
@@ -188,6 +191,7 @@
                       <td class="text-right">{{currencyFormat(item.profit)}}</td>
                       <td class="text-right">{{item.profit_percent}}%</td>
                     </tr>
+                    </tbody>
                 </table>
 
                 <p v-show="firstSearch == false && items.length == 0" class="text-center">Không có kết quả nào</p>
@@ -207,14 +211,18 @@
 <script>
 import reportApi from '@/api/report'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
-
+import { useToast } from '@/composables/useToast'
 
 export default {
   components: {
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
   },
   data () {
     return {
@@ -309,18 +317,6 @@ export default {
     this.search()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     prepareDateInput() {
       let dateNow = new Date()

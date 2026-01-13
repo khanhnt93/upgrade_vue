@@ -69,13 +69,15 @@
             <b-row class="mt-2" v-show="supplierSelect.id">
               <b-col class="table-cus">
                 <table class="table table-bordered table-striped">
-                  <tr>
+                  <thead>
+                    <tr>
                       <th class="text-center">STT</th>
                       <th class="text-center">Số ĐH nhập</th>
                       <th class="text-center">Tên nhà cung cấp</th>
                       <th class="text-center">Số tiền còn nợ</th>
                       <th class="text-center">Số tiền thanh toán</th>
                     </tr>
+                  </thead>
                   <tbody>
                     <tr v-for="(item, index) in debtList">
                       <td>{{index + 1}}</td>
@@ -196,10 +198,15 @@
 import publicDebtApi from '@/api/publicDebt'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -234,17 +241,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Get options

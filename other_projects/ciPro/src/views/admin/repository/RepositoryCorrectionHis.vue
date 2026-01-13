@@ -162,20 +162,23 @@
           <b-row>
             <b-col md="12" class="table-cus">
               <table class="table table-bordered table-striped fixed_header">
-                <tr>
-                  <th style="width:3%">STT</th>
-                  <th style="width:8%">Ngày</th>
-                  <th style="width:8%">Loại hoạt động</th>
-                  <th style="width:10%">Số phiếu</th>
-                  <th style="width:9%">Mã hàng</th>
-                  <th style="width:13%">Tên hàng</th>
-                  <th style="width:10%">Hãng</th>
-                  <th style="width:9%">Số lượng</th>
-                  <th style="width:9%">Đơn giá</th>
-                  <th style="width:9%">Thành tiền</th>
-                  <th style="width:9%">Người thao tác</th>
-                  <th style="width:3%"></th>
-                </tr>
+                <thead>
+                  <tr>
+                    <th style="width:3%">STT</th>
+                    <th style="width:8%">Ngày</th>
+                    <th style="width:8%">Loại hoạt động</th>
+                    <th style="width:10%">Số phiếu</th>
+                    <th style="width:9%">Mã hàng</th>
+                    <th style="width:13%">Tên hàng</th>
+                    <th style="width:10%">Hãng</th>
+                    <th style="width:9%">Số lượng</th>
+                    <th style="width:9%">Đơn giá</th>
+                    <th style="width:9%">Thành tiền</th>
+                    <th style="width:9%">Người thao tác</th>
+                    <th style="width:3%"></th>
+                  </tr>
+                </thead>
+                <tbody>
                 <tr v-for="(item) in items">
                   <td>{{item.stt}}</td>
                   <td>{{item.created_at}}</td>
@@ -201,6 +204,7 @@
                        @click="deleted(item.id, item.repository_number)"/>
                   </td>
                 </tr>
+                </tbody>
               </table>
             </b-col>
           </b-row>
@@ -216,7 +220,7 @@
 
     <b-row hidden id="contentPrintPHG">
       <b-col>
-        <img :src="'/static/img/project/print/quotation/header_' + this.$store.state.user.storeId + '.png'" style="width: 100%"/>
+        <img :src="'/static/img/project/print/quotation/header_' + this.authStore.user.storeId + '.png'" style="width: 100%"/>
         <div style="width:100%; height:35px; font-size: 12px;" class="tr-bg">
           <div style="color: #006699; font-size: 18px; float: left; width: 70%; text-align: center; margin-top: 10px;">
             <b>PHIẾU GIAO HÀNG</b>
@@ -236,6 +240,7 @@
 
         <div class="custom-line-height">
           <table style="width:100%; font-size: 10px">
+            <tbody>
             <tr class="print-pl-2">
               <td style="width:15%" class="print-no-border print-pl-2 print-text-right">
                 <u><b> Tên khách hàng: </b></u>
@@ -258,11 +263,13 @@
               <td style="width:15%" class="print-no-border print-pl-2 print-text-right">Ghi chú về giao hàng: </td>
               <td colspan="3" class="print-no-border print-pl-2 print-text-left">{{currentRepository.shipping_note}}</td>
             </tr>
+            </tbody>
           </table>
         </div>
         <br>
         <div class="print-table-border">
           <table style="width:100%; font-size: 10px" class="custom-line-height">
+            <thead>
             <tr class="print-text-center tr-bg" style="background-color: #eeece1">
               <th>STT</th>
               <th>MÃ SẢN PHẨM</th>
@@ -272,6 +279,8 @@
               <th style="width:50px">SL</th>
               <th>GHI CHÚ</th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="(item, index) in currentRepository.products" :key="item.product_id">
               <td class="print-text-center">{{index + 1}}</td>
               <td>{{item.product_code}}</td>
@@ -286,6 +295,7 @@
               <td class="print-text-right"><b>{{currentRepository.total_quantity + ''}}</b></td>
               <td></td>
             </tr>
+            </tbody>
           </table>
           <div>
             <p style="font-size: 10px"><b>Chứng từ kèm theo:</b></p>
@@ -301,6 +311,7 @@
           <br><br>
           <div>
             <table style="width:100%; font-size: 10px">
+              <tbody>
               <tr>
                 <td class="print-no-border print-text-center"><b>NGƯỜI NHẬN HÀNG</b></td>
                 <td class="print-no-border print-text-center"><b>NGƯỜI GIAO HÀNG</b></td>
@@ -311,6 +322,7 @@
                 <td class="print-no-border print-text-center" style="color: #C0C0C0">(Ký, họ tên)</td>
                 <td class="print-no-border print-text-center" style="color: #C0C0C0">(Ký, họ tên)</td>
               </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -326,11 +338,18 @@
 import repositoryApi from '@/api/repository'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -423,7 +442,7 @@ export default {
   },
   mounted() {
     // Check delete
-    if(this.$store.state.user && this.$store.state.user.isRoot) {
+    if(this.authStore.user && this.authStore.user.isRoot) {
         this.isUserRoot = true
     }
 
@@ -460,18 +479,6 @@ export default {
     this.search()
   },
   methods: {
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     prepareDateInput() {
       let dateNow = new Date()
       this.inputs.to_date = dateNow.toJSON().slice(0,10)

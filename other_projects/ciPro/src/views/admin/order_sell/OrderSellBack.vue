@@ -44,6 +44,7 @@
                       <col style="width:13%">
                       <col style="width:13%">
                     </colgroup>
+                    <thead>
                     <tr>
                         <th class="text-center font-weight-bold">STT</th>
                         <th class="text-center font-weight-bold">Mã SP</th>
@@ -54,6 +55,7 @@
                         <th class="text-center font-weight-bold">Thành tiền</th>
                         <th class=""></th>
                       </tr>
+                      </thead>
                     <tbody>
                     <tr v-for="(item, index) in order_sell_back.products">
                       <td>{{index + 1}}</td>
@@ -129,9 +131,14 @@
 
 import orderSellApi from '@/api/orderSell'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       order_sell_back: {
@@ -156,19 +163,6 @@ export default {
     this.getOrderSellDetail()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      *  Get detail
      */
@@ -276,7 +270,7 @@ export default {
           product.quantity_root = parseFloat(product.quantity) / parseFloat(product.conversion_value)
         }
       }
-      
+
       this.saving = true
 
       orderSellApi.confirmOrderSellBack(this.order_sell_back).then(res => {

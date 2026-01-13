@@ -1,44 +1,55 @@
-import Vue from 'vue'
-import App from './App'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import App from './App.vue'
 import router from './router'
-import store from './store'
 
-Vue.config.productionTip = false
+// Import Tailwind CSS
+import './assets/css/tailwind.css'
 
-// Import VueBoostrap
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// Import existing SCSS styles
+import './assets/scss/style.scss'
 
-Vue.use(BootstrapVue)
+// Import vue-toastification
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
+// Import Font Awesome Free
+import '@fortawesome/fontawesome-free/css/all.css'
 
-// Import Global Filters
-import '@/filters'
+// Import VueGoogleCharts
+import VueGoogleCharts from 'vue-google-charts'
 
-// svg: loading
-import * as svgicon from 'vue-svgicon'
-import './icons.js'
+// Create Vue app
+const app = createApp(App)
 
-Vue.use(svgicon, {
-  tagName: 'icon'
+// Create and configure Pinia
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+// Configure vue-toastification
+app.use(Toast, {
+  transition: "Vue-Toastification__bounce",
+  maxToasts: 3,
+  newestOnTop: true,
+  position: "top-right",
+  timeout: 3000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: "button",
+  icon: true,
+  rtl: false
 })
 
+// Register plugins and components
+app.use(router)
+app.use(pinia)
+app.use(VueGoogleCharts)
 
-// Some middleware to help us ensure the user is authenticated.
-router.beforeEach((to, from, next) => {
-    next()
-});
-
-// Init chart
-import VueGoogleCharts from 'vue-google-charts'
-Vue.use(VueGoogleCharts)
-
-
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-});
+// Mount app
+app.mount('#app')

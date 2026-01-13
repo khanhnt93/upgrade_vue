@@ -168,10 +168,15 @@
 import loanApi from '@/api/loan'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -224,17 +229,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Get detail

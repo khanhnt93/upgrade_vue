@@ -73,9 +73,14 @@ import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       fields: [
@@ -125,18 +130,6 @@ export default {
     this.search()
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Scroll event

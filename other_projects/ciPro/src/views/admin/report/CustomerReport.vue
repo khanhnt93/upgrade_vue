@@ -148,20 +148,23 @@
             <b-row>
               <b-col class="table-cus">
                 <table class="table table-bordered table-striped fixed_header">
-                  <tr>
-                    <th style="width:3%">STT</th>
-                    <th style="width:20%">Tên khách hàng</th>
-                    <th style="width:6%">Ngày phát sinh ĐH cuối</th>
-                    <th style="width:11%">Số lượng ĐH bán</th>
-                    <th style="width:11%">Tổng doanh số đã bán</th>
-                    <th style="width:11%">Số lượng BG</th>
-                    <th style="width:11%">Tổng doanh số BG</th>
-                    <th style="width:11%">Tình trạng khách</th>
-                    <th style="width:5%">Lịch sử mua hàng</th>
-                    <th style="width:5%">Lịch sử BG</th>
-                    <th style="width:5%">Chi tiết công nợ</th>
-                  </tr>
-                  <tr v-for="(item, index) in items" :key="index">
+                  <thead>
+                    <tr>
+                      <th style="width:3%">STT</th>
+                      <th style="width:20%">Tên khách hàng</th>
+                      <th style="width:6%">Ngày phát sinh ĐH cuối</th>
+                      <th style="width:11%">Số lượng ĐH bán</th>
+                      <th style="width:11%">Tổng doanh số đã bán</th>
+                      <th style="width:11%">Số lượng BG</th>
+                      <th style="width:11%">Tổng doanh số BG</th>
+                      <th style="width:11%">Tình trạng khách</th>
+                      <th style="width:5%">Lịch sử mua hàng</th>
+                      <th style="width:5%">Lịch sử BG</th>
+                      <th style="width:5%">Chi tiết công nợ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in items" :key="index">
                     <td>{{index + 1}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.last_finished_date}}</td>
@@ -189,6 +192,7 @@
                       </b-button>
                     </td>
                   </tr>
+                  </tbody>
               </table>
               </b-col>
             </b-row>
@@ -267,6 +271,7 @@
       <b-row class="mt-2">
         <b-col class="table-cus">
           <table class="table table-bordered table-striped fixed_header">
+            <thead>
               <tr>
                 <th style="width:4%">STT</th>
                 <th style="width:12%">Số ĐH bán</th>
@@ -278,6 +283,8 @@
                 <th style="width:12%">Ngày cập nhật lần cuối</th>
                 <th style="width:12%">NV phụ trách</th>
               </tr>
+            </thead>
+            <tbody>
               <tr v-for="(item, index) in order_sells" :key="index">
                 <td>{{index + 1}}</td>
                 <td>{{item.order_sell_number}}</td>
@@ -289,6 +296,7 @@
                 <td>{{item.updated_at}}</td>
                 <td>{{item.staff_name}}</td>
               </tr>
+              </tbody>
           </table>
           <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
           <p class="text-center">--Hết--</p>
@@ -363,6 +371,7 @@
       <b-row class="mt-2">
         <b-col class="table-cus">
           <table class="table table-bordered table-striped fixed_header">
+              <thead>
               <tr>
                 <th style="width:4%">STT</th>
                 <th style="width:14%">Số báo giá</th>
@@ -373,6 +382,8 @@
                 <th style="width:14%">Ngày cập nhật lần cuối</th>
                 <th style="width:14%">NV phụ trách</th>
               </tr>
+              </thead>
+              <tbody>
               <tr v-for="(item, index) in quotations" :key="index">
                 <td>{{index + 1}}</td>
                 <td>{{item.quotation_number}}</td>
@@ -383,6 +394,7 @@
                 <td>{{item.updated_at}}</td>
                 <td>{{item.staff_name}}</td>
               </tr>
+              </tbody>
           </table>
           <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
           <p class="text-center">--Hết--</p>
@@ -455,6 +467,7 @@
       <b-row class="mt-2">
         <b-col class="table-cus">
           <table class="table table-bordered table-striped fixed_header">
+            <thead>
               <tr>
                 <th style="width:5%">STT</th>
                 <th style="width:14%">Số ĐH bán</th>
@@ -465,6 +478,8 @@
                 <th style="width:14%">Trạng thái GH</th>
                 <th style="width:14%">NV phụ trách</th>
               </tr>
+            </thead>
+            <tbody>
               <tr v-for="(item, index) in debts" :key="index">
                 <td>{{index + 1}}</td>
                 <td>{{item.order_sell_number}}</td>
@@ -475,6 +490,7 @@
                 <td>{{item.shipping_status_str}}</td>
                 <td>{{item.staff_name}}</td>
               </tr>
+              </tbody>
           </table>
           <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
           <p class="text-center">--Hết--</p>
@@ -492,7 +508,7 @@
 import reportApi from '@/api/report'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 
@@ -623,18 +639,6 @@ export default {
   methods: {
 
     /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Scroll event
      */
     onScroll (event) {
@@ -666,7 +670,7 @@ export default {
       this.search_inputs.to_date = to_date
       this.search_inputs.from_date = from_date
 
-      
+
       this.yearOptions = []
       for (let i = currentYear; i > currentYear - 10; i--) {
           this.yearOptions.push({value: i, text: i})

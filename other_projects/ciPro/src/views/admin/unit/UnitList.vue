@@ -47,9 +47,13 @@
 <script>
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       fields: [
@@ -81,18 +85,6 @@ export default {
     this.getUnitList()
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Load list

@@ -15,8 +15,8 @@
                     <label>
                       Mật Khẩu Hiện Tại
                     </label><span class="error-sybol"></span>
-                    <input id="oldPassword"  
-                      type="password" 
+                    <input id="oldPassword"
+                      type="password"
                       class="form-control"
                       v-model="inputs.old_password">
                     <b-form-invalid-feedback  class="invalid-feedback" :state="!errorOldPassword">
@@ -28,7 +28,7 @@
                       Mật Khẩu Mới
                     </label><span class="error-sybol"></span>
                     <input id="newPassword"
-                      type="password" 
+                      type="password"
                       class="form-control"
                       v-model="inputs.new_password">
                     <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPassword">
@@ -43,7 +43,7 @@
                       Nhắc lại mật khẩu mới
                     </label><span class="error-sybol"></span>
                     <input id="confirmPassword"
-                      type="password" 
+                      type="password"
                       class="form-control"
                       v-model="confirmPass">
                     <b-form-invalid-feedback class="invalid-feedback" :state="!errorConfirmPassword">
@@ -56,7 +56,7 @@
                   <b-row>
                     <b-col cols="12" class="text-center">
                       <b-button
-                        @click="update" 
+                        @click="update"
                         :disabled="onUpdate"
                         :variant="onUpdate ? '' : 'primary'" class="default-btn-bg">
                         {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
@@ -73,13 +73,18 @@
   </div>
 </template>
 <script>
+import { useAuthStore } from '@/stores/auth'
 import AuthenticationAPI from '@/api/authentication'
 import {Constant} from '@/common/constant'
 
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    return { authStore }
+  },
   data () {
-    return {  
+    return {
       inputs: {
         new_password: null,
         old_password: null,
@@ -138,7 +143,7 @@ export default {
         AuthenticationAPI.staffChangePass(this.inputs).then(res => {
           if(res && res.data && res.data.status == 200) {
             // Redirect to active pass page
-            this.$store.commit('removeToken')
+            this.authStore.logout()
             this.$router.push('/staff-login')
           }
           this.onUpdate = false

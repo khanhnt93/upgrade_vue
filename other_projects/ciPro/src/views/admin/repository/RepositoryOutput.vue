@@ -201,7 +201,8 @@
                       <col style="width:15%">
                       <col style="width:5%">
                     </colgroup>
-                  <tr>
+                  <thead>
+                    <tr>
                       <th class="text-center font-weight-bold">STT</th>
                       <th class="text-center font-weight-bold">Mã SP</th>
                       <th class="text-center font-weight-bold">Tên SP</th>
@@ -211,6 +212,7 @@
                       <th class="text-center font-weight-bold">Thành tiền</th>
                       <th></th>
                     </tr>
+                  </thead>
                   <tbody>
                   <tr v-for="(item, index) in repository.products">
                     <td>{{index + 1}}</td>
@@ -376,9 +378,14 @@ import orderSellApi from '@/api/orderSell'
 import fundApi from '@/api/fund'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Multiselect
   },
@@ -461,19 +468,6 @@ export default {
     this.getOptionRelatedRepository()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
     back() {
       if(this.repository.is_correction) {
         this.$router.push("/repo-correction-history")

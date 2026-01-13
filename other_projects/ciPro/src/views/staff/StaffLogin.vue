@@ -79,12 +79,17 @@
   </div>
 </template>
 <script>
+import { useAuthStore } from '@/stores/auth'
 import StaffMapper from '@/mapper/staff'
 import Staff from '@/api/staff'
 import commonFunc from '@/common/commonFunc'
 
 export default {
   name: 'Login',
+  setup() {
+    const authStore = useAuthStore()
+    return { authStore }
+  },
   data () {
     return {
       inputs: {
@@ -111,15 +116,15 @@ export default {
          Staff.logIn(this.inputs).then(res => {
 
           // Store token
-          this.$store.commit('updateToken', res.data.data.token)
+          this.authStore.updateToken(res.data.data.token)
 
           // Store menu
           let menu = res.data.data.menu
-          this.$store.commit('updateMenu', menu)
+          this.authStore.updateMenu(menu)
 
           // Store staff info
           const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
-          this.$store.commit('updateUser', usr)
+          this.authStore.updateUser(usr)
 
            // Check user and redirect
            if(usr.isSuper) {

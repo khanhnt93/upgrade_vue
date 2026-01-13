@@ -207,7 +207,7 @@
                   <b-form-select
                     v-show="inputs.money_type==1"
                     :options="bankAccountOptions"
-                    v-model="inputs.bank_account_id" 
+                    v-model="inputs.bank_account_id"
                     @change="changeBankAccount"
                     :disabled="inputs.money_type==0">
                   </b-form-select>
@@ -422,10 +422,15 @@
 import fundApi from '@/api/fund'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -579,17 +584,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     checkCreatedFromOrderSell() {
       // Check tạo đơn hàng nhập từ đơn hàng bán
@@ -968,7 +963,7 @@ export default {
               this.getCustomerById(this.orderSellSelect.customer_id)
           }
           this.checkIssueInvoice()
-          
+
       }
 
       // Cập nhật nội dung

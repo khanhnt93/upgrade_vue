@@ -128,11 +128,16 @@
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
   components: {
     GChart
+  },
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
   },
   data () {
     return {
@@ -198,18 +203,6 @@ export default {
     },
     checkValidate () {
       return !(this.errorFromDate || this.errorToDate)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**

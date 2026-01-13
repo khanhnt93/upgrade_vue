@@ -166,21 +166,24 @@
           <b-row>
             <b-col md="12" class="table-cus table-fix-header">
               <table class="table table-bordered table-striped fixed_header">
-                    <tr>
-                      <th style="width:3%">STT</th>
-                      <th style="width:8%">Số báo giá</th>
-                      <th style="width:5%">NV phụ trách</th>
-                      <th style="width:22%">Tên K.H</th>
-                      <th style="width:8%">Người liên hệ</th>
-                      <th style="width:8%">SĐT liên hệ</th>
-                      <th style="width:8%">Tổng tiền SP</th>
-                      <th style="width:8%">Thành tiền</th>
-                      <th style="width:8%">Lợi nhuận</th>
-                      <th style="width:8%">Ngày BG</th>
-                      <th style="width:6%">Trạng thái BG</th>
-                      <th style="width:8%"></th>
-                    </tr>
-                    <tr v-for="(item) in items" v-bind:class="item.row_class">
+                <thead>
+                  <tr>
+                    <th style="width:3%">STT</th>
+                    <th style="width:8%">Số báo giá</th>
+                    <th style="width:5%">NV phụ trách</th>
+                    <th style="width:22%">Tên K.H</th>
+                    <th style="width:8%">Người liên hệ</th>
+                    <th style="width:8%">SĐT liên hệ</th>
+                    <th style="width:8%">Tổng tiền SP</th>
+                    <th style="width:8%">Thành tiền</th>
+                    <th style="width:8%">Lợi nhuận</th>
+                    <th style="width:8%">Ngày BG</th>
+                    <th style="width:6%">Trạng thái BG</th>
+                    <th style="width:8%"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item) in items" v-bind:class="item.row_class">
                       <td>{{item.stt}}</td>
                       <td>
                         <a v-if="item.type == 0" :href="'/quotation-' + scope + '/detail/' + item.id" target="_blank" title="Chi tiết báo giá">
@@ -223,6 +226,7 @@
                         </div>
                       </td>
                     </tr>
+                    </tbody>
                 </table>
             </b-col>
           </b-row>
@@ -353,7 +357,7 @@ import quotationApi from '@/api/quotation'
 import settingApi from '@/api/setting'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 
@@ -486,17 +490,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Scroll event

@@ -74,6 +74,7 @@
             <b-col class="text-center table-cus">
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
               <table class="table table-bordered table-striped fixed_header">
+                <thead>
                 <tr>
                   <th class="text-center font-weight-bold">STT</th>
                   <th class="text-center font-weight-bold">Ngày</th>
@@ -85,6 +86,7 @@
                   <th class="text-center font-weight-bold">Thành tiền</th>
                   <th></th>
                 </tr>
+                </thead>
 
                 <tbody>
                 <tr>
@@ -130,7 +132,7 @@
 import supplierApi from '@/api/supplier'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 
 
 export default {
@@ -193,18 +195,6 @@ export default {
     // checkValidate() {
     //   return !(this.errorFromDate || this.errorToDate)
     // },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Go to detail

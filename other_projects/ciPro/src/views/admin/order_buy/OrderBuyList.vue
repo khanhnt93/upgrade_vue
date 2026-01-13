@@ -160,6 +160,7 @@
           <b-row>
             <b-col md="12" class="table-cus">
               <table class="table table-bordered table-striped fixed_header">
+                    <thead>
                     <tr>
                       <th style="width:3%">STT</th>
                       <th style="width:7%">Số ĐH nhập</th>
@@ -176,6 +177,8 @@
                       <th style="width:7%">Ghi chú</th>
                       <th style="width:17%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr v-for="(item) in items">
                       <td>{{item.stt}}</td>
                       <td>
@@ -233,6 +236,7 @@
                         </div>
                       </td>
                     </tr>
+                    </tbody>
                 </table>
             </b-col>
           </b-row>
@@ -461,6 +465,7 @@
       <b-row class="mt-2" v-show="currentOrderBuy.products && currentOrderBuy.products.length > 0" >
         <b-col md="12" class="table-cus">
           <table class="table table-bordered table-striped fixed_header">
+            <thead>
             <tr>
               <th class="text-center font-weight-bold">STT</th>
               <th class="text-center font-weight-bold">Mã Hàng</th>
@@ -472,6 +477,7 @@
               <th class="text-center font-weight-bold">Thành tiền</th>
               <th class="text-center font-weight-bold">Ghi Chú</th>
             </tr>
+            </thead>
             <tbody>
             <tr v-for="(item, index) in currentOrderBuy.products">
               <td>{{index + 1}}</td>
@@ -550,11 +556,16 @@ import orderBuyApi from '@/api/orderBuy'
 import supplierApi from '@/api/supplier'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -710,18 +721,6 @@ export default {
     this.prepareToSearch()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      * Scroll event

@@ -46,12 +46,17 @@
 
 
 <script>
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       fields: [
@@ -86,17 +91,6 @@ export default {
     this.search()
   },
   methods: {
-     /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
-  },
 
     /**
      * Delete

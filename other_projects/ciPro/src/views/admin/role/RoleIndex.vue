@@ -94,12 +94,16 @@
 </template>
 <script>
 
-
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       prefix_text: '',
@@ -138,18 +142,6 @@ export default {
     },
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
-  },
 
     checkInfo (info) {
       return (this.click && (info == null || info.length <= 0))

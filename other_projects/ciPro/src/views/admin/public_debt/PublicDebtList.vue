@@ -128,6 +128,7 @@
           <b-row>
             <b-col class="table-cus">
               <table class="table table-bordered table-striped fixed_header">
+                <thead>
                   <tr>
                     <th style="width:4%" class="text-center">STT</th>
                     <th style="width:9%" class="text-center">Số ĐH mua</th>
@@ -141,6 +142,8 @@
                     <th style="width:9%" class="text-center">Số HĐ VAT vào</th>
                     <th style="width:6%" class="text-center"></th>
                   </tr>
+                </thead>
+                <tbody>
                   <tr v-for="(item, index) in items">
                     <td>{{index + 1}}</td>
                     <td>
@@ -168,6 +171,7 @@
                       </b-button>
                     </td>
                   </tr>
+                  </tbody>
               </table>
             </b-col>
           </b-row>
@@ -198,7 +202,8 @@
       <b-row class="mt-2">
         <b-col class="table-cus">
           <table class="table table-bordered table-striped">
-            <tr>
+            <thead>
+              <tr>
                 <th style="width:10%" class="text-center">STT</th>
                 <th style="width:20%" class="text-center">Số ĐH mua</th>
                 <th style="width:20%" class="text-center">Số ngày công nợ</th>
@@ -206,6 +211,7 @@
                 <th style="width:20%" class="text-center">Số tiền còn nợ</th>
                 <th style="width:10%" class="text-center"></th>
               </tr>
+            </thead>
             <tbody>
               <tr v-for="(item, index) in items">
                 <td>{{index + 1}}</td>
@@ -248,9 +254,14 @@ import publicDebtApi from '@/api/publicDebt'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Multiselect
   },
@@ -327,17 +338,7 @@ export default {
 
       this.search()
     },
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Processing on scroll: use for paging

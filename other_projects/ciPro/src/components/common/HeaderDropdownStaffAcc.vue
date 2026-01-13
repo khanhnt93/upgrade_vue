@@ -1,47 +1,46 @@
 <template>
-  <AppHeaderDropdown
-    right
-    no-caret
-  >
-    <template slot="header">
-      <span>
-        <!--<i class="fa fa-user fa-2x" />-->
-        <img src="/static/img/icons/sticker_5.png" class="iconsCustom"/>
-      </span>
-    </template>
-    <template slot="dropdown">
-      <!--<b-dropdown-item @click.prevent="goToStaffInfo">Thông tin cá nhân</b-dropdown-item>-->
-      <b-dropdown-item @click.prevent="goToChangePass">Đổi Mật Khẩu</b-dropdown-item>
-      <b-dropdown-item @click.prevent="logOut">Thoát</b-dropdown-item>
-    </template>
-  </AppHeaderDropdown>
+  <div class="dropdown">
+    <button class="btn btn-link dropdown-toggle" type="button" @click="toggleDropdown">
+      <img src="/static/img/icons/sticker_5.png" class="iconsCustom"/>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" :class="{ 'show': isOpen }">
+      <button class="dropdown-item" @click.prevent="goToChangePass">Đổi Mật Khẩu</button>
+      <button class="dropdown-item" @click.prevent="logOut">Thoát</button>
+    </div>
+  </div>
 </template>
 
 <script>
-import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
-import {Constant} from '@/common/constant'
-
+import { useAuthStore } from '@/stores/auth'
+import { Constant } from '@/common/constant'
 
 export default {
-  name: 'DefaultHeaderDropdownAccnt',
-  components: {
-    AppHeaderDropdown
+  name: 'HeaderDropdownStaffAcc',
+  setup() {
+    const authStore = useAuthStore()
+    return { authStore }
   },
-  data: function() {
-    return{
+  data() {
+    return {
       roleAdmin: Constant.ROLE_ADMIN,
+      isOpen: false
     }
   },
   methods: {
-    logOut () {
-      this.$store.commit('removeToken')
+    toggleDropdown() {
+      this.isOpen = !this.isOpen
+    },
+    logOut() {
+      this.authStore.logout()
       this.$router.push('/staff-login')
     },
-    goToChangePass () {
+    goToChangePass() {
       this.$router.push('/staff-change-password')
+      this.isOpen = false
     },
-    goToStaffInfo () {
+    goToStaffInfo() {
       this.$router.push('/staff-info')
+      this.isOpen = false
     }
   }
 }

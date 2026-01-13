@@ -150,10 +150,10 @@
             </div>
             <div v-show="paymentInfo.pmts && paymentInfo.pmts.length > 0" class="ml-3">
               <label class="font-semibold">Khuyến mãi đang áp dụng:</label>
-              <p v-for="(pmt, index) in paymentInfo.pmts" :key="pmt.name + index" class="flex justify-between items-center">
+              <div v-for="(pmt, index) in paymentInfo.pmts" :key="pmt.name + index" class="flex justify-between items-center">
                 <span>{{pmt.quantity_apply + " x " + pmt.name}}</span>
                 <i v-show="pmt.method != 'auto'" class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" @click="deletePromotion(pmt.id)"></i>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -171,10 +171,10 @@
             </div>
             <div v-show="paymentInfo.service && paymentInfo.service.length > 0" class="ml-3">
               <label class="font-semibold">Dịch vụ, phụ thu đang áp dụng:</label>
-              <p v-for="(service, index) in paymentInfo.service" :key="service.name + index" class="flex justify-between items-center">
+              <div v-for="(service, index) in paymentInfo.service" :key="service.name + index" class="flex justify-between items-center">
                 <span>{{service.quantity + " x " + service.name + " (" + formatCurrency(service.price) + ") = " + formatCurrency(service.price * service.quantity)}}</span>
                 <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" @click="deleteService(service.name, service.price)"></i>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -182,10 +182,10 @@
           <p class="mt-4 mb-2 font-bold">Chi tiết thời gian:</p>
           <ul v-if="paymentInfo && paymentInfo.payment_split_times && paymentInfo.payment_split_times.length > 0">
             <li v-for="(item, index) in paymentInfo.payment_split_times" :key="index">
-              <p class="mb-2 flex justify-between items-center">
+              <div class="mb-2 flex justify-between items-center">
                 <span>Từ {{item.start_time.substring(0, 16)}} đến {{item.end_time.substring(0, 16)}}{{item.unit_number > 1 ? ` (${item.unit_number})` : ''}}: <b>{{formatCurrency(item.amount)}}</b></span>
                 <i class="fa fa-edit cursor-pointer text-blue-600 hover:text-blue-800" @click="showModalSplitBill($event, index)"></i>
-              </p>
+              </div>
               <EditSplitBillModal
                 :title="'Thay đổi giá trị bill tách số ' + item.payment_split_time_id"
                 :handle-submit="confirmEditSplitBill"
@@ -266,7 +266,7 @@
         <hr class="mb-4"/>
 
         <div class="max-h-96 overflow-y-auto mb-4">
-          <p class="mb-3 flex justify-between items-center" v-for="pmt in pmtOfStore" :key="pmt.id">
+          <div class="mb-3 flex justify-between items-center" v-for="pmt in pmtOfStore" :key="pmt.id">
             <span><b>-</b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span></span>
             <div class="flex items-center gap-2">
               <button
@@ -283,7 +283,7 @@
                 <i class="fa fa-minus"></i>
               </button>
             </div>
-          </p>
+          </div>
         </div>
 
         <div class="flex justify-between items-center gap-2 mt-4">
@@ -411,7 +411,7 @@
               />
             </div>
             <div class="max-h-64 overflow-y-auto">
-              <p class="mb-3 flex justify-between items-center" v-for="service in filteredRoomService" :key="service.id">
+              <div class="mb-3 flex justify-between items-center" v-for="service in filteredRoomService" :key="service.id">
                 <span><b>-</b> {{service.name + " (" + formatCurrency(service.price) + ")"}}</span>
                 <div class="flex items-center gap-2">
                   <button
@@ -428,7 +428,7 @@
                     <i class="fa fa-minus"></i>
                   </button>
                 </div>
-              </p>
+              </div>
             </div>
             <div class="text-center mt-3">
               <button
@@ -443,10 +443,10 @@
 
         <!-- Current Services List -->
         <div class="mt-4 p-3 bg-gray-50 rounded">
-          <p class="mb-2" v-for="service in paymentInfo.service" :key="service.name">
+          <div class="mb-2" v-for="service in paymentInfo.service" :key="service.name">
             - <b>Loại</b>: <span v-if="service.type == 'service'">Dịch vụ</span><span v-if="service.type == 'surcharge'">Phụ thu</span><span v-if="service.type == 'roomService'">Dịch vụ có sẵn</span>, <b>Tên</b>: {{service.name}}, <span v-show="service.price"><b>Số tiền</b>: {{formatCurrency(service.price)}}vnđ</span>
             <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800 ml-2" @click="deleteServiceTemp(service.type, service.name, service.price)"></i>
-          </p>
+          </div>
         </div>
 
         <div class="flex justify-between items-center gap-2 mt-4">

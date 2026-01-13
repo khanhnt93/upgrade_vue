@@ -90,9 +90,14 @@
 <script>
 import productApi from '@/api/product'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       prefix_text: '',
@@ -137,18 +142,6 @@ export default {
     },
     checkValidate () {
       return !(this.errorProductGroup || this.errorCode || this.errorName)
-    },
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
     },
 
     /**

@@ -1,9 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // Staff group
-import StaffLogin from '@/views/staff/StaffLogin'
-import StaffChangePass from '@/views/staff/StaffChangePass'
+import StaffLogin from '@/views/staff/StaffLogin.vue'
+import StaffChangePass from '@/views/staff/StaffChangePass.vue'
 
 /**
  * Admin group
@@ -158,14 +157,12 @@ import StoreStatistic from '@/views/brand_manager/report/StoreStatistic'
 // Common
 import Contact from '@/views/common/contact'
 import AboutUs from '@/views/common/aboutUs'
-import Tutorial from '@/views/common/tutorial'
-import Home from '@/views/common/Home'
+import Tutorial from '@/views/common/tutorial.vue'
+import Home from '@/views/common/Home.vue'
 
-Vue.use(Router)
-
-const router = new Router({
-  mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior: () => ({ top: 0 }),
   routes: [
     {
       path: '/',

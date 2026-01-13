@@ -15,7 +15,7 @@
 
               <b-row class="form-row">
                 <b-col md='12'>
-                  <img src="/static/img/project/logo.png" class="imageLogo"/>
+                  <img :src="'/static/img/project/' + 'logo.png'" class="imageLogo"/>
                 </b-col>
               </b-row>
               <br>
@@ -30,7 +30,7 @@
 
                   <b-row class="form-row">
                     <b-col md='12'>
-                      <img src="/static/img/project/functions.png" class="imageLogo"/>
+                      <img :src="'/static/img/project/' + 'functions.png'" class="imageLogo"/>
                     </b-col>
                   </b-row>
                   <br>

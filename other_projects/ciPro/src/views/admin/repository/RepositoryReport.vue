@@ -124,25 +124,28 @@
                 <col style="width:9%">
                 <col style="width:9%">
               </colgroup>
-              <tr>
-                <th>STT</th>
-                <th>Nhóm SP</th>
-                <th>Loại SP</th>
-                <th>Hãng SP</th>
-                <th>Mã SP</th>
-                <th>Tên SP</th>
-                <th>Số lượng</th>
-                <th>Đơn giá nhập</th>
-                <th>Thành tiền</th>
-                <th>SL đang tạm giữ chờ xuất kho</th>
-              </tr>
-              <tr>
-                <td colspan="6" class="text-center text-header text-bold"><b>Tổng</b></td>
-                <td class="text-header text-right"><b>{{ currencyFormat(total_quantity) }}</b></td>
-                <td class="text-header text-right"><b>{{ currencyFormat(total_price_buy) }}</b></td>
-                <td class="text-header text-right"><b>{{ currencyFormat(total_amount_buy) }}</b></td>
-                <td class="text-header text-right"><b>{{ currencyFormat(total_quantity_keep) }}</b></td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Nhóm SP</th>
+                  <th>Loại SP</th>
+                  <th>Hãng SP</th>
+                  <th>Mã SP</th>
+                  <th>Tên SP</th>
+                  <th>Số lượng</th>
+                  <th>Đơn giá nhập</th>
+                  <th>Thành tiền</th>
+                  <th>SL đang tạm giữ chờ xuất kho</th>
+                </tr>
+                <tr>
+                  <td colspan="6" class="text-center text-header text-bold"><b>Tổng</b></td>
+                  <td class="text-header text-right"><b>{{ currencyFormat(total_quantity) }}</b></td>
+                  <td class="text-header text-right"><b>{{ currencyFormat(total_price_buy) }}</b></td>
+                  <td class="text-header text-right"><b>{{ currencyFormat(total_amount_buy) }}</b></td>
+                  <td class="text-header text-right"><b>{{ currencyFormat(total_quantity_keep) }}</b></td>
+                </tr>
+              </thead>
+              <tbody>
               <tr v-for="(item) in items">
                 <td>{{item.stt}}</td>
                 <td>{{item.product_group_name}}</td>
@@ -160,6 +163,7 @@
                   </span>
                 </td>
               </tr>
+              </tbody>
             </table>
           </b-col>
         </b-row>
@@ -285,12 +289,12 @@
 
     </b-modal>
 
-    <b-modal 
+    <b-modal
       v-model="isShowModalPrintTem"
-      centered 
-      hide-footer 
-      hide-header 
-      size="xl" 
+      centered
+      hide-footer
+      hide-header
+      size="xl"
       id="modal-print-temp">
       <b-row>
         <b-col md="12">
@@ -463,15 +467,6 @@ export default {
     this.getStoreDetail()
   },
   methods: {
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
-    },
-
     /**
      * Scroll event
      */
@@ -871,7 +866,7 @@ export default {
           </div>
         `;
         printContent.appendChild(label);
-      }); 
+      });
       // const printContent = this.$refs.printArea;
       // printContent.style.visibility = 'visible';
       var mywindow = window.open('', 'PRINT', 'height=600,width=800');

@@ -194,6 +194,7 @@
 
 
 <script>
+import { useToast } from '@/composables/useToast'
 import reportAPI from '@/api/report'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
@@ -201,6 +202,10 @@ import { GChart } from 'vue-google-charts'
 export default {
   components: {
     GChart
+  },
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
   },
   data () {
     return {
@@ -285,24 +290,12 @@ export default {
   methods: {
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Define input
      */
     defineInput() {
       let currentYear = new Date().getFullYear()
       this.year_input = currentYear
-      
+
       this.yearOptions = []
       for (let i = currentYear; i > currentYear - 10; i--) {
           this.yearOptions.push({value: i, text: i})

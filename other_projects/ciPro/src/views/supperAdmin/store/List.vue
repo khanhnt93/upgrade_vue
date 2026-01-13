@@ -50,11 +50,11 @@
                 </b-col>
             <b-col md="3">
                 <label>Quận</label>
-                <b-form-select 
+                <b-form-select
                   v-bind="{ disabled: inputs.city_id=='' }"
                   :options="optionsDistrict"
                   id="district"
-                  type="text" 
+                  type="text"
                   class="form-control"
                   v-model="inputs.district_id"></b-form-select>
               </b-col>
@@ -68,11 +68,11 @@
             </b-col>
             </b-row>
 
-          <b-table 
+          <b-table
           hover
           bordered
           stacked="md"
-          :fields="fields" 
+          :fields="fields"
           :items="items">
           <template v-slot:cell(actions)="dataId">
             <b-list-group horizontal>
@@ -102,9 +102,14 @@ import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       fields: [
@@ -179,18 +184,6 @@ export default {
     this.search()
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
-  },
 
     /**
      * Scroll event
@@ -293,7 +286,7 @@ export default {
 
       this.onSearch = true
       this.loading = true
-      
+
       this.inputs.city_id = this.inputs.city_id.toString()
       this.inputs.district_id = this.inputs.district_id.toString()
         this.inputs.limit = this.pageLimit

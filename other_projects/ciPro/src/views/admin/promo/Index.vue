@@ -412,9 +412,14 @@ import promotionAPI from '@/api/promotion'
 import commonFunc from '@/common/commonFunc'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    const toast = useToast()
+    return { popToast, toast }
+  },
   components: {
     VueCropper
   },
@@ -537,22 +542,10 @@ export default {
     },
 
    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Make toast with title
      */
     makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
+      this.toast.toast(content, {
         title: title,
         variant: variant,
         solid: true,

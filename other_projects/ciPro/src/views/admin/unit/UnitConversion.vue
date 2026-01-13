@@ -130,7 +130,7 @@
                 Vui lòng nhập tên
               </b-form-invalid-feedback>
               <p v-show="productSelect.unit_name && unitConvert.target_unit_id && unitConvert.conversion_value">
-                1 {{productSelect.unit_name}} = {{unitConvert.conversion_value + ' ' + target_unit_name}} 
+                1 {{productSelect.unit_name}} = {{unitConvert.conversion_value + ' ' + target_unit_name}}
               </p>
             </b-col>
           </b-row>
@@ -271,18 +271,6 @@ export default {
     },
 
     /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      *  Get product options
      */
      getProductOptions() {
@@ -347,7 +335,7 @@ export default {
       } else {
         this.unitConvert = item
       }
-      
+
       if(item && item.product_id) {
         this.getProductSelectById(item.product_id)
       }

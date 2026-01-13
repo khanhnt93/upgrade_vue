@@ -68,17 +68,20 @@
           <b-row>
             <b-col md="12" class="table-cus">
               <table class="table table-bordered table-striped fixed_header">
-                <tr>
-                  <th style="width:4%">STT</th>
-                  <th style="width:10%">Ngày lập</th>
-                  <th style="width:10%">Loại</th>
-                  <th style="width:10%">Số ĐH xoá nợ</th>
-                  <th style="width:20%">Tên K.H/NCC</th>
-                  <th style="width:10%">Số tiền</th>
-                  <th style="width:10%">Số ngày nợ tới thời điểm xoá nợ</th>
-                  <th style="width:16%">Lý do xoá nợ</th>
-                  <th style="width:10%">Tài khoản thực hiện</th>
-                </tr>
+                <thead>
+                  <tr>
+                    <th style="width:4%">STT</th>
+                    <th style="width:10%">Ngày lập</th>
+                    <th style="width:10%">Loại</th>
+                    <th style="width:10%">Số ĐH xoá nợ</th>
+                    <th style="width:20%">Tên K.H/NCC</th>
+                    <th style="width:10%">Số tiền</th>
+                    <th style="width:10%">Số ngày nợ tới thời điểm xoá nợ</th>
+                    <th style="width:16%">Lý do xoá nợ</th>
+                    <th style="width:10%">Tài khoản thực hiện</th>
+                  </tr>
+                </thead>
+                <tbody>
                 <tr v-for="(item, index) in items">
                   <td>{{index + 1}}</td>
                   <td>{{item.created_at}}</td>
@@ -90,6 +93,7 @@
                   <td>{{item.description}}</td>
                   <td>{{item.staff_name}}</td>
                 </tr>
+                </tbody>
               </table>
             </b-col>
           </b-row>
@@ -110,10 +114,15 @@
 import fundApi from '@/api/fund'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker
   },
@@ -196,17 +205,7 @@ export default {
     this.prepareToSearch()
   },
   methods: {
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     prepareDateInput() {
       let dateNow = new Date()

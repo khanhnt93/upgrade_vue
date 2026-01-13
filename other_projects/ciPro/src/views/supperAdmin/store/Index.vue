@@ -175,9 +175,14 @@ import superAdminAPI from '@/api/superAdmin'
 import commonFunc from '@/common/commonFunc'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       optionsBrand: [],
@@ -233,18 +238,6 @@ export default {
     checkValidate () {
       return !(this.errorName || this.errorCiti || this.errorDistrict || this.errorAddress || this.errorPhoneNumber || this.errorExpiredAt)
     },
-
-    /**
-   * Make toast without title
-   */
-  popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
-  },
 
     /**
      * Get time live

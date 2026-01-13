@@ -1537,9 +1537,9 @@
     <!--Print-->
     <b-row hidden id="provisionalInvoice">
       <b-col>
-        <img :src="'/static/img/project/print/quotation/header_' + this.$store.state.user.storeId + '.png'" style="width: 100%"/>
+        <img :src="'/static/img/project/print/quotation/header_' + this.authStore.user.storeId + '.png'" style="width: 100%"/>
 
-        <div v-if="this.$store.state.user.storeId != 19" style="width:100%; height:35px; font-size: 12px;" class="tr-bg">
+        <div v-if="this.authStore.user.storeId != 19" style="width:100%; height:35px; font-size: 12px;" class="tr-bg">
           <div style="color: #006699; font-size: 18px; float: left; width: 70%; text-align: center; margin-top: 10px;">
             <b>BẢNG BÁO GIÁ</b>
           </div>
@@ -1549,7 +1549,7 @@
         </div>
 
         <!--Cty 19 mong muốn mẫu báo giá khác-->
-        <div v-if="this.$store.state.user.storeId == 19" style="width:100%; height:35px; font-size: 12px;">
+        <div v-if="this.authStore.user.storeId == 19" style="width:100%; height:35px; font-size: 12px;">
           <div style="font-size: 18px; text-align: center; margin-top: 10px;">
             <b>THƯ BÁO GIÁ</b>
           </div>
@@ -1561,7 +1561,7 @@
           </div>
         </div>
 
-        <div v-if="this.$store.state.user.storeId != 19" style="width:100%; font-size: 12px; text-align: right; margin-top: 5px; margin-bottom: 5px;">
+        <div v-if="this.authStore.user.storeId != 19" style="width:100%; font-size: 12px; text-align: right; margin-top: 5px; margin-bottom: 5px;">
           <div style="color: #006699; font-size: 18px; float: left; width: 70%; text-align: center;">
 
           </div>
@@ -1572,6 +1572,7 @@
 
         <div class="print-table-border custom-line-height">
           <table style="width:100%; font-size: 10px">
+            <tbody>
             <tr class="print-pl-2">
               <td colspan="2" class="print-pl-2"> Kính gửi: <b>
               <span>{{trade.customer_name}}</span>
@@ -1589,6 +1590,7 @@
               <td class="print-no-border print-pl-2">Email: <span>{{trade.contact_person_email}}</span></td>
               <td class="print-no-border">Email: <span>{{trade.staff_in_charge_email}}</span></td>
             </tr>
+            </tbody>
           </table>
         </div>
         <div style="width:100%; font-size: 12px; text-align: right; margin-top: 5px; margin-bottom: 5px;">
@@ -1598,6 +1600,7 @@
         </div>
         <div class="print-table-border">
           <table style="width:100%; font-size: 10px" class="custom-line-height">
+            <thead>
             <tr class="print-text-center tr-bg" style="background-color: #eeece1">
               <th>STT</th>
               <th>MÃ SẢN PHẨM</th>
@@ -1609,6 +1612,8 @@
               <th>THÀNH TIỀN (VNĐ)</th>
               <th>GHI CHÚ</th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-if="trade.type == 0" v-for="(item, index) in trade.products" :key="index">
               <td class="print-text-center">{{index + 1}}</td>
               <td>{{item.product_code ? item.product_code : item.product_code_input}}</td>
@@ -1697,28 +1702,30 @@
               <td class="print-text-right"><b>{{currencyFormat(trade.total)}}</b></td>
               <td></td>
             </tr>
+            </tbody>
           </table>
           <div>
             <p style="font-size: 10px"><b> Số tiền viết bằng chữ:</b> {{convertNumberToText(trade.total)}}</p>
           </div>
           <div>
             <p style="color: red; font-size: 10px">
-              <b v-if="this.$store.state.user.storeId != 19 && trade.type == 0">* Quý khách hàng vui lòng kiểm tra mã sản phẩm & thông số sản phẩm, hàng mua xin miễn đổi trả</b>
-              <b v-if="this.$store.state.user.storeId == 19 || trade.type == 1">* Quý khách hàng vui lòng xem thêm các Điều khoản - Chính sách báo giá phía dưới dây:</b>
+              <b v-if="this.authStore.user.storeId != 19 && trade.type == 0">* Quý khách hàng vui lòng kiểm tra mã sản phẩm & thông số sản phẩm, hàng mua xin miễn đổi trả</b>
+              <b v-if="this.authStore.user.storeId == 19 || trade.type == 1">* Quý khách hàng vui lòng xem thêm các Điều khoản - Chính sách báo giá phía dưới dây:</b>
             </p>
           </div>
 
           <div>
             <table style="width:100%; font-size: 10px">
+              <tbody>
               <tr>
                 <td class="print-no-border">
-                  {{this.$store.state.user.storeId == 19 ? 'Thời gian giao hàng:' : 'Bảo hành:'}}
+                  {{this.authStore.user.storeId == 19 ? 'Thời gian giao hàng:' : 'Bảo hành:'}}
                 </td>
                 <td class="print-no-border">
-                  <span v-if="this.$store.state.user.storeId == 19">
+                  <span v-if="this.authStore.user.storeId == 19">
                     {{trade.shipping_date}}
                   </span>
-                  <span v-if="this.$store.state.user.storeId != 19">
+                  <span v-if="this.authStore.user.storeId != 19">
                     {{trade.guarantee}}
                   </span>
                 </td>
@@ -1773,11 +1780,13 @@
               <tr>
                 <td class="print-no-border" colspan="4">Mọi thắc mắc vui lòng liên hệ nhân viên lập báo giá phía trên</td>
               </tr>
+              </tbody>
             </table>
           </div>
           <br><br>
           <div>
             <table style="width:100%; font-size: 10px">
+              <tbody>
               <tr>
                 <td class="print-no-border print-text-center"><b>XÁC NHẬN ĐẶT HÀNG</b></td>
                 <td class="print-no-border print-text-center"><b>NGƯỜI BÁO GIÁ</b></td>
@@ -1830,6 +1839,7 @@
                 <td class="print-no-border print-text-center"></td>
                 <td class="print-no-border print-text-center">{{trade.staff_in_charge_position}}</td>
               </tr>
+              </tbody>
             </table>
           </div>
 
@@ -2496,7 +2506,7 @@ import paymentMethodApi from '@/api/paymentMethod'
 import shippingAgreementApi from '@/api/shippingAgreement'
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -2631,7 +2641,7 @@ export default {
         "properties": [],
         "note": null,
         "description": [],
-        "target_unit_id": null, 
+        "target_unit_id": null,
         "target_unit_name": null,
         "conversion_value": null,
         "quantity_root": null
@@ -2909,17 +2919,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      *  Get customer options
@@ -3724,7 +3724,7 @@ export default {
      * Get detail
      */
     getStoreDetail() {
-      let storeId = this.$store.state.user.storeId
+      let storeId = this.authStore.user.storeId
       if(storeId){
         superAdminAPI.getStoreDetail(storeId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -3751,7 +3751,7 @@ export default {
           this.popToast('danger', errorMess)
         })
       } else {
-        this.$store.commit('removeToken')
+        this.authStore.logout()
         this.$router.push('/staff-login')
       }
     },

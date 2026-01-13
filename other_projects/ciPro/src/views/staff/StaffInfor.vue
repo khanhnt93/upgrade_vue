@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 import CustomerAPI from '@/api/customer'
 import StaffAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
@@ -82,6 +84,11 @@ import 'vue2-datepicker/index.css'
 
 export default {
   name: 'Register',
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   data () {
     return {
       inputs: {
@@ -114,22 +121,10 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Get staff information
      */
     getStaffInfo () {
-      let staffId = this.$store.state.user.id
+      let staffId = this.authStore.user.id
       StaffAPI.getStaffDetail(staffId).then(res => {
         if(res != null && res.data != null && res.data.data != null){
           this.inputs = Mapper.mapStaffDetailModelToDto(res.data.data)

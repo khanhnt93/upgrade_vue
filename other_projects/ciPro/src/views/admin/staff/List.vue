@@ -130,6 +130,8 @@
   </div>
 </template>
 <script>
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import staffAPI from '@/api/staff'
 import {Constant} from '@/common/constant'
@@ -137,6 +139,11 @@ import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+    return { authStore, popToast }
+  },
   data () {
     return {
       roleOptions:[],
@@ -194,7 +201,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$store.state && this.$store.state.user && this.$store.state.user.isRoot) {
+    if(this.authStore.user && this.authStore.user.isRoot) {
       this.isRoot = true
     }
 
@@ -206,17 +213,7 @@ export default {
     this.search()
   },
   methods: {
-     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Scroll event
@@ -326,7 +323,7 @@ export default {
         "name": this.inputs.name,
         "phone_number": this.inputs.phone,
         "role_id": this.inputs.role,
-        "store_name": "store ".concat(this.$store.state.user.storeId),
+        "store_name": "store ".concat(this.authStore.user.storeId),
         "limit": this.pageLimit,
         "offset": this.offset
       }

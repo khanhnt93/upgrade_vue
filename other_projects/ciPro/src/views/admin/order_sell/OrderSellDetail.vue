@@ -133,6 +133,7 @@
                       <col style="width:8%">
                       <col style="width:4%">
                     </colgroup>
+                    <thead>
                     <tr>
                         <th class="text-center font-weight-bold">STT</th>
                         <th class="text-center font-weight-bold">Mã sản phẩm</th>
@@ -149,6 +150,7 @@
                         <th class="text-center font-weight-bold">Lợi nhuận tổng</th>
                         <th class="text-center font-weight-bold">Ghi chú</th>
                       </tr>
+                      </thead>
                     <tbody v-if="trade.type == 0 && trade.products.length > 0">
                       <tr v-for="(item, index) in trade.products">
                         <td>{{index + 1}}</td>
@@ -376,9 +378,14 @@
 <script>
 import orderSellApi from '@/api/orderSell'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       trade: {
@@ -482,18 +489,6 @@ export default {
     this.getOrderSellDetail()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
       handleProductExcel() {
         this.products_excel = []
