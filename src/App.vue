@@ -110,12 +110,13 @@ const navCusNotLogin = navCusNotLoginConfig.items
 const navSpAdmin = navSpAdminConfig.items
 const activePushedMenu = ref(false)
 const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
-const sidebarVisible = ref(localStorage.getItem('sidebarVisible') !== 'false')
 
-// Toggle sidebar visibility (show/hide)
+// Always start with sidebar closed after refresh
+const sidebarVisible = ref(false)
+
+// Toggle sidebar visibility (show/hide) - don't persist to localStorage
 const toggleSidebarVisibility = () => {
   sidebarVisible.value = !sidebarVisible.value
-  localStorage.setItem('sidebarVisible', sidebarVisible.value.toString())
 }
 
 // Toggle sidebar collapsed state (expand/collapse)

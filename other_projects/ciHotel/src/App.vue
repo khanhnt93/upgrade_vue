@@ -165,7 +165,8 @@ export default {
       roleSpAdmin: Constant.ROLE_SP_ADMIN,
       notifyNumber: 0,
       sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
-      sidebarVisible: localStorage.getItem('sidebarVisible') !== 'false'
+      // Initialize sidebar as hidden on page load, only show when user clicks toggle
+      sidebarVisible: false
     }
   },
   computed: {

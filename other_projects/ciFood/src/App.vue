@@ -111,12 +111,12 @@ const authStore = useAuthStore()
 const navCusNotLogin = ref(navCusNotLoginData.items || [])
 const navSpAdmin = ref(navSpAdminData.items || [])
 const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
-const sidebarVisible = ref(localStorage.getItem('sidebarVisible') !== 'false')
+// Always start with sidebar closed after refresh
+const sidebarVisible = ref(false)
 
-// Toggle sidebar visibility (show/hide)
+// Toggle sidebar visibility (show/hide) - don't persist to localStorage
 const toggleSidebarVisibility = () => {
   sidebarVisible.value = !sidebarVisible.value
-  localStorage.setItem('sidebarVisible', sidebarVisible.value.toString())
 }
 
 // Toggle sidebar collapsed state (expand/collapse)
