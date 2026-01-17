@@ -24,22 +24,32 @@ export function useToastNotification() {
    * @param {string} variant - Type: 'success', 'danger', 'warning', 'info'
    * @param {string} content - Message to display
    */
-  const popToast = (variant, content) => {
-    switch(variant) {
+  const popToast = (variant, content = '', options = {}) => {
+    // Set default message if content is null, undefined, or empty
+    const message = content || 'Thông báo'
+
+    const defaultOptions = {
+      timeout: 3000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      ...options
+    }
+
+    switch (variant) {
       case 'success':
-        toast.success(content)
+        toast.success(message, defaultOptions)
         break
       case 'danger':
       case 'error':
-        toast.error(content)
+        toast.error(message, defaultOptions)
         break
       case 'warning':
-        toast.warning(content)
+        toast.warning(message, defaultOptions)
         break
       case 'info':
       default:
-        toast.info(content)
-        break
+        toast.info(message, defaultOptions)
     }
   }
 

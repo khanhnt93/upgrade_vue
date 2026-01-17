@@ -13,12 +13,16 @@ export function useToast() {
    * @param {string} message - The message to display
    * @param {Object} options - Additional toast options
    */
-  const popToast = (variant, message, options = {}) => {
+  const popToast = (variant, content = '', options = {}) => {
+    // Set default message if content is null, undefined, or empty
+    const message = content || 'Thông báo'
+
     const defaultOptions = {
       timeout: 3000,
       closeOnClick: true,
       pauseOnHover: true,
-      ...options,
+      draggable: true,
+      ...options
     }
 
     switch (variant) {
@@ -33,10 +37,8 @@ export function useToast() {
         toast.warning(message, defaultOptions)
         break
       case 'info':
-        toast.info(message, defaultOptions)
-        break
       default:
-        toast(message, defaultOptions)
+        toast.info(message, defaultOptions)
     }
   }
 

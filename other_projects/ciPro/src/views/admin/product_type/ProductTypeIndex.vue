@@ -1,248 +1,239 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container-fluid px-4 py-6">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors min-w-[120px]"
+          >
+            Quay lại
+          </button>
+          <button
+            @click="save"
+            :disabled="saving"
+            class="px-4 py-2 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors min-w-[120px] disabled:opacity-50"
+          >
+            Lưu
+          </button>
+        </div>
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <h4 class="text-2xl font-semibold text-center mb-4">{{prefix_text}}Loại Sản Phẩm</h4>
+        <hr class="mb-6">
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">{{prefix_text}}Loại Sản Phẩm</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center py-4">
+          <icon name="loading" width="60" />
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Nhóm sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="productGroupOptions"
-                  id="productGroup"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="productType.product_group_id"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProductGroup">
-                    Vui lòng nhập nhóm sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <label class="w-1/4 pt-2 text-sm font-medium text-gray-700">
+              Nhóm sản phẩm <span class="text-red-500">*</span>
+            </label>
+            <div class="w-3/4">
+              <select
+                id="productGroup"
+                v-model="productType.product_group_id"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorProductGroup }"
+              >
+                <option v-for="option in productGroupOptions" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <div v-if="errorProductGroup" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập nhóm sản phẩm
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Mã loại sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="code"
-                  type="text"
-                  maxlength="30"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="productType.code">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCode">
-                    Vui lòng nhập mã loại sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex items-start">
+            <label class="w-1/4 pt-2 text-sm font-medium text-gray-700">
+              Mã loại sản phẩm <span class="text-red-500">*</span>
+            </label>
+            <div class="w-3/4">
+              <input
+                id="code"
+                type="text"
+                maxlength="30"
+                autocomplete="new-password"
+                v-model="productType.code"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorCode }"
+              >
+              <div v-if="errorCode" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập mã loại sản phẩm
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên loại sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="productType.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên loại sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div class="flex items-start">
+            <label class="w-1/4 pt-2 text-sm font-medium text-gray-700">
+              Tên loại sản phẩm <span class="text-red-500">*</span>
+            </label>
+            <div class="w-3/4">
+              <input
+                id="name"
+                type="text"
+                maxlength="255"
+                autocomplete="new-password"
+                v-model="productType.name"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }"
+              >
+              <div v-if="errorName" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập tên loại sản phẩm
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import productApi from '@/api/product'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      prefix_text: '',
-      productGroupOptions:[],
-      productType: {
-        "product_group_id": null,
-        "code": null,
-        "name": null,
-      },
-      click: false,
-      saving: false,
-      loading: false,
+// Data
+const prefix_text = ref('')
+const productGroupOptions = ref([])
+const productType = reactive({
+  product_group_id: null,
+  code: null,
+  name: null
+})
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
+
+// Computed
+const errorProductGroup = computed(() => {
+  return checkInfo(productType.product_group_id)
+})
+
+const errorCode = computed(() => {
+  return checkInfo(productType.code)
+})
+
+const errorName = computed(() => {
+  return checkInfo(productType.name)
+})
+
+// Methods
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
+
+const checkValidate = () => {
+  return !(errorProductGroup.value || errorCode.value || errorName.value)
+}
+
+const getProductGroupOption = () => {
+  productApi.getProductGroupOption().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      productGroupOptions.value = [{value: null, text: ''}]
+
+      var productGroups = res.data.data
+      if(productGroups) {
+        for (let i in productGroups) {
+          productGroupOptions.value.push(productGroups[i])
+        }
+      }
     }
-  },
-  mounted() {
-    // Check prefix
-    if(this.$route.params.id) {
-      this.prefix_text = "Cập Nhật "
-    } else {
-      this.prefix_text = "Thêm Mới "
-    }
+  })
+}
 
-    // Get product group option
-    this.getProductGroupOption()
+const getProductTypeDetail = () => {
+  let productTypeId = route.params.id
+  if(productTypeId){
+    loading.value = true
 
-    this.getProductTypeDetail()
-  },
-  computed: {
-    errorProductGroup: function () {
-      return this.checkInfo(this.productType.product_group_id)
-    },
-    errorCode: function () {
-      return this.checkInfo(this.productType.code)
-    },
-    errorName: function () {
-      return this.checkInfo(this.productType.name)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorProductGroup || this.errorCode || this.errorName)
-    },
+    productApi.getProductTypeDetail(productTypeId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        Object.assign(productType, res.data.data)
+      }
 
-    /**
-     *  Get product group options
-     */
-    getProductGroupOption() {
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
 
-      productApi.getProductGroupOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.productGroupOptions = [{value: null, text: ''}]
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
 
-          var productGroups = res.data.data
-          if(productGroups) {
-            for (let i in productGroups) {
-              this.productGroupOptions.push(productGroups[i])
-            }
+const back = () => {
+  router.push('/product-type')
+}
+
+const save = () => {
+  click.value = true
+
+  let result = checkValidate()
+  if(result) {
+    saving.value = true
+
+    let productTypeId = route.params.id
+    if(productTypeId){
+      // Edit
+      let typeData = { ...productType, id: productTypeId }
+      productApi.updateProductType(typeData).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            popToast('success', 'Cập nhật loại sản phẩm thành công!!! ')
           }
         }
+      }).catch(err => {
+        saving.value = false
+
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
       })
-    },
-
-    /**
-     * Get detail
-     */
-    getProductTypeDetail() {
-      let productTypeId = this.$route.params.id
-      if(productTypeId){
-        this.loading = true
-
-        productApi.getProductTypeDetail(productTypeId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.productType = res.data.data
+    } else {
+      // Add
+      productApi.addProductType(productType).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            router.push("/product-type")
           }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/product-type')
-    },
-
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-
-      let result = this.checkValidate()
-      if(result) {
-        this.saving = true
-
-        let productTypeId = this.$route.params.id
-        if(productTypeId){
-          // Edit
-          this.productType.id = productTypeId
-          productApi.updateProductType(this.productType).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật loại sản phẩm thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          productApi.addProductType(this.productType).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/product-type")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
         }
-      }
+      }).catch(err => {
+        saving.value = false
+
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
     }
   }
 }
+
+// Lifecycle
+onMounted(() => {
+  // Check prefix
+  if(route.params.id) {
+    prefix_text.value = "Cập Nhật "
+  } else {
+    prefix_text.value = "Thêm Mới "
+  }
+
+  // Get product group option
+  getProductGroupOption()
+
+  getProductTypeDetail()
+})
 </script>
