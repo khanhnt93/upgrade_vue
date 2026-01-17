@@ -1,170 +1,180 @@
 <template>
-  <div class="app flex-row align-items-center is-fixed-page">
-    <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form method="put">
-                  <h1 class="text-center">
-                    Đổi Mật Khẩu
-                  </h1>
-                  <div class="form-group">
-                    <label>
-                      Mật Khẩu Hiện Tại
-                    </label><span class="error-sybol"></span>
-                    <input id="oldPassword"
-                      type="password"
-                      class="form-control"
-                      v-model="inputs.old_password">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorOldPassword">
-                      Vui lòng nhập mật khẩu hiện tại
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Mật Khẩu Mới
-                    </label><span class="error-sybol"></span>
-                    <input id="newPassword"
-                      type="password"
-                      class="form-control"
-                      v-model="inputs.new_password">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPassword">
-                      Vui lòng nhập mật khẩu mới
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorNewPasswordCompare">
-                      Mật khẩu mới không được trùng mật khẩu cũ
-                    </b-form-invalid-feedback>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      Nhắc lại mật khẩu mới
-                    </label><span class="error-sybol"></span>
-                    <input id="confirmPassword"
-                      type="password"
-                      class="form-control"
-                      v-model="confirmPass">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorConfirmPassword">
-                      Vui lòng nhập lại mật khẩu mới
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorMatch">
-                      Nhắc lại mật khẩu không đúng
-                    </b-form-invalid-feedback>
-                  </div>
-                  <b-row>
-                    <b-col cols="12" class="text-center">
-                      <b-button
-                        @click="update"
-                        :disabled="onUpdate"
-                        :variant="onUpdate ? '' : 'primary'" class="default-btn-bg">
-                        {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+  <div class="app flex items-center is-fixed-page">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-center">
+        <div class="w-full md:w-1/2">
+          <div class="bg-white rounded-lg shadow p-6">
+            <form method="put" @submit.prevent="update">
+              <h1 class="text-center text-2xl font-bold mb-6">
+                Đổi Mật Khẩu
+              </h1>
+
+              <!-- Old Password -->
+              <div class="mb-4">
+                <label class="block mb-2">
+                  Mật Khẩu Hiện Tại<span class="error-sybol"></span>
+                </label>
+                <input
+                  id="oldPassword"
+                  v-model="inputs.old_password"
+                  type="password"
+                  class="form-control w-full">
+                <div v-if="errorOldPassword" class="text-red-600 text-sm mt-1">
+                  Vui lòng nhập mật khẩu hiện tại
+                </div>
+              </div>
+
+              <!-- New Password -->
+              <div class="mb-4">
+                <label class="block mb-2">
+                  Mật Khẩu Mới<span class="error-sybol"></span>
+                </label>
+                <input
+                  id="newPassword"
+                  v-model="inputs.new_password"
+                  type="password"
+                  class="form-control w-full">
+                <div v-if="errorNewPassword" class="text-red-600 text-sm mt-1">
+                  Vui lòng nhập mật khẩu mới
+                </div>
+                <div v-if="errorNewPasswordCompare" class="text-red-600 text-sm mt-1">
+                  Mật khẩu mới không được trùng mật khẩu cũ
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="mb-4">
+                <label class="block mb-2">
+                  Nhắc lại mật khẩu mới<span class="error-sybol"></span>
+                </label>
+                <input
+                  id="confirmPassword"
+                  v-model="confirmPass"
+                  type="password"
+                  class="form-control w-full">
+                <div v-if="errorConfirmPassword" class="text-red-600 text-sm mt-1">
+                  Vui lòng nhập lại mật khẩu mới
+                </div>
+                <div v-if="errorMatch" class="text-red-600 text-sm mt-1">
+                  Nhắc lại mật khẩu không đúng
+                </div>
+              </div>
+
+              <!-- Update Button -->
+              <div class="text-center">
+                <button
+                  type="submit"
+                  :disabled="onUpdate"
+                  :class="[
+                    'px-6 py-2 rounded default-btn-bg',
+                    onUpdate ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+                  ]">
+                  {{ onUpdate ? "Cập Nhật Mật Khẩu..." : "Cập Nhật Mật Khẩu" }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import AuthenticationAPI from '@/api/authentication'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 
+// Router
+const router = useRouter()
 
-export default {
-  setup() {
-    const authStore = useAuthStore()
-    return { authStore }
-  },
-  data () {
-    return {
-      inputs: {
-        new_password: null,
-        old_password: null,
-      },
-      confirmPass : null,
-      click: false,
-      onUpdate: null,
-      errorMatch: null,
-    }
-  },
-  computed: {
-    errorNewPassword () {
-      return this.checkInfo(this.inputs.new_password)
-    },
-    errorNewPasswordCompare () {
-      return this.comparePass()
-    },
-    errorConfirmPassword () {
-      return this.checkInfo(this.confirmPass)
-    },
-    errorOldPassword () {
-      return this.checkInfo(this.inputs.old_password)
-    }
-  },
-  watch: {
-    confirmPass () {
-      this.errorMatch = false
-    }
-  },
-  methods: {
-    checkConfirmPass () {
-      return this.errorConfirmPassword || (this.inputs.new_password == this.confirmPass)
-    },
-    comparePass () {
-      return (this.click && (this.inputs.new_password != null && this.inputs.new_password.length > 0)
-      && (this.inputs.old_password != null || this.inputs.old_password.length > 0)
-      && (this.inputs.new_password == this.inputs.old_password))
-    },
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorNewPassword || this.errorConfirmPassword || this.errorMatch || this.errorNewPasswordCompare)
-    },
-    update () {
-      if(this.onUpdate == true) {
-        return
+// Store
+const authStore = useAuthStore()
+
+// Data
+const inputs = ref({
+  new_password: null,
+  old_password: null,
+})
+
+const confirmPass = ref(null)
+const click = ref(false)
+const onUpdate = ref(null)
+const errorMatch = ref(null)
+
+// Computed
+const errorNewPassword = computed(() => {
+  return checkInfo(inputs.value.new_password)
+})
+
+const errorNewPasswordCompare = computed(() => {
+  return comparePass()
+})
+
+const errorConfirmPassword = computed(() => {
+  return checkInfo(confirmPass.value)
+})
+
+const errorOldPassword = computed(() => {
+  return checkInfo(inputs.value.old_password)
+})
+
+// Watch
+watch(confirmPass, () => {
+  errorMatch.value = false
+})
+
+// Methods
+const checkConfirmPass = () => {
+  return errorConfirmPassword.value || (inputs.value.new_password == confirmPass.value)
+}
+
+const comparePass = () => {
+  return (click.value && (inputs.value.new_password != null && inputs.value.new_password.length > 0)
+    && (inputs.value.old_password != null || inputs.value.old_password.length > 0)
+    && (inputs.value.new_password == inputs.value.old_password))
+}
+
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
+
+const checkValidate = () => {
+  return !(errorNewPassword.value || errorConfirmPassword.value || errorMatch.value || errorNewPasswordCompare.value)
+}
+
+const update = () => {
+  if (onUpdate.value == true) {
+    return
+  }
+
+  click.value = true
+  let result = checkValidate()
+  errorMatch.value = !checkConfirmPass()
+  
+  if (result && !errorMatch.value) {
+    onUpdate.value = true
+
+    AuthenticationAPI.staffChangePass(inputs.value).then(res => {
+      if (res && res.data && res.data.status == 200) {
+        // Redirect to active pass page
+        authStore.logout()
+        router.push('/staff-login')
       }
+      onUpdate.value = false
+    }).catch(err => {
+      onUpdate.value = false
 
-      this.click = true
-      let result = this.checkValidate()
-      this.errorMatch = !this.checkConfirmPass()
-      if(result && !this.errorMatch) {
-        this.onUpdate = true
-
-        AuthenticationAPI.staffChangePass(this.inputs).then(res => {
-          if(res && res.data && res.data.status == 200) {
-            // Redirect to active pass page
-            this.authStore.logout()
-            this.$router.push('/staff-login')
-          }
-          this.onUpdate = false
-        }).catch(err => {
-          this.onUpdate = false
-
-          let message = ""
-          if(err.response.data.status == 422) {
-            message = err.response.data.mess
-          } else {
-            message = "Lỗi hệ thống"
-          }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập nhật thất bại",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
-        })
+      let message = ""
+      if (err.response.data.status == 422) {
+        message = err.response.data.mess
+      } else {
+        message = "Lỗi hệ thống"
       }
-    }
+      alert(message)
+    })
   }
 }
 </script>

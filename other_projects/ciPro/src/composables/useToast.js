@@ -3,7 +3,10 @@ import { useToast as useVueToastification } from 'vue-toastification'
 export function useToastNotification() {
   const toast = useVueToastification()
 
-  const popToast = (variant, content, options = {}) => {
+  const popToast = (variant, content = '', options = {}) => {
+    // Set default message if content is null, undefined, or empty
+    const message = content || 'Thông báo'
+
     const defaultOptions = {
       timeout: 3000,
       closeOnClick: true,
@@ -14,18 +17,18 @@ export function useToastNotification() {
 
     switch (variant) {
       case 'success':
-        toast.success(content, defaultOptions)
+        toast.success(message, defaultOptions)
         break
       case 'danger':
       case 'error':
-        toast.error(content, defaultOptions)
+        toast.error(message, defaultOptions)
         break
       case 'warning':
-        toast.warning(content, defaultOptions)
+        toast.warning(message, defaultOptions)
         break
       case 'info':
       default:
-        toast.info(content, defaultOptions)
+        toast.info(message, defaultOptions)
     }
   }
 

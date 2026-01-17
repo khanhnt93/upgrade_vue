@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <template v-if="route.name != 'Login'">
-      <header class="app-header navbar" v-if="authStore.user == null">
+      <header class="header-custom app-header navbar" v-if="authStore.user == null">
         <div class="header-container">
 
           <div class="nav-left">
@@ -15,17 +15,14 @@
             </router-link>
           </div>
 
-          <div class="ml-auto d-flex align-items-center">
+          <div class="ml-auto flex items-center">
             <!-- hiện cho template staff -->
-            <template>
-              <div class="white text-right">
-                <button class="btn btn-outline-danger pull-right btn-width-120" @click="goToLogin">
-                  Đăng nhập
-                </button>
-              </div>
-            </template>
+            <div>
+              <button class="btn px-4 py-2 border-2 border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors btn-width-120" @click="goToLogin">
+                Đăng nhập
+              </button>
+            </div>
             <!-- end -->
-
           </div>
         </div>
       </header>
@@ -43,13 +40,13 @@
             </router-link>
           </div>
 
-          <div class="ml-auto d-flex align-items-center">
+          <div class="ml-auto flex items-center">
             <!-- hiện cho template staff -->
             <template>
-              <span class="white text-right"  v-if="authStore.user.userType == 'staff'">
+              <span class="text-right"  v-if="authStore.user.userType == 'staff'">
                 <b style="color: #0d0e10">{{ authStore.user.userName }}</b>
                 <br>
-                <span class="text-muted">
+                <span class="text-gray-500">
                   ({{ authStore.user.role }})
                 </span>
               </span>
@@ -128,12 +125,13 @@ const authStore = useAuthStore()
 const navCusNotLogin = ref(navCusNotLoginData.items || [])
 const navSpAdmin = ref(navSpAdminData.items || [])
 const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
-const sidebarVisible = ref(localStorage.getItem('sidebarVisible') !== 'false')
 
-// Toggle sidebar visibility (show/hide)
+// Always start with sidebar closed after refresh
+const sidebarVisible = ref(false)
+
+// Toggle sidebar visibility (show/hide) - don't persist to localStorage
 const toggleSidebarVisibility = () => {
   sidebarVisible.value = !sidebarVisible.value
-  localStorage.setItem('sidebarVisible', sidebarVisible.value.toString())
 }
 
 // Toggle sidebar collapsed state (expand/collapse)
@@ -190,11 +188,6 @@ const playNotify = () => {
   body {
     font-family: Arial, sans-serif !important; /* Đặt font mặc định là Arial */
     font-size: 12px !important; /* Đặt kích thước font mặc định (có thể điều chỉnh) */
-  }
-
-  header {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
   }
 
   .custom-select {
@@ -278,6 +271,7 @@ const playNotify = () => {
   }
   .header-custom {
     background-color: white !important;
+    border-bottom: 1px solid #e4e7ea;
     ul.navbar-nav {
       li.nav-item {
         min-width: unset;

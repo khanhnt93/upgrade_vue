@@ -1,160 +1,150 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd()">
-                Thêm mới
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="mb-4">
+        <button
+          class="float-right px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120"
+          @click="gotoAdd()">
+          Thêm mới
+        </button>
+      </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">Danh Sách Nhóm Quyền</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="clear-both">
+        <h4 class="mt-1 text-center text-header font-bold">Danh Sách Nhóm Quyền</h4>
+      </div>
+      <hr class="my-4">
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 border">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Mã nhóm quyền</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Tên nhóm quyền</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border actions-cell"></th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+              <td class="px-4 py-3 whitespace-nowrap border">{{ item.stt }}</td>
+              <td class="px-4 py-3 whitespace-nowrap border">{{ item.code }}</td>
+              <td class="px-4 py-3 whitespace-nowrap border">{{ item.name }}</td>
+              <td class="px-4 py-3 whitespace-nowrap border actions-cell">
+                <div class="flex space-x-2">
+                  <button
+                    @click="edit(item.id)"
+                    title="Edit"
+                    class="text-blue-600 hover:text-blue-900">
+                    <i class="fa fa-edit" />
+                  </button>
+                  <button
+                    @click="deleted(item.id, item.name)"
+                    title="Delete"
+                    class="text-red-600 hover:text-red-900">
+                    <i class="fa fa-trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
+    </div>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
+// Router
+const router = useRouter()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
+// Toast
+const { popToast } = useToast()
+
+// Data
+const fields = ref([
+  {
+    key: 'stt',
+    label: 'STT'
   },
-  data () {
-    return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'code',
-          label: 'Mã nhóm quyền'
-        },
-        {
-          key: 'name',
-          label: 'Tên nhóm quyền'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      loading: false,
-    }
+  {
+    key: 'code',
+    label: 'Mã nhóm quyền'
   },
-  computed: {
-    rows() {
-      return this.items.length
-    }
+  {
+    key: 'name',
+    label: 'Tên nhóm quyền'
   },
-  mounted() {
-    this.search()
-  },
-  methods: {
+  {
+    key: 'actions',
+    label: '',
+    class: 'actions-cell'
+  }
+])
 
-    /**
-     * Delete
-     */
-    deleted (id, name) {
-      if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa [' + name + "]. Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if(res){
-            adminAPI.deleteRole(id).then(res => {
-              this.items = res.data.data
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
-        }
-    },
+const items = ref([])
+const loading = ref(false)
 
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/role/index/' + id)
-    },
+// Computed
+const rows = computed(() => {
+  return items.value.length
+})
 
-    /**
-     * Go to add
-     */
-    gotoAdd () {
-      this.$router.push('/role/index/')
-    },
-
-    /**
-     * Search
-     */
-    search () {
-      if (this.loading) { return }
-
-      this.loading = true
-
-      adminAPI.getListRole().then(res => {
-        if (res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data
-        } else {
-          this.items = []
-        }
-        this.loading = false
+// Methods
+const deleted = (id, name) => {
+  if (id && name) {
+    if (confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+      adminAPI.deleteRole(id).then(res => {
+        items.value = res.data.data
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.loading = false
+        popToast('danger', errorMess)
       })
-    },
+    }
   }
 }
-</script>
 
+const edit = (id) => {
+  router.push('/role/index/' + id)
+}
+
+const gotoAdd = () => {
+  router.push('/role/index/')
+}
+
+const search = () => {
+  if (loading.value) { return }
+
+  loading.value = true
+
+  adminAPI.getListRole().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
+    } else {
+      items.value = []
+    }
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    loading.value = false
+  })
+}
+
+// Lifecycle
+onMounted(() => {
+  search()
+})
+</script>

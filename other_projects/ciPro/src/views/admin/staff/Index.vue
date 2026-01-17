@@ -1,375 +1,239 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 btn-width-120" @click="back">
+            Quay lại
+          </button>
+        </div>
+        <div class="text-right">
+          <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="save" :disabled="saving">
+            Lưu
+          </button>
+        </div>
+      </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                  <!--<span v-show="saving" class="loading-more"><icon name="loading" width="60" /></span>-->
-                </b-button>
+      <div class="mb-4">
+        <h4 class="mt-1 text-center text-header font-bold">{{prefix_text}}Nhân Viên</h4>
+      </div>
+      <hr class="my-4"/>
+      
+      <!-- Loading -->
+      <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
 
-              </b-col>
-            </b-row>
+      <!-- Name -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Tên<span class="error-sybol"></span></label>
+        </div>
+        <div class="md:col-span-9">
+          <input id="name" v-model="staff.name" type="text" autocomplete="new-password" class="form-control w-full" maxlength="100">
+          <div v-if="errorName" class="text-red-600 text-sm mt-1">Vui lòng nhập tên</div>
+        </div>
+      </div>
 
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="mt-1 text-center text-header">{{prefix_text}}Nhân Viên</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Phone -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Số Điện Thoại<span class="error-sybol"></span></label>
+        </div>
+        <div class="md:col-span-9">
+          <input id="phone" v-model="staff.phone_number" type="text" class="form-control w-full" @keyup="integerOnly($event.target)" autocomplete="new-password" maxlength="10" @change="checkPhoneNumberFormat($event.target.value)">
+          <div v-if="errorPhone" class="text-red-600 text-sm mt-1">Vui lòng nhập số điện thoại</div>
+          <div v-if="!phoneNumberCheckFlag" class="text-red-600 text-sm mt-1">Số điện thoại không đúng</div>
+        </div>
+      </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="staff.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+      <!-- Role -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Quyền<span class="error-sybol"></span></label>
+        </div>
+        <div class="md:col-span-9">
+          <select id="permission" v-model="staff.role_id" class="form-control w-full" autocomplete="new-password">
+            <option v-for="option in roleOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+          </select>
+          <div v-if="errorRole" class="text-red-600 text-sm mt-1">Vui lòng nhập quyền</div>
+        </div>
+      </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số Điện Thoại<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="phone"
-                  type="text"
-                  class="form-control"
-                  v-model="staff.phone_number"
-                  @keyup="integerOnly($event.target)"
-                  autocomplete="new-password"
-                  maxlength="10"
-                  v-on:change="checkPhoneNumberFormat($event.target.value)">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                    Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                    Số điện thoại không đúng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+      <!-- Password (only for new staff) -->
+      <div v-if="!$route.params.id" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Mật Khẩu<span class="error-sybol"></span></label>
+        </div>
+        <div class="md:col-span-9">
+          <input id="password" v-model="staff.password" type="password" class="form-control w-full" autocomplete="new-password" maxlength="100">
+          <div v-if="errorPassword" class="text-red-600 text-sm mt-1">Vui lòng nhập mật khẩu</div>
+          <div v-if="errorLengthPassword" class="text-red-600 text-sm mt-1">Mật khẩu phải ít nhất 6 kí tự</div>
+        </div>
+      </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Quyền<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="roleOptions"
-                  id="permission"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="100"
-                  v-model="staff.role_id"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorRole">
-                    Vui lòng nhập quyền
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+      <!-- Position -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Chức danh</label>
+        </div>
+        <div class="md:col-span-9">
+          <input id="position" v-model="staff.position" type="text" autocomplete="new-password" class="form-control w-full" maxlength="100">
+        </div>
+      </div>
 
-              <b-row class="form-row" v-if="this.$route.params.id == null">
-                <b-col md="3" class="mt-2">
-                  <label> Mật Khẩu<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="password"
-                  type="password"
-                  class="form-control"
-                  v-model="staff.password"
-                  autocomplete="new-password"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPassword">
-                    Vui lòng nhập mật khẩu
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorLengthPassword">
-                    Mật khẩu phải ít nhất 6 kí tự
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Chức danh </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="position"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="staff.position"
-                  maxlength="100">
-              </b-col>
-            </b-row>
-
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Email </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="email"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="staff.email"
-                  maxlength="100">
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Email -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+        <div class="md:col-span-3 flex items-center">
+          <label>Email</label>
+        </div>
+        <div class="md:col-span-9">
+          <input id="email" v-model="staff.email" type="text" autocomplete="new-password" class="form-control w-full" maxlength="100">
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
 import commonFunc from '@/common/commonFunc'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      prefix_text: '',
-      roleOptions: [],
-      staff: {
-        "name": null,
-        "phone_number": null,
-        "role_id": null,
-        "password": null,
-        "position": null,
-        "email": null
-      },
-      click: false,
-      phoneNumberCheckFlag: null,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    // Check prefix
-    if(this.$route.params.id) {
-      this.prefix_text = "Cập Nhật "
-    } else {
-      this.prefix_text = "Thêm Mới "
-    }
+const prefix_text = ref('')
+const roleOptions = ref([])
+const staff = ref({
+  name: null,
+  phone_number: null,
+  role_id: null,
+  password: null,
+  position: null,
+  email: null
+})
+const click = ref(false)
+const phoneNumberCheckFlag = ref(null)
+const saving = ref(false)
+const loading = ref(false)
 
-    // Get role options
-    this.getRoleOption()
+const errorName = computed(() => checkInfo(staff.value.name))
+const errorPhone = computed(() => checkInfo(staff.value.phone_number))
+const errorRole = computed(() => checkInfo(staff.value.role_id))
+const errorPassword = computed(() => {
+  if (route.params.id != null) return false
+  return checkInfo(staff.value.password)
+})
+const errorLengthPassword = computed(() => {
+  if (!staff.value.password || errorPassword.value) return false
+  if (!click.value) return false
+  return (staff.value.password.length < 6)
+})
 
-    this.getStaffDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.staff.name)
-    },
-    errorPhone: function () {
-      return this.checkInfo(this.staff.phone_number)
-    },
-    errorRole: function () {
-      return this.checkInfo(this.staff.role_id)
-    },
-    errorPassword: function () {
-      if(this.$route.params.id != null) {
-        return false
-      }
-      return this.checkInfo(this.staff.password)
-    },
-    errorLengthPassword () {
-      if(!this.staff.password || this.errorPassword)
-        return false
-      if(!this.click)
-        return false
-      return (this.staff.password.length < 6)
-    },
-  },
-  methods: {
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
 
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName || this.errorPhone || this.errorRole || this.errorPassword
-            || this.errorLengthPassword || !this.phoneNumberCheckFlag)
-    },
+const checkValidate = () => {
+  return !(errorName.value || errorPhone.value || errorRole.value || errorPassword.value
+    || errorLengthPassword.value || !phoneNumberCheckFlag.value)
+}
 
-    /**
-     *  Get role options
-     */
-    getRoleOption() {
-      adminAPI.getRoleOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.roleOptions = [{value: null, text: ''}]
-
-          var roles = res.data.data
-          if(roles) {
-            for (let i in roles) {
-              this.roleOptions.push(roles[i])
-            }
-          }
+const getRoleOption = () => {
+  adminAPI.getRoleOption().then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      roleOptions.value = [{ value: null, text: '' }]
+      var roles = res.data.data
+      if (roles) {
+        for (let i in roles) {
+          roleOptions.value.push(roles[i])
         }
-      })
-    },
-
-    /**
-     *  Get detail
-     */
-    getStaffDetail() {
-      let staffId = this.$route.params.id
-      if(staffId){
-        this.loading = true
-
-        adminAPI.getStaffDetail(staffId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.staff = res.data.data
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
       }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      this.checkPhoneNumberFormat(this.staff.phone_number)
-      let result = this.checkValidate()
-      if(result) {
-        let staffId = this.$route.params.id
-        let staff = this.staff
-        staff.id = staffId
-        if(staffId){
-          // Edit
-          this.staff = staff
-          adminAPI.editStaff(staff).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              let message = ""
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật nhân viên thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Show notify edit fail
-            let message = ""
-            if(err.response.data.status == 422) {
-              message = err.response.data.mess
-            } else {
-              message = "Lỗi hệ thống"
-            }
-            this.$bvModal.msgBoxOk(message, {
-              title: "Cập Nhật Nhân Viên",
-              centered: true,
-              size: 'sm',
-              headerClass: 'bg-danger',
-            })
-          })
-        } else {
-          // Add
-          adminAPI.addStaff(this.staff).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-
-              let message = ""
-              if (res.data.status == 200) {
-                this.$router.push("/staff")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            let message = ""
-              if(err.response.data.status == 422) {
-                message = err.response.data.mess
-              } else {
-                message = "Lỗi hệ thống"
-              }
-              this.$bvModal.msgBoxOk(message, {
-                title: "Thêm Nhân Viên",
-                centered: true,
-                size: 'sm',
-                headerClass: 'bg-danger',
-              })
-          })
-        }
-      } else {
-        this.saving = false
-      }
-
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.phoneNumberCheck(valueInput)) {
-          this.phoneNumberCheckFlag = true
-        } else {
-          this.phoneNumberCheckFlag = false
-        }
-      } else {
-        this.phoneNumberCheckFlag = true
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/staff")
     }
+  })
+}
+
+const getStaffDetail = () => {
+  let staffId = route.params.id
+  if (staffId) {
+    loading.value = true
+    adminAPI.getStaffDetail(staffId).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        staff.value = res.data.data
+      }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+const save = () => {
+  click.value = true
+  saving.value = true
+  checkPhoneNumberFormat(staff.value.phone_number)
+  let result = checkValidate()
+  if (result) {
+    let staffId = route.params.id
+    let staffData = staff.value
+    staffData.id = staffId
+    if (staffId) {
+      adminAPI.editStaff(staffData).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            popToast('success', 'Cập nhật nhân viên thành công!!! ')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        let message = err.response.data.status == 422 ? err.response.data.mess : "Lỗi hệ thống"
+        alert(message)
+      })
+    } else {
+      adminAPI.addStaff(staff.value).then(res => {
+        saving.value = false
+        if (res != null && res.data != null && res.data.status == 200) {
+          router.push("/staff")
+        }
+      }).catch(err => {
+        saving.value = false
+        let message = err.response.data.status == 422 ? err.response.data.mess : "Lỗi hệ thống"
+        alert(message)
+      })
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+const checkPhoneNumberFormat = (item) => {
+  let valueInput = item
+  if (valueInput != null && valueInput != "") {
+    phoneNumberCheckFlag.value = commonFunc.phoneNumberCheck(valueInput)
+  } else {
+    phoneNumberCheckFlag.value = true
+  }
+}
+
+const back = () => {
+  router.push("/staff")
+}
+
+onMounted(() => {
+  prefix_text.value = route.params.id ? "Cập Nhật " : "Thêm Mới "
+  getRoleOption()
+  getStaffDetail()
+})
 </script>
