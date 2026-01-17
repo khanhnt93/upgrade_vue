@@ -1,191 +1,158 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <button class="border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded" @click="back">
+            Quay lại
+          </button>
+        </div>
+        <div class="text-right">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" @click="save" :disabled="saving">
+            Lưu
+          </button>
+        </div>
+      </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="secondary" class="pull-left px-4" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="save" :disabled="saving">
-                    Lưu
-                </button>
-              </b-col>
-            </b-row>
+      <div class="mb-4">
+        <h4 class="text-center text-xl font-semibold">Thương Hiệu</h4>
+      </div>
+      <hr class="mb-4"/>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center">Thương Hiệu</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <!-- Loading -->
+      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  autocomplete="new-password"
-                  v-model="brand.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+      <div class="grid grid-cols-12 gap-4 mb-4">
+        <div class="col-span-3 flex items-center">
+          <label>Tên<span class="text-red-500">*</span></label>
+        </div>
+        <div class="col-span-9">
+          <input
+            type="text"
+            class="form-control border rounded px-3 py-2 w-full"
+            autocomplete="new-password"
+            v-model="brand.name"
+            maxlength="100">
+          <div v-if="errorName" class="text-red-500 text-sm mt-1">
+            Vui lòng nhập tên
+          </div>
+        </div>
+      </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Mô tả </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-textarea
-                    id="description"
-                    rows="5"
-                    v-model="brand.description"
-                  ></b-form-textarea>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-3 flex items-center">
+          <label>Mô tả</label>
+        </div>
+        <div class="col-span-9">
+          <textarea
+            rows="5"
+            class="form-control border rounded px-3 py-2 w-full"
+            v-model="brand.description"
+          ></textarea>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      brand: {
-        "name": null,
-        "description": null
-      },
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    this.getBrandDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.brand.name)
-    },
-  },
-  methods: {
+const brand = ref({
+  name: null,
+  description: null
+})
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName)
-    },
+const errorName = computed(() => click.value && (!brand.value.name || brand.value.name.length <= 0))
 
-    /**
-     *  Get detail
-     */
-    getBrandDetail() {
-      let brandId = this.$route.params.id
-      if(brandId){
-        this.loading = true
+const checkValidate = () => {
+  return !errorName.value
+}
 
-        adminAPI.getBrandDetail(brandId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.brand = res.data.data
-          }
-
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+/**
+ * Get detail
+ */
+const getBrandDetail = () => {
+  const brandId = route.params.id
+  if(brandId){
+    loading.value = true
+    adminAPI.getBrandDetail(brandId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        brand.value = res.data.data
       }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      this.click = true
-
-      let checkValidate = this.checkValidate()
-      if(!checkValidate) {
-        return
-      }
-
-      this.saving = true
-
-      let brandId = this.$route.params.id
-      if(brandId){
-        // Edit
-        this.brand.id = brandId
-        adminAPI.updateBrand(this.brand).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-            if (res.data.status == 200) {
-              // show popup success
-              this.popToast('success', 'Cập nhật thương hiệu thành công!!! ')
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        adminAPI.addBrand(this.brand).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-
-            if (res.data.status == 200) {
-              this.$router.push("/brand/list")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/brand/list")
-    }
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+/**
+ * Save
+ */
+const save = () => {
+  click.value = true
+
+  if(!checkValidate()) {
+    return
+  }
+
+  saving.value = true
+  const brandId = route.params.id
+
+  if(brandId){
+    // Edit
+    brand.value.id = brandId
+    adminAPI.updateBrand(brand.value).then(res => {
+      saving.value = false
+      if(res != null && res.data != null){
+        if (res.data.status == 200) {
+          popToast('success', 'Cập nhật thương hiệu thành công!!!')
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    // Add
+    adminAPI.addBrand(brand.value).then(res => {
+      saving.value = false
+      if(res != null && res.data != null){
+        if (res.data.status == 200) {
+          router.push("/brand/list")
+        }
+      }
+    }).catch(err => {
+      saving.value = false
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+/**
+ * Back to list
+ */
+const back = () => {
+  router.push("/brand/list")
+}
+
+onMounted(() => {
+  getBrandDetail()
+})
 </script>

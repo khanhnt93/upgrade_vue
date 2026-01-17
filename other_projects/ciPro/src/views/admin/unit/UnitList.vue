@@ -1,154 +1,136 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-end mb-4">
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="goToAdd()">
+            Thêm
+          </button>
+        </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Đơn Vị</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <div class="text-center mb-4">
+          <h4 class="text-xl font-semibold text-gray-700">Danh Sách Đơn Vị</h4>
+        </div>
+        <hr class="mb-4">
 
-          <b-table
-          hover
-          bordered
-          :fields="fields"
-          :items="items"
-          >
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="border border-gray-300 px-4 py-2">STT</th>
+                <th class="border border-gray-300 px-4 py-2">Tên</th>
+                <th class="border border-gray-300 px-4 py-2 w-24"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <div class="flex gap-2 justify-center">
+                    <button
+                      @click="edit(item.id)"
+                      class="text-blue-500 hover:text-blue-700"
+                      title="Edit">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button
+                      @click="deleted(item.id, item.name, item.stt)"
+                      class="text-red-500 hover:text-red-700"
+                      title="Delete">
+                      <i class="fa fa-trash" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Loading -->
+        <div class="text-center mt-4">
+          <span v-show="loading" class="inline-block"><icon name="loading" width="60" /></span>
+          <span class="text-gray-500">--Hết--</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      listIdDeleted: [],
-      loading: false,
+const router = useRouter()
+const { popToast } = useToast()
+
+const items = ref([])
+const listIdDeleted = ref([])
+const loading = ref(false)
+
+/**
+ * Load list
+ */
+const getUnitList = () => {
+  loading.value = true
+
+  unitAPI.getListUnit().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      items.value = res.data.data
     }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    this.getUnitList()
-  },
-  methods: {
 
-    /**
-     * Load list
-     */
-    getUnitList () {
-      this.loading = true
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
 
-      unitAPI.getListUnit().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.items = res.data.data
-        }
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
 
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Delete
-     * @param id
-     * @param name
-     * @param rowIndex
-     */
-    deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          unitAPI.deleteUnit(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
-    },
-
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/unit/index/' + id)
-    },
-
-    /**
-     * Go to add
-     */
-    goToAdd () {
-      this.$router.push('/unit/index/')
-    }
+/**
+ * Delete
+ * @param id
+ * @param name
+ * @param rowIndex
+ */
+const deleted = (id, name, rowIndex) => {
+  if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+    unitAPI.deleteUnit(id).then(res => {
+      // Remove item in list
+      let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+      items.value.splice(indexTemp, 1)
+      listIdDeleted.value.push(rowIndex - 1)
+    }).catch(err => {
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+/**
+ * Go to edit
+ * @param id
+ */
+const edit = (id) => {
+  router.push('/unit/index/' + id)
+}
+
+/**
+ * Go to add
+ */
+const goToAdd = () => {
+  router.push('/unit/index/')
+}
+
+onMounted(() => {
+  getUnitList()
+})
 </script>

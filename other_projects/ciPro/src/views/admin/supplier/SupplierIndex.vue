@@ -1,273 +1,273 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button
+            class="border border-gray-500 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded w-32"
+            @click="back">
+            Quay lại
+          </button>
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="save"
+            :disabled="saving">
+            Lưu
+          </button>
+        </div>
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <div class="mb-4">
+          <h4 class="text-center text-xl font-semibold text-gray-700">{{prefix_title}} Nhà Cung Cấp</h4>
+        </div>
+        <hr class="mb-6">
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">{{prefix_title}} Nhà Cung Cấp</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center py-4">
+          <icon name="loading" width="60" />
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <!-- Form -->
+        <div class="space-y-4">
+          <!-- Name -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">
+              Tên<span class="text-red-500">*</span>
+            </label>
+            <div class="col-span-9">
+              <input
+                id="name"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                :class="{'border-red-500': errorName}"
+                v-model="supplier.name">
+              <div v-if="errorName" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập tên
+              </div>
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Số điện thoại </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="phone_number"
-                  type="text"
-                  maxlength="30"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.phone_number">
-              </b-col>
-            </b-row>
+          <!-- Phone Number -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">Số điện thoại</label>
+            <div class="col-span-9">
+              <input
+                id="phone_number"
+                type="text"
+                maxlength="30"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                v-model="supplier.phone_number">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Địa chỉ </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="address"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.address">
-              </b-col>
-            </b-row>
+          <!-- Address -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">Địa chỉ</label>
+            <div class="col-span-9">
+              <input
+                id="address"
+                type="text"
+                maxlength="255"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                v-model="supplier.address">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Mã số thuế </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="tax_code"
-                  type="text"
-                  maxlength="20"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.tax_code">
-              </b-col>
-            </b-row>
+          <!-- Tax Code -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">Mã số thuế</label>
+            <div class="col-span-9">
+              <input
+                id="tax_code"
+                type="text"
+                maxlength="20"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                v-model="supplier.tax_code">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>
-                  <span>Tên người liên hệ</span>
-                </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="contact_person"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.contact_person_name">
-              </b-col>
-            </b-row>
+          <!-- Contact Person Name -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">Tên người liên hệ</label>
+            <div class="col-span-9">
+              <input
+                id="contact_person"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                v-model="supplier.contact_person_name">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>
-                  <span>Sđt người liên hệ</span>
-                </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="contact_person_phone"
-                  type="text"
-                  maxlength="14"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.contact_person_phone"
-                  @keyup="integerOnly($event.target)">
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Contact Person Phone -->
+          <div class="grid grid-cols-12 gap-4 items-start">
+            <label class="col-span-3 pt-2">Sđt người liên hệ</label>
+            <div class="col-span-9">
+              <input
+                id="contact_person_phone"
+                type="text"
+                maxlength="14"
+                autocomplete="new-password"
+                class="form-control border rounded px-3 py-2 w-full"
+                v-model="supplier.contact_person_phone"
+                @keyup="integerOnly($event.target)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import supplierAPI from '@/api/supplier'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      prefix_title: "Thêm Mới",
-      supplier: {
-        "name": null,
-        "phone_number": null,
-        "address": null,
-        "tax_code": null,
-        "contact_person_name": null,
-        "contact_person_phone": null,
-      },
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    // Check prefix
-    if(this.$route.params.id) {
-      this.prefix_title = "Cập Nhật"
-    } else {
-      this.prefix_title = "Thêm Mới"
-    }
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-    this.getSupplierDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.supplier.name)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName)
-    },
+const prefix_title = ref("Thêm Mới")
+const supplier = ref({
+  "name": null,
+  "phone_number": null,
+  "address": null,
+  "tax_code": null,
+  "contact_person_name": null,
+  "contact_person_phone": null,
+})
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    /**
-     * Get detail
-     */
-    getSupplierDetail() {
-      let supplierId = this.$route.params.id
-      if(supplierId){
-        this.loading = true
+const errorName = computed(() => {
+  return checkInfo(supplier.value.name)
+})
 
-        supplierAPI.getSupplierDetail(supplierId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.supplier = res.data.data
-          }
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+const checkValidate = () => {
+  return !(errorName.value)
+}
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+/**
+ * Get detail
+ */
+const getSupplierDetail = () => {
+  let supplierId = route.params.id
+  if(supplierId){
+    loading.value = true
+
+    supplierAPI.getSupplierDetail(supplierId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        supplier.value = res.data.data
       }
-    },
 
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/supplier')
-    },
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
 
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      let result = this.checkValidate()
-      if(result) {
-        let supplierId = this.$route.params.id
-        if(supplierId){
-          // Edit
-          let supplier = this.supplier
-          supplier.id = supplierId
-          supplierAPI.editSupplier(supplier).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật đơn vị thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          supplierAPI.addSupplier(this.supplier).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/supplier")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      } else {
-        this.saving = false
-      }
-    },
-
-    /**
-     * Only input integer
-     */
-    integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+/**
+ * Back to list
+ */
+const back = () => {
+  router.push('/supplier')
+}
+
+/**
+ * Save
+ */
+const save = () => {
+  click.value = true
+  saving.value = true
+  let result = checkValidate()
+  if(result) {
+    let supplierId = route.params.id
+    if(supplierId){
+      // Edit
+      let supplierData = supplier.value
+      supplierData.id = supplierId
+      supplierAPI.editSupplier(supplierData).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            // show popup success
+            popToast('success', 'Cập nhật đơn vị thành công!!! ')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    } else {
+      // Add
+      supplierAPI.addSupplier(supplier.value).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            router.push("/supplier")
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+/**
+ * Only input integer
+ */
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+onMounted(() => {
+  // Check prefix
+  if(route.params.id) {
+    prefix_title.value = "Cập Nhật"
+  } else {
+    prefix_title.value = "Thêm Mới"
+  }
+
+  getSupplierDetail()
+})
 </script>
+
+<style scoped>
+.form-control {
+  display: block;
+  width: 100%;
+}
+.form-control:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+</style>

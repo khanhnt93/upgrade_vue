@@ -1,449 +1,520 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Thanh Toán Khoản Cho Vay</h4>
+        <hr class="mb-6" />
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-2 text-center text-header">Thanh Toán Khoản Cho Vay</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+        <!-- Loan Information -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2 font-semibold">Khoản vay</label>
+          </div>
+          <div class="w-3/4">
+            <p class="mb-1">Khách hàng: {{ loan.customer_name + ' - ' + loan.customer_phone }}</p>
+            <p class="mb-1">Ngày mượn: {{ loan.borrowed_date }}</p>
+            <p class="mb-1">Ngày hẹn trả: {{ loan.due_date }}</p>
+            <p class="mb-1">Số tiền vay: {{ currencyFormat(loan.amount) }}</p>
+            <p class="mb-1">Số tiền lãi: {{ currencyFormat(loan.interest_amount) }}</p>
+            <p class="mb-1 font-bold text-red-600">Còn lại: {{ currencyFormat(loan.remaining) }}</p>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Khoản vay</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <p>Khách hàng: {{loan.customer_name + ' - ' + loan.customer_phone}}</p>
-                <p>Ngày mượn: {{loan.borrowed_date}}</p>
-                <p>Ngày hẹn trả: {{loan.due_date}}</p>
-                <p>Số tiền vay: {{loan.amount | format_currency}}</p>
-                <p>Số tiền lãi: {{loan.interest_amount | format_currency}}</p>
-                <p>Còn lại: {{loan.remaining | format_currency}}</p>
-              </b-col>
-            </b-row>
+        <!-- Date Input -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Ngày tạo<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <datepicker
+              v-model="inputs.date_input"
+              format="yyyy-MM-dd"
+              placeholder="yyyy-MM-dd"
+              input-class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              @input="changeDateInput"
+            />
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Ngày tạo<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9">
-                <datepicker v-model="inputs.date_input" format="yyyy-MM-dd"
-                  placeholder="yyyy-MM-dd"  input-class="datepicker-cus" @input="changeDateInput"></datepicker>
-              </b-col>
-            </b-row>
+        <!-- Accounting Date -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Ngày hoạch toán<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <datepicker
+              v-model="inputs.accounting_date"
+              format="yyyy-MM-dd"
+              placeholder="yyyy-MM-dd"
+              input-class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Ngày hoạch toán<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9">
-                <datepicker v-model="inputs.accounting_date" format="yyyy-MM-dd"
-                            placeholder="yyyy-MM-dd"  input-class="datepicker-cus"></datepicker>
-              </b-col>
-            </b-row>
+        <!-- Amount -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Số tiền<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <input
+              type="text"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              v-model="inputs.amount"
+              @keyup="integerPointAndCommaOnly($event.target)"
+              @change="changeAmount"
+              maxlength="14"
+              placeholder="Nhập số tiền"
+            >
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Số tiền<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+        <!-- Payment Type -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Loại thanh toán<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <div class="flex space-x-6">
+              <label class="inline-flex items-center">
                 <input
-                  id="amount"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.amount"
-                  autocomplete="new-password"
-                  @keyup="integerPointAndCommaOnly($event.target)"
-                  @change="changeAmount"
-                  maxlength="14">
-              </b-col>
-            </b-row>
+                  type="radio"
+                  v-model="inputs.payment_type"
+                  name="payment_type"
+                  :value="1"
+                  class="form-radio text-blue-600"
+                >
+                <span class="ml-2">Tiền lãi</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  v-model="inputs.payment_type"
+                  name="payment_type"
+                  :value="2"
+                  class="form-radio text-blue-600"
+                >
+                <span class="ml-2">Tiền gốc</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  v-model="inputs.payment_type"
+                  name="payment_type"
+                  :value="3"
+                  class="form-radio text-blue-600"
+                >
+                <span class="ml-2">Cả gốc và lãi</span>
+              </label>
+            </div>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Loại thanh toán<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <div class="input-group">
-                  <input type="radio" v-model="inputs.payment_type" name="payment_type" :value="1"
-                         class="mt-2" id="payment_type_1">
-                  <label class="ml-4 mt-1" for="money_type_1">Tiền lãi</label>
-                  <input type="radio" v-model="inputs.payment_type" name="payment_type" :value="2"
-                         class="ml-5 mt-2" id="payment_type_2">
-                  <label class="ml-4 mt-1" for="payment_type_2">Tiền gốc</label>
-                  <input type="radio" v-model="inputs.payment_type" name="payment_type" :value="3"
-                         class="ml-5 mt-2" id="payment_type_3">
-                  <label class="ml-4 mt-1" for="payment_type_3">Cả gốc và lãi</label>
-                </div>
-              </b-col>
-            </b-row>
+        <!-- Money Type & Bank Account -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Sổ khoản chi<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <div class="flex space-x-4 mb-2">
+              <label class="inline-flex items-center">
+                <input
+                  type="radio"
+                  v-model="inputs.money_type"
+                  name="money_type"
+                  :value="1"
+                  class="form-radio text-blue-600"
+                >
+                <span class="ml-2">Chuyển khoản</span>
+              </label>
+              <label class="inline-flex items-center ml-4">
+                <input
+                  type="radio"
+                  v-model="inputs.money_type"
+                  name="money_type"
+                  :value="0"
+                  class="form-radio text-blue-600"
+                >
+                <span class="ml-2">Tiền mặt</span>
+              </label>
+            </div>
+            <select
+              v-show="inputs.money_type == 1"
+              v-model="inputs.bank_account_id"
+              :disabled="inputs.money_type == 0"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option :value="null">--Chọn sổ khoản chi--</option>
+              <option
+                v-for="option in bankAccountOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Sổ khoản chi<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <div class="input-group">
-                  <input type="radio" v-model="inputs.money_type" name="money_type" :value="1" class="mt-2"
-                         id="money_type_1">
-                  <label class="ml-4 mt-1" for="money_type_1">Chuyển khoản</label>
-                  <input type="radio" v-model="inputs.money_type" name="money_type" :value="0" class="ml-5 mt-2"
-                         id="money_type_0">
-                  <label class="ml-4 mt-1" for="money_type_0">Tiền mặt</label>
-                </div>
-                <div class="input-group">
-                  <b-form-select
-                    v-show="inputs.money_type==1"
-                    :options="bankAccountOptions"
-                    v-model="inputs.bank_account_id" :disabled="inputs.money_type==0">
-                  </b-form-select>
-                </div>
-              </b-col>
-            </b-row>
+        <!-- Expense Group -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Nhóm khoản chi<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <select
+              v-model="inputs.expend_income_group_id"
+              @change="changeExpendGroup"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option :value="null">--Chọn nhóm khoản chi--</option>
+              <option
+                v-for="option in expendGroupOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Nhóm khoản chi<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <b-form-select :options="expendGroupOptions"
-                               v-model="inputs.expend_income_group_id"
-                               @change="changeExpendGroup"
-                ></b-form-select>
-              </b-col>
-            </b-row>
+        <!-- Expense Type -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Loại khoản chi<span class="text-red-500">*</span></label>
+          </div>
+          <div class="w-3/4">
+            <select
+              v-model="inputs.expend_income_type_id"
+              :disabled="!inputs.expend_income_group_id"
+              @change="updateDescription"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option :value="null">--Chọn loại khoản chi--</option>
+              <option
+                v-for="option in expendTypeOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Loại khoản chi<span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <b-form-select :options="expendTypeOptions" v-model="inputs.expend_income_type_id"
-                               :disabled="!inputs.expend_income_group_id" @change="updateDescription"
-                ></b-form-select>
-              </b-col>
-            </b-row>
+        <!-- Description -->
+        <div class="flex mb-6">
+          <div class="w-1/4">
+            <label class="block mt-2">Diễn giải nội dung</label>
+          </div>
+          <div class="w-3/4">
+            <textarea
+              rows="2"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              v-model="inputs.description"
+              placeholder="Nhập diễn giải nội dung"
+            ></textarea>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Diễn giải nội dung</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <b-form-textarea
-                  id="description"
-                  v-model="inputs.description"
-                  style="width:100%;"
-                  rows="2"></b-form-textarea>
-              </b-col>
-            </b-row>
+        <!-- Action Buttons -->
+        <div class="flex justify-center space-x-4">
+          <button
+            @click="back"
+            class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 w-32"
+          >
+            Huỷ
+          </button>
 
-            <b-row>
-              <b-col cols="12" class="text-center mt-2">
-                <b-button variant="outline-secondary" class="btn-width-120" @click="back">
-                  Huỷ
-                </b-button>
+          <button
+            v-show="!saving"
+            @click="save"
+            :disabled="saving"
+            class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 w-32"
+          >
+            Xác nhận
+          </button>
+          <span v-show="saving" class="text-blue-500">
+            <icon name="loading" width="60" />
+          </span>
+        </div>
 
-                <b-button  v-show="!saving" variant="outline-success" class="pl-2 btn-width-120"
-                           @click="save" :disabled="saving">
-                  Xác nhận
-                </b-button>
-                <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import loanApi from '@/api/loan'
 import commonFunc from '@/common/commonFunc'
-import Multiselect from 'vue-multiselect'
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const route = useRoute()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  components: {
-    Datepicker,
-    Multiselect
-  },
-  data () {
-    return {
-      loan: {
-        "id": null,
-        "customer_id": null,
-        "customer_name": null,
-        "customer_phone": null,
-        "borrowed_date": null,
-        "due_date": null,
-        "amount": 0,
-        "interest_amount": 0,
-        "remaining": 0
-      },
-      inputs: {
-        "loan_id": null,
-        "type": 1,
-        "sub_type": 0,
-        "date_input": null,
-        "accounting_date": null,
-        "object_other_name": null,
-        "amount": 0,
-        "payment_type": 3,
-        "money_type": 1,
-        "bank_account_id": null,
-        "expend_income_group_id": null,
-        "expend_income_type_id": null,
-        "description": null
-      },
-      loadingOptions: false,
-      bankAccountOptions: [],
-      expendGroupOptions: [],
-      expendTypeOptions: [],
-      expendTypeOptionStore: [],
-      saving: false,
-    }
-  },
-  mounted() {
-    this.getLoanDetail()
+// Data
+const loan = reactive({
+  id: null,
+  customer_id: null,
+  customer_name: null,
+  customer_phone: null,
+  borrowed_date: null,
+  due_date: null,
+  amount: 0,
+  interest_amount: 0,
+  remaining: 0
+})
 
-    let dateNow = new Date()
-    this.inputs.date_input = dateNow.toJSON().slice(0,10)
-    this.inputs.accounting_date = dateNow.toJSON().slice(0,10)
+const inputs = reactive({
+  loan_id: null,
+  type: 0,
+  sub_type: 0,
+  date_input: null,
+  accounting_date: null,
+  object_other_name: null,
+  amount: 0,
+  payment_type: 3,
+  money_type: 1,
+  bank_account_id: null,
+  expend_income_group_id: null,
+  expend_income_type_id: null,
+  description: null
+})
 
-    // Get options related
-    this.getOptionRelated()
-  },
-  methods: {
+const loadingOptions = ref(false)
+const bankAccountOptions = ref([])
+const expendGroupOptions = ref([])
+const expendTypeOptions = ref([])
+const expendTypeOptionStore = ref([])
+const saving = ref(false)
 
+// Methods
+const formatDateLocal = (date) => {
+  if (!date) return null
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
+const prepareDateInput = () => {
+  const dateNow = new Date()
+  inputs.date_input = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate())
+  inputs.accounting_date = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate())
+}
 
-    /**
-     *  Get detail
-     */
-    getLoanDetail() {
-      let loanId = this.$route.params.id
-      if(loanId) {
-        loanApi.getLoanDetail(loanId).then(res => {
-          if(res != null && res.data != null && res.data.data != null){
-            this.loan = res.data.data
-            let loanTemp = JSON.parse(JSON.stringify(this.loan))
-            this.inputs.amount = this.currencyFormat(loanTemp.remaining)
-            this.object_other_name = loanTemp.customer_name + " - " + loanTemp.customer_phone
-            this.updateDescription()
-          }
-        }).catch(err => {
-          // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-        })
-      }
-    },
+const getLoanDetail = async () => {
+  const loanId = route.params.id
+  if (loanId) {
+    await loanApi.getLoanDetail(loanId, 1)
+      .then((result) => {
+        if (result?.data?.data) {
+          Object.assign(loan, result.data.data)
+          const loanTemp = JSON.parse(JSON.stringify(loan))
+          inputs.amount = currencyFormat(loanTemp.remaining)
+          inputs.object_other_name = loanTemp.customer_name + " - " + loanTemp.customer_phone
+          updateDescription()
+        }
+      })
+      .catch((error) => {
+        popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      })
+  }
+}
 
-    /**
-     * Get options related fund
-     */
-    getOptionRelated() {
-      this.loadingOptions = true
+const getOptionRelated = async () => {
+  loadingOptions.value = true
 
-      let params = {
-        bank_accounts: true,
-        expend_income_groups: true,
-        expend_income_types: true,
-        type: 2
-      }
+  const params = {
+    bank_accounts: true,
+    expend_income_groups: true,
+    expend_income_types: true,
+    type: 2
+  }
 
-      loanApi.getOptionsRelated(params).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let options = res.data.data
+  await loanApi.getOptionsRelated(params)
+    .then((result) => {
+      if (result?.data?.data) {
+        const options = result.data.data
 
-          this.bankAccountOptions = options.bank_accounts
+        // Set bank accounts
+        if (options.bank_accounts) {
+          bankAccountOptions.value = options.bank_accounts
+        }
 
-          this.expendGroupOptions = []
-          let expend_groups = options.expend_income_groups
-          for(let item of expend_groups) {
-            let option = {"value": item.id, "text": item.name}
-            this.expendGroupOptions.push(option)
+        // Set expend groups
+        if (options.expend_income_groups) {
+          expendGroupOptions.value = []
+          for (const item of options.expend_income_groups) {
+            expendGroupOptions.value.push({ value: item.id, text: item.name })
           }
 
-          this.expendTypeOptions = []
-          let expend_income_types = options.expend_income_types
-          for(let item of expend_income_types) {
-            let option = {"value": item.id, "text": item.name}
-            this.expendTypeOptions.push(option)
-          }
-          this.expendTypeOptionStore = JSON.parse(JSON.stringify(options.expend_income_types))
-
-          let expend_group_code = 'khoan_cho_vay'
-          for(let item of expend_groups) {
-            if(item.code == expend_group_code) {
-              this.inputs.expend_income_group_id = item.id
-              this.changeExpendGroup()
+          // Set default expend group
+          const expend_group_code = 'khoan_cho_vay'
+          for (const item of options.expend_income_groups) {
+            if (item.code == expend_group_code) {
+              inputs.expend_income_group_id = item.id
+              changeExpendGroup()
               break
             }
           }
-
         }
-        this.loadingOptions = false
-      }).catch(err => {
-        this.loadingOptions = false
 
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    updateDescription() {
-        try {
-            let description_str = ""
-
-            if (this.inputs.expend_income_type_id && this.expendTypeOptions.length > 0) {
-                description_str = commonFunc.getTextByValueOfSelectedBox(this.expendTypeOptions, this.inputs.expend_income_type_id)
-            }
-
-            if(!description_str) {
-              description_str = "Chi tiền chi vay"
-            }
-
-            description_str += ": " + this.loan.customer_name + ' - ' + this.loan.customer_phone
-
-            this.inputs.description = description_str
-        } catch(err) {
-          console.log(err)
-        }
-    },
-
-    /**
-     *  Save
-     */
-    save () {
-      // Check validate
-      if(this.inputs.money_type == 0 || this.inputs.money_type == 2) {
-        this.inputs.bank_account_id = -1
-      } else {
-          if(!this.inputs.bank_account_id) {
-            this.popToast('danger', "[Sổ khoản chi] là mục bắt buộc nhập")
-            return;
+        // Set expend types
+        if (options.expend_income_types) {
+          expendTypeOptions.value = []
+          for (const item of options.expend_income_types) {
+            expendTypeOptions.value.push({ value: item.id, text: item.name })
           }
-      }
-      if(!this.inputs.expend_income_group_id) {
-        this.popToast('danger', "[Nhóm khoản chi] là mục bắt buộc nhập")
-        return;
-      }
-      if(!this.inputs.expend_income_type_id) {
-        this.popToast('danger', "[Loại Khoản chi] là mục bắt buộc nhập")
-        return;
-      }
-
-      let amount = (this.inputs.amount + "").replaceAll(",", "")
-      if(amount == "") {
-        this.popToast('danger', "Vui lòng nhập [Số tiền*]")
-        return;
-      }
-      amount = parseInt(amount)
-      if(amount < 0) {
-        this.popToast('danger', "Không thể nhập [Số tiền*] âm")
-        return;
-      }
-      this.inputs.amount = amount
-      this.inputs.loan_id = this.loan.id
-      this.inputs.object_other_name = this.loan.customer_name + ' - ' + this.loan.customer_phone
-
-      // Add
-      this.saving = true
-      loanApi.addLoanOutPayment(this.inputs).then(res => {
-          this.saving = false
-          if(res != null && res.data != null){
-
-            if (res.data.status == 200) {
-              this.$router.push("/loan-out")
-            }
-          }
-        }).catch(err => {
-          this.saving = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-    },
-
-    /**
-     * Only input integer
-     */
-    integerPointAndCommaOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.integerPointAndCommaOnly(valueInput)
-      item.value = result
-    },
-
-      changeAmount() {
-        let amount = (this.inputs.amount + "").replaceAll(",", "")
-        this.inputs.amount = this.currencyFormat(amount)
-      },
-
-      /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-        if(num == 0) {
-            return "0"
+          expendTypeOptionStore.value = JSON.parse(JSON.stringify(options.expend_income_types))
         }
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       }
-      return result
-    },
+      loadingOptions.value = false
+    })
+    .catch((error) => {
+      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      loadingOptions.value = false
+    })
+}
 
-    /**
-     * Back to list
-     */
-    back() {
-      this.$router.push("/loan-out")
-    },
+const updateDescription = () => {
+  try {
+    let description_str = ""
 
-    changeExpendGroup() {
-      if(this.inputs.expend_income_group_id) {
-        this.expendTypeOptions = [{"value": null, "text": ""}]
-        for(let item of this.expendTypeOptionStore) {
-          if(item.group_id == this.inputs.expend_income_group_id) {
-            let typeItem = {"value": item.id, "text": item.name}
-            this.expendTypeOptions.push(typeItem)
-
-            if(item.name == 'Thu tiền cho vay') {
-              this.inputs.expend_income_type_id = item.id
-              this.updateDescription()
-            }
-          }
-        }
-      } else {
-        this.expendTypeOptions = []
-      }
-    },
-
-    changeDateInput() {
-      let dateNow = new Date()
-      let today = dateNow.toJSON().slice(0,10)
-      if(this.inputs.date_input != today && this.inputs.accounting_date == today) {
-        this.inputs.accounting_date = JSON.parse(JSON.stringify(this.inputs.date_input))
-      }
+    if (inputs.expend_income_type_id && expendTypeOptions.value.length > 0) {
+      description_str = commonFunc.getTextByValueOfSelectedBox(expendTypeOptions.value, inputs.expend_income_type_id)
     }
 
+    if (!description_str) {
+      description_str = "Thu tiền cho vay"
+    }
+
+    description_str += ": " + loan.customer_name + ' - ' + loan.customer_phone
+
+    inputs.description = description_str
+  } catch (err) {
+    console.log(err)
   }
 }
+
+const save = async () => {
+  // Check validate
+  if (inputs.money_type == 0 || inputs.money_type == 2) {
+    inputs.bank_account_id = -1
+  } else {
+    if (!inputs.bank_account_id) {
+      popToast('Lỗi', '[Sổ khoản chi] là mục bắt buộc nhập', 'error')
+      return
+    }
+  }
+
+  if (!inputs.expend_income_group_id) {
+    popToast('Lỗi', '[Nhóm khoản chi] là mục bắt buộc nhập', 'error')
+    return
+  }
+
+  if (!inputs.expend_income_type_id) {
+    popToast('Lỗi', '[Loại Khoản chi] là mục bắt buộc nhập', 'error')
+    return
+  }
+
+  let amount = (inputs.amount + "").replace(/,/g, '')
+  if (amount == "") {
+    popToast('Lỗi', 'Vui lòng nhập [Số tiền*]', 'error')
+    return
+  }
+
+  amount = parseInt(amount)
+  if (amount < 0) {
+    popToast('Lỗi', 'Không thể nhập [Số tiền*] âm', 'error')
+    return
+  }
+
+  // Prepare data
+  const data = { ...inputs }
+  data.amount = amount
+  data.loan_id = loan.id
+  data.object_other_name = loan.customer_name + ' - ' + loan.customer_phone
+  data.date_input = formatDateLocal(data.date_input)
+  data.accounting_date = formatDateLocal(data.accounting_date)
+
+  // Add payment
+  saving.value = true
+  await loanApi.addLoanOutPayment(data)
+    .then(() => {
+      popToast('Thành công', 'Thanh toán khoản vay thành công', 'success')
+      router.push('/loan-out')
+    })
+    .catch((error) => {
+      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      saving.value = false
+    })
+}
+
+const integerPointAndCommaOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.integerPointAndCommaOnly(valueInput)
+  item.value = result
+}
+
+const changeAmount = () => {
+  const amount = (inputs.amount + '').replace(/,/g, '')
+  inputs.amount = currencyFormat(amount)
+}
+
+const currencyFormat = (num) => {
+  if (num == 0) {
+    return '0'
+  }
+  if (num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+  return ''
+}
+
+const back = () => {
+  router.push('/loan-out')
+}
+
+const changeExpendGroup = () => {
+  if (inputs.expend_income_group_id) {
+    expendTypeOptions.value = [{ value: null, text: '' }]
+    for (const item of expendTypeOptionStore.value) {
+      if (item.group_id == inputs.expend_income_group_id) {
+        const typeItem = { value: item.id, text: item.name }
+        expendTypeOptions.value.push(typeItem)
+
+        if (item.name == 'Thu tiền cho vay') {
+          inputs.expend_income_type_id = item.id
+          updateDescription()
+        }
+      }
+    }
+  } else {
+    expendTypeOptions.value = []
+  }
+}
+
+const changeDateInput = () => {
+  const dateNow = new Date()
+  const today = formatDateLocal(new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate()))
+  const date_input_str = formatDateLocal(inputs.date_input)
+  const accounting_date_str = formatDateLocal(inputs.accounting_date)
+
+  if (date_input_str != today && accounting_date_str == today) {
+    inputs.accounting_date = new Date(inputs.date_input.getTime())
+  }
+}
+
+// Mounted
+onMounted(async () => {
+  prepareDateInput()
+  await getOptionRelated()
+  await getLoanDetail()
+})
 </script>

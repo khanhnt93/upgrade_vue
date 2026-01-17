@@ -1,77 +1,88 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="openModalCreateUnitConvert()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-end mb-4">
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="openModalCreateUnitConvert()">
+            Thêm
+          </button>
+        </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Chuyển Đổi Đơn Vị</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <div class="text-center mb-4">
+          <h4 class="text-xl font-semibold text-gray-700">Chuyển Đổi Đơn Vị</h4>
+        </div>
+        <hr class="mb-4">
 
-          <b-row class="mt-3">
-            <b-col md="12">
-              Số kết quả: <b>{{items.length}}</b>
-            </b-col>
-          </b-row>
+        <div class="mb-3">
+          Số kết quả: <b>{{ items.length }}</b>
+        </div>
 
-          <b-row>
-            <b-col md="12">
-              <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-                <template v-slot:cell(price)="data"><p class="text-right">{{ currencyFormat(data.item.price) }}</p></template>
-                <template v-slot:cell(action)="dataId">
-                  <b-list-group horizontal>
-                    <b-list-group-item v-b-tooltip.hover title="Cập nhật"
-                                       @click="openModalCreateUnitConvert(dataId.item)">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="border border-gray-300 px-4 py-2">STT</th>
+                <th class="border border-gray-300 px-4 py-2">Tên SP</th>
+                <th class="border border-gray-300 px-4 py-2">Đơn vị gốc</th>
+                <th class="border border-gray-300 px-4 py-2">Giá bán gốc</th>
+                <th class="border border-gray-300 px-4 py-2">Đơn vị chuyển đổi</th>
+                <th class="border border-gray-300 px-4 py-2">Tỷ giá</th>
+                <th class="border border-gray-300 px-4 py-2">Giá bán mới</th>
+                <th class="border border-gray-300 px-4 py-2 w-24"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.product_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.root_unit_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.root_price }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.target_unit_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.conversion_value }}</td>
+                <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.price) }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <div class="flex gap-2 justify-center">
+                    <button
+                      @click="openModalCreateUnitConvert(item)"
+                      class="text-blue-500 hover:text-blue-700"
+                      title="Cập nhật">
                       <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Xóa"
-                                       @click="deleted(dataId.item)">
+                    </button>
+                    <button
+                      @click="deleted(item)"
+                      class="text-red-500 hover:text-red-700"
+                      title="Xóa">
                       <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-              </b-table>
-            </b-col>
-          </b-row>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-
-      </b-col>
-    </b-row>
+        <!-- Loading -->
+        <div class="text-center mt-4">
+          <span v-show="loading" class="inline-block"><icon name="loading" width="60" /></span>
+          <span class="text-gray-500">--Hết--</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal add/update -->
-    <b-modal centered hide-footer hide-header size="xl" id="modal-change-invoice-status">
-      <b-row>
-        <b-col md="12">
-          <h4 class="modal-title text-center text-success">{{modalTitle}} Chuyển Đổi Đơn Vị</h4>
-        </b-col>
-      </b-row>
-      <hr>
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <h4 class="text-xl font-semibold text-green-600 text-center mb-4">{{ modalTitle }} Chuyển Đổi Đơn Vị</h4>
+          <hr class="mb-4">
 
-      <b-row class="form-row">
-            <b-col md="3" class="mt-2">
-              <label>Sản phẩm<span class="error-sybol"></span></label>
-            </b-col>
-            <b-col md="9" class="mt-2">
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3 flex items-center">
+              <label>Sản phẩm<span class="text-red-500"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
               <multiselect
                 v-model="productSelect"
                 :options="productOptions"
@@ -82,450 +93,374 @@
                 label="name_full"
                 track-by="name_full">
               </multiselect>
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProduct">
+              <div v-if="errorProduct" class="text-red-500 text-sm mt-1">
                 Vui lòng chọn sản phẩm
-              </b-form-invalid-feedback>
-              <b-row v-show="productSelect.id"  class="mt-2">
-                <b-col>
-                  <p>Đơn vị gốc: {{productSelect.unit_name}}</p>
-                  <p>Giá bán: {{productSelect.price}}</p>
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+              </div>
+              <div v-show="productSelect.id" class="mt-2">
+                <p>Đơn vị gốc: {{ productSelect.unit_name }}</p>
+                <p>Giá bán: {{ productSelect.price }}</p>
+              </div>
+            </div>
+          </div>
 
-          <b-row class="form-row">
-            <b-col md="3" class="mt-2">
-              <label>Đơn vị chuyển đổi<span class="error-sybol"></span></label>
-            </b-col>
-            <b-col md="9" class="mt-2">
-              <b-form-select
-                :options="unitOptions"
-                id="unit"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3 flex items-center">
+              <label>Đơn vị chuyển đổi<span class="text-red-500"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
+              <select
                 v-model="unitConvert.target_unit_id"
-                v-on:change="changeTargetUnit()">
-              </b-form-select>
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorUnit">
+                @change="changeTargetUnit()"
+                class="w-full border rounded px-3 py-2">
+                <option v-for="opt in unitOptions" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+              </select>
+              <div v-if="errorUnit" class="text-red-500 text-sm mt-1">
                 Vui lòng chọn đơn vị chuyển đổi
-              </b-form-invalid-feedback>
-            </b-col>
-          </b-row>
+              </div>
+            </div>
+          </div>
 
-          <b-row class="form-row">
-            <b-col md="3" class="mt-2">
-              <label>Tỷ giá chuyển đổi</label><span class="error-sybol"></span>
-            </b-col>
-            <b-col md="9" class="mt-2">
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3 flex items-center">
+              <label>Tỷ giá chuyển đổi<span class="text-red-500"></span></label>
+            </div>
+            <div class="col-span-12 md:col-span-9">
               <input
-                id="name"
                 type="text"
-                class="form-control"
+                class="w-full border rounded px-3 py-2"
                 v-model="unitConvert.conversion_value"
                 autocomplete="new-password"
                 maxlength="14">
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorConversionValue">
+              <div v-if="errorConversionValue" class="text-red-500 text-sm mt-1">
                 Vui lòng nhập tên
-              </b-form-invalid-feedback>
-              <p v-show="productSelect.unit_name && unitConvert.target_unit_id && unitConvert.conversion_value">
-                1 {{productSelect.unit_name}} = {{unitConvert.conversion_value + ' ' + target_unit_name}}
+              </div>
+              <p v-show="productSelect.unit_name && unitConvert.target_unit_id && unitConvert.conversion_value" class="mt-2">
+                1 {{ productSelect.unit_name }} = {{ unitConvert.conversion_value + ' ' + target_unit_name }}
               </p>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row class="form-row">
-            <b-col md="3" class="mt-2">
+          <div class="grid grid-cols-12 gap-4 mb-4">
+            <div class="col-span-12 md:col-span-3 flex items-center">
               <label>Giá bán theo đơn vị mới</label>
-            </b-col>
-            <b-col md="9" class="mt-2">
+            </div>
+            <div class="col-span-12 md:col-span-9">
               <input
-                id="name"
                 type="text"
-                class="form-control"
+                class="w-full border rounded px-3 py-2"
                 v-model="unitConvert.price"
                 autocomplete="new-password"
                 maxlength="14"
                 @change="changePrice">
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120"
-                    @click.prevent="hideModalCreateUnitConvert">
-            Bỏ qua
-          </b-button>
+          <div class="flex justify-between mt-4">
+            <button
+              class="border border-gray-400 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded w-32"
+              @click="hideModalCreateUnitConvert">
+              Bỏ qua
+            </button>
 
-          <b-button v-show="!saving" variant="outline-primary" class="pull-right btn-width-120"
-                    :disabled="saving" @click.prevent="addUpdateUnitConvert">
-            Xác nhận
-          </b-button>
+            <button
+              v-show="!saving"
+              class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-4 py-2 rounded w-32"
+              :disabled="saving"
+              @click="addUpdateUnitConvert">
+              Xác nhận
+            </button>
 
-          <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-        </b-col>
-      </b-row>
-
-    </b-modal>
-
+            <span v-show="saving" class="inline-block"><icon name="loading" width="60" /></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from '@/composables/useToast'
 import unitApi from '@/api/unit'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
 
+const { popToast } = useToast()
 
-export default {
-  components: {
-    Multiselect
-  },
-  data () {
-    return {
-      unitConvert: {
-        product_id: null,
-        root_unit_id: null,
-        target_unit_id: null,
-        conversion_value: null,
-        price: null
-      },
-      target_unit_name: "",
-      loadingProductOptions: false,
-      productSelect: {},
-      productOptions: [],
-      unitOptions:[],
-      modalTitle: "Thêm Mới",
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'product_name',
-          label: 'Tên SP'
-        },
-        {
-          key: 'root_unit_name',
-          label: 'Đơn vị gốc'
-        },
-        {
-          key: 'root_price',
-          label: 'Giá bán gốc'
-        },
-        {
-          key: 'target_unit_name',
-          label: 'Đơn vị chuyển đổi'
-        },
-        {
-          key: 'conversion_value',
-          label: 'Tỷ giá'
-        },
-        {
-          key: 'price',
-          label: 'Giá bán mới'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      onSearch: false,
-      loading: false,
-      click: false,
-      saving: false,
+const unitConvert = ref({
+  product_id: null,
+  root_unit_id: null,
+  target_unit_id: null,
+  conversion_value: null,
+  price: null
+})
+
+const target_unit_name = ref("")
+const loadingProductOptions = ref(false)
+const productSelect = ref({})
+const productOptions = ref([])
+const unitOptions = ref([])
+const modalTitle = ref("Thêm Mới")
+const showModal = ref(false)
+const items = ref([])
+const loading = ref(false)
+const click = ref(false)
+const saving = ref(false)
+
+const errorProduct = computed(() => {
+  return click.value && (productSelect.value.id == null || productSelect.value.id.length <= 0)
+})
+
+const errorUnit = computed(() => {
+  return click.value && (unitConvert.value.target_unit_id == null || unitConvert.value.target_unit_id.length <= 0)
+})
+
+const errorConversionValue = computed(() => {
+  return click.value && (unitConvert.value.conversion_value == null || unitConvert.value.conversion_value.length <= 0)
+})
+
+const checkValidate = () => {
+  return !(errorProduct.value || errorUnit.value || errorConversionValue.value)
+}
+
+/**
+ *  Get product options
+ */
+const getProductOptions = () => {
+  loadingProductOptions.value = true
+
+  unitApi.getListProductOption().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      // Products
+      productOptions.value = res.data.data
+      let itemEmpty = {"id": null, "name_full": '-- Chọn sản phẩm --'}
+      productOptions.value.unshift(itemEmpty)
     }
-  },
-  mounted() {
-    // Get group option
-    this.getProductOptions()
-    this.getUnitOption()
 
-    // Load list when load page
-    this.search()
-  },
-  computed: {
-    errorProduct () {
-      return this.checkInfo(this.productSelect.id)
-    },
-    errorUnit () {
-      return this.checkInfo(this.unitConvert.target_unit_id)
-    },
-    errorConversionValue () {
-      return this.checkInfo(this.unitConvert.conversion_value)
-    },
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorProduct || this.errorUnit || this.errorConversionValue)
-    },
+    loadingProductOptions.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
 
-    /**
-     *  Get product options
-     */
-     getProductOptions() {
-      this.loadingProductOptions = true
+    loadingProductOptions.value = false
+  })
+}
 
-      unitApi.getListProductOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          // Products
-          this.productOptions = res.data.data
-          let itemEmpty = {"id": null, "name_full": '-- Chọn sản phẩm --'}
-          this.productOptions.unshift(itemEmpty)
-        }
+/**
+ *  Get unit options
+ */
+const getUnitOption = () => {
+  unitApi.getListUnitOption().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      unitOptions.value = [{value: null, text: ''}]
 
-        this.loadingProductOptions = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.loadingProductOptions = false
-      })
-    },
-
-    /**
-     *  Get unit options
-     */
-     getUnitOption() {
-      unitApi.getListUnitOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.unitOptions = [{value: null, text: ''}]
-
-          var units = res.data.data
-          if(units) {
-            for (let i in units) {
-              this.unitOptions.push(units[i])
-            }
-          }
-        }
-      })
-    },
-
-    /**
-     *  Get unit options
-     */
-     getProductSelectById(product_id) {
-      if(!product_id) {
-        return {"id": null, "name_full": '-- Chọn sản phẩm --'}
-      }
-      for(let product of this.productOptions) {
-        if(product.id == product_id) {
-          this.productSelect = product
-          return
+      var units = res.data.data
+      if(units) {
+        for (let i in units) {
+          unitOptions.value.push(units[i])
         }
       }
-      return {"id": null, "name_full": '-- Chọn sản phẩm --'}
-    },
+    }
+  })
+}
 
-    openModalCreateUnitConvert(item=null) {
-      if(!item) {
-        this.click = false
-        this.resetValueSeting()
-      } else {
-        this.unitConvert = item
-      }
-
-      if(item && item.product_id) {
-        this.getProductSelectById(item.product_id)
-      }
-      this.$bvModal.show('modal-change-invoice-status')
-    },
-
-    hideModalCreateUnitConvert() {
-      this.productSelect = {"id": null, "name_full": '-- Chọn sản phẩm --'}
-      this.resetValueSeting()
-      this.$bvModal.hide('modal-change-invoice-status')
-    },
-
-    /**
-     * Get unit target name
-     */
-    changeTargetUnit() {
-      if(!this.unitConvert.target_unit_id) {
-        this.target_unit_name = ''
-        return
-      }
-      if(this.unitConvert.target_unit_id == this.productSelect.unit_id) {
-        this.unitConvert.target_unit_id = null
-        this.popToast('danger', "Vui lòng chọn khác đơn vị gốc!")
-        return
-      }
-      for(let unit of this.unitOptions) {
-        if(unit.value == this.unitConvert.target_unit_id) {
-          this.target_unit_name = unit.text
-          return
-        }
-      }
-      this.target_unit_name = ''
+/**
+ *  Get unit options
+ */
+const getProductSelectById = (product_id) => {
+  if(!product_id) {
+    return {"id": null, "name_full": '-- Chọn sản phẩm --'}
+  }
+  for(let product of productOptions.value) {
+    if(product.id == product_id) {
+      productSelect.value = product
       return
-    },
+    }
+  }
+  return {"id": null, "name_full": '-- Chọn sản phẩm --'}
+}
 
-    changePrice() {
-      try {
-        let price = parseInt((this.unitConvert.price + "").replaceAll(",", ""))
-        this.unitConvert.price = this.currencyFormat(price)
-      } catch (error) {
-        this.unitConvert.price = 0
-      }
-    },
+const openModalCreateUnitConvert = (item=null) => {
+  if(!item) {
+    click.value = false
+    resetValueSeting()
+  } else {
+    unitConvert.value = item
+  }
 
-    /**
-     *  Search
-     */
-    search() {
-      if (this.loading) { return }
-      this.loading = true
+  if(item && item.product_id) {
+    getProductSelectById(item.product_id)
+  }
+  showModal.value = true
+}
 
-      // Search
-      unitApi.getUnitConversion().then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          this.items = res.data.data
-        }else{
-          this.items = []
-        }
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+const hideModalCreateUnitConvert = () => {
+  productSelect.value = {"id": null, "name_full": '-- Chọn sản phẩm --'}
+  resetValueSeting()
+  showModal.value = false
+}
 
-        this.loading = false
-      })
-    },
+/**
+ * Get unit target name
+ */
+const changeTargetUnit = () => {
+  if(!unitConvert.value.target_unit_id) {
+    target_unit_name.value = ''
+    return
+  }
+  if(unitConvert.value.target_unit_id == productSelect.value.unit_id) {
+    unitConvert.value.target_unit_id = null
+    popToast('danger', "Vui lòng chọn khác đơn vị gốc!")
+    return
+  }
+  for(let unit of unitOptions.value) {
+    if(unit.value == unitConvert.value.target_unit_id) {
+      target_unit_name.value = unit.text
+      return
+    }
+  }
+  target_unit_name.value = ''
+  return
+}
 
-    edit(index) {
-
-      this.fundSetting = this.items[index]
-      this.changeType(this.fundSetting.type)
-      this.btn_text = "Cập nhật"
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-
-    /**
-     * Only input integer
-     */
-    integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      let result = ""
-      if(num === 0) {
-          return "0"
-      }
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-
-    deleted (item) {
-      if(item.id) {
-        this.$bvModal.msgBoxConfirm('Xóa chuyển đổi từ đơn vị [' + item.root_unit_name + '] qua đơn vị [' + item.target_unit_name + '] của sản phẩm [' + item.product_name + "]. Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if(res){
-            unitApi.deleteUnitConversion(item.id).then(res => {
-              if(res != null && res.data != null){
-                this.search()
-                this.popToast('success', 'Xoá thành công!')
-              }
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
-      }
-    },
-
-    resetValueSeting() {
-      this.unitConvert = {
-        product: null,
-        root_unit_id: null,
-        target_unit_id: null,
-        conversion_value: null,
-        price: 0
-      }
-    },
-
-    addUpdateUnitConvert () {
-      this.click = true
-      if(this.saving) {
-        return
-      }
-
-      let checkValidate = this.checkValidate()
-      if(!checkValidate) {
-        return
-      }
-
-      this.saving = true
-      this.unitConvert.product_id = this.productSelect.id
-      this.unitConvert.root_unit_id = this.productSelect.unit_id
-      this.unitConvert.price = (this.unitConvert.price + "").replaceAll(",", "")
-
-      let id = this.unitConvert.id
-      if(id){
-        // Edit
-        unitApi.updateUnitConversion(this.unitConvert).then(res => {
-          this.saving = false
-          if(res != null && res.data != null && res.data.status == 200){
-            this.search()
-            this.popToast('success', 'Cập nhật thành công!')
-            this.hideModalCreateUnitConvert()
-
-            this.resetValueSeting()
-          }
-        }).catch(err => {
-          this.saving = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        // Add
-        unitApi.addUnitConversion(this.unitConvert).then(res => {
-          this.saving = false
-          if(res != null && res.data != null && res.data.status == 200){
-            this.search()
-            this.popToast('success', 'Thêm mới thành công!')
-            this.hideModalCreateUnitConvert()
-
-            this.resetValueSeting()
-          }
-        }).catch(err => {
-          this.saving = false
-
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-
-    },
+const changePrice = () => {
+  try {
+    let price = parseInt((unitConvert.value.price + "").replaceAll(",", ""))
+    unitConvert.value.price = currencyFormat(price)
+  } catch (error) {
+    unitConvert.value.price = 0
   }
 }
+
+/**
+ *  Search
+ */
+const search = () => {
+  if (loading.value) { return }
+  loading.value = true
+
+  // Search
+  unitApi.getUnitConversion().then(res => {
+    if(res != null && res.data != null && res.data.data != null){
+      items.value = res.data.data
+    }else{
+      items.value = []
+    }
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    loading.value = false
+  })
+}
+
+/**
+ * Currency format
+ */
+const currencyFormat = (num) => {
+  let result = ""
+  if(num === 0) {
+      return "0"
+  }
+  if(num) {
+    result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+  return result
+}
+
+const deleted = (item) => {
+  if(item.id) {
+    if (confirm('Xóa chuyển đổi từ đơn vị [' + item.root_unit_name + '] qua đơn vị [' + item.target_unit_name + '] của sản phẩm [' + item.product_name + "]. Bạn có chắc không?")) {
+      unitApi.deleteUnitConversion(item.id).then(res => {
+        if(res != null && res.data != null){
+          search()
+          popToast('success', 'Xoá thành công!')
+        }
+      }).catch(err => {
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  }
+}
+
+const resetValueSeting = () => {
+  unitConvert.value = {
+    product: null,
+    root_unit_id: null,
+    target_unit_id: null,
+    conversion_value: null,
+    price: 0
+  }
+}
+
+const addUpdateUnitConvert = () => {
+  click.value = true
+  if(saving.value) {
+    return
+  }
+
+  let checkValidateResult = checkValidate()
+  if(!checkValidateResult) {
+    return
+  }
+
+  saving.value = true
+  unitConvert.value.product_id = productSelect.value.id
+  unitConvert.value.root_unit_id = productSelect.value.unit_id
+  unitConvert.value.price = (unitConvert.value.price + "").replaceAll(",", "")
+
+  let id = unitConvert.value.id
+  if(id){
+    // Edit
+    unitApi.updateUnitConversion(unitConvert.value).then(res => {
+      saving.value = false
+      if(res != null && res.data != null && res.data.status == 200){
+        search()
+        popToast('success', 'Cập nhật thành công!')
+        hideModalCreateUnitConvert()
+
+        resetValueSeting()
+      }
+    }).catch(err => {
+      saving.value = false
+
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    // Add
+    unitApi.addUnitConversion(unitConvert.value).then(res => {
+      saving.value = false
+      if(res != null && res.data != null && res.data.status == 200){
+        search()
+        popToast('success', 'Thêm mới thành công!')
+        hideModalCreateUnitConvert()
+
+        resetValueSeting()
+      }
+    }).catch(err => {
+      saving.value = false
+
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+onMounted(() => {
+  // Get group option
+  getProductOptions()
+  getUnitOption()
+
+  // Load list when load page
+  search()
+})
 </script>

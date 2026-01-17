@@ -1,258 +1,245 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button
+            class="border border-gray-400 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded w-32"
+            @click="back">
+            Quay lại
+          </button>
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="save"
+            :disabled="saving">
+            Lưu
+          </button>
+        </div>
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <div class="text-center mb-4">
+          <h4 class="text-xl font-semibold text-gray-700">{{ prefix_title }} Tài Khoản Ngân Hàng</h4>
+        </div>
+        <hr class="mb-4">
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">{{prefix_title}} Tài Khoản Ngân Hàng</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <icon name="loading" width="60" />
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Loại tài khoản <span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select :options="optionsType" v-model="bankAccount.type"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorType">
-                    Vui lòng chọn loại tài khoản
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Loại tài khoản<span class="text-red-500"></span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <select v-model="bankAccount.type" class="w-full border rounded px-3 py-2">
+              <option v-for="opt in optionsType" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+            </select>
+            <div v-if="errorType" class="text-red-500 text-sm mt-1">
+              Vui lòng chọn loại tài khoản
+            </div>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Tên tài khoản <span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="account_name"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="bankAccount.account_name">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAccountName">
-                  Vui lòng nhập tên tài khoản
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Tên tài khoản<span class="text-red-500"></span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              type="text"
+              maxlength="255"
+              autocomplete="new-password"
+              class="w-full border rounded px-3 py-2"
+              v-model="bankAccount.account_name">
+            <div v-if="errorAccountName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập tên tài khoản
+            </div>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Số tài khoản <span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="account_number"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="bankAccount.account_number">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAccountNumber">
-                  Vui lòng nhập số tài khoản
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Số tài khoản<span class="text-red-500"></span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              type="text"
+              maxlength="255"
+              autocomplete="new-password"
+              class="w-full border rounded px-3 py-2"
+              v-model="bankAccount.account_number">
+            <div v-if="errorAccountNumber" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập số tài khoản
+            </div>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Ngân hàng <span class="error-sybol"></span></label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="bank_name"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="bankAccount.bank_name">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorBankName">
-                  Vui lòng nhập ngân hàng
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Ngân hàng<span class="text-red-500"></span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              type="text"
+              maxlength="255"
+              autocomplete="new-password"
+              class="w-full border rounded px-3 py-2"
+              v-model="bankAccount.bank_name">
+            <div v-if="errorBankName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập ngân hàng
+            </div>
+          </div>
+        </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label>Là tài khoản mặc định</label>
-              </b-col>
-              <b-col md="9">
-                <div class="input-group">
-                  <input type="radio" v-model="bankAccount.is_default" name="is_default" :value="true" class="mt-2">
-                  <label class="ml-4 mt-1">Có</label>
-                  <input type="radio" v-model="bankAccount.is_default" name="is_default" :value="false" class="ml-5 mt-2">
-                  <label class="ml-4 mt-1">Không</label>
-                </div>
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Là tài khoản mặc định</label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <div class="flex items-center gap-4">
+              <label class="flex items-center">
+                <input type="radio" v-model="bankAccount.is_default" name="is_default" :value="true" class="mr-2">
+                <span>Có</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" v-model="bankAccount.is_default" name="is_default" :value="false" class="mr-2">
+                <span>Không</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import bankAccountAPI from '@/api/bankAccount'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      prefix_title: "Thêm Mới",
-      bankAccount: {
-        "type": 1,
-        "account_name": null,
-        "account_number": null,
-        "bank_name": null,
-        "is_default": false
-      },
-      optionsType: [
-        {value: 0, text: 'Cá nhân'},
-        {value: 1, text: 'Cty'}
-      ],
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    // Check prefix
-    if(this.$route.params.id) {
-      this.prefix_title = "Cập Nhật"
-    } else {
-      this.prefix_title = "Thêm Mới"
-    }
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-    this.getBankAccountDetail()
-  },
-  computed: {
-    errorType: function () {
-      return this.checkInfo(this.bankAccount.type)
-    },
-    errorAccountName: function () {
-      return this.checkInfo(this.bankAccount.account_name)
-    },
-    errorAccountNumber: function () {
-      return this.checkInfo(this.bankAccount.account_number)
-    },
-    errorBankName: function () {
-      return this.checkInfo(this.bankAccount.bank_name)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorType || this.errorAccountName || this.errorAccountNumber || this.errorBankName)
-    },
+const prefix_title = ref("Thêm Mới")
+const bankAccount = ref({
+  type: 1,
+  account_name: null,
+  account_number: null,
+  bank_name: null,
+  is_default: false
+})
+const optionsType = ref([
+  {value: 0, text: 'Cá nhân'},
+  {value: 1, text: 'Cty'}
+])
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    /**
-     * Get detail
-     */
-    getBankAccountDetail() {
-      let bankAccountId = this.$route.params.id
-      if(bankAccountId){
-        this.loading = true
+const checkInfo = (info) => {
+  return (click.value && (info == null || info.length <= 0))
+}
 
-        bankAccountAPI.getBankAccountDetail(bankAccountId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.bankAccount = res.data.data
-          }
+const errorType = computed(() => checkInfo(bankAccount.value.type))
+const errorAccountName = computed(() => checkInfo(bankAccount.value.account_name))
+const errorAccountNumber = computed(() => checkInfo(bankAccount.value.account_number))
+const errorBankName = computed(() => checkInfo(bankAccount.value.bank_name))
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+const checkValidate = () => {
+  return !(errorType.value || errorAccountName.value || errorAccountNumber.value || errorBankName.value)
+}
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+/**
+ * Get detail
+ */
+const getBankAccountDetail = () => {
+  let bankAccountId = route.params.id
+  if(bankAccountId){
+    loading.value = true
+
+    bankAccountAPI.getBankAccountDetail(bankAccountId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        bankAccount.value = res.data.data
       }
-    },
 
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/bank-account')
-    },
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
 
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      let result = this.checkValidate()
-      if(result) {
-        let bankAccountId = this.$route.params.id
-        if(bankAccountId){
-          // Edit
-          let bankAccount = this.bankAccount
-          bankAccount.id = bankAccountId
-          bankAccountAPI.editBankAccount(bankAccount).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật tài khoản ngân hàng thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          bankAccountAPI.addBankAccount(this.bankAccount).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/bank-account")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      } else {
-        this.saving = false
-      }
-    }
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+/**
+ * Back to list
+ */
+const back = () => {
+  router.push('/bank-account')
+}
+
+/**
+ * Save
+ */
+const save = () => {
+  click.value = true
+  saving.value = true
+  let result = checkValidate()
+  if(result) {
+    let bankAccountId = route.params.id
+    if(bankAccountId){
+      // Edit
+      let bankAccountData = bankAccount.value
+      bankAccountData.id = bankAccountId
+      bankAccountAPI.editBankAccount(bankAccountData).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            // show popup success
+            popToast('success', 'Cập nhật tài khoản ngân hàng thành công!!! ')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    } else {
+      // Add
+      bankAccountAPI.addBankAccount(bankAccount.value).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            router.push("/bank-account")
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+onMounted(() => {
+  // Check prefix
+  if(route.params.id) {
+    prefix_title.value = "Cập Nhật"
+  } else {
+    prefix_title.value = "Thêm Mới"
+  }
+
+  getBankAccountDetail()
+})
 </script>

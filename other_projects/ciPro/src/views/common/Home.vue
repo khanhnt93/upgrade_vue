@@ -1,76 +1,75 @@
 <template>
   <div class="bg-white" ref="scrollParent">
+    <!-- Header Banner -->
     <header class="header-area" id="bodyHome">
-      <div id="home" >
-        <img src="/static/img/project/home/banner-bg.jpg" style="width: 100%"/>
+      <div id="home">
+        <img src="/static/img/project/home/banner-bg.jpg" class="w-full" alt="Banner"/>
       </div>
     </header>
-    <section id="features" class="services-area pt-120">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-10">
-            <div class="section-title text-center pb-40">
-              <!--<div class="line m-auto"></div>-->
-              <h3 class="title">
+
+    <!-- Features Section -->
+    <section id="features" class="services-area pt-32">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-center">
+          <div class="w-full lg:w-10/12">
+            <div class="text-center pb-10">
+              <h3 class="text-4xl md:text-5xl font-bold text-gray-800">
                 ciPro
-                <span> Giải Pháp Trọn Vẹn Cho quản lý bán hàng và tài chính</span>
+                <span class="block text-3xl md:text-4xl font-normal mt-2"> Giải Pháp Trọn Vẹn Cho quản lý bán hàng và tài chính</span>
               </h3>
             </div>
           </div>
         </div>
 
-        <div class="row justify-content-center">
-
-          <div class="col-lg-4 col-md-7 col-sm-8  mt-3">
-            <div
-              class="single-services text-center mt-30 fadeIn"
-            >
-              <div class="services-icon">
+        <div class="flex flex-wrap justify-center -mx-4">
+          <!-- Feature Card 1 -->
+          <div class="w-full md:w-1/2 lg:w-4/12 px-4 mt-6">
+            <div class="single-services text-center bg-white shadow-xl rounded-lg p-12 hover:border-2 hover:border-red-400 transition-all duration-300">
+              <div class="services-icon relative inline-block mb-8">
                 <img
-                  class="shape"
+                  class="shape absolute"
                   src="/static/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
-                  class="shape-1"
+                  class="shape-1 absolute"
                   src="/static/img/project/home/services-shape-2.svg"
                   alt="shape"
                 />
-                <i class="lni-cog"></i>
+                <i class="lni-cog text-white text-4xl relative z-10"></i>
               </div>
-              <div class="services-content mt-30">
-                <h4 class="services-title">
-                  <a href="#">Quản lý từ xa</a>
+              <div class="services-content mt-8">
+                <h4 class="text-2xl font-bold mb-4">
+                  <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Quản lý từ xa</a>
                 </h4>
-                <p class="text">
-                  Mọi chức năng đếu có thể làm việc từ xa, mọi lúc, mọi nơi.
+                <p class="text-gray-600 leading-7">
+                  Mọi chức năng đều có thể làm việc từ xa, mọi lúc, mọi nơi.
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-7 col-sm-8 mt-3">
-            <div
-              class="single-services text-center mt-30 fadeIn"
-            >
-              <div class="services-icon">
+          <!-- Feature Card 2 -->
+          <div class="w-full md:w-1/2 lg:w-4/12 px-4 mt-6">
+            <div class="single-services text-center bg-white shadow-xl rounded-lg p-12 hover:border-2 hover:border-red-400 transition-all duration-300">
+              <div class="services-icon relative inline-block mb-8">
                 <img
-                  class="shape"
+                  class="shape absolute"
                   src="/static/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
-                  class="shape-1"
+                  class="shape-1 absolute"
                   src="/static/img/project/home/services-shape-1.svg"
                   alt="shape"
                 />
-                <i class="lni-baloon"></i>
+                <i class="lni-baloon text-white text-4xl relative z-10"></i>
               </div>
-              <div class="services-content mt-30">
-                <h4 class="services-title">
-                  <a href="#">Hiệu quả quản lý</a>
+              <div class="services-content mt-8">
+                <h4 class="text-2xl font-bold mb-4">
+                  <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Hiệu quả quản lý</a>
                 </h4>
-                <p class="text">
+                <p class="text-gray-600 leading-7">
                   Bán hàng và tài chính được kết nối chặt chẽ, giúp bạn quản lý quỹ, công nợ, nợ công, kho hàng, bán hàng một
                   cách tuyệt vời.
                 </p>
@@ -78,28 +77,27 @@
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-7 col-sm-8  mt-3">
-            <div
-              class="single-services text-center mt-30 fadeIn"
-            >
-              <div class="services-icon">
+          <!-- Feature Card 3 -->
+          <div class="w-full md:w-1/2 lg:w-4/12 px-4 mt-6">
+            <div class="single-services text-center bg-white shadow-xl rounded-lg p-12 hover:border-2 hover:border-red-400 transition-all duration-300">
+              <div class="services-icon relative inline-block mb-8">
                 <img
-                  class="shape"
+                  class="shape absolute"
                   src="/static/img/project/home/services-shape.svg"
                   alt="shape"
                 />
                 <img
-                  class="shape-1"
+                  class="shape-1 absolute"
                   src="/static/img/project/home/services-shape-3.svg"
                   alt="shape"
                 />
-                <i class="lni-bolt-alt"></i>
+                <i class="lni-bolt-alt text-white text-4xl relative z-10"></i>
               </div>
-              <div class="services-content mt-30">
-                <h4 class="services-title">
-                  <a href="#">Tiết kiệm chi phí</a>
+              <div class="services-content mt-8">
+                <h4 class="text-2xl font-bold mb-4">
+                  <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Tiết kiệm chi phí</a>
                 </h4>
-                <p class="text">
+                <p class="text-gray-600 leading-7">
                   Bạn không cần mua thêm bất cứ thiết bị nào, mọi công việc đều có thể làm việc trên các thiết bị di động.
                 </p>
               </div>
@@ -109,204 +107,247 @@
       </div>
     </section>
 
-    <section id="about" class="about-area pt-70">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 mt-3">
-            <div
-              class="about-content mt-50 fadeInLeftBig"
-            >
+    <!-- About Section 1 -->
+    <section id="about" class="about-area pt-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mt-6">
+            <div class="about-content mt-12 fadeInLeftBig">
               <div class="section-title">
-                <h3 class="title">Cấu trúc <span> phù hợp với mọi loại hình kinh doanh </span></h3>
+                <h3 class="text-4xl font-bold text-gray-800">
+                  Cấu trúc <span class="font-normal"> phù hợp với mọi loại hình kinh doanh </span>
+                </h3>
               </div>
-              <p class="text">
+              <p class="text-gray-600 leading-7 mt-4">
                 ciPro được thiết kế phù hợp với mọi loại hình kinh doanh: từ công ty đến các cá nhân nhỏ lẻ.
               </p>
-              <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
+              <button
+                class="main-btn mt-10 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                @click="scrollBottom()"
+              >
+                Liên hệ ngay
+              </button>
             </div>
           </div>
-          <div class="col-lg-6 mt-3">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/loai_kinh_doanh.jpg" alt="Loại hình nhà hàng, quán ăn" />
+          <div class="w-full lg:w-1/2 px-4 mt-6">
+            <div class="about-image text-center mt-12 fadeInRightBig">
+              <img src="/static/img/project/home/loai_kinh_doanh.jpg" alt="Loại hình nhà hàng, quán ăn" class="rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
       </div>
-      <!--<div class="about-shape-1">-->
-        <!--<img src="/static/img/project/home/about-shape-1.svg" alt="shape" />-->
-      <!--</div>-->
     </section>
 
-    <section class="about-area pt-70">
-      <!--<div class="about-shape-2">-->
-        <!--<img src="/static/img/project/home/about-shape-2.svg" alt="shape" />-->
-      <!--</div>-->
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 order-lg-last  mt-3">
-            <div
-              class="about-content mt-50 fadeInLeftBig"
-            >
+    <!-- About Section 2 -->
+    <section class="about-area pt-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-last">
+            <div class="about-content mt-12 fadeInLeftBig">
               <div class="section-title">
-                <h3 class="title">
-                  Hệ thống<span> hoạt động trên mọi thiết bị</span>
+                <h3 class="text-4xl font-bold text-gray-800">
+                  Hệ thống<span class="font-normal"> hoạt động trên mọi thiết bị</span>
                 </h3>
               </div>
-              <p class="text">
+              <p class="text-gray-600 leading-7 mt-4">
                 Hệ thống hoạt động tốt trên mọi thiết bị như laptop, máy tính bàn hoặc
                 chỉ cần các thiết bị di động như máy tính bảng, tablet, điện thoại cá nhân.
               </p>
-              <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
+              <button
+                class="main-btn mt-10 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                @click="scrollBottom()"
+              >
+                Liên hệ ngay
+              </button>
             </div>
           </div>
-          <div class="col-lg-6 order-lg-first mt-3">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/header-hero.jpg" alt="about" />
+          <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-first">
+            <div class="about-image text-center mt-12 fadeInRightBig">
+              <img src="/static/img/project/home/header-hero.jpg" alt="about" class="rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="about-area pt-70">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 mt-3">
-            <div class="about-content mt-50 fadeInLeftBig">
+    <!-- About Section 3 -->
+    <section class="about-area pt-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mt-6">
+            <div class="about-content mt-12 fadeInLeftBig">
               <div class="section-title">
-                <h3 class="title">Giao diện<span> đơn giản, dễ sử dụng</span></h3>
+                <h3 class="text-4xl font-bold text-gray-800">
+                  Giao diện<span class="font-normal"> đơn giản, dễ sử dụng</span>
+                </h3>
               </div>
-              <p class="text">
+              <p class="text-gray-600 leading-7 mt-4">
                 Giao diện đơn giản, các chức năng được phân bổ theo tần suất thực hiện để tiện cho việc thao tác của nhân viên.
               </p>
-              <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
+              <button
+                class="main-btn mt-10 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                @click="scrollBottom()"
+              >
+                Liên hệ ngay
+              </button>
             </div>
           </div>
-          <div class="col-lg-6 mt-3">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/giao_dien_don_gian.jpg" alt="about" />
+          <div class="w-full lg:w-1/2 px-4 mt-6">
+            <div class="about-image text-center mt-12 fadeInRightBig">
+              <img src="/static/img/project/home/giao_dien_don_gian.jpg" alt="about" class="rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
       </div>
-      <!--<div class="about-shape-1">-->
-        <!--<img src="/static/img/project/home/about-shape-1.svg" alt="shape" />-->
-      <!--</div>-->
     </section>
 
-    <section class="about-area pt-70">
-      <div class="about-shape-2">
-        <img src="/static/img/project/home/about-shape-2.svg" alt="shape" />
+    <!-- About Section 4 -->
+    <section class="about-area pt-20">
+      <div class="about-shape-2 absolute top-0 left-0 w-1/3 h-full -z-10 hidden md:block">
+        <img src="/static/img/project/home/about-shape-2.svg" alt="shape" class="w-full" />
       </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 order-lg-last mt-3">
-            <div class="about-content mt-50 fadeInLeftBig">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center -mx-4">
+          <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-last">
+            <div class="about-content mt-12 fadeInLeftBig">
               <div class="section-title">
-                <h3 class="title">
-                    Tại sao <span>ciPro là lựa chọn của bạn?</span>
-                  </h3>
+                <h3 class="text-4xl font-bold text-gray-800">
+                  Tại sao <span class="font-normal">ciPro là lựa chọn của bạn?</span>
+                </h3>
               </div>
-              <p class="text">
+              <p class="text-gray-600 leading-7 mt-4">
                 Áp dụng công nghệ tiên tiến trong phát triển hệ thống, ciPro sẽ đem lại cho bạn những trải nghiệm
-                  cực kỳ nhanh chóng và tiện lợi.
+                cực kỳ nhanh chóng và tiện lợi.
               </p>
-              <button class="main-btn" @click="scrollBottom()">Liên hệ ngay</button>
+              <button
+                class="main-btn mt-10 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-400 hover:to-orange-500 transition-all duration-300"
+                @click="scrollBottom()"
+              >
+                Liên hệ ngay
+              </button>
             </div>
           </div>
-          <div class="col-lg-6 order-lg-first mt-3">
-            <div
-              class="about-image text-center mt-50 fadeInRightBig"
-            >
-              <img src="/static/img/project/home/best_choose.jpg" alt="Best choose" />
+          <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-first">
+            <div class="about-image text-center mt-12 fadeInRightBig">
+              <img src="/static/img/project/home/best_choose.jpg" alt="Best choose" class="rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
       </div>
     </section>
-    <footer id="footer" class="footer-area pt-120">
-      <div class="container">
-        <div class="footer-widget pb-100 mt-200">
-          <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-8">
-              <div
-                class="footer-about mt-50 fadeIn"
-              >
-                <a class="logo" href="#">
-                  <img src="/static/img/project/home/logo_login.png" alt="logo" />
+
+    <!-- Footer -->
+    <footer id="footer" class="footer-area pt-32 mt-48">
+      <div class="container mx-auto px-4">
+        <div class="footer-widget pb-24">
+          <div class="flex flex-wrap -mx-4">
+            <!-- Footer About -->
+            <div class="w-full lg:w-4/12 md:w-6/12 px-4">
+              <div class="footer-about mt-12 fadeIn">
+                <a class="logo inline-block" href="#">
+                  <img src="/static/img/project/home/logo_login.png" alt="logo" class="w-40" />
                 </a>
-                <p class="text">
+                <p class="text-gray-600 mt-8 leading-7">
                   ciPro - Giải pháp chọn vẹn cho quản lý bán hàng và tài chính
                 </p>
-                <ul class="social">
+                <ul class="social flex mt-10 space-x-6">
                   <li>
-                    <a href="#"><i class="lni-facebook-filled"></i></a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-orange-500 transition-colors">
+                      <i class="lni-facebook-filled"></i>
+                    </a>
                   </li>
                   <li>
-                    <a href="#"><i class="lni-twitter-filled"></i></a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-orange-500 transition-colors">
+                      <i class="lni-twitter-filled"></i>
+                    </a>
                   </li>
                   <li>
-                    <a href="#"><i class="lni-instagram-filled"></i></a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-orange-500 transition-colors">
+                      <i class="lni-instagram-filled"></i>
+                    </a>
                   </li>
                   <li>
-                    <a href="#"><i class="lni-linkedin-original"></i></a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-orange-500 transition-colors">
+                      <i class="lni-linkedin-original"></i>
+                    </a>
                   </li>
                 </ul>
               </div>
             </div>
-            <div class="col-lg-4 col-md-7 col-sm-7">
-              <div class="footer-link d-flex mt-50 justify-content-md-between">
-                <div
-                  class="link-wrapper fadeIn"
-                >
-                  <div class="footer-title">
-                    <h4 class="title">ciPro</h4>
-                  </div>
-                  <ul class="link">
-                    <li><a @click="scrollToTop">Trang chủ</a></li>
-                    <li><a @click="scrollToFunction()">Tính năng</a></li>
-                    <li><a @click="scrollToAbout()">Giới thiệu</a></li>
-                    <li><a>Liên hệ</a></li>
-                  </ul>
+
+            <!-- Footer Links -->
+            <div class="w-full lg:w-4/12 md:w-7/12 px-4">
+              <div class="footer-link mt-12 fadeIn">
+                <div class="footer-title mb-6">
+                  <h4 class="text-2xl font-bold text-gray-600">ciPro</h4>
                 </div>
+                <ul class="link space-y-4">
+                  <li>
+                    <a
+                      @click="scrollToTop"
+                      class="text-gray-600 hover:text-orange-500 transition-colors cursor-pointer"
+                    >
+                      Trang chủ
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      @click="scrollToFunction()"
+                      class="text-gray-600 hover:text-orange-500 transition-colors cursor-pointer"
+                    >
+                      Tính năng
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      @click="scrollToAbout()"
+                      class="text-gray-600 hover:text-orange-500 transition-colors cursor-pointer"
+                    >
+                      Giới thiệu
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-gray-600 hover:text-orange-500 transition-colors cursor-pointer">Liên hệ</a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="col-lg-4 col-md-5 col-sm-5">
-              <div
-                class="footer-contact mt-50 fadeIn"
-              >
-                <div class="footer-title">
-                  <h4 class="title">Thông tin liên hệ</h4>
+
+            <!-- Footer Contact -->
+            <div class="w-full lg:w-4/12 md:w-5/12 px-4">
+              <div class="footer-contact mt-12 fadeIn">
+                <div class="footer-title mb-6">
+                  <h4 class="text-2xl font-bold text-gray-600">Thông tin liên hệ</h4>
                 </div>
-                <ul class="contact">
+                <ul class="contact space-y-2 text-gray-600">
                   <li>Cty CiInTech</li>
                   <li>Mã số thuế: 0316431771</li>
                   <li>Địa chỉ: 23/36 Mai Lão Bạng p.13 Q.Tân Bình HCM</li>
                   <li>Số điện thoại: 0865.827.248</li>
                   <li>Email: info@ciintech.com</li>
-                  <li>Website: <a href="https://ciintech.com" target="_blank">ciintech.com</a></li>
-                  <li>Thông tin giao dịch:</li>
-                  <li class="pl-4">Ngân hàng MB Bank</li>
-                  <li class="pl-4">STK: 9391135440021</li>
-                  <li class="pl-4 pb-5">Chi nhánh TP HCM</li>
+                  <li>
+                    Website:
+                    <a href="https://ciintech.com" target="_blank" class="text-blue-500 hover:text-blue-700 hover:underline">
+                      ciintech.com
+                    </a>
+                  </li>
+                  <li class="mt-4">Thông tin giao dịch:</li>
+                  <li class="pl-6">Ngân hàng MB Bank</li>
+                  <li class="pl-6">STK: 9391135440021</li>
+                  <li class="pl-6 pb-12">Chi nhánh TP HCM</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!--<Particles id="particles-2" :options="particlesOptions" ></Particles>-->
     </footer>
+
+    <!-- Back to Top Button -->
     <button
       id="back-to-top"
-      style="background: #fff !important;color:#ed592a"
+      class="fixed right-5 bottom-5 w-10 h-10 leading-10 rounded bg-white text-orange-600 text-center z-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+      :class="showBackToTop ? 'inline-block' : 'hidden'"
       @click="scrollToTop()"
     >
       <i class="fa fa-arrow-up"></i>
@@ -314,1003 +355,225 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 
-export default {
-  data() {
-    return {
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-  },
-  methods: {
-    onScroll() {
-      // Show or hide the sticky footer button
-      if (document.documentElement.scrollTop > 600) {
-        if (document.getElementById("back-to-top")) {
-          document.getElementById("back-to-top").style.display = "inline-block";
-        }
-      } else {
-        if (document.getElementById("back-to-top")) {
-            document.getElementById("back-to-top").style.display = "none";
-        }
-      }
-    },
+const scrollParent = ref(null)
+const showBackToTop = ref(false)
 
-    /**
-     * Scroll to top
-     */
-    scrollToTop() {
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    },
-
-    /**
-     * Scroll to function
-     */
-    scrollToAbout() {
-      let el = document.getElementById("about");
-      let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
-      disFromTop = disFromTop - 50
-      window.scrollTo({top: disFromTop, behavior: 'smooth'});
-
-    },
-
-    /**
-     * Scroll to function
-     */
-    scrollToFunction() {
-      let el = document.getElementById("features");
-      let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
-      disFromTop = disFromTop - 50
-      window.scrollTo({top: disFromTop, behavior: 'smooth'});
-    },
-
-    /**
-     * Scroll bot
-     */
-    scrollBottom() {
-      window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
-    }
+const onScroll = () => {
+  // Show or hide the sticky footer button
+  if (document.documentElement.scrollTop > 600) {
+    showBackToTop.value = true
+  } else {
+    showBackToTop.value = false
   }
 }
+
+/**
+ * Scroll to top
+ */
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+/**
+ * Scroll to about section
+ */
+const scrollToAbout = () => {
+  const el = document.getElementById('about')
+  if (el) {
+    let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
+    disFromTop = disFromTop - 50
+    window.scrollTo({ top: disFromTop, behavior: 'smooth' })
+  }
+}
+
+/**
+ * Scroll to function section
+ */
+const scrollToFunction = () => {
+  const el = document.getElementById('features')
+  if (el) {
+    let disFromTop = window.pageYOffset + el.getBoundingClientRect().top
+    disFromTop = disFromTop - 50
+    window.scrollTo({ top: disFromTop, behavior: 'smooth' })
+  }
+}
+
+/**
+ * Scroll to bottom
+ */
+const scrollBottom = () => {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
 
-<style>
-  @import url("https://fonts.googleapis.com/css?family=Poppins:400,700|Lato:300,400,700&display=swap");
+<style scoped>
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,700|Lato:300,400,700&display=swap");
 
-  body {
-    font-family: "Lato", sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    color: #6a6972;
-    overflow-x: hidden;
+/* Service Card Styles */
+.single-services {
+  position: relative;
+}
+
+.single-services .services-icon {
+  position: relative;
+}
+
+.single-services .services-icon .shape {
+  width: 100px;
+  height: 100px;
+  transition: all 0.4s ease-out;
+}
+
+.single-services .services-icon .shape-1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+}
+
+.single-services .services-icon i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.single-services:hover .services-icon .shape {
+  transform: rotate(25deg);
+}
+
+/* Footer Styles */
+.footer-area {
+  background-position: top center;
+  position: relative;
+  z-index: 5;
+}
+
+.footer-area::before {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url("/static/img/project/home/footer-bg.jpg");
+  background-position: top center;
+  z-index: -1;
+  background-size: cover;
+}
+
+/* Animation Classes */
+.fadeIn {
+  animation: fadeIn 1s ease-in;
+}
+
+.fadeInLeftBig {
+  animation: fadeInLeft 1s ease-in;
+}
+
+.fadeInRightBig {
+  animation: fadeInRight 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-
-  * {
-    margin: 0;
-    padding: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-
-  img {
-    max-width: 100%;
-  }
-
-  a:focus,
-  input:focus,
-  textarea:focus,
-  button:focus {
-    text-decoration: none;
-    outline: none;
-  }
-
-  a:focus,
-  a:hover {
-    text-decoration: none;
-  }
-
-  i,
-  span,
-  a {
-    display: inline-block;
-  }
-
-  audio,
-  canvas,
-  iframe,
-  img,
-  svg,
-  video {
-    vertical-align: middle;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Poppins", sans-serif;
-    font-weight: 700;
-    color: #2e2e2e;
-    margin: 0px;
-  }
-
-  h1 {
-    font-size: 48px;
-  }
-
-  h2 {
-    font-size: 36px;
-  }
-
-  h3 {
-    font-size: 28px;
-  }
-
-  h4 {
-    font-size: 22px;
-  }
-
-  h5 {
-    font-size: 18px;
-  }
-
-  h6 {
-    font-size: 16px;
-  }
-
-  ul,
-  ol {
-    margin: 0px;
-    padding: 0px;
-    list-style-type: none;
-  }
-
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 26px;
-    color: #6a6972;
-    margin: 0px;
-  }
-
-  .bg_cover {
-    background-position: center center;
-    background-size: 100% auto;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-  }
-
-  /*===== All Button Style =====*/
-
-  .main-btn {
-    display: inline-block;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    padding: 0 25px;
-    font-size: 16px;
-    line-height: 48px;
-    border-radius: 8px;
-    border: 0;
-    color: #fff;
-    cursor: pointer;
-    z-index: 5;
-    -webkit-transition: all 0.4s ease-out 0s;
-    -moz-transition: all 0.4s ease-out 0s;
-    -ms-transition: all 0.4s ease-out 0s;
-    -o-transition: all 0.4s ease-out 0s;
-    transition: all 0.4s ease-out 0s;
-    background: -webkit-linear-gradient(
-      left,
-      #33c8c1 0%,
-      #119bd2 50%,
-      #33c8c1 100%
-    );
-    background: -o-linear-gradient(left, #33c8c1 0%, #119bd2 50%, #33c8c1 100%);
-    background: linear-gradient(to right, #33c8c1 0%, #119bd2 50%, #33c8c1 100%);
-    background-size: 200%;
-  }
-
-  .main-btn:hover {
-    color: #fff;
-    background-position: right center;
-  }
-
-  /*===== All SECTION TITLE Style =====*/
-
-  /*.section-title .line {*/
-    /*background: -webkit-linear-gradient(#fe8464 0%, #fe6e9a 100%);*/
-    /*background: -o-linear-gradient(#fe8464 0%, #fe6e9a 100%);*/
-    /*background: linear-gradient(#fe8464 0%, #fe6e9a 100%);*/
-    /*width: 150px;*/
-    /*height: 5px;*/
-    /*margin-bottom: 10px !important;*/
-  /*}*/
-
-  .section-title .title {
-    font-size: 38px;
-    font-weight: 700;
-    line-height: 42px;
-  }
-
-  @media (max-width: 767px) {
-    .section-title .title {
-      font-size: 20px;
-    }
-  }
-
-  @media only screen and (min-width: 576px) and (max-width: 767px) {
-    .section-title .title {
-      font-size: 30px;
-    }
-  }
-
-  .section-title .title span {
-    font-weight: 400;
-    display: contents;
-  }
-
-  /*===== All Section Title Style =====*/
-
-  .section-title .sub-title {
-    font-size: 18px;
-    font-weight: 400;
-    color: #361cc1;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 767px) {
-    .section-title .sub-title {
-      font-size: 16px;
-    }
-  }
-
-  .section-title .title {
-    font-size: 32px;
-    padding-top: 10px;
-  }
-
-  @media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .section-title .title {
-      font-size: 30px;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .section-title .title {
-      font-size: 24px;
-    }
-  }
-
-  .section-title .title span {
-    font-weight: 400;
-    display: contents;
-  }
-
-  /* Preloader Animations */
-
-  @-webkit-keyframes ytp-spinner-linspin {
-    to {
-      -webkit-transform: rotate(360deg);
-      -moz-transform: rotate(360deg);
-      -ms-transform: rotate(360deg);
-      -o-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes ytp-spinner-linspin {
-    to {
-      -webkit-transform: rotate(360deg);
-      -moz-transform: rotate(360deg);
-      -ms-transform: rotate(360deg);
-      -o-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
-  @-webkit-keyframes ytp-spinner-easespin {
-    12.5% {
-      -webkit-transform: rotate(135deg);
-      -moz-transform: rotate(135deg);
-      -ms-transform: rotate(135deg);
-      -o-transform: rotate(135deg);
-      transform: rotate(135deg);
-    }
-    25% {
-      -webkit-transform: rotate(270deg);
-      -moz-transform: rotate(270deg);
-      -ms-transform: rotate(270deg);
-      -o-transform: rotate(270deg);
-      transform: rotate(270deg);
-    }
-    37.5% {
-      -webkit-transform: rotate(405deg);
-      -moz-transform: rotate(405deg);
-      -ms-transform: rotate(405deg);
-      -o-transform: rotate(405deg);
-      transform: rotate(405deg);
-    }
-    50% {
-      -webkit-transform: rotate(540deg);
-      -moz-transform: rotate(540deg);
-      -ms-transform: rotate(540deg);
-      -o-transform: rotate(540deg);
-      transform: rotate(540deg);
-    }
-    62.5% {
-      -webkit-transform: rotate(675deg);
-      -moz-transform: rotate(675deg);
-      -ms-transform: rotate(675deg);
-      -o-transform: rotate(675deg);
-      transform: rotate(675deg);
-    }
-    75% {
-      -webkit-transform: rotate(810deg);
-      -moz-transform: rotate(810deg);
-      -ms-transform: rotate(810deg);
-      -o-transform: rotate(810deg);
-      transform: rotate(810deg);
-    }
-    87.5% {
-      -webkit-transform: rotate(945deg);
-      -moz-transform: rotate(945deg);
-      -ms-transform: rotate(945deg);
-      -o-transform: rotate(945deg);
-      transform: rotate(945deg);
-    }
-    to {
-      -webkit-transform: rotate(1080deg);
-      -moz-transform: rotate(1080deg);
-      -ms-transform: rotate(1080deg);
-      -o-transform: rotate(1080deg);
-      transform: rotate(1080deg);
-    }
-  }
-
-  @keyframes ytp-spinner-easespin {
-    12.5% {
-      -webkit-transform: rotate(135deg);
-      -moz-transform: rotate(135deg);
-      -ms-transform: rotate(135deg);
-      -o-transform: rotate(135deg);
-      transform: rotate(135deg);
-    }
-    25% {
-      -webkit-transform: rotate(270deg);
-      -moz-transform: rotate(270deg);
-      -ms-transform: rotate(270deg);
-      -o-transform: rotate(270deg);
-      transform: rotate(270deg);
-    }
-    37.5% {
-      -webkit-transform: rotate(405deg);
-      -moz-transform: rotate(405deg);
-      -ms-transform: rotate(405deg);
-      -o-transform: rotate(405deg);
-      transform: rotate(405deg);
-    }
-    50% {
-      -webkit-transform: rotate(540deg);
-      -moz-transform: rotate(540deg);
-      -ms-transform: rotate(540deg);
-      -o-transform: rotate(540deg);
-      transform: rotate(540deg);
-    }
-    62.5% {
-      -webkit-transform: rotate(675deg);
-      -moz-transform: rotate(675deg);
-      -ms-transform: rotate(675deg);
-      -o-transform: rotate(675deg);
-      transform: rotate(675deg);
-    }
-    75% {
-      -webkit-transform: rotate(810deg);
-      -moz-transform: rotate(810deg);
-      -ms-transform: rotate(810deg);
-      -o-transform: rotate(810deg);
-      transform: rotate(810deg);
-    }
-    87.5% {
-      -webkit-transform: rotate(945deg);
-      -moz-transform: rotate(945deg);
-      -ms-transform: rotate(945deg);
-      -o-transform: rotate(945deg);
-      transform: rotate(945deg);
-    }
-    to {
-      -webkit-transform: rotate(1080deg);
-      -moz-transform: rotate(1080deg);
-      -ms-transform: rotate(1080deg);
-      -o-transform: rotate(1080deg);
-      transform: rotate(1080deg);
-    }
-  }
-
-  @-webkit-keyframes ytp-spinner-left-spin {
-    0% {
-      -webkit-transform: rotate(130deg);
-      -moz-transform: rotate(130deg);
-      -ms-transform: rotate(130deg);
-      -o-transform: rotate(130deg);
-      transform: rotate(130deg);
-    }
-    50% {
-      -webkit-transform: rotate(-5deg);
-      -moz-transform: rotate(-5deg);
-      -ms-transform: rotate(-5deg);
-      -o-transform: rotate(-5deg);
-      transform: rotate(-5deg);
-    }
-    to {
-      -webkit-transform: rotate(130deg);
-      -moz-transform: rotate(130deg);
-      -ms-transform: rotate(130deg);
-      -o-transform: rotate(130deg);
-      transform: rotate(130deg);
-    }
-  }
-
-  @keyframes ytp-spinner-left-spin {
-    0% {
-      -webkit-transform: rotate(130deg);
-      -moz-transform: rotate(130deg);
-      -ms-transform: rotate(130deg);
-      -o-transform: rotate(130deg);
-      transform: rotate(130deg);
-    }
-    50% {
-      -webkit-transform: rotate(-5deg);
-      -moz-transform: rotate(-5deg);
-      -ms-transform: rotate(-5deg);
-      -o-transform: rotate(-5deg);
-      transform: rotate(-5deg);
-    }
-    to {
-      -webkit-transform: rotate(130deg);
-      -moz-transform: rotate(130deg);
-      -ms-transform: rotate(130deg);
-      -o-transform: rotate(130deg);
-      transform: rotate(130deg);
-    }
-  }
-
-  @-webkit-keyframes ytp-right-spin {
-    0% {
-      -webkit-transform: rotate(-130deg);
-      -moz-transform: rotate(-130deg);
-      -ms-transform: rotate(-130deg);
-      -o-transform: rotate(-130deg);
-      transform: rotate(-130deg);
-    }
-    50% {
-      -webkit-transform: rotate(5deg);
-      -moz-transform: rotate(5deg);
-      -ms-transform: rotate(5deg);
-      -o-transform: rotate(5deg);
-      transform: rotate(5deg);
-    }
-    to {
-      -webkit-transform: rotate(-130deg);
-      -moz-transform: rotate(-130deg);
-      -ms-transform: rotate(-130deg);
-      -o-transform: rotate(-130deg);
-      transform: rotate(-130deg);
-    }
-  }
-
-  @keyframes ytp-right-spin {
-    0% {
-      -webkit-transform: rotate(-130deg);
-      -moz-transform: rotate(-130deg);
-      -ms-transform: rotate(-130deg);
-      -o-transform: rotate(-130deg);
-      transform: rotate(-130deg);
-    }
-    50% {
-      -webkit-transform: rotate(5deg);
-      -moz-transform: rotate(5deg);
-      -ms-transform: rotate(5deg);
-      -o-transform: rotate(5deg);
-      transform: rotate(5deg);
-    }
-    to {
-      -webkit-transform: rotate(-130deg);
-      -moz-transform: rotate(-130deg);
-      -ms-transform: rotate(-130deg);
-      -o-transform: rotate(-130deg);
-      transform: rotate(-130deg);
-    }
-  }
-
-  /*===== HEADER HERO =====*/
-
-  .header-hero {
-    position: relative;
-    z-index: 5;
-    background-position: top center;
-  }
-
-  /*#particles-1 {*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*left: 0;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*z-index: -1;*/
-  /*}*/
-
-  .header-hero-content {
-    padding-top: 180px;
-  }
-
-  @media (max-width: 767px) {
-    .header-hero-content {
-      padding-top: 100px;
-    }
-  }
-
-  .header-hero-content .header-sub-title {
-    font-size: 38px;
-    font-weight: 300;
-    color: #fff;
-  }
-
-  @media (max-width: 767px) {
-    .header-hero-content .header-sub-title {
-      font-size: 24px;
-    }
-  }
-
-  @media only screen and (min-width: 576px) and (max-width: 767px) {
-    .header-hero-content .header-sub-title {
-      font-size: 30px;
-    }
-  }
-
-  .header-hero-content .header-title {
-    font-size: 38px;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  @media (max-width: 767px) {
-    .header-hero-content .header-title {
-      font-size: 24px;
-    }
-  }
-
-  @media only screen and (min-width: 576px) and (max-width: 767px) {
-    .header-hero-content .header-title {
-      font-size: 30px;
-    }
-  }
-
-  .header-hero-content .text {
-    color: #fff;
-    margin-top: 30px;
-  }
-
-  .header-hero-content .main-btn {
-    margin-top: 40px;
-  }
-
-  .header-hero-image {
-    padding-top: 45px;
-  }
-
-  .header-hero-image img {
-    max-width: 650px;
-  }
-
-  @media (max-width: 767px) {
-    .header-hero-image img {
-      max-width: 100%;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .header-hero-image {
-      padding-top: 30px;
-    }
-  }
-
-  .single-logo img {
-    width: 100%;
-    opacity: 0.5;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
-
-  .single-logo:hover img {
+  to {
     opacity: 1;
   }
+}
 
-  /*===========================
-        04.SERVICES css
-  ===========================*/
-
-  .single-services {
-    background-color: #fff;
-    -webkit-box-shadow: 0px 5px 30px 0px rgba(167, 167, 167, 0.16);
-    -moz-box-shadow: 0px 5px 30px 0px rgba(167, 167, 167, 0.16);
-    box-shadow: 0px 5px 30px 0px rgba(167, 167, 167, 0.16);
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-    padding: 50px 30px;
-    border: 2px solid transparent;
-    border-radius: 8px;
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
   }
-
-  @media (max-width: 767px) {
-    .single-services {
-      padding: 20px 20px 30px;
-    }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
+}
 
-  .single-services .services-icon {
-    display: inline-block;
-    position: relative;
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
   }
-
-  .single-services .services-icon img {
-    -webkit-transition: all 0.4s ease-out 0s;
-    -moz-transition: all 0.4s ease-out 0s;
-    -ms-transition: all 0.4s ease-out 0s;
-    -o-transition: all 0.4s ease-out 0s;
-    transition: all 0.4s ease-out 0s;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
+}
 
-  .single-services .services-icon .shape-1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
+/* Section Spacing */
+.pt-32 {
+  padding-top: 8rem;
+}
 
-  .single-services .services-icon i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    font-size: 34px;
-    color: #fff;
-  }
+.pt-20 {
+  padding-top: 5rem;
+}
 
-  .single-services .services-content .services-title a {
-    font-size: 26px;
-    font-weight: 700;
-    color: #2e2e2e;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
+.mt-48 {
+  margin-top: 12rem;
+}
 
-  @media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .single-services .services-content .services-title a {
-      font-size: 24px;
-    }
-  }
+/* Button Styles */
+.main-btn {
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  font-size: 16px;
+  line-height: 48px;
+  border-radius: 8px;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.4s ease-out 0s;
+  background: linear-gradient(to right, #33c8c1 0%, #119bd2 50%, #33c8c1 100%);
+  background-size: 200%;
+}
 
-  @media (max-width: 767px) {
-    .single-services .services-content .services-title a {
-      font-size: 20px;
-    }
-  }
+.main-btn:hover {
+  color: #fff;
+  background-position: right center;
+}
 
-  .single-services .services-content .services-title a:hover {
-    color: #361cc1;
-  }
+/* About Shape */
+.about-shape-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  z-index: -1;
+}
 
-  .single-services .services-content .text {
-    margin-top: 30px;
-  }
+.about-shape-2 img {
+  width: 100%;
+}
 
-  @media (max-width: 767px) {
-    .single-services .services-content .text {
-      margin-top: 20px;
-    }
-  }
-
-  .single-services .services-content .more {
-    margin-top: 30px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #2e2e2e;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
-
-  .single-services .services-content .more i {
-    margin-left: 10px;
-  }
-
-  .single-services .services-content .more:hover {
-    color: #444444;
-  }
-
-  .single-services:hover {
-    border-color: #fe7a7b;
-  }
-
-  .single-services:hover .services-icon .shape {
-    -webkit-transform: rotate(25deg);
-    -moz-transform: rotate(25deg);
-    -ms-transform: rotate(25deg);
-    -o-transform: rotate(25deg);
-    transform: rotate(25deg);
-  }
-
-  /*===========================
-        05.ABOUT css
-  ===========================*/
-
-  .about-area {
-    position: relative;
-    z-index: 5;
-  }
-
-  .about-shape-1 {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 35%;
-    height: 100%;
-    z-index: -1;
-  }
-
-  .about-shape-1 img {
-    width: 100%;
-  }
-
-  @media (max-width: 767px) {
-    .about-shape-1 {
-      display: none;
-    }
-  }
-
+@media (max-width: 767px) {
   .about-shape-2 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 35%;
-    height: 100%;
-    z-index: -1;
-  }
-
-  .about-shape-2 img {
-    width: 100%;
-  }
-
-  @media (max-width: 767px) {
-    .about-shape-2 {
-      display: none;
-    }
-  }
-
-  .about-content {
-    max-width: 480px;
-  }
-
-  .about-content .text {
-    margin-top: 15px;
-  }
-
-  .about-content .main-btn {
-    background: #ed592a;
-    background-size: 200%;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 35px;
-    margin-top: 40px;
-  }
-
-  .about-content .main-btn:hover {
-    background: #e6947b;
-  }
-
-  /*===========================
-         11.FOOTER  css
-  ===========================*/
-
-  .footer-area {
-    background-position: top center;
-    position: relative;
-    z-index: 5;
-  }
-
-  .footer-area::before {
-    position: absolute;
-    content: "";
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-image: url("/static/img/project/home/footer-bg.jpg");
-    background-position: top center;
-    z-index: -1;
-    background-size: cover;
-  }
-
-  @media only screen and (min-width: 1921px) {
-    .footer-area::before {
-      height: 1120px;
-    }
-  }
-
-  /*#particles-2 {*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*left: 0;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*z-index: -1;*/
-  /*}*/
-
-  .footer-widget {
-    padding-top: 50px;
-  }
-
-  .footer-about .logo img {
-    width: 160px;
-  }
-
-  .footer-about .text {
-    color: #646565;
-    line-height: 30px;
-    margin-top: 30px;
-  }
-
-  .footer-about .social {
-    margin-top: 40px;
-  }
-
-  .footer-about .social li {
-    display: inline-block;
-    margin-right: 30px;
-  }
-
-  .footer-about .social li a {
-    font-size: 22px;
-    color: #646565;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
-
-  .footer-about .social li a:hover {
-    color: #fe8464;
-  }
-
-  .footer-title .title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #646565;
-  }
-
-  .link-wrapper {
-    padding: 0 35px;
-  }
-
-  @media (max-width: 767px) {
-    .link-wrapper {
-      padding: 0;
-      padding-right: 50px;
-    }
-  }
-
-  .link-wrapper .link {
-    padding-top: 20px;
-  }
-
-  .link-wrapper .link li {
-    margin-top: 20px;
-  }
-
-  .link-wrapper .link li a {
-    font-size: 16px;
-    color: #646565;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
-
-  .link-wrapper .link li a:hover {
-    color: #fe8464;
-  }
-
-  .footer-contact .contact {
-    padding-top: 20px;
-  }
-
-  .footer-contact .contact li {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #646565;
-  }
-
-  .copyright-content p {
-    color: #646565;
-  }
-
-  .copyright-content a {
-    font-size: 16px;
-    color: #646565;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-  }
-
-  .copyright-content a:hover {
-    color: #fe8464;
-  }
-
-  /*===== BACK TO TOP =====*/
-
-  #back-to-top {
-    font-size: 20px;
-    color: #fff;
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 5px;
-    background: -webkit-linear-gradient(left, #361cc1 0%, #2e82ef 100%);
-    background: -o-linear-gradient(left, #361cc1 0%, #2e82ef 100%);
-    background: linear-gradient(to right, #361cc1 0%, #2e82ef 100%);
-    text-align: center;
-    z-index: 99;
-    -webkit-transition: all 0.3s ease-out 0s;
-    -moz-transition: all 0.3s ease-out 0s;
-    -ms-transition: all 0.3s ease-out 0s;
-    -o-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
     display: none;
   }
-
-  #back-to-top:hover {
-    color: #fff;
-  }
-
-  .height-300 {
-    height: 400px;
-  }
+}
 </style>

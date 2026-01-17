@@ -1,150 +1,111 @@
 <template>
-  <div class="container-fluid">
-    <b-card-group>
-      <b-card no-body>
-        <b-card-body>
-            <b-row>
-              <b-col cols="12">
-                <h4>Chi Tiết Phiếu {{fund.type == 0 ? 'Thu' : 'Chi'}}</h4>
-              </b-col>
-            </b-row>
-            <hr>
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="mb-4">
+        <h4 class="text-xl font-semibold text-center">Chi Tiết Phiếu {{fund.type == 0 ? 'Thu' : 'Chi'}}</h4>
+      </div>
+      <hr class="my-4">
 
-            <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Số phiếu: {{fund.fund_number}}</label>
-              </b-col>
-            </b-row>
+      <div v-show="loading" class="flex justify-center my-4">
+        <icon name="loading" width="60" />
+      </div>
 
-            <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Ngày tạo: {{fund.date_input}}</label>
-              </b-col>
-            </b-row>
+      <div class="space-y-4">
+        <div>
+          <label class="font-medium">Số phiếu: {{fund.fund_number}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Ngày hoạch toán: {{fund.accounting_date}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Ngày tạo: {{fund.date_input}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Khoản thu cho ĐH: {{fund.order_sell_number ? fund.order_sell_number : fund.order_buy_number}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Ngày hoạch toán: {{fund.accounting_date}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Đối tượng thu-chi: {{fund.object_type_str}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Khoản thu cho ĐH: {{fund.order_sell_number ? fund.order_sell_number : fund.order_buy_number}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Số tiền: {{currencyFormat(fund.amount)}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Đối tượng thu-chi: {{fund.object_type_str}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Sổ khoản thu-chi: {{fund.money_type_str}}</label>
-                <p class="ml-3" v-show="fund.bank_account_name">{{fund.bank_account_name}}</p>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Số tiền: {{currencyFormat(fund.amount)}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Nhóm khoản thu-chi: {{fund.expend_income_group_name}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Sổ khoản thu-chi: {{fund.money_type_str}}</label>
+          <p class="ml-3" v-show="fund.bank_account_name">{{fund.bank_account_name}}</p>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Loại khoản thu-chi: {{fund.expend_income_type_name}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Nhóm khoản thu-chi: {{fund.expend_income_group_name}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label>Diễn giải nội dung: {{fund.description}}</label>
-              </b-col>
-            </b-row>
+        <div>
+          <label class="font-medium">Loại khoản thu-chi: {{fund.expend_income_type_name}}</label>
+        </div>
 
-          <b-row class="form-row">
-              <b-col md="12" class="mt-2">
-                <label v-bind:class="fund.is_active ? 'text-success' : 'text-danger'">Trạng thái: {{fund.is_active ? 'Đang hoạt động' : 'Đã xoá'}}</label>
-              </b-col>
-            </b-row>
-        </b-card-body>
-      </b-card>
-    </b-card-group>
+        <div>
+          <label class="font-medium">Diễn giải nội dung: {{fund.description}}</label>
+        </div>
+
+        <div>
+          <label class="font-medium" :class="fund.is_active ? 'text-green-600' : 'text-red-600'">
+            Trạng thái: {{fund.is_active ? 'Đang hoạt động' : 'Đã xoá'}}
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import fundApi from '@/api/fund'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
+const route = useRoute()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      fund: {
-        name: '',
-        phone_number: '',
-        role_name: ''
-      },
-      loading: false,
+const fund = ref({
+  name: '',
+  phone_number: '',
+  role_name: ''
+})
+const loading = ref(false)
+
+const getFundHisDetail = () => {
+  loading.value = true
+  let id = route.params.id
+  fundApi.getFundHisDetail(id).then(res => {
+    if(res != null && res.data != null && res.data.data != null){
+      fund.value = res.data.data
     }
-  },
-  mounted () {
-    this.getFundHisDetail()
-  },
-  methods: {
-
-
-
-    /**
-     * Get staff information
-     */
-    getFundHisDetail () {
-      this.loading = true
-      let id = this.$route.params.id
-      fundApi.getFundHisDetail(id).then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          this.fund = res.data.data
-        }
-
-        this.loading = false
-      }).catch(err => {
-        this.loading = false
-
-        // Handle error
-          let errorMess = commonFunc.handleCusError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-        if(num == 0) {
-          return "0"
-        }
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-  }
+    loading.value = false
+  }).catch(err => {
+    loading.value = false
+    let errorMess = commonFunc.handleCusError(err)
+    popToast('danger', errorMess)
+  })
 }
+
+const currencyFormat = (num) => {
+  let result = ""
+  if(num == 0) {
+    return "0"
+  }
+  if(num) {
+    result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+  return result
+}
+
+onMounted(() => {
+  getFundHisDetail()
+})
 </script>

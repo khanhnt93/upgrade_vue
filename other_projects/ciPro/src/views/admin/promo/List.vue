@@ -1,424 +1,358 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-end mb-4">
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="goToAdd">
+            Thêm
+          </button>
+        </div>
 
-           <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Khuyến Mãi</h4>
-            </b-col>
-          </b-row>
-          <hr>
+        <div class="text-center mb-4">
+          <h4 class="text-xl font-semibold text-gray-700">Danh Sách Khuyến Mãi</h4>
+        </div>
+        <hr class="mb-4">
 
-          <b-row>
-            <b-col md="3">
-              <label> Tên </label>
-              <input
-              id="name"
+        <!-- Search Form -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div>
+            <label class="block mb-2">Tên</label>
+            <input
               type="text"
               autocomplete="new-password"
-              class="form-control"
+              class="w-full border rounded px-3 py-2"
               v-model="inputs.name">
-            </b-col>
+          </div>
 
-            <b-col md="3">
-              <label> Giá </label>
-              <input
-              id="price"
+          <div>
+            <label class="block mb-2">Giá</label>
+            <input
               type="text"
               autocomplete="new-password"
-              class="form-control"
+              class="w-full border rounded px-3 py-2"
               v-model="inputs.price"
               maxlength="11"
               @keyup="integerOnly($event.target)">
-            </b-col>
+          </div>
 
-            <b-col md="3">
-              <label> Loại </label>
-              <b-form-select
-              :options="typeOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
+          <div>
+            <label class="block mb-2">Loại</label>
+            <select
+              v-model="inputs.type"
+              class="w-full border rounded px-3 py-2">
+              <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+            </select>
+          </div>
 
-            <b-col md="3">
-              <label> Hiệu lực </label>
-              <b-form-select
-              :options="expireOptions"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.expire"></b-form-select>
-            </b-col>
-          </b-row>
+          <div>
+            <label class="block mb-2">Hiệu lực</label>
+            <select
+              v-model="inputs.expire"
+              class="w-full border rounded px-3 py-2">
+              <option v-for="opt in expireOptions" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+            </select>
+          </div>
+        </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+        <div class="flex justify-end mb-4">
+          <button
+            class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-4 py-2 rounded w-32"
+            :disabled="onSearch"
+            @click="prepareToSearch">
+            Tìm Kiếm
+          </button>
+        </div>
 
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+        <div class="mb-3">
+          Số kết quả: {{ totalRow }}
+        </div>
 
-          <b-row>
-            <b-col md="12">
-                <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-                <template v-slot:cell(method)="data">{{ formatMethod(data.item.method) }}</template>
-                <template v-slot:cell(actions)="dataId">
-                  <b-list-group horizontal>
-                    <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="border border-gray-300 px-4 py-2">STT</th>
+                <th class="border border-gray-300 px-4 py-2">Mã</th>
+                <th class="border border-gray-300 px-4 py-2">Tên</th>
+                <th class="border border-gray-300 px-4 py-2">Giá(điểm)</th>
+                <th class="border border-gray-300 px-4 py-2">Loại</th>
+                <th class="border border-gray-300 px-4 py-2">% giảm giá</th>
+                <th class="border border-gray-300 px-4 py-2">Giảm giá tối đa</th>
+                <th class="border border-gray-300 px-4 py-2">Trên tổng giá</th>
+                <th class="border border-gray-300 px-4 py-2">Giá trị voucher</th>
+                <th class="border border-gray-300 px-4 py-2">Item free</th>
+                <th class="border border-gray-300 px-4 py-2">Số lượng</th>
+                <th class="border border-gray-300 px-4 py-2">Còn lại</th>
+                <th class="border border-gray-300 px-4 py-2">Ngày hiệu lực</th>
+                <th class="border border-gray-300 px-4 py-2">Ngày Hết Hạn</th>
+                <th class="border border-gray-300 px-4 py-2 w-24"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2">{{ item.stt }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.code }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.price }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.type }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.discount_percent }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.max_discount }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.discount_on_amount }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.value_of_voucher }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.item_free }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.quantity }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.remaining }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.expired_date_from }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ item.expired_date_to }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <div class="flex gap-2 justify-center">
+                    <button
+                      @click="edit(item.id)"
+                      class="text-blue-500 hover:text-blue-700"
+                      title="Edit">
                       <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Delete"
-                                      @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt, dataId.item.method)">
+                    </button>
+                    <button
+                      @click="deleted(item.id, item.name, item.stt, item.method)"
+                      class="text-red-500 hover:text-red-700"
+                      title="Delete">
                       <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-                </b-table>
-            </b-col>
-          </b-row>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        <!-- Loading -->
+        <div class="text-center mt-4">
+          <span v-show="loading" class="inline-block"><icon name="loading" width="60" /></span>
+          <span v-if="hasNext === false" class="text-gray-500">--Hết--</span>
+          <span v-if="hasNext === true && totalRow != 0" class="text-gray-500 cursor-pointer">
+            <i class="fa fa-angle-double-down text-2xl"></i>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import promotionAPI from '@/api/promotion'
 import commonFunc from '@/common/commonFunc'
-import {Constant} from '@/common/constant'
-import { useToast } from '@/composables/useToast'
+import { Constant } from '@/common/constant'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    const toast = useToast()
-    return { popToast, toast }
-  },
-  data () {
-    return {
-      inputs: {
-        name: null,
-        price: null,
-        method: null,
-        type: null,
-        expire: null
-      },
-      pageLimit: Constant.PAGE_LIMIT,
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'code',
-          label: 'Mã'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'price',
-          label: 'Giá(điểm)'
-        },
-        // {
-        //   key: 'method',
-        //   label: 'Hình thức phát hành'
-        // },
-        {
-          key: 'type',
-          label: 'Loại'
-        },
+const router = useRouter()
+const { popToast } = useToast()
 
-        {
-          key: 'discount_percent',
-          label: '% giảm giá'
-        },
-        {
-          key: 'max_discount',
-          label: 'Giảm giá tối đa'
-        },
-        {
-          key: 'discount_on_amount',
-          label: 'Trên tổng giá'
-        },
-        {
-          key: 'value_of_voucher',
-          label: 'Giá trị voucher'
-        },
-        {
-          key: 'item_free',
-          label: 'Item free'
-        },
-        {
-          key: 'quantity',
-          label: 'Số lượng'
-        },
-        {
-          key: 'remaining',
-          label: 'Còn lại'
-        },
-        {
-          key: 'expired_date_from',
-          label: 'Ngày hiệu lực'
-        },
-        {
-          key: 'expired_date_to',
-          label: 'Ngày Hết Hạn'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      listIdDeleted: [],
-      offset: 0,
-      hasNext: true,
-      onSearch: false,
-      loadByScroll: false,
-      loading: false,
-      expireOptions: [
-        {value: null, text: ''},
-        {value: 'true', text: 'Còn'},
-        {value: 'false', text: 'Hết'}
-      ],
-      typeOptions: [{value: null, text: ''}],
-      methodOptions: [
-        {value: null, text: ''},
-        {value: 'trade_point', text: 'Đổi điểm'},
-        {value: 'other', text: 'Khác'}
-      ],
-      totalRow: 0
+const inputs = ref({
+  name: null,
+  price: null,
+  method: null,
+  type: null,
+  expire: null
+})
+
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const items = ref([])
+const listIdDeleted = ref([])
+const offset = ref(0)
+const hasNext = ref(true)
+const onSearch = ref(false)
+const loadByScroll = ref(false)
+const loading = ref(false)
+const totalRow = ref(0)
+
+const expireOptions = ref([
+  {value: null, text: ''},
+  {value: 'true', text: 'Còn'},
+  {value: 'false', text: 'Hết'}
+])
+
+const typeOptions = ref([{value: null, text: ''}])
+
+const methodOptions = ref([
+  {value: null, text: ''},
+  {value: 'trade_point', text: 'Đổi điểm'},
+  {value: 'other', text: 'Khác'}
+])
+
+/**
+ *  Processing on scroll: use for paging
+ */
+const onScroll = (event) => {
+  if(onSearch.value) {
+    return
+  }
+  event.preventDefault()
+  var body = document.body
+  var html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if(hasNext.value) {
+      offset.value = offset.value + pageLimit.value
+      loadByScroll.value = true
+      getPromoList()
     }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-
-    window.addEventListener('resize', this.delete)
-
-    // Load list option promotion type
-    this.getPromotionTypeList()
-
-    // Get list promotion
-    this.getPromoList()
-
-  },
-  methods: {
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.toast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
-     *  Processing on scroll: use for paging
-     */
-    onScroll (event) {
-      if(this.onSearch) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + this.pageLimit
-          this.loadByScroll = true
-          this.getPromoList ()
-        }
-      }
-    },
-
-    /**
-     * Delete
-     */
-    deleted (id, name, rowIndex, method) {
-      if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            let dataPost = {
-              "id": id,
-              "method": method
-            }
-            promotionAPI.deletePromo(dataPost).then(res => {
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
-
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-            })
-          }
-        })
-      }
-    },
-
-    /**
-     * Load list option promotion type
-     */
-    getPromotionTypeList () {
-      promotionAPI.getListPromotionType().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.typeOptions = this.typeOptions.concat(res.data.data)
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Go to edit
-     * @param id
-     */
-    edit (id) {
-      this.$router.push('/promo/index/' + id)
-    },
-
-    /**
-     * Go to add
-     */
-    goToAdd () {
-      this.$router.push('/promo/index/')
-    },
-
-    /**
-     * Format method
-     */
-    formatMethod(method) {
-      let result = "Khác"
-      if(method == 'trade_point') {
-        result = "Đổi điểm"
-      }
-      return result
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-
-      this.getPromoList()
-    },
-
-    /**
-     * Get list
-     */
-    getPromoList () {
-      if (this.loading) { return }
-
-      this.onSearch = true
-      this.loading = true
-      // Define params
-      let param = {
-        "name": this.inputs.name,
-        "price": this.inputs.price,
-        "method": this.inputs.method,
-        "type": this.inputs.type,
-        "expire": this.inputs.expire,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      promotionAPI.getPromoList(param).then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          let it = res.data.data.promotions //Mapper.mapPromoModelToDto(res.data.data.promotions, this.offset)
-          this.totalRow = res.data.data.total_row
-
-          // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
-          }
-        } else {
-          this.items = []
-        }
-        this.onSearch = false
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.onSearch = false
-        this.loading = false
-      })
-    },
-
-    /**
-     * Only input integer
-     */
-     integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
   }
 }
+
+/**
+ * Delete
+ */
+const deleted = (id, name, rowIndex, method) => {
+  if(id && name) {
+    if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+      let dataPost = {
+        "id": id,
+        "method": method
+      }
+      promotionAPI.deletePromo(dataPost).then(res => {
+        // Remove item in list
+        let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+        items.value.splice(indexTemp, 1)
+        listIdDeleted.value.push(rowIndex - 1)
+
+        totalRow.value = totalRow.value - 1
+      }).catch(err => {
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  }
+}
+
+/**
+ * Load list option promotion type
+ */
+const getPromotionTypeList = () => {
+  promotionAPI.getListPromotionType().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      typeOptions.value = typeOptions.value.concat(res.data.data)
+    }
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+/**
+ * Go to edit
+ * @param id
+ */
+const edit = (id) => {
+  router.push('/promo/index/' + id)
+}
+
+/**
+ * Go to add
+ */
+const goToAdd = () => {
+  router.push('/promo/index/')
+}
+
+/**
+ * Format method
+ */
+const formatMethod = (method) => {
+  let result = "Khác"
+  if(method == 'trade_point') {
+    result = "Đổi điểm"
+  }
+  return result
+}
+
+/**
+ * Prepare to search
+ */
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+
+  getPromoList()
+}
+
+/**
+ * Get list
+ */
+const getPromoList = () => {
+  if (loading.value) { return }
+
+  onSearch.value = true
+  loading.value = true
+  // Define params
+  let param = {
+    "name": inputs.value.name,
+    "price": inputs.value.price,
+    "method": inputs.value.method,
+    "type": inputs.value.type,
+    "expire": inputs.value.expire,
+    "limit": pageLimit.value,
+    "offset": offset.value
+  }
+
+  promotionAPI.getPromoList(param).then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      let it = res.data.data.promotions
+      totalRow.value = res.data.data.total_row
+
+      // Update items
+      if(loadByScroll.value) {
+        let temp = items.value
+        var newArray = temp.concat(it)
+        items.value = newArray
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      // Check has next
+      if(offset.value + pageLimit.value >= res.data.data.total_row) {
+        hasNext.value = false
+      }
+    } else {
+      items.value = []
+    }
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+/**
+ * Only input integer
+ */
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+
+  // Load list option promotion type
+  getPromotionTypeList()
+
+  // Get list promotion
+  getPromoList()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>

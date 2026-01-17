@@ -1,489 +1,403 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center">Store</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="store.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+  <div class="container-fluid px-4 py-6">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Header -->
+        <h4 class="text-2xl font-semibold text-center mb-4">Store</h4>
+        <hr class="my-4 border-gray-200">
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Thương hiệu </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="optionsBrand"
-                  id="brand_id"
-                  type="text"
-                  class="form-control"
-                  v-model="store.brand_id"
-                  ></b-form-select>
-                </b-col>
-              </b-row>
+        <!-- Form Fields -->
+        <div class="space-y-4">
+          <!-- Name -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Tên <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="store.name"
+                type="text"
+                maxlength="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorName }"
+              >
+              <p v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tỉnh/ Thành Phố </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="optionsCity"
-                  id="city_id"
-                  type="text"
-                  class="form-control"
-                  v-model="store.city_id"
-                  v-on:change="changeCity($event.target)"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCiti">
-                    Vui lòng nhập tỉnh/thành phố
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Quận </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                    v-bind="{ disabled: store.city_id=='' }"
-                    :options="optionsDistrict"
-                    id="district"
-                    type="text"
-                    class="form-control"
-                    v-model="store.district_id"
-                    ></b-form-select>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorDistrict">
-                    Vui lòng nhập quận
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Địa Chỉ </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="address"
-                  type="text"
-                  class="form-control"
-                  v-model="store.address">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAddress">
-                    Vui lòng nhập địa chỉ
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số điện thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="phone_number"
-                  type="text"
-                  class="form-control"
-                  v-model="store.phone_number"
-                  maxlength="20">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPhoneNumber">
-                    Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <!-- Brand -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">Thương hiệu</label>
+            <div class="md:col-span-9">
+              <select
+                v-model="store.brand_id"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option v-for="option in optionsBrand" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Mã số thuế </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="tax_code"
-                  type="text"
-                  class="form-control"
-                  v-model="store.tax_code"
-                  @keyup="integerOnly($event.target)"
-                  autocomplete="new-password"
-                  maxlength="20">
-              </b-col>
-            </b-row>
+          <!-- City -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Tỉnh/ Thành Phố <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <select
+                v-model="store.city_id"
+                @change="changeCity"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorCiti }"
+              >
+                <option v-for="option in optionsCity" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <p v-if="errorCiti" class="text-red-500 text-sm mt-1">Vui lòng nhập tỉnh/thành phố</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Hết Hạn Vào </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="expriedDate"
-                  type="text"
-                  class="form-control"
-                  v-model="store.expired_at"
-                  @keyup="inputDateOnly($event.target)"
-                  @change="changeExpiredDate">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredAt">
-                    Vui lòng nhập ngày hết hạn
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <!-- District -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Quận <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <select
+                v-model="store.district_id"
+                :disabled="store.city_id === ''"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                :class="{ 'border-red-500': errorDistrict }"
+              >
+                <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <p v-if="errorDistrict" class="text-red-500 text-sm mt-1">Vui lòng nhập quận</p>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Thời hạn </label>
-                </b-col>
-                <b-col md="9">
-                  <p>{{timeLive}}</p>
-                </b-col>
-              </b-row>
+          <!-- Address -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Địa Chỉ <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="store.address"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorAddress }"
+              >
+              <p v-if="errorAddress" class="text-red-500 text-sm mt-1">Vui lòng nhập địa chỉ</p>
+            </div>
+          </div>
 
-              <b-row class="mt-3">
-                <b-col cols="6">
-                  <b-button variant="secondary" class="pull-left px-4" @click="back">
-                    Quay lại
-                  </b-button>
-                </b-col>
-                <b-col cols="6">
-                  <button class="btn btn-primary pull-left px-4 default-btn-bg" :disabled="saving" @click="save" >
-                      Lưu
-                  </button>
-                </b-col>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <!-- Phone Number -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Số điện thoại <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="store.phone_number"
+                type="text"
+                maxlength="20"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorPhoneNumber }"
+              >
+              <p v-if="errorPhoneNumber" class="text-red-500 text-sm mt-1">Vui lòng nhập số điện thoại</p>
+            </div>
+          </div>
+
+          <!-- Tax Code -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">Mã số thuế</label>
+            <div class="md:col-span-9">
+              <input
+                v-model="store.tax_code"
+                type="text"
+                maxlength="20"
+                @keyup="integerOnly($event.target)"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+          </div>
+
+          <!-- Expired Date -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">
+              Hết Hạn Vào <span class="text-red-500">*</span>
+            </label>
+            <div class="md:col-span-9">
+              <input
+                v-model="store.expired_at"
+                type="text"
+                @keyup="inputDateOnly($event.target)"
+                @change="changeExpiredDate"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'border-red-500': errorExpiredAt }"
+              >
+              <p v-if="errorExpiredAt" class="text-red-500 text-sm mt-1">Vui lòng nhập ngày hết hạn</p>
+            </div>
+          </div>
+
+          <!-- Time Live -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <label class="md:col-span-3 text-sm font-medium text-gray-700 pt-2">Thời hạn</label>
+            <div class="md:col-span-9">
+              <p class="pt-2 text-gray-700">{{ timeLive }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div>
+            <button
+              @click="back"
+              class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              Quay lại
+            </button>
+          </div>
+          <div>
+            <button
+              @click="save"
+              :disabled="saving"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              Lưu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import superAdminAPI from '@/api/superAdmin'
 import commonFunc from '@/common/commonFunc'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const route = useRoute()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      optionsBrand: [],
-      optionsCity: [],
-      optionsDistrict: [],
-      store: {
-        "name": '',
-        "brand_id": null,
-        "address": '',
-        "tax_code": '',
-        "phone_number": '',
-        "city_id": '',
-        "district_id": '',
-        "expired_at": ''
-      },
-      saving: false,
-      timeLive: 0
-    }
-  },
-  mounted() {
-    // Get brand options
-    this.getOptionBrand()
+// Reactive state
+const optionsBrand = ref([])
+const optionsCity = ref([])
+const optionsDistrict = ref([])
+const store = reactive({
+  name: '',
+  brand_id: null,
+  address: '',
+  tax_code: '',
+  phone_number: '',
+  city_id: '',
+  district_id: '',
+  expired_at: ''
+})
+const saving = ref(false)
+const timeLive = ref(0)
 
-    // Get default date
-    this.getDefaultDate()
+// Computed properties
+const errorName = computed(() => checkInfo(store.name))
+const errorCiti = computed(() => checkInfo(store.city_id))
+const errorDistrict = computed(() => checkInfo(store.district_id))
+const errorAddress = computed(() => checkInfo(store.address))
+const errorPhoneNumber = computed(() => checkInfo(store.phone_number))
+const errorExpiredAt = computed(() => checkInfo(store.expired_at))
 
-    this.getStoreDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.store.name)
-    },
-    errorCiti: function () {
-      return this.checkInfo(this.store.city_id)
-    },
-    errorDistrict: function () {
-      return this.checkInfo(this.store.district_id)
-    },
-    errorAddress: function () {
-      return this.checkInfo(this.store.address)
-    },
-    errorPhoneNumber: function () {
-      return this.checkInfo(this.store.phone_number)
-    },
-    errorExpiredAt: function () {
-      return this.checkInfo(this.store.expired_at)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.saving && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName || this.errorCiti || this.errorDistrict || this.errorAddress || this.errorPhoneNumber || this.errorExpiredAt)
-    },
+// Methods
+const checkInfo = (info) => {
+  return saving.value && (info == null || info.length <= 0)
+}
 
-    /**
-     * Get time live
-     */
-    getTimeLive() {
-      let dateNow = new Date()
-      let dayInMonth = new Date(dateNow.getFullYear(), (dateNow.getMonth() + 1), 0).getDate()
+const checkValidate = () => {
+  return !(errorName.value || errorCiti.value || errorDistrict.value || errorAddress.value || errorPhoneNumber.value || errorExpiredAt.value)
+}
 
-      let year = dateNow.getFullYear()
-      let month = dateNow.getMonth() + 1
-      let day = dateNow.getDate()
+const getTimeLive = () => {
+  const dateNow = new Date()
+  const dayInMonth = new Date(dateNow.getFullYear(), (dateNow.getMonth() + 1), 0).getDate()
 
-      let expiredDate = this.store.expired_at.split("-")
-      let eYear = parseInt(expiredDate[2])
-      let eMonth = parseInt(expiredDate[1])
-      let eDay = parseInt(expiredDate[0])
+  const year = dateNow.getFullYear()
+  const month = dateNow.getMonth() + 1
+  const day = dateNow.getDate()
 
-      let minYear = parseInt(eYear) - parseInt(year)
-      let minMon = eMonth - month
-      if(minMon < 0) {
-        minMon = 12 - parseInt(month) + parseInt(eMonth)
-        minYear = minYear - 1
-      }
-      let minDay = eDay - day
-      if(minDay < 0) {
-        minDay = parseInt(dayInMonth) - parseInt(day) + parseInt(eDay)
-        minMon = minMon - 1
-      }
-      this.timeLive = minYear + " năm " + minMon + " tháng " + minDay + " ngày"
-    },
+  const expiredDate = store.expired_at.split('-')
+  const eYear = parseInt(expiredDate[2])
+  const eMonth = parseInt(expiredDate[1])
+  const eDay = parseInt(expiredDate[0])
 
-    /**
-     * Get default date
-     */
-    getDefaultDate() {
-      if(!this.$route.params.id) {
-        let dateNow = new Date()
-        let oneMonth = new Date(dateNow.setMonth(dateNow.getMonth() + 1))
-        this.store.expired_at = commonFunc.formatDate(oneMonth.toJSON().slice(0,10))
+  let minYear = parseInt(eYear) - parseInt(year)
+  let minMon = eMonth - month
+  if (minMon < 0) {
+    minMon = 12 - parseInt(month) + parseInt(eMonth)
+    minYear = minYear - 1
+  }
+  let minDay = eDay - day
+  if (minDay < 0) {
+    minDay = parseInt(dayInMonth) - parseInt(day) + parseInt(eDay)
+    minMon = minMon - 1
+  }
+  timeLive.value = minYear + ' năm ' + minMon + ' tháng ' + minDay + ' ngày'
+}
 
-        this.getTimeLive()
-      }
-    },
-
-    /**
-     * Get detail
-     */
-    getStoreDetail() {
-      let storeId = this.$route.params.id
-      if(storeId){
-        superAdminAPI.getStoreDetail(storeId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.store = res.data.data
-            // this.getTimeLive()
-            this.getOptionCity()
-          }
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      } else {
-        this.getOptionCity()
-      }
-    },
-
-    /**
-     * Save
-     */
-    save () {
-
-      let result = this.checkValidate()
-      if(result) {
-        this.saving = true
-
-        // Format date
-        let store = JSON.parse(JSON.stringify(this.store))
-        store.expired_at = commonFunc.convertDDMMYYYYToYYYYMMDD(this.store.expired_at)
-
-        let storeId = this.$route.params.id
-        if(storeId){
-          // Edit
-          store.id = storeId
-         console.log(store)
-          superAdminAPI.editStore(store).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              let message = ""
-              if (res.data.status == 200) {
-                // show popup success
-                this.$bvModal.msgBoxOk("Cập nhật thành công", {
-                  title: "Cập Nhật Cửa Hàng",
-                  centered: true,
-                  size: 'sm',
-                  headerClass: 'bg-success',
-                }).then(res => {
-                  this.$router.push("/store/list")
-                })
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Show notify edit fail: TODO
-            let message = ""
-            if(err.response.data.status == 422) {
-              message = err.response.data.mess
-            } else {
-              message = "Lỗi hệ thống"
-            }
-            this.$bvModal.msgBoxOk(message, {
-              title: "Cập Nhật Cửa Hàng",
-              centered: true,
-              size: 'sm',
-              headerClass: 'bg-danger',
-            })
-          })
-        } else {
-          // Add
-          superAdminAPI.addStore(store).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              let message = ""
-              if (res.data.status == 200) {
-                // show popup success
-                this.$bvModal.msgBoxOk("Thêm thành công", {
-                  title: "Thêm Cửa Hàng",
-                  centered: true,
-                  size: 'sm',
-                  headerClass: 'bg-success',
-                }).then(res => {
-                  this.$router.push("/store/list")
-                })
-              }
-
-            }
-          }).catch(err => {
-            this.saving = false
-            let message = ""
-              if(err.response.data.status == 422) {
-                message = err.response.data.mess
-              } else {
-                message = "Lỗi hệ thống"
-              }
-              this.$bvModal.msgBoxOk(message, {
-                title: "Thêm Cửa Hàng",
-                centered: true,
-                size: 'sm',
-                headerClass: 'bg-danger',
-              })
-          })
-        }
-      }
-      // else {
-      //   this.saving = false
-      // }
-
-    },
-
-    /**
-     * Only input date
-     */
-     inputDateOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.inputDateOnly(valueInput)
-      item.value = result
-    },
-
-    /**
-     * Get brand options
-     */
-    getOptionBrand() {
-      superAdminAPI.getBrandOption().then(res => {
-        this.optionsBrand = [{"value": null, "text": ""}]
-        if(res && res.data && res.data.data) {
-          let brands = res.data.data
-          for (var index in brands) {
-            let brand = {
-              value: brands[index].value,
-              text: brands[index].text
-            }
-            this.optionsBrand.push(brand)
-          }
-        }
-
-      }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get city options
-     */
-    getOptionCity() {
-      MasterApi.getCityOptions().then(res => {
-        this.optionsCity = MasterMapper.mapCityModelToDto(res.data.data)
-        this.changeCity()
-      }).catch(err => {
-        // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-      })
-    },
-
-    /**
-     * Get district by city
-     */
-    changeCity() {
-      let cityId = this.store.city_id
-      // console.log(cityId)
-      if(cityId != "" && cityId != undefined) {
-        MasterApi.getDistrictOptions(cityId).then(res => {
-          // console.log(res.data.data)
-          this.optionsDistrict = MasterMapper.mapCityModelToDto(res.data.data)
-        })
-      } else {
-        this.store.district_id = ""
-      }
-    },
-
-    /**
-     * Change expired date
-     */
-    changeExpiredDate() {
-      if(commonFunc.dateFormatCheck(this.store.expired_at)) {
-        this.getTimeLive()
-      }
-    },
-
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push("/store/list")
-    },
-
-    /**
-     * Only input integer
-     */
-    integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
+const getDefaultDate = () => {
+  if (!route.params.id) {
+    const dateNow = new Date()
+    const oneMonth = new Date(dateNow.setMonth(dateNow.getMonth() + 1))
+    store.expired_at = commonFunc.formatDate(oneMonth.toJSON().slice(0, 10))
+    getTimeLive()
   }
 }
+
+const getStoreDetail = () => {
+  const storeId = route.params.id
+  if (storeId) {
+    superAdminAPI.getStoreDetail(storeId).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        Object.assign(store, res.data.data)
+        getOptionCity()
+      }
+    }).catch(err => {
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  } else {
+    getOptionCity()
+  }
+}
+
+const save = () => {
+  const result = checkValidate()
+  if (result) {
+    saving.value = true
+
+    const storeData = JSON.parse(JSON.stringify(store))
+    storeData.expired_at = commonFunc.convertDDMMYYYYToYYYYMMDD(store.expired_at)
+
+    const storeId = route.params.id
+    if (storeId) {
+      storeData.id = storeId
+      superAdminAPI.editStore(storeData).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            alert('Cập nhật thành công')
+            router.push('/store/list')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        let message = ''
+        if (err.response.data.status == 422) {
+          message = err.response.data.mess
+        } else {
+          message = 'Lỗi hệ thống'
+        }
+        alert(message)
+      })
+    } else {
+      superAdminAPI.addStore(storeData).then(res => {
+        saving.value = false
+        if (res != null && res.data != null) {
+          if (res.data.status == 200) {
+            alert('Thêm thành công')
+            router.push('/store/list')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        let message = ''
+        if (err.response.data.status == 422) {
+          message = err.response.data.mess
+        } else {
+          message = 'Lỗi hệ thống'
+        }
+        alert(message)
+      })
+    }
+  }
+}
+
+const inputDateOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.inputDateOnly(valueInput)
+  item.value = result
+}
+
+const getOptionBrand = () => {
+  superAdminAPI.getBrandOption().then(res => {
+    optionsBrand.value = [{ value: null, text: '' }]
+    if (res && res.data && res.data.data) {
+      const brands = res.data.data
+      for (const index in brands) {
+        const brand = {
+          value: brands[index].value,
+          text: brands[index].text
+        }
+        optionsBrand.value.push(brand)
+      }
+    }
+  }).catch(err => {
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+const getOptionCity = () => {
+  MasterApi.getCityOptions().then(res => {
+    optionsCity.value = MasterMapper.mapCityModelToDto(res.data.data)
+    changeCity()
+  }).catch(err => {
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+const changeCity = () => {
+  const cityId = store.city_id
+  if (cityId !== '' && cityId !== undefined) {
+    MasterApi.getDistrictOptions(cityId).then(res => {
+      optionsDistrict.value = MasterMapper.mapCityModelToDto(res.data.data)
+    })
+  } else {
+    store.district_id = ''
+  }
+}
+
+const changeExpiredDate = () => {
+  if (commonFunc.dateFormatCheck(store.expired_at)) {
+    getTimeLive()
+  }
+}
+
+const back = () => {
+  router.push('/store/list')
+}
+
+const integerOnly = (item) => {
+  const valueInput = item.value
+  const result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+// Lifecycle hooks
+onMounted(() => {
+  getOptionBrand()
+  getDefaultDate()
+  getStoreDetail()
+})
 </script>

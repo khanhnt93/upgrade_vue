@@ -1,503 +1,503 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body>
+  <div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <!-- Back button -->
+        <div class="flex justify-between mb-4">
+          <button
+            @click="back"
+            class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-32">
+            Quay lại
+          </button>
+        </div>
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+        <!-- Title -->
+        <div class="mb-4">
+          <h4 class="text-2xl font-bold text-center text-blue-600">Thêm Mới ĐH Nhập Từ ĐH Bán</h4>
+        </div>
+        <hr class="my-4"/>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-1 text-center text-header">Thêm Mới ĐH Nhập Từ ĐH Bán</h4>
-              </b-col>
-            </b-row>
-            <hr/>
+        <!-- Order Sell Selection -->
+        <div class="flex items-center gap-4 mt-4">
+          <label class="w-48 font-medium">
+            <span>Từ đơn hàng bán</span>
+          </label>
+          <div class="flex-1 flex gap-2">
+            <div class="flex-1">
+              <multiselect
+                v-model="orderSellSelect"
+                :options="orderSellOptions"
+                :loading="loadingOptions"
+                :select-label="''"
+                :deselect-label="''"
+                placeholder="--Chọn từ đơn hàng bán--"
+                label="name"
+                track-by="name">
+              </multiselect>
+            </div>
 
-            <b-row class="form-row mt-2">
-              <b-col md="2" class="mt-2">
-                <label>
-                  <span>Từ đơn hàng bán</span>
-                </label>
-              </b-col>
-              <b-col md="10">
-                <div class="input-group">
+            <button
+              @click="showModalSearchOrderSell"
+              class="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors"
+              title="Tìm kiếm">
+              <i class="fa fa-search"></i>
+            </button>
+
+            <button
+              @click="chooseOrderSell()"
+              :disabled="!orderSellSelect?.id"
+              class="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Chọn">
+              <i class="fa fa-arrow-down"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div v-show="loadingOrderSell" class="flex justify-center my-4">
+          <icon name="loading" width="60" />
+        </div>
+
+        <!-- Product list from order sell -->
+        <div v-show="productOfOrderSell.length > 0" class="mt-6">
+          <label class="font-medium">
+            Danh sách sản phẩm cần đặt hàng của đơn hàng bán
+            [<b>{{orderSellDetail.order_sell_number}}</b>]
+            [<b>{{orderSellDetail.customer_name}}</b>]
+          </label>
+        </div>
+
+        <div v-show="productOfOrderSell.length > 0" class="mt-4 overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <colgroup>
+              <col style="width:3%">
+              <col style="width:3%">
+              <col style="width:12%">
+              <col style="width:12%">
+              <col style="width:5%">
+              <col style="width:5%">
+              <col style="width:8%">
+              <col style="width:12%">
+              <col style="width:10%">
+              <col style="width:18%">
+              <col style="width:6%">
+              <col style="width:6%">
+            </colgroup>
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">STT</th>
+                <th class="border border-gray-300 px-2 py-2 text-center">
+                  <input type="checkbox" v-model="checkAll" class="mr-2" @change="changeCheckAll()" checked>
+                </th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Mã hàng</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Tên hàng</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Hãng</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Đơn vị</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Số Lượng</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Giá Nhập</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Thành tiền</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">Nhà Cung Cấp</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">SL hàng trong kho</th>
+                <th class="border border-gray-300 px-2 py-2 text-center font-bold">SL hàng đang tạm giữ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in productOfOrderSell" :key="index" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-2 py-2 text-center">{{index + 1}}</td>
+                <td class="border border-gray-300 px-2 py-2 text-center">
+                  <input type="checkbox" :id="'is_get_' + index" class="mr-2" checked>
+                </td>
+                <td class="border border-gray-300 px-2 py-2">{{item.product_code}}</td>
+                <td class="border border-gray-300 px-2 py-2">{{item.product_name}}</td>
+                <td class="border border-gray-300 px-2 py-2">{{item.brand_name}}</td>
+                <td class="border border-gray-300 px-2 py-2 text-right">{{item.unit_name}}</td>
+                <td class="border border-gray-300 px-2 py-2 text-right">
+                  <input
+                    :id="'quantity_' + index"
+                    type="text"
+                    maxlength="11"
+                    autocomplete="new-password"
+                    class="w-full px-2 py-1 border border-gray-300 rounded"
+                    :value="item.quantity"
+                    @keyup="integerPointAndCommaOnly($event.target)"
+                    @change="changeQuantity(index)">
+                </td>
+                <td class="border border-gray-300 px-2 py-2 text-right">
+                  <input
+                    :id="'price_' + index"
+                    type="text"
+                    maxlength="11"
+                    autocomplete="new-password"
+                    class="w-full px-2 py-1 border border-gray-300 rounded"
+                    :value="item.price_buy"
+                    @change="changePrice(index)">
+                </td>
+                <td class="border border-gray-300 px-2 py-2 text-right">
+                  <input
+                    :id="'amount_' + index"
+                    type="text"
+                    maxlength="14"
+                    autocomplete="new-password"
+                    class="w-full px-2 py-1 border border-gray-300 rounded bg-gray-100"
+                    :value="item.amount"
+                    readonly>
+                </td>
+                <td class="border border-gray-300 px-2 py-2">
                   <multiselect
-                    v-model="orderSellSelect"
-                    :options="orderSellOptions"
+                    v-model="supplierSelect[index]"
+                    :options="supplierOptions"
                     :loading="loadingOptions"
                     :select-label="''"
                     :deselect-label="''"
-                    placeholder="--Chọn từ đơn hàng bán--"
+                    placeholder="--Chọn NCC--"
                     label="name"
                     track-by="name">
                   </multiselect>
+                </td>
+                <td class="border border-gray-300 px-2 py-2 text-center">{{item.quantity_repo}}</td>
+                <td class="border border-gray-300 px-2 py-2 text-center">{{item.quantity_keep}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-                  <b-button variant="outline-primary" class="pull-right ml-2" title="Tìm kiếm"
-                            @click="showModalSearchOrderSell" >
-                    <i class="fa fa-search"></i>
-                  </b-button>
+        <!-- Confirm/Cancel buttons -->
+        <div v-show="productOfOrderSell.length > 0" class="flex justify-center gap-4 mt-4">
+          <button
+            @click="cancelChooseOrderSell"
+            class="px-6 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition-colors w-48">
+            Huỷ chọn
+          </button>
+          <button
+            @click="confirmOrderSell"
+            :disabled="productOfOrderSell.length == 0"
+            class="px-6 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors w-48 disabled:opacity-50 disabled:cursor-not-allowed">
+            Xác nhận đặt hàng
+          </button>
+        </div>
 
-                  <b-button variant="outline-primary" class="pull-right ml-2" title="Chọn"
-                            @click="chooseOrderSell" :disabled="!orderSellSelect.id">
-                    <i class="fa fa-arrow-down"></i>
-                  </b-button>
+        <!-- Confirmed order sells list -->
+        <div v-show="orderSells.length > 0" class="mt-8">
+          <label class="font-bold">Danh sách đơn hàng bán đã xác nhận</label>
+        </div>
+
+        <div v-show="orderSells.length > 0" class="mt-4 overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border border-gray-300 px-4 py-2 text-center font-bold">STT</th>
+                <th class="border border-gray-300 px-4 py-2 text-center font-bold">Ngày Lập</th>
+                <th class="border border-gray-300 px-4 py-2 text-center font-bold">Số đơn hàng</th>
+                <th class="border border-gray-300 px-4 py-2 text-center font-bold">Khách hàng</th>
+                <th class="border border-gray-300 px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in orderSells" :key="index" class="hover:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2 text-center">{{index + 1}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.created_at}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">{{item.order_sell_number}}</td>
+                <td class="border border-gray-300 px-4 py-2">{{item.customer_name}}</td>
+                <td class="border border-gray-300 px-4 py-2 text-center">
+                  <i class="fa fa-edit cursor-pointer text-blue-500 hover:text-blue-700" @click="editOrderSell(index)" title="Sửa" />
+                  <i class="fa fa-trash ml-2 cursor-pointer text-red-500 hover:text-red-700" title="Xoá"
+                     @click="deleteOrderSell(index)" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Order Buy Details -->
+        <div v-for="(orderBuy, index) in orderBuys" :key="index" class="mt-6 border-t pt-6">
+          <div class="mb-4">
+            <label class="text-lg font-bold text-blue-600">THÔNG TIN ĐƠN HÀNG NHẬP SỐ: {{index + 1}}</label>
+          </div>
+
+          <div class="mb-4">
+            <label class="font-medium">Nhà cung cấp: <b>{{orderBuy.supplier_name}}</b></label>
+            <p class="text-gray-600">Địa chỉ: {{orderBuy.supplier_address}}</p>
+          </div>
+
+          <!-- Products table -->
+          <div class="overflow-x-auto mb-4">
+            <table class="min-w-full border border-gray-300">
+              <colgroup>
+                <col style="width:4%">
+                <col style="width:17%">
+                <col style="width:20%">
+                <col style="width:6%">
+                <col style="width:6%">
+                <col style="width:5%">
+                <col style="width:10%">
+                <col style="width:12%">
+                <col style="width:13%">
+                <col style="width:7%">
+              </colgroup>
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">STT</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Mã sản phẩm(*)</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Tên hàng sản phẩm(*)</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Hãng</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Đơn vị(*)</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">số lượng(*)</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Giá nhập</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Thành tiền</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Ghi Chú</th>
+                  <th class="border border-gray-300 px-2 py-2"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(product, indexPro) in orderBuy.products" :key="indexPro" class="hover:bg-gray-50">
+                  <td class="border border-gray-300 px-2 py-2 text-center">{{indexPro + 1}}</td>
+                  <td class="border border-gray-300 px-2 py-2">{{product.product_code}}</td>
+                  <td class="border border-gray-300 px-2 py-2">{{product.product_name}}</td>
+                  <td class="border border-gray-300 px-2 py-2">{{product.product_brand}}</td>
+                  <td class="border border-gray-300 px-2 py-2">{{product.unit}}</td>
+                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.quantity)}}</td>
+                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.price_buy)}}</td>
+                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.amount)}}</td>
+                  <td class="border border-gray-300 px-2 py-2">{{product.note}}</td>
+                  <td class="border border-gray-300 px-2 py-2 text-center">
+                    <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" title="Xoá"
+                       @click="deleteProduct(index, indexPro)" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Order Buy summary -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Left column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Tổng thành tiền:</label>
+                <input
+                  :id="'sub_total_' + index"
+                  type="text"
+                  maxlength="14"
+                  autocomplete="new-password"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-100"
+                  :value="currencyFormat(orderBuy.sub_total)"
+                  readonly>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Vat</label>
+                <div class="flex-1 flex gap-2">
+                  <input type="checkbox" :id="'have_vat_' + index" class="mr-2"
+                         @change="calculateAmount(index)">
+                  <input
+                    :id="'vat_percent_' + index"
+                    type="text"
+                    maxlength="3"
+                    autocomplete="new-password"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded"
+                    @keyup="integerOnly($event.target)"
+                    :value="orderBuy.vat_percent"
+                    @change="calculateAmount(index)">
+                  <input
+                    :id="'vat_value_' + index"
+                    type="text"
+                    maxlength="14"
+                    autocomplete="new-password"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded"
+                    @keyup="integerOnly($event.target)"
+                    @change="calculateAmount(index)">
                 </div>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
+          </div>
 
-            <span class="loading-more" v-show="loadingOrderSell"><icon name="loading" width="60" /></span>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Left column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Tổng tiền thanh toán:<span class="text-red-500">*</span></label>
+                <input
+                  :id="'amount_' + index"
+                  type="text"
+                  maxlength="14"
+                  autocomplete="new-password"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-100"
+                  :value="currencyFormat(orderBuy.total)"
+                  readonly>
+              </div>
+            </div>
 
-            <b-row v-show="productOfOrderSell.length > 0">
-              <b-col>
-                <label>Danh sách sản phẩm cần đặt hàng của đơn hàng bán [<b>{{orderSellDetail.order_sell_number}}</b>] [<b>{{orderSellDetail.customer_name}}</b>]</label>
-              </b-col>
-            </b-row>
+            <!-- Right column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Phương thức thanh toán:<span class="text-red-500">*</span></label>
+                <select
+                  :id="'payment_method_' + index"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option v-for="option in paymentMethodOptions" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-            <b-row class="mt-2" v-show="productOfOrderSell.length > 0" >
-              <b-col md="12" class="table-cus">
-                <table class="table table-bordered table-striped fixed_header">
-                  <colgroup>
-                    <col style="width:3%">
-                    <col style="width:3%">
-                    <col style="width:12%">
-                    <col style="width:12%">
-                    <col style="width:5%">
-                    <col style="width:5%">
-                    <col style="width:8%">
-                    <col style="width:12%">
-                    <col style="width:10%">
-                    <col style="width:18%">
-                    <col style="width:6%">
-                    <col style="width:6%">
-                  </colgroup>
-                  <thead>
-                  <tr>
-                      <th style="width:3%" class="text-center font-weight-bold">STT</th>
-                      <th style="width:3%" class="text-center">
-                        <input type="checkbox" v-model="checkAll" class="mr-2" @change="changeCheckAll()" checked>
-                      </th>
-                      <th style="width:11%" class="text-center font-weight-bold">Mã hàng</th>
-                      <th style="width:15%" class="text-center font-weight-bold">Tên hàng</th>
-                      <th style="width:12%" class="text-center font-weight-bold">Hãng</th>
-                      <th style="width:4%" class="text-center font-weight-bold">Đơn vị</th>
-                      <th style="width:8%" class="text-center font-weight-bold">Số Lượng</th>
-                      <th style="width:8%" class="text-center font-weight-bold">Giá Nhập</th>
-                      <th style="width:8%" class="text-center font-weight-bold">Thành tiền</th>
-                      <th style="width:14%" class="text-center font-weight-bold">Nhà Cung Cấp</th>
-                      <th style="width:5%" class="text-center font-weight-bold">SL hàng trong kho</th>
-                      <th style="width:5%" class="text-center font-weight-bold">SL hàng đang tạm giữ</th>
-                    </tr>
-                    </thead>
-                  <tbody>
-                    <tr v-for="(item, index) in productOfOrderSell">
-                      <td>{{index + 1}}</td>
-                      <td>
-                        <input type="checkbox" :id="'is_get_' + index" class="mr-2" checked>
-                      </td>
-                      <td>{{item.product_code}}</td>
-                      <td>{{item.product_name}}</td>
-                      <td>{{item.brand_name}}</td>
-                      <td class="text-right">{{item.unit_name}}</td>
-                      <td class="text-right">
-                        <input
-                          :id="'quantity_' + index"
-                          type="text"
-                          maxlength="11"
-                          autocomplete="new-password"
-                          class="form-control"
-                          :value="item.quantity"
-                          @keyup="integerPointAndCommaOnly($event.target)"
-                          @change="changeQuantity(index)">
-                      </td>
-                      <td class="text-right">
-                        <input
-                          :id="'price_' + index"
-                          type="text"
-                          maxlength="11"
-                          autocomplete="new-password"
-                          class="form-control"
-                          :value="item.price_buy"
-                          @change="changePrice(index)">
-                      </td>
-                      <td class="text-right">
-                        <input
-                          :id="'amount_' + index"
-                          type="text"
-                          maxlength="14"
-                          autocomplete="new-password"
-                          class="form-control"
-                          :value="item.amount"
-                          readonly>
-                      </td>
-                      <td class="text-right">
-                        <multiselect
-                          v-model="supplierSelect[index]"
-                          :options="supplierOptions"
-                          :loading="loadingOptions"
-                          :select-label="''"
-                          :deselect-label="''"
-                          placeholder="--Chọn NCC--"
-                          label="name"
-                          track-by="name">
-                        </multiselect>
-                      </td>
-                      <td>{{item.quantity_repo}}</td>
-                      <td>{{item.quantity_keep}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </b-col>
-            </b-row>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- Left column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Hình thức giao hàng:</label>
+                <select
+                  :id="'shipping_method_' + index"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option v-for="option in shippingMethodOptions" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-            <b-row v-show="productOfOrderSell.length > 0">
-              <b-col md="12" class="text-center mt-2">
-                <b-button variant="outline-danger" class="ml-2 btn-width-180" @click="cancelChooseOrderSell" >
-                  Huỷ chọn
-                </b-button>
-                <b-button variant="outline-primary" class="ml-2 btn-width-180"
-                          @click="confirmOrderSell" :disabled="productOfOrderSell.length == 0">
-                  Xác nhận đặt hàng
-                </b-button>
-              </b-col>
-            </b-row>
+            <!-- Right column -->
+            <div>
+              <div class="flex items-center gap-4 mb-3">
+                <label class="w-40 font-medium">Số ngày dự kiến GH</label>
+                <Datepicker
+                  :id="'shipping_date_' + index"
+                  v-model="orderBuy.shipping_date_model"
+                  :inputFormat="'yyyy-MM-dd'"
+                  :typeable="true"
+                  class="flex-1" />
+              </div>
+            </div>
+          </div>
 
-            <b-row v-show="orderSells.length > 0" class="mt-4">
-              <b-col>
-                <label><b>Danh sách đơn hàng bán đã xác nhận</b></label>
-              </b-col>
-            </b-row>
+          <div class="flex items-start gap-4 mb-4">
+            <label class="w-32 font-medium mt-2">Ghi chú</label>
+            <textarea
+              :id="'note_' + index"
+              rows="2"
+              class="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
+        </div>
 
-            <b-row class="mt-2" v-show="orderSells.length > 0" >
-              <b-col md="12" class="table-cus">
-                <table class="table table-bordered table-striped fixed_header">
-                  <thead>
-                  <tr>
-                    <th class="text-center font-weight-bold">STT</th>
-                    <th class="text-center font-weight-bold">Ngày Lập</th>
-                    <th class="text-center font-weight-bold">Số đơn hàng</th>
-                    <th class="text-center font-weight-bold">Khách hàng</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for="(item, index) in orderSells">
-                    <td>{{index + 1}}</td>
-                    <td>{{item.created_at}}</td>
-                    <td>{{item.order_sell_number}}</td>
-                    <td>{{item.customer_name}}</td>
-                    <td>
-                      <i class="fa fa-edit" @click="editOrderSell(index)" title="Sửa" />
-                      <i class="fa fa-trash ml-2" title="Xoá"
-                         @click="deleteOrderSell(index)" />
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </b-col>
-            </b-row>
+        <!-- Save button -->
+        <div class="flex justify-center mt-6">
+          <button
+            v-show="!saving && orderSells.length > 0"
+            @click="save"
+            :disabled="saving"
+            class="px-8 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            style="height: 50px; width: 240px">
+            <i class="fa fa-pencil-square-o"></i>
+            <span>Xác Nhận Tất Cả</span>
+          </button>
+          <div v-show="saving" class="flex justify-center">
+            <icon name="loading" width="60" />
+          </div>
+        </div>
 
-            <b-row class="mt-2" v-show="orderBuys.length > 0" v-for="(orderBuy, index) in orderBuys">
-              <b-col md="12">
+      </div>
+    </div>
 
-                <b-row>
-                  <b-col>
-                    <label class="text-header"><b>THÔNG TIN ĐƠN HÀNG NHẬP SỐ: {{index + 1}}</b></label>
-                  </b-col>
-                </b-row>
+    <!-- Modal search order sell -->
+    <div v-if="showSearchModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <!-- Modal header -->
+          <div class="mb-4">
+            <h4 class="text-2xl font-bold text-center text-green-600">Tìm kiếm đơn hàng bán</h4>
+          </div>
+          <hr class="my-4"/>
 
-                <b-row>
-                  <b-col>
-                    <label>Nhà cung cấp: <b>{{orderBuy.supplier_name}}</b></label>
-                    <p>Địa chỉ: {{orderBuy.supplier_address}}</p>
-                  </b-col>
-                </b-row>
+          <!-- Search fields -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block mb-2 font-medium">Mã đơn hàng</label>
+              <input
+                id="order_sell_number"
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="orderSellSearch.order_sell_number"
+                maxlength="15">
+            </div>
+            <div>
+              <label class="block mb-2 font-medium">Tên khách hàng</label>
+              <input
+                id="customer_name"
+                type="text"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                v-model="orderSellSearch.customer_name"
+                maxlength="255">
+            </div>
+          </div>
 
-                <b-row>
-                  <b-col md="12" class="table-cus">
-                    <table class="table table-bordered table-striped fixed_header">
-                      <colgroup>
-                        <col style="width:4%">
-                        <col style="width:17%">
-                        <col style="width:20%">
-                        <col style="width:6%">
-                        <col style="width:6%">
-                        <col style="width:5%">
-                        <col style="width:10%">
-                        <col style="width:12%">
-                        <col style="width:13%">
-                        <col style="width:7%">
-                      </colgroup>
-                      <thead>
-                      <tr>
-                          <th class="text-center font-weight-bold">STT</th>
-                          <th class="text-center font-weight-bold">Mã sản phẩm(*)</th>
-                          <th class="text-center font-weight-bold">Tên hàng sản phẩm(*)</th>
-                          <th class="text-center font-weight-bold">Hãng</th>
-                          <th class="text-center font-weight-bold">Đơn vị(*)</th>
-                          <th class="text-center font-weight-bold">số lượng(*)</th>
-                          <th class="text-center font-weight-bold">Giá nhập</th>
-                          <th class="text-center font-weight-bold">Thành tiền</th>
-                          <th class="text-center font-weight-bold">Ghi Chú</th>
-                          <th></th>
-                        </tr>
-                        </thead>
-                      <tbody>
-                      <tr v-for="(product, indexPro) in orderBuy.products">
-                        <td>{{indexPro + 1}}</td>
-                        <td>{{product.product_code}}</td>
-                        <td>{{product.product_name}}</td>
-                        <td>{{product.product_brand}}</td>
-                        <td>{{product.unit}}</td>
-                        <td class="text-right">{{currencyFormat(product.quantity)}}</td>
-                        <td class="text-right">{{currencyFormat(product.price_buy)}}</td>
-                        <td class="text-right">{{currencyFormat(product.amount)}}</td>
-                        <td>{{product.note}}</td>
-                        <td>
-                          <i class="fa fa-trash ml-2" title="Xoá"
-                             @click="deleteProduct(index, indexPro)" />
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </b-col>
-                </b-row>
+          <!-- Modal buttons -->
+          <div class="flex justify-between mb-4">
+            <button
+              @click="showSearchModal = false"
+              class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors w-32">
+              Quay lại
+            </button>
+            <button
+              @click="searchOrderSell"
+              :disabled="onSearchOrderSell"
+              class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+              Tìm Kiếm
+            </button>
+          </div>
 
-                <b-row>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Tổng thành tiền:</label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-                        <input
-                          :id="'sub_total_' + index"
-                          type="text"
-                          maxlength="14"
-                          autocomplete="new-password"
-                          class="form-control"
-                          :value="currencyFormat(orderBuy.sub_total)"
-                          readonly>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Vat</label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-                        <div class="input-group">
-                          <input type="checkbox" :id="'have_vat_' + index" class="mr-2"
-                                 @change="calculateAmount(index)">
-                          <input
-                            :id="'vat_percent_' + index"
-                            type="text"
-                            maxlength="3"
-                            autocomplete="new-password"
-                            class="form-control mr-2"
-                            @keyup="integerOnly($event.target)"
-                            :value="orderBuy.vat_percent"
-                            @change="calculateAmount(index)">
-                          <input
-                            :id="'vat_value_' + index"
-                            type="text"
-                            maxlength="14"
-                            autocomplete="new-password"
-                            class="form-control"
-                            @keyup="integerOnly($event.target)"
-                            @change="calculateAmount(index)">
-                        </div>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+          <!-- Search results table -->
+          <div class="overflow-x-auto mb-4">
+            <table class="min-w-full border border-gray-300">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">STT</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">Ngày lập</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">Số ĐH</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">Tên K.H</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">Thành tiền</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold">NV phụ trách</th>
+                  <th class="border border-gray-300 px-4 py-2 text-center font-bold"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in orderSellSearchItems" :key="item.id" class="hover:bg-gray-50">
+                  <td class="border border-gray-300 px-4 py-2 text-center">{{index + 1}}</td>
+                  <td class="border border-gray-300 px-4 py-2 text-center">{{item.created_at}}</td>
+                  <td class="border border-gray-300 px-4 py-2 text-center">{{item.order_sell_number}}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{item.customer_name}}</td>
+                  <td class="border border-gray-300 px-4 py-2 text-right">{{item.amount}}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{item.staff_in_change}}</td>
+                  <td class="border border-gray-300 px-4 py-2 text-center">
+                    <button
+                      @click="chooseOrderSell(item.id)"
+                      class="px-4 py-2 border border-green-500 text-green-500 rounded-md hover:bg-green-50 transition-colors w-32">
+                      Chọn
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                <b-row>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Tổng tiền thanh toán:<span class="error-sybol"></span> </label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-                        <input
-                          :id="'amount_' + index"
-                          type="text"
-                          maxlength="14"
-                          autocomplete="new-password"
-                          class="form-control"
-                          :value="currencyFormat(orderBuy.total)"
-                          readonly>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Phương thức thanh toán:<span class="error-sybol"></span></label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-                        <b-form-select :id="'payment_method_' + index"
-                          :options="paymentMethodOptions"></b-form-select>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
-
-                <b-row>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Hình thức giao hàng:</label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-<!--                        <input-->
-<!--                          :id="'shipping_method_' + index"-->
-<!--                          type="text"-->
-<!--                          maxlength="255"-->
-<!--                          autocomplete="new-password"-->
-<!--                          class="form-control">-->
-                        <b-form-select :id="'shipping_method_' + index"
-                                       :options="shippingMethodOptions"></b-form-select>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                  <b-col md="6">
-                    <b-row class="form-row">
-                      <b-col md="4" class="mt-2">
-                        <label>Số ngày dự kiến GH</label>
-                      </b-col>
-                      <b-col md="8" class="mt-2">
-                        <datepicker :id="'shipping_date_' + index" format="yyyy-MM-dd"
-                                    input-class="datepicker-cus"></datepicker>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
-
-                <b-row class="form-row">
-                  <b-col md="2" class="mt-2">
-                    <label>Ghi chú</label>
-                  </b-col>
-                  <b-col md="10" class="mt-2">
-                    <b-form-textarea
-                      :id="'note_' + index"
-                      style="width:100%;"
-                      rows="2"></b-form-textarea>
-                  </b-col>
-                </b-row>
-
-              </b-col>
-            </b-row>
-
-<!--            <b-row class="mt-2">-->
-<!--              <b-col md="12">-->
-<!--                <b-button variant="outline-primary" class="pull-left btn-width-200" @click="updateDraft">-->
-<!--                  Lưu nháp-->
-<!--                </b-button>-->
-<!--              </b-col>-->
-<!--            </b-row>-->
-
-            <b-row class="mt-2">
-              <b-col md="12" class="text-center">
-                <b-button v-show="!saving && orderSells.length > 0" variant="outline-success" style="height: 50px; width: 240px"
-                          @click="save" :disabled="saving">
-                  <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
-                  Xác Nhận Tất Cả
-                </b-button>
-                <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-
-    <!--Modal tìm kiếm báo giá -->
-    <b-modal centered hide-footer hide-header size="xl" id="modal-search-order-sell">
-      <b-row>
-        <b-col md="12">
-          <h4 class="modal-title text-center text-success">Tìm kiếm đơn hàng bán</h4>
-        </b-col>
-      </b-row>
-      <hr>
-
-      <b-row>
-        <b-col md="6">
-          <label> Mã đơn hàng </label>
-          <input
-            id="order_sell_number"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="orderSellSearch.order_sell_number"
-            maxlength="15">
-        </b-col>
-        <b-col md="6">
-          <label> Tên khách hàng </label>
-          <input
-            id="customer_name"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="orderSellSearch.customer_name"
-            maxlength="255">
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120"
-                    @click.prevent="this.$bvModal.hide('modal-search-order-sell')">
-            Quay lại
-          </b-button>
-
-          <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchOrderSell"
-                    @click.prevent="searchOrderSell">
-            Tìm Kiếm
-          </b-button>
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="orderSellSearchFields"
-            :items="orderSellSearchItems">
-            <template v-slot:cell(action)="data">
-              <b-button variant="outline-success" class="pull-right btn-width-120"
-                        @click.prevent="chooseOrderSell(data.item.id)">
-                Chọn
-              </b-button>
-            </template>
-          </b-table>
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-2">
-        <b-col>
-          <p class="text-center">---Hết---</p>
-        </b-col>
-      </b-row>
-
-    </b-modal>
-
+          <div class="text-center">
+            <p>---Hết---</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import orderBuyApi from '@/api/orderBuy'
 import supplierApi from '@/api/supplier'
 import commonFunc from '@/common/commonFunc'
@@ -505,647 +505,559 @@ import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  components: {
-    Datepicker,
-    Multiselect
-  },
-  data () {
-    return {
-      paymentMethodOptions: [
-        {"value": null, "text": ''},
-        {"value": 'Tiền mặt khi nhận hàng', "text": 'Tiền mặt khi nhận hàng'},
-        {"value": "Chuyển khoản trước khi nhận hàng", "text": 'Chuyển khoản trước khi nhận hàng'},
-        {"value": "Công nợ 7 ngày", "text": 'Công nợ 7 ngày'},
-        {"value": "Công nợ 15 ngày", "text": 'Công nợ 15 ngày'},
-        {"value": "Công nợ 30 ngày", "text": 'Công nợ 30 ngày'},
-        {"value": "Công nợ 45 ngày", "text": 'Công nợ 45 ngày'}
-      ],
-      shippingMethodOptions: [
-        {"value": null, "text": ''},
-        {"value": 'Giao tại kho bên mua', "text": 'Giao tại kho bên mua'},
-        {"value": "Giao thẳng cho khách hàng", "text": 'Giao thẳng cho khách hàng'},
-        {"value": "Nhân viên bên mua đến lấy", "text": 'Nhân viên bên mua đến lấy'},
-        {"value": "Bên mua đặt grap đến lấy", "text": 'Bên mua đặt grap đến lấy'}
-      ],
-      orderSellOptions: [],
-      loadingOptions: false,
-      orderSellSelect: {},
-      loadingOrderSell: false,
-      orderSellDetail: {},
-      productOfOrderSell: [],
-      productConfirmed: [],
-      orderSells: [],
-      orderBuys: [],
-      saving: false,
-      vatOptions: [
-        {"value": true, "text": "Có"},
-        {"value": false, "text": "Không"}
-      ],
-      supplierSelect: [],
-      supplierOptions: [],
-      // supplierOptionStore: [],
-      orderSellSearchItems: [],
-      orderSellSearchFields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày lập'
-        },
-        {
-          key: 'order_sell_number',
-          label: 'Số ĐH'
-        },
-        {
-          key: 'customer_name',
-          label: 'Tên K.H'
-        },
-        {
-          key: 'amount',
-          label: 'Thành tiền'
-        },
-        {
-          key: 'staff_in_change',
-          label: 'NV phụ trách'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      onSearchOrderSell: false,
-      orderSellSearch: {
-        order_sell_number: null,
-        customer_name: null
-      },
-      checkAll: true,
+const router = useRouter()
+const route = useRoute()
+const { popToast } = useToast()
+
+// Reactive data
+const paymentMethodOptions = ref([
+  {"value": null, "text": ''},
+  {"value": 'Tiền mặt khi nhận hàng', "text": 'Tiền mặt khi nhận hàng'},
+  {"value": "Chuyển khoản trước khi nhận hàng", "text": 'Chuyển khoản trước khi nhận hàng'},
+  {"value": "Công nợ 7 ngày", "text": 'Công nợ 7 ngày'},
+  {"value": "Công nợ 15 ngày", "text": 'Công nợ 15 ngày'},
+  {"value": "Công nợ 30 ngày", "text": 'Công nợ 30 ngày'},
+  {"value": "Công nợ 45 ngày", "text": 'Công nợ 45 ngày'}
+])
+
+const shippingMethodOptions = ref([
+  {"value": null, "text": ''},
+  {"value": 'Giao tại kho bên mua', "text": 'Giao tại kho bên mua'},
+  {"value": "Giao thẳng cho khách hàng", "text": 'Giao thẳng cho khách hàng'},
+  {"value": "Nhân viên bên mua đến lấy", "text": 'Nhân viên bên mua đến lấy'},
+  {"value": "Bên mua đặt grap đến lấy", "text": 'Bên mua đặt grap đến lấy'}
+])
+
+const orderSellOptions = ref([])
+const loadingOptions = ref(false)
+const orderSellSelect = ref({})
+const loadingOrderSell = ref(false)
+const orderSellDetail = ref({})
+const productOfOrderSell = ref([])
+const productConfirmed = ref([])
+const orderSells = ref([])
+const orderBuys = ref([])
+const saving = ref(false)
+const supplierSelect = ref([])
+const supplierOptions = ref([])
+const orderSellSearchItems = ref([])
+const onSearchOrderSell = ref(false)
+const orderSellSearch = reactive({
+  order_sell_number: null,
+  customer_name: null
+})
+const checkAll = ref(true)
+const showSearchModal = ref(false)
+
+// Lifecycle hooks
+onMounted(() => {
+  getSupplierOptions()
+  getOptionOrderSell()
+})
+
+// Methods
+const back = () => {
+  router.push("/order-buy")
+}
+
+const currencyFormat = (num) => {
+  if(num == null || num == undefined) {
+    return ""
+  }
+  let result = ""
+  if(num == 0) {
+    return "0"
+  }
+  num = (num + "").replace(",", "")
+  if(num) {
+    result = num.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+  return result
+}
+
+const getSupplierOptions = () => {
+  loadingOptions.value = true
+  supplierApi.getListSupplierOption().then(res => {
+    if(res != null && res.data != null && res.data.data != null){
+      supplierOptions.value = res.data.data
+
+      let itemEmpty = {"id": null, "name": null, "address": null}
+      supplierOptions.value.unshift(itemEmpty)
+
+      loadingOptions.value = false
     }
-  },
-  mounted() {
-    this.getSupplierOptions()
-    // Get order sell list option
-    this.getOptionOrderSell()
-  },
-  methods: {
-    /**
-     * Back to list
-     */
-    back() {
-      this.$router.push("/order-buy")
-    },
+  }).catch(err => {
+    loadingOptions.value = false
+  })
+}
 
-    /**
-     * Currency format
-     */
-    currencyFormat(num) {
-      if(num == null || num == undefined) {
-        return ""
+const getOptionOrderSell = () => {
+  orderBuyApi.getOrderSellOptions().then(res => {
+    if(res != null && res.data != null && res.data.data != null) {
+      orderSellOptions.value = res.data.data
+
+      let itemEmpty = {"id": null, "name": null}
+      orderSellOptions.value.unshift(itemEmpty)
+
+      // Check tạo đơn hàng nhập từ đơn hàng bán
+      let url = location.href
+      if(url.includes("order-buy-from-order-sell")) {
+        let orderSellId = route.params.orderSellId
+        chooseOrderSell(orderSellId)
       }
-      let result = ""
-      if(num == 0) {
-        return "0"
+    }
+  })
+}
+
+const showModalSearchOrderSell = () => {
+  showSearchModal.value = true
+}
+
+const chooseOrderSell = (orderSellId) => {
+  if(orderSellId) {
+    for(let item of orderSellOptions.value) {
+      if(item.id == orderSellId) {
+        orderSellSelect.value = item
+        break
       }
-      num = (num + "").replace(",", "")
-      if(num) {
-        result = num.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
+    }
 
-    /**
-     *  Save
-     */
-    getSupplierOptions () {
-      this.loadingOptions = true
-      supplierApi.getListSupplierOption().then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          this.supplierOptions = res.data.data;
+    // Call api, get order sell detail
+    getOrderSellDetailById(orderSellSelect.value.id)
+    showSearchModal.value = false
+  } else {
+    if(orderSellSelect.value) {
+      // Call api, get order sell detail
+      getOrderSellDetailById(orderSellSelect.value.id)
+    }
+  }
+}
 
-          let itemEmpty = {"id": null, "name": null, "address": null}
-          this.supplierOptions.unshift(itemEmpty)
+const getOrderSellDetailById = (orderSellId) => {
+  if(orderSellId){
+    loadingOrderSell.value = true
+    productOfOrderSell.value = []
 
-          this.loadingOptions = false
+    orderBuyApi.getOrderSellDetail(orderSellId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        orderSellDetail.value = res.data.data
+        if(orderSellDetail.value.products && orderSellDetail.value.products.length > 0) {
+          productOfOrderSell.value = orderSellDetail.value.products
 
-          // let suppliers = res.data.data
-          // this.supplierOptionStore = res.data.data
-          //
-          // this.supplierOptions = [{"value": null, "text": ""}]
-          //
-          // for(let item of suppliers) {
-          //   this.supplierOptions.push({"value": item.id, "text": item.name})
-          // }
-          //
-          // this.loadingOptions = false
-        }
-      }).catch(err => {
-        this.loadingOptions = false
-      })
-    },
-
-    /**
-     * Get order sell options
-     */
-    getOptionOrderSell() {
-      orderBuyApi.getOrderSellOptions().then(res => {
-        if(res != null && res.data != null && res.data.data != null) {
-          this.orderSellOptions = res.data.data;
-
-          let itemEmpty = {"id": null, "name": null}
-          this.orderSellOptions.unshift(itemEmpty)
-
-          // Check tạo đơn hàng nhập từ đơn hàng bán
-          let url = location.href
-          if(url.includes("order-buy-from-order-sell")) {
-            let orderSellId = this.$route.params.orderSellId
-            this.chooseOrderSell(orderSellId)
+          for(let index in productOfOrderSell.value) {
+            productOfOrderSell.value[index].amount = null
           }
         }
-      })
-    },
-
-    showModalSearchOrderSell() {
-      this.$bvModal.show('modal-search-order-sell')
-    },
-
-    /**
-     *  Event change quotation
-     */
-    chooseOrderSell(orderSellId) {
-      if(orderSellId) {
-        for(let item of this.orderSellOptions) {
-          if(item.id == orderSellId) {
-            this.orderSellSelect = item
-            break
-          }
-        }
-
-        // Call api, get quotation detail
-        this.getOrderSellDetailById(this.orderSellSelect.id)
-      } else {
-        if(this.orderSellSelect) {
-          // Call api, get quotation detail
-          this.getOrderSellDetailById(this.orderSellSelect.id)
-        }
       }
 
-    },
+      loadingOrderSell.value = false
 
-    getOrderSellDetailById(orderSellId) {
-      if(orderSellId){
-        this.loadingOrderSell = true
-        this.productOfOrderSell = []
+    }).catch(err => {
+      loadingOrderSell.value = false
 
-        orderBuyApi.getOrderSellDetail(orderSellId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.orderSellDetail = res.data.data
-            if(this.orderSellDetail.products && this.orderSellDetail.products.length > 0) {
-              this.productOfOrderSell = this.orderSellDetail.products
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
 
-              for(let index in this.productOfOrderSell) {
-                this.productOfOrderSell[index].amount = null
-              }
-            }
-          }
+const cancelChooseOrderSell = () => {
+  orderSellSelect.value = {}
+  productOfOrderSell.value = []
+}
 
-          this.loadingOrderSell = false
+const confirmOrderSell = () => {
+  // Handle product
+  let products = JSON.parse(JSON.stringify(orderSellDetail.value.products))
+  let products_checked = []
 
-        }).catch(err => {
-          this.loadingOrderSell = false
+  for(let index in products) {
+    index = parseInt(index)
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
+    // Kiểm tra việc bỏ qua sản phẩm
+    let is_get_product = document.getElementById("is_get_" + index).checked
+    if(!is_get_product) {
+      continue
+    }
 
-    // getSupplierById(id) {
-    //   for(let item of this.supplierOptionStore) {
-    //     if(item.id == id) {
-    //       return item
-    //     }
-    //   }
-    //   return {}
-    // },
+    // Validate and set value
+    let supplier = supplierSelect.value[index]
+    if(!supplier || !supplier.id) {
+      popToast('danger', "Vui lòng chọn nhà cung cấp tại sản phẩm số " + (index + 1))
+      return
+    }
+    products[index].supplier_id = supplier.id
+    products[index].supplier_name = supplier.name
+    products[index].supplier_address = supplier.address
 
-    cancelChooseOrderSell() {
-      this.orderSellSelect = {}
-      this.productOfOrderSell = []
-    },
+    let price_buy = document.getElementById("price_" + index).value
+    if(!price_buy) {
+      popToast('danger', "Vui lòng nhập giá mua tại sản phẩm số " + (index + 1))
+      return
+    }
+    price_buy = (price_buy + "").replaceAll(",", "")
+    products[index].price_buy = price_buy
 
-    confirmOrderSell() {
-      // Handle product
-      let products = JSON.parse(JSON.stringify(this.orderSellDetail.products))
-      let products_checked = []
-        console.log("products: " + JSON.stringify(products))
-      for(let index in products) {
-        index = parseInt(index)
+    let quantity = document.getElementById("quantity_" + index).value
+    quantity = (quantity + "").replaceAll(",", "")
+    if(!quantity) {
+      popToast('danger', "Vui lòng nhập số lượng tại sản phẩm số " + (index + 1))
+      return
+    }
+    products[index].quantity = quantity
+    products[index].amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
+    products[index].note = null
+    products[index].unit = products[index].unit_name
+    products[index].product_brand = products[index].brand_name
+    products[index].order_sell_id = orderSellDetail.value.id
 
-        // Kiểm tra việc bỏ qua sản phẩm
-        let is_get_product = document.getElementById("is_get_" + index).checked
-        if(!is_get_product) {
-          continue;
-        }
+    productConfirmed.value.push(products[index])
+    products_checked.push(products[index])
+  }
 
-        // Validate and set value
-        let supplier = this.supplierSelect[index]
-        if(!supplier || !supplier.id) {
-          this.popToast('danger', "Vui lòng chọn nhà cung cấp tại sản phẩm số " + (index + 1))
-          return
-        }
-        products[index].supplier_id = supplier.id
-          // console.log("products: " + JSON.stringify(products))
-          // let supplier = this.getSupplierById(supplier_id)
-        products[index].supplier_name = supplier.name
-        products[index].supplier_address = supplier.address
+  if(products_checked.length == 0) {
+    popToast('danger', "Không có sản phẩm nào được chọn")
+    return
+  }
 
-        let price_buy = document.getElementById("price_" + index).value
-        if(!price_buy) {
-          this.popToast('danger', "Vui lòng nhập giá mua tại sản phẩm số " + (index + 1))
-          return
-        }
-        price_buy = (price_buy + "").replaceAll(",", "")
-        products[index].price_buy = price_buy
+  orderSellDetail.value.products = products_checked
+  orderSells.value.push(JSON.parse(JSON.stringify(orderSellDetail.value)))
+  orderSellSelect.value = {}
+  orderSellDetail.value = {}
+  productOfOrderSell.value = []
 
-        let quantity = document.getElementById("quantity_" + index).value
-        quantity = (quantity + "").replaceAll(",", "")
-        if(!quantity) {
-          this.popToast('danger', "Vui lòng nhập số lượng tại sản phẩm số " + (index + 1))
-          return
-        }
-        products[index].quantity = quantity
-        products[index].amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
-        products[index].note = null
-        products[index].unit = products[index].unit_name
-        products[index].product_brand = products[index].brand_name
-        products[index].order_sell_id = this.orderSellDetail.id
+  // Tính toán tách đơn hàng nhập
+  calOrderBuy()
+}
 
-        this.productConfirmed.push(products[index])
-        products_checked.push(products[index])
-      }
-      if(products_checked.length == 0) {
-          this.popToast('danger', "Không có sản phẩm nào được chọn")
-          return
-        }
+const editOrderSell = (index) => {
+  orderSellDetail.value = JSON.parse(JSON.stringify(orderSells.value[index]))
+  let products = orderSellDetail.value.products
+  productOfOrderSell.value = products
+  orderSells.value.splice(index, 1)
+  reCalOrderBuy()
 
-      console.log(this.productConfirmed)
-      this.orderSellDetail.products = products_checked
-      this.orderSells.push(JSON.parse(JSON.stringify(this.orderSellDetail)))
-      this.orderSellSelect = {}
-      this.orderSellDetail = {}
-      this.productOfOrderSell = []
+  for(let i in products) {
+    let price_buy = currencyFormat(products[i].price_buy)
+    products[i].price_buy = price_buy
 
-      // Tính toán tách đơn hàng nhập
-      this.calOrderBuy()
-    },
+    let quantity = currencyFormat(products[i].quantity)
+    products[i].quantity = quantity
 
-    editOrderSell(index) {
-      this.orderSellDetail = JSON.parse(JSON.stringify(this.orderSells[index]))
-      let products = this.orderSellDetail.products
-        console.log("aaaaaaaaaa")
-        console.log(products)
-      this.productOfOrderSell = products
-      this.orderSells.splice(index, 1)
-      this.reCalOrderBuy()
+    let amount = currencyFormat(products[i].amount)
+    products[i].amount = amount
+  }
+}
 
+const deleteOrderSell = (index) => {
+  orderSells.value.splice(index, 1)
+  if(orderSells.value.length == 0) {
+    orderBuys.value = []
+  } else {
+    reCalOrderBuy()
+  }
+}
 
-        console.log("xxxx")
-        console.log(products)
-        console.log("xxxx")
-      for(let i in products) {
-        let price_buy = this.currencyFormat(products[i].price_buy)
-        products[i].price_buy = price_buy
-        // document.getElementById("price_" + i).value = price_buy
+const reCalOrderBuy = () => {
+  productConfirmed.value = []
+  for(let index in orderSells.value) {
+    productConfirmed.value = productConfirmed.value.concat(orderSells.value[index].products)
+  }
+  // Tính toán tách đơn hàng nhập
+  calOrderBuy()
+}
 
-        let quantity = this.currencyFormat(products[i].quantity)
-        products[i].quantity = quantity
-        // document.getElementById("quantity_" + i).value = quantity
+const getIndexOfOrderBuy = (orderBuys, supplier_id) => {
+  for(let index in orderBuys) {
+    if(orderBuys[index].supplier_id == supplier_id) {
+      return index
+    }
+  }
+  return -1
+}
 
-        let amount = this.currencyFormat(products[i].amount)
-        products[i].amount = amount
-        // document.getElementById("amount_" + i).value = amount
+const calOrderBuy = () => {
+  let orderBuysTemp = []
 
-        // setTimeout(
-        //     document.getElementById("supplier_" + i).value = products[i].supplier_id,
-        // 1000);
+  // Group by supplier
+  let supplierIdChecked = []
+  for(let item of productConfirmed.value) {
+    let orderBuy = {}
+    if(supplierIdChecked.includes(item.supplier_id)) {
 
-        // document.getElementById("supplier_" + i).value = products[i].supplier_id
-      }
-      console.log(this.productOfOrderSell)
-    },
-
-    deleteOrderSell(index) {
-      this.orderSells.splice(index, 1)
-      if(this.orderSells.length == 0) {
-        this.orderBuys = []
-      } else {
-        this.reCalOrderBuy()
-      }
-    },
-
-    reCalOrderBuy() {
-      this.productConfirmed = []
-      for(let index in this.orderSells) {
-        this.productConfirmed = this.productConfirmed.concat(this.orderSells[index].products)
-      }
-      // Tính toán tách đơn hàng nhập
-      this.calOrderBuy()
-    },
-
-    getIndexOfOrderBuy(orderBuys, supplier_id) {
-      for(let index in orderBuys) {
-        if(orderBuys[index].supplier_id == supplier_id) {
-          return index
-        }
-      }
-      return -1
-    },
-
-    calOrderBuy() {
-      let orderBuys = []
-
-      // Group by supplier
-      let supplierIdChecked = []
-      for(let item of this.productConfirmed) {
-        let orderBuy = {}
-        if(supplierIdChecked.includes(item.supplier_id)) {
-
-          let index = this.getIndexOfOrderBuy(orderBuys, item.supplier_id)
-          orderBuys[index].order_sell_ids.push(item.order_sell_id)
-          orderBuys[index].products.push(item)
-          orderBuys[index].sub_total += parseInt(parseInt(item.price_buy) * parseFloat(item.quantity))
-
-          let vat_value = 0
-          let vat_percent = 10
-          let have_vat = false
-          let have_vat_flag = document.getElementById("have_vat_" + index)
-            if(have_vat_flag) {
-                have_vat = have_vat_flag.checked
-                if(have_vat) {
-                    vat_percent = document.getElementById("vat_percent_" + index).value
-                    if(vat_percent) {
-                      vat_value = Math.round((orderBuys[index].sub_total) * vat_percent / 100)
-                    }
-                }
-            }
-
-          orderBuys[index].have_vat = have_vat
-          orderBuys[index].vat_percent = vat_percent
-          orderBuys[index].vat_value = vat_value
-
-            let vat_value_flag = document.getElementById("vat_value_" + index)
-                if(vat_value_flag) {
-                    vat_value_flag.value = this.currencyFormat(vat_value)
-                }
-
-          orderBuys[index].total = orderBuys[index].sub_total + vat_value
-          orderBuys[index].note = null
-        } else {
-          orderBuy = {
-            order_sell_ids: [item.order_sell_id],
-            supplier_id: item.supplier_id,
-            supplier_name: item.supplier_name,
-            supplier_address: item.supplier_address,
-            products: [item],
-            sub_total: Math.round(parseInt(item.price_buy) * parseFloat(item.quantity)),
-            have_vat: false,
-            vat_percent: 10,
-            vat_value: 0,
-            total: Math.round(parseInt(item.price_buy) * parseFloat(item.quantity)),
-            payment_method: null,
-            shipping_method: null,
-            shipping_date: null,
-            note: null
-          }
-          orderBuys.push(orderBuy)
-          supplierIdChecked.push(item.supplier_id)
-        }
-      }
-
-      this.orderBuys = orderBuys
-    },
-
-    deleteProduct(indexOrderBuy, indexProduct) {
-      this.orderBuys[indexOrderBuy].products.splice(indexProduct, 1)
-      if(this.orderBuys[indexOrderBuy].products.length == 0) {
-          this.orderBuys.splice(indexOrderBuy, 1)
-      } else {
-          this.calculateAmount(indexOrderBuy)
-      }
-
-    },
-
-    /**
-     * Only input integer and point
-     */
-    integerPointAndCommaOnly(item) {
-      let valueInput = item.value
-        valueInput = valueInput.replaceAll(",", "")
-      let result = commonFunc.integerPointAndCommaOnly(valueInput)
-
-        result = this.currencyFormat(result)
-      item.value = result
-    },
-
-    calSubTotal(index) {
-        let result = 0
-      for(let item of this.orderBuys[index].products) {
-          result += parseInt(item.amount)
-      }
-      return result
-    },
-
-    calculateAmount(index) {
-      index = parseInt(index)
-      let sub_total = this.calSubTotal(index) //(this.orderBuys[index].sub_total + "").replaceAll(",","")
-      this.orderBuys[index].sub_total = sub_total
+      let index = getIndexOfOrderBuy(orderBuysTemp, item.supplier_id)
+      orderBuysTemp[index].order_sell_ids.push(item.order_sell_id)
+      orderBuysTemp[index].products.push(item)
+      orderBuysTemp[index].sub_total += parseInt(parseInt(item.price_buy) * parseFloat(item.quantity))
 
       let vat_value = 0
-      let have_vat = document.getElementById("have_vat_" + index).checked
-      if(have_vat) {
-          let vat_percent = document.getElementById("vat_percent_" + index).value
-        if(vat_percent) {
-          vat_value = Math.round((sub_total) * vat_percent / 100)
-
-          this.orderBuys[index].vat_value = this.currencyFormat(vat_value)
-          this.orderBuys[index].vat_percent = vat_percent
-        } else {
-          this.orderBuys[index].vat_value = 0
-        }
-      } else {
-        this.orderBuys[index].vat_value = 0
-      }
-      document.getElementById("vat_value_" + index).value = this.currencyFormat(vat_value)
-      this.orderBuys[index].total = parseInt(sub_total) + parseInt(vat_value)
-    },
-
-    save() {
-      if(this.orderBuys.length == 0) {
-        this.popToast('danger', "Chưa có đơn hàng nào được chọn")
-      }
-
-      // Handle data order buy ở đây
-      for (let index in this.orderBuys) {
-          index = parseInt(index)
-          let sub_total = (this.orderBuys[index].sub_total + "").replaceAll(",","")
-          let vat_value = 0
-          let vat_percent = 10
-          let have_vat = document.getElementById("have_vat_" + index).checked
-          if(have_vat) {
-              vat_percent = document.getElementById("vat_percent_" + index).value
-              if(vat_percent) {
-                vat_value = Math.round((sub_total) * vat_percent / 100)
-              }
+      let vat_percent = 10
+      let have_vat = false
+      let have_vat_flag = document.getElementById("have_vat_" + index)
+      if(have_vat_flag) {
+        have_vat = have_vat_flag.checked
+        if(have_vat) {
+          vat_percent = document.getElementById("vat_percent_" + index).value
+          if(vat_percent) {
+            vat_value = Math.round((orderBuysTemp[index].sub_total) * vat_percent / 100)
           }
-
-          this.orderBuys[index].have_vat = have_vat
-          this.orderBuys[index].vat_percent = vat_percent
-          this.orderBuys[index].vat_value = vat_value
-          this.orderBuys[index].total = parseInt(sub_total) + parseInt(vat_value)
-
-          let payment_method = document.getElementById("payment_method_" + index).value
-          if(!payment_method) {
-            this.popToast('danger', "Vui lòng chọn [Phương thức thanh toán] cho đơn hàng số " + (index + 1))
-            return;
-          }
-          this.orderBuys[index].payment_method = payment_method
-          this.orderBuys[index].shipping_method = document.getElementById("shipping_method_" + index).value
-          let shipping_date = document.getElementById("shipping_date_" + index).value
-          this.orderBuys[index].shipping_date = shipping_date ? shipping_date : null
-          this.orderBuys[index].note = document.getElementById("note_" + index).value
+        }
       }
 
-      this.saving = true
-      orderBuyApi.saveOrderBuyByGroup(this.orderBuys).then(res => {
-        if(res != null && res.data != null) {
-          this.$router.push("/order-buy")
-        }
+      orderBuysTemp[index].have_vat = have_vat
+      orderBuysTemp[index].vat_percent = vat_percent
+      orderBuysTemp[index].vat_value = vat_value
 
-        this.saving = false
-      }).catch(err => {
-        this.saving = false
-
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-      })
-
-    },
-
-    changePrice(index) {
-      let price_buy = document.getElementById("price_" + index).value
-      if(price_buy) {
-        price_buy = (price_buy + "").replaceAll(",", "")
-
-        let quantity = document.getElementById("quantity_" + index).value
-        if(quantity) {
-          quantity = (quantity + "").replaceAll(",", "")
-          let amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
-          amount = this.currencyFormat(amount)
-          this.productOfOrderSell[index].amount = amount
-          document.getElementById("amount_" + index).value = amount
-        } else {
-          this.productOfOrderSell[index].amount = null
-          document.getElementById("amount_" + index).value = null
-        }
-
-        price_buy = this.currencyFormat(price_buy)
-        document.getElementById("price_" + index).value = price_buy
-        this.productOfOrderSell[index].price_buy = price_buy
-      } else {
-        this.productOfOrderSell[index].amount = null
-        document.getElementById("amount_" + index).value = null
-      }
-    },
-
-      changeQuantity(index) {
-        let quantity = document.getElementById("quantity_" + index).value
-        if(quantity) {
-          quantity = (quantity + "").replaceAll(",", "")
-
-          let price_buy = document.getElementById("price_" + index).value
-          if(price_buy) {
-            price_buy = (price_buy + "").replaceAll(",", "")
-            let amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
-            this.productOfOrderSell[index].amount = this.currencyFormat(amount)
-            document.getElementById("amount_" + index).value = amount
-          } else {
-            this.productOfOrderSell[index].amount = null
-            document.getElementById("amount_" + index).value = null
-          }
-
-          quantity = this.currencyFormat(quantity)
-          document.getElementById("quantity_" + index).value = quantity
-          this.productOfOrderSell[index].quantity = quantity
-        } else {
-          this.productOfOrderSell[index].amount = null
-          document.getElementById("amount_" + index).value = null
-        }
-
-      },
-
-    /**
-     * Only input integer
-     */
-    integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-    searchOrderSell() {
-      if (this.onSearchOrderSell) { return }
-
-      this.onSearchOrderSell = true
-
-      let params = {
-        "order_sell_number": this.orderSellSearch.order_sell_number,
-        "customer_name": this.orderSellSearch.customer_name,
-        "limit": 100,
-        "offset": 0
+      let vat_value_flag = document.getElementById("vat_value_" + index)
+      if(vat_value_flag) {
+        vat_value_flag.value = currencyFormat(vat_value)
       }
 
-      orderBuyApi.searchOrderSell(params).then(res => {
-        if (res != null && res.data != null && res.data.data != null) {
-          this.orderSellSearchItems = res.data.data
-        } else {
-          this.orderSellSearchItems = []
-        }
-        this.onSearchOrderSell = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+      orderBuysTemp[index].total = orderBuysTemp[index].sub_total + vat_value
+      orderBuysTemp[index].note = null
+    } else {
+      orderBuy = {
+        order_sell_ids: [item.order_sell_id],
+        supplier_id: item.supplier_id,
+        supplier_name: item.supplier_name,
+        supplier_address: item.supplier_address,
+        products: [item],
+        sub_total: Math.round(parseInt(item.price_buy) * parseFloat(item.quantity)),
+        have_vat: false,
+        vat_percent: 10,
+        vat_value: 0,
+        total: Math.round(parseInt(item.price_buy) * parseFloat(item.quantity)),
+        payment_method: null,
+        shipping_method: null,
+        shipping_date: null,
+        shipping_date_model: null,
+        note: null
+      }
+      orderBuysTemp.push(orderBuy)
+      supplierIdChecked.push(item.supplier_id)
+    }
+  }
 
-        this.onSearchOrderSell = false
-      })
-    },
+  orderBuys.value = orderBuysTemp
+}
 
-    changeCheckAll() {
-      for(let index in this.productOfOrderSell) {
-        document.getElementById("is_get_" + index).checked = this.checkAll;
+const deleteProduct = (indexOrderBuy, indexProduct) => {
+  orderBuys.value[indexOrderBuy].products.splice(indexProduct, 1)
+  if(orderBuys.value[indexOrderBuy].products.length == 0) {
+    orderBuys.value.splice(indexOrderBuy, 1)
+  } else {
+    calculateAmount(indexOrderBuy)
+  }
+}
+
+const integerPointAndCommaOnly = (item) => {
+  let valueInput = item.value
+  valueInput = valueInput.replaceAll(",", "")
+  let result = commonFunc.integerPointAndCommaOnly(valueInput)
+
+  result = currencyFormat(result)
+  item.value = result
+}
+
+const calSubTotal = (index) => {
+  let result = 0
+  for(let item of orderBuys.value[index].products) {
+    result += parseInt(item.amount)
+  }
+  return result
+}
+
+const calculateAmount = (index) => {
+  index = parseInt(index)
+  let sub_total = calSubTotal(index)
+  orderBuys.value[index].sub_total = sub_total
+
+  let vat_value = 0
+  let have_vat = document.getElementById("have_vat_" + index).checked
+  if(have_vat) {
+    let vat_percent = document.getElementById("vat_percent_" + index).value
+    if(vat_percent) {
+      vat_value = Math.round((sub_total) * vat_percent / 100)
+
+      orderBuys.value[index].vat_value = currencyFormat(vat_value)
+      orderBuys.value[index].vat_percent = vat_percent
+    } else {
+      orderBuys.value[index].vat_value = 0
+    }
+  } else {
+    orderBuys.value[index].vat_value = 0
+  }
+  document.getElementById("vat_value_" + index).value = currencyFormat(vat_value)
+  orderBuys.value[index].total = parseInt(sub_total) + parseInt(vat_value)
+}
+
+const save = () => {
+  if(orderBuys.value.length == 0) {
+    popToast('danger', "Chưa có đơn hàng nào được chọn")
+    return
+  }
+
+  // Handle data order buy
+  for (let index in orderBuys.value) {
+    index = parseInt(index)
+    let sub_total = (orderBuys.value[index].sub_total + "").replaceAll(",","")
+    let vat_value = 0
+    let vat_percent = 10
+    let have_vat = document.getElementById("have_vat_" + index).checked
+    if(have_vat) {
+      vat_percent = document.getElementById("vat_percent_" + index).value
+      if(vat_percent) {
+        vat_value = Math.round((sub_total) * vat_percent / 100)
       }
     }
 
+    orderBuys.value[index].have_vat = have_vat
+    orderBuys.value[index].vat_percent = vat_percent
+    orderBuys.value[index].vat_value = vat_value
+    orderBuys.value[index].total = parseInt(sub_total) + parseInt(vat_value)
 
+    let payment_method = document.getElementById("payment_method_" + index).value
+    if(!payment_method) {
+      popToast('danger', "Vui lòng chọn [Phương thức thanh toán] cho đơn hàng số " + (index + 1))
+      return
+    }
+    orderBuys.value[index].payment_method = payment_method
+    orderBuys.value[index].shipping_method = document.getElementById("shipping_method_" + index).value
+
+    // Get shipping date from model
+    let shipping_date = orderBuys.value[index].shipping_date_model
+    if (shipping_date && shipping_date instanceof Date) {
+      const year = shipping_date.getFullYear()
+      const month = String(shipping_date.getMonth() + 1).padStart(2, '0')
+      const day = String(shipping_date.getDate()).padStart(2, '0')
+      orderBuys.value[index].shipping_date = `${year}-${month}-${day}`
+    } else {
+      orderBuys.value[index].shipping_date = null
+    }
+
+    orderBuys.value[index].note = document.getElementById("note_" + index).value
+  }
+
+  saving.value = true
+  orderBuyApi.saveOrderBuyByGroup(orderBuys.value).then(res => {
+    if(res != null && res.data != null) {
+      router.push("/order-buy")
+    }
+
+    saving.value = false
+  }).catch(err => {
+    saving.value = false
+
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+  })
+}
+
+const changePrice = (index) => {
+  let price_buy = document.getElementById("price_" + index).value
+  if(price_buy) {
+    price_buy = (price_buy + "").replaceAll(",", "")
+
+    let quantity = document.getElementById("quantity_" + index).value
+    if(quantity) {
+      quantity = (quantity + "").replaceAll(",", "")
+      let amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
+      amount = currencyFormat(amount)
+      productOfOrderSell.value[index].amount = amount
+      document.getElementById("amount_" + index).value = amount
+    } else {
+      productOfOrderSell.value[index].amount = null
+      document.getElementById("amount_" + index).value = null
+    }
+
+    price_buy = currencyFormat(price_buy)
+    document.getElementById("price_" + index).value = price_buy
+    productOfOrderSell.value[index].price_buy = price_buy
+  } else {
+    productOfOrderSell.value[index].amount = null
+    document.getElementById("amount_" + index).value = null
+  }
+}
+
+const changeQuantity = (index) => {
+  let quantity = document.getElementById("quantity_" + index).value
+  if(quantity) {
+    quantity = (quantity + "").replaceAll(",", "")
+
+    let price_buy = document.getElementById("price_" + index).value
+    if(price_buy) {
+      price_buy = (price_buy + "").replaceAll(",", "")
+      let amount = Math.round(parseInt(price_buy) * parseFloat(quantity))
+      productOfOrderSell.value[index].amount = currencyFormat(amount)
+      document.getElementById("amount_" + index).value = amount
+    } else {
+      productOfOrderSell.value[index].amount = null
+      document.getElementById("amount_" + index).value = null
+    }
+
+    quantity = currencyFormat(quantity)
+    document.getElementById("quantity_" + index).value = quantity
+    productOfOrderSell.value[index].quantity = quantity
+  } else {
+    productOfOrderSell.value[index].amount = null
+    document.getElementById("amount_" + index).value = null
+  }
+}
+
+const integerOnly = (item) => {
+  let valueInput = item.value
+  let result = commonFunc.intergerOnly(valueInput)
+  item.value = result
+}
+
+const searchOrderSell = () => {
+  if (onSearchOrderSell.value) { return }
+
+  onSearchOrderSell.value = true
+
+  let params = {
+    "order_sell_number": orderSellSearch.order_sell_number,
+    "customer_name": orderSellSearch.customer_name,
+    "limit": 100,
+    "offset": 0
+  }
+
+  orderBuyApi.searchOrderSell(params).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      orderSellSearchItems.value = res.data.data
+    } else {
+      orderSellSearchItems.value = []
+    }
+    onSearchOrderSell.value = false
+  }).catch(err => {
+    // Handle error
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+
+    onSearchOrderSell.value = false
+  })
+}
+
+const changeCheckAll = () => {
+  for(let index in productOfOrderSell.value) {
+    document.getElementById("is_get_" + index).checked = checkAll.value
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.datepicker-cus {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
 
-  .title-partner {
-    border-radius: 5px 5px;
-    padding: 5px;
-
-  }
-
+.datepicker-cus:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
 </style>

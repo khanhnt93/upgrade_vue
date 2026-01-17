@@ -1,252 +1,203 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="mb-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded float-right" @click="gotoAdd()">
+          Thêm
+        </button>
+      </div>
 
-          <b-row>
-            <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="gotoAdd()">
-                Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+      <div class="clear-both">
+        <h4 class="text-center text-xl font-semibold mb-4">Thương Hiệu</h4>
+      </div>
+      <hr class="mb-4">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center">Thương Hiệu</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="mb-4">
+        <label>Tên</label>
+        <input
+          type="text"
+          class="form-control border rounded px-3 py-2 w-full"
+          v-model="inputs.name"
+          maxlength="100">
+      </div>
 
-          <b-row>
-            <b-col>
-              <label>Tên</label>
-              <input
-                id="name"
-                type="text"
-                class="form-control"
-                v-model="inputs.name"
-                maxlength="100">
-            </b-col>
+      <div class="mb-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded float-right" :disabled="onSearch" @click="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-          </b-row>
-           <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-            </b-row>
+      <div class="overflow-x-auto clear-both">
+        <table class="min-w-full divide-y divide-gray-200 border">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">STT</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tên</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Mô tả</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Ngày Tạo</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase"></th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="(item, index) in items" :key="index">
+              <td class="px-4 py-3">{{ item.stt }}</td>
+              <td class="px-4 py-3">{{ item.name }}</td>
+              <td class="px-4 py-3">{{ item.description }}</td>
+              <td class="px-4 py-3">{{ item.created_at }}</td>
+              <td class="px-4 py-3">
+                <div class="flex gap-2">
+                  <button @click="edit(item.id)" class="text-blue-500 hover:text-blue-700" title="Edit">
+                    <i class="fa fa-edit" />
+                  </button>
+                  <button @click="deleted(item.id, item.name, item.stt)" class="text-red-500 hover:text-red-700" title="Delete">
+                    <i class="fa fa-trash" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">Hết</span>
-        </b-card>
-      </b-col>
-    </b-row>
+      <!-- Loading -->
+      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-if="hasNext === false">Hết</span>
+    </div>
   </div>
 </template>
 
-
-<script>
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import superAdminAPI from '@/api/superAdmin'
-import Mapper from '@/mapper/store'
-import MasterApi from '@/api/master'
-import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
-import { useToast } from '@/composables/useToast'
 
+const router = useRouter()
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'description',
-          label: 'Mô tả'
-        },
-        {
-          key: 'created_at',
-          label: 'Ngày Tạo'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
-      items: [],
-      inputs: {
-        name: ''
-      },
-      loadByScroll: false,
-      onSearch: false,
-      hasNext: true,
-      loading: false,
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      listIdDeleted: [],
+const items = ref([])
+const inputs = ref({
+  name: ''
+})
+const loadByScroll = ref(false)
+const onSearch = ref(false)
+const hasNext = ref(true)
+const loading = ref(false)
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const offset = ref(0)
+const listIdDeleted = ref([])
+
+/**
+ * Scroll event
+ */
+const onScroll = (event) => {
+  if(onSearch.value) {
+    return
+  }
+  event.preventDefault()
+  const body = document.body
+  const html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if(hasNext.value) {
+      offset.value = offset.value + 10
+      loadByScroll.value = true
+      search()
     }
-  },
-  computed: {
-    rows() {
-      return this.items.length
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-
-    this.search()
-  },
-  methods: {
-
-    /**
-     * Scroll event
-     */
-    onScroll (event) {
-      if(this.onSearch) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + 10
-          this.loadByScroll = true
-          this.search ()
-        }
-      }
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-
-      this.search()
-    },
-
-    /**
-     * Delete
-     */
-    deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          superAdminAPI.deleteBrand(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
-    },
-
-    /**
-     *  Go to edit
-     */
-    edit (id) {
-      this.$router.push('/brand/index/' + id)
-    },
-
-    /**
-     *  Go to add
-     */
-    gotoAdd () {
-      this.$router.push('/brand/index/')
-    },
-
-    /**
-     * Search
-     */
-    search () {
-      if (this.loading) { return }
-
-      this.onSearch = true
-      this.loading = true
-
-      let dataPost = {
-        "name": this.inputs.name,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      superAdminAPI.getBrandList(dataPost).then(res => {
-        if (res != null && res.data != null && res.data.data != null) {
-          let it = res.data.data.data
-
-          // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          // Check has next
-          if(this.offset + this.pageLimit >= res.data.data.total_row) {
-            this.hasNext = false
-          }
-        } else {
-          this.items = []
-        }
-          this.onSearch = false
-          this.loading = false
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-
-          this.onSearch = false
-          this.loading = false
-      })
-    },
   }
 }
+
+/**
+ * Prepare to search
+ */
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+  search()
+}
+
+/**
+ * Delete
+ */
+const deleted = (id, name, rowIndex) => {
+  if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+    superAdminAPI.deleteBrand(id).then(res => {
+      const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
+      items.value.splice(indexTemp, 1)
+      listIdDeleted.value.push(rowIndex - 1)
+    }).catch(err => {
+      const errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+/**
+ * Go to edit
+ */
+const edit = (id) => {
+  router.push('/brand/index/' + id)
+}
+
+/**
+ * Go to add
+ */
+const gotoAdd = () => {
+  router.push('/brand/index/')
+}
+
+/**
+ * Search
+ */
+const search = () => {
+  if (loading.value) { return }
+
+  onSearch.value = true
+  loading.value = true
+
+  const dataPost = {
+    "name": inputs.value.name,
+    "limit": pageLimit.value,
+    "offset": offset.value
+  }
+
+  superAdminAPI.getBrandList(dataPost).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      const it = res.data.data.data
+
+      // Update items
+      if(loadByScroll.value) {
+        items.value = items.value.concat(it)
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      // Check has next
+      if(offset.value + pageLimit.value >= res.data.data.total_row) {
+        hasNext.value = false
+      }
+    } else {
+      items.value = []
+    }
+    onSearch.value = false
+    loading.value = false
+  }).catch(err => {
+    const errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+    onSearch.value = false
+    loading.value = false
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+  search()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>

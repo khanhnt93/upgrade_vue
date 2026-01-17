@@ -1,179 +1,167 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="bg-white rounded-lg shadow">
+      <div class="p-6">
+        <div class="flex justify-between mb-4">
+          <button
+            class="border border-gray-400 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded w-32"
+            @click="back">
+            Quay lại
+          </button>
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            @click="save"
+            :disabled="saving">
+            Lưu
+          </button>
+        </div>
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+        <div class="text-center mb-4">
+          <h4 class="text-xl font-semibold text-gray-700">{{ prefix_title }} Đơn Vị</h4>
+        </div>
+        <hr class="mb-4">
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center text-header">{{prefix_title}} Đơn Vị</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+        <!-- Loading -->
+        <div v-show="loading" class="text-center mb-4">
+          <icon name="loading" width="60" />
+        </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên<span class="error-sybol"></span></label>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="unit.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        <div class="grid grid-cols-12 gap-4 mb-4">
+          <div class="col-span-12 md:col-span-3 flex items-center">
+            <label>Tên<span class="text-red-500"></span></label>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <input
+              id="name"
+              type="text"
+              maxlength="100"
+              autocomplete="new-password"
+              class="w-full border rounded px-3 py-2"
+              v-model="unit.name">
+            <div v-if="errorName" class="text-red-500 text-sm mt-1">
+              Vui lòng nhập tên
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from '@/composables/useToast'
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from '@/composables/useToast'
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  data () {
-    return {
-      prefix_title: "Thêm Mới",
-      unit: {
-        "name": null,
-      },
-      click: false,
-      saving: false,
-      loading: false,
-    }
-  },
-  mounted() {
-    // Check prefix
-    if(this.$route.params.id) {
-      this.prefix_title = "Cập Nhật"
-    } else {
-      this.prefix_title = "Thêm Mới"
-    }
+const route = useRoute()
+const router = useRouter()
+const { popToast } = useToast()
 
-    this.getUnitDetail()
-  },
-  computed: {
-    errorName: function () {
-      return this.checkInfo(this.unit.name)
-    }
-  },
-  methods: {
-    checkInfo (info) {
-      return (this.click && (info == null || info.length <= 0))
-    },
-    checkValidate () {
-      return !(this.errorName)
-    },
+const prefix_title = ref("Thêm Mới")
+const unit = ref({
+  name: null,
+})
+const click = ref(false)
+const saving = ref(false)
+const loading = ref(false)
 
-    /**
-     * Get detail
-     */
-    getUnitDetail() {
-      let unitId = this.$route.params.id
-      if(unitId){
-        this.loading = true
+const errorName = computed(() => {
+  return click.value && (unit.value.name == null || unit.value.name.length <= 0)
+})
 
-        unitAPI.getUnitDetail(unitId).then(res => {
-          if(res != null && res.data != null && res.data.data != null) {
-            this.unit = res.data.data
-          }
+const checkValidate = () => {
+  return !errorName.value
+}
 
-          this.loading = false
-        }).catch(err => {
-          this.loading = false
+/**
+ * Get detail
+ */
+const getUnitDetail = () => {
+  let unitId = route.params.id
+  if(unitId){
+    loading.value = true
 
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
+    unitAPI.getUnitDetail(unitId).then(res => {
+      if(res != null && res.data != null && res.data.data != null) {
+        unit.value = res.data.data
       }
-    },
 
-    /**
-     * Back to list
-     */
-    back() {
-      // Go to list
-      this.$router.push('/unit')
-    },
+      loading.value = false
+    }).catch(err => {
+      loading.value = false
 
-    /**
-     * Save
-     */
-    save () {
-      this.click = true
-      this.saving = true
-      let result = this.checkValidate()
-      if(result) {
-        let unitId = this.$route.params.id
-        if(unitId){
-          // Edit
-          let unit = this.unit
-          unit.id = unitId
-          unitAPI.editUnit(unit).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                // show popup success
-                this.popToast('success', 'Cập nhật đơn vị thành công!!! ')
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        } else {
-          // Add
-          unitAPI.addUnit(this.unit).then(res => {
-            this.saving = false
-            if(res != null && res.data != null){
-              if (res.data.status == 200) {
-                this.$router.push("/unit")
-              }
-            }
-          }).catch(err => {
-            this.saving = false
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      } else {
-        this.saving = false
-      }
-    }
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
   }
 }
+
+/**
+ * Back to list
+ */
+const back = () => {
+  router.push('/unit')
+}
+
+/**
+ * Save
+ */
+const save = () => {
+  click.value = true
+  saving.value = true
+  let result = checkValidate()
+  if(result) {
+    let unitId = route.params.id
+    if(unitId){
+      // Edit
+      let unitData = unit.value
+      unitData.id = unitId
+      unitAPI.editUnit(unitData).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            // show popup success
+            popToast('success', 'Cập nhật đơn vị thành công!!! ')
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    } else {
+      // Add
+      unitAPI.addUnit(unit.value).then(res => {
+        saving.value = false
+        if(res != null && res.data != null){
+          if (res.data.status == 200) {
+            router.push("/unit")
+          }
+        }
+      }).catch(err => {
+        saving.value = false
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        popToast('danger', errorMess)
+      })
+    }
+  } else {
+    saving.value = false
+  }
+}
+
+onMounted(() => {
+  // Check prefix
+  if(route.params.id) {
+    prefix_title.value = "Cập Nhật"
+  } else {
+    prefix_title.value = "Thêm Mới"
+  }
+
+  getUnitDetail()
+})
 </script>

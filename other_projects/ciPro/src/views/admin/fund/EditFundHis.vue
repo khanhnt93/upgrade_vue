@@ -1,376 +1,327 @@
 <template>
-  <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+  <div class="container mx-auto px-4">
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="mb-4">
+        <h4 class="text-xl font-semibold text-center text-gray-700">Lịch Sử Sửa Phiếu Thu-Chi</h4>
+      </div>
+      <hr class="my-4">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">Lịch Sử Sửa Phiếu Thu-Chi</h4>
-            </b-col>
-          </b-row>
-          <hr>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block mb-2 font-medium">Thời gian</label>
+          <select v-model="time_option" class="form-select w-full rounded-md border-gray-300">
+            <option v-for="opt in timeOptions" :key="opt.value" :value="opt.value">{{opt.text}}</option>
+          </select>
+        </div>
 
-          <b-row class="form-row">
+        <div>
+          <label class="block mb-2 font-medium">{{time_option == 1 ? 'Từ ngày' : 'Năm'}}</label>
+          <Datepicker v-show="time_option == 1" v-model="inputs.from_date" input-class="datepicker-cus w-full" />
+          <select v-show="time_option != 1" v-model="year_input" class="form-select w-full rounded-md border-gray-300">
+            <option v-for="opt in yearOptions" :key="opt.value" :value="opt.value">{{opt.text}}</option>
+          </select>
+        </div>
 
-            <b-col md="3">
-              <label> Thời gian </label>
-              <b-form-select :options="timeOptions" v-model="time_option" ></b-form-select>
-            </b-col>
+        <div>
+          <label v-show="time_option != 4" class="block mb-2 font-medium">
+            {{time_option == 1 ? 'Đến ngày' : time_option == 2 ? 'Tháng' : 'Quý'}}
+          </label>
+          <Datepicker v-show="time_option == 1" v-model="inputs.to_date" input-class="datepicker-cus w-full" />
+          <select v-show="time_option == 2" v-model="month_input" class="form-select w-full rounded-md border-gray-300">
+            <option v-for="opt in monthOptions" :key="opt.value" :value="opt.value">{{opt.text}}</option>
+          </select>
+          <select v-show="time_option == 3" v-model="quarter_input" class="form-select w-full rounded-md border-gray-300">
+            <option v-for="opt in quarterOptions" :key="opt.value" :value="opt.value">{{opt.text}}</option>
+          </select>
+        </div>
 
-            <b-col md="3">
-              <label> {{time_option == 1 ? 'Từ ngày' : 'Năm' }} </label>
-              <!--Thời gian theo ngày-->
-              <datepicker v-show="time_option == 1" v-model="inputs.from_date" format="yyyy-MM-dd"
-                          placeholder="yyyy-MM-dd"  input-class="datepicker-cus"></datepicker>
-              <!--Thời gian năm-->
-              <b-form-select v-show="time_option != 1" :options="yearOptions" v-model="year_input"></b-form-select>
-            </b-col>
+        <div>
+          <label class="block mb-2 font-medium">Loại phiếu</label>
+          <select v-model="inputs.fund_type" class="form-select w-full rounded-md border-gray-300">
+            <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{opt.text}}</option>
+          </select>
+        </div>
+      </div>
 
-            <b-col md="3">
-              <label v-show="time_option != 4"> {{time_option == 1 ? 'Đến ngày' : time_option == 2 ? 'Tháng' : 'Quý' }} </label>
+      <div class="mb-4">
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right"
+          :disabled="loading"
+          @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
+      </div>
 
-              <!--Thời gian theo ngày-->
-              <datepicker v-show="time_option == 1" v-model="inputs.to_date" format="yyyy-MM-dd"
-                          placeholder="yyyy-MM-dd"  input-class="datepicker-cus"></datepicker>
+      <div class="flex justify-between items-center mb-4 clear-both">
+        <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
+        <download-excel
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold"
+          :data="excel_items"
+          :fields="excel_fields"
+          worksheet="Lịch Sử Sửa Phiếu Thu-Chi"
+          name="Lịch Sử Sửa Phiếu Thu-Chi">
+          Xuất Excel
+        </download-excel>
+      </div>
 
-              <!--Thời gian tháng -->
-              <b-form-select v-show="time_option == 2" :options="monthOptions" v-model="month_input"></b-form-select>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-2 py-2 w-20">STT</th>
+              <th class="border border-gray-300 px-2 py-2">Ngày</th>
+              <th class="border border-gray-300 px-2 py-2">Người sửa</th>
+              <th class="border border-gray-300 px-2 py-2">Loại phiếu</th>
+              <th class="border border-gray-300 px-2 py-2">Phiếu cũ</th>
+              <th class="border border-gray-300 px-2 py-2">Phiếu mới</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-2 py-2 text-center">{{index + 1}}</td>
+              <td class="border border-gray-300 px-2 py-2">{{item.created_at}}</td>
+              <td class="border border-gray-300 px-2 py-2">{{item.staff_name}}</td>
+              <td class="border border-gray-300 px-2 py-2">{{item.fund_type_str}}</td>
+              <td class="border border-gray-300 px-2 py-2">
+                <a :href="'/fund-history-detail/' + item.fund_his_id_old"
+                   target="_blank"
+                   class="text-blue-600 hover:underline"
+                   title="Chi tiết phiếu thu-chi">
+                  {{item.fund_number_old}}
+                </a>
+              </td>
+              <td class="border border-gray-300 px-2 py-2">
+                <a :href="'/fund-history-detail/' + item.fund_his_id_new"
+                   target="_blank"
+                   class="text-blue-600 hover:underline"
+                   title="Chi tiết phiếu thu-chi">
+                  {{item.fund_number_new}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-              <!--Thời gian quý -->
-              <b-form-select v-show="time_option == 3" :options="quarterOptions" v-model="quarter_input"></b-form-select>
-            </b-col>
-
-            <b-col md="3">
-              <label>Loại phiếu</label>
-              <b-form-select
-                id="type"
-                :options="typeOptions"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.fund_type"></b-form-select>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col md="12" class="mt-2">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="loading"
-                        @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col md="12">
-              <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "excel_items"
-                :fields = "excel_fields"
-                worksheet = "Lịch Sử Sửa Phiếu Thu-Chi"
-                name    = "Lịch Sử Sửa Phiếu Thu-Chi">
-                <b>Xuất Excel</b>
-              </download-excel>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col md="12" class="table-cus">
-              <table class="table table-bordered table-striped fixed_header">
-                <thead>
-                  <tr>
-                    <th style="width:10%">STT</th>
-                    <th style="width:15%">Ngày</th>
-                    <th style="width:15%">Người sửa</th>
-                    <th style="width:15%">Loại phiếu</th>
-                    <th style="width:15%">Phiếu cũ</th>
-                    <th style="width:15%">Phiếu mới</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(item, index) in items">
-                  <td>{{index + 1}}</td>
-                  <td>{{item.created_at}}</td>
-                  <td>{{item.staff_name}}</td>
-                  <td>{{item.fund_type_str}}</td>
-                  <td>
-                    <a :href="'/fund-history-detail/' + item.fund_his_id_old" target="_blank" title="Chi tiết phiếu thu-chi">
-                      {{item.fund_number_old}}
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="'/fund-history-detail/' + item.fund_his_id_new" target="_blank" title="Chi tiết phiếu thu-chi">
-                      {{item.fund_number_new}}
-                    </a>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </b-col>
-          </b-row>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
-
+      <div v-show="loading" class="flex justify-center my-4">
+        <icon name="loading" width="60" />
+      </div>
+      <div v-if="hasNext === false" class="text-center my-4">--Hết--</div>
+      <div v-if="hasNext === true && totalRow != 0" class="text-center my-4">
+        <i class="fa fa-angle-double-down text-2xl"></i>
+      </div>
+    </div>
   </div>
 </template>
-<script>
 
-
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useToast } from '@/composables/useToast'
 import fundApi from '@/api/fund'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
-import { useToast } from '@/composables/useToast'
 
+const { popToast } = useToast()
 
-export default {
-  setup() {
-    const { popToast } = useToast()
-    return { popToast }
-  },
-  components: {
-    Datepicker
-  },
-  data () {
-    return {
-      timeOptions: [
-        {"value": 1, "text": 'Ngày'},
-        {"value": 2, "text": 'Tháng'},
-        {"value": 3, "text": 'Quý'},
-        {"value": 4, "text": 'Năm'}
-      ],
-      yearOptions: [],
-      quarterOptions: [
-        {"value": 1, "text": 'Quý 1'},
-        {"value": 2, "text": 'Quý 2'},
-        {"value": 3, "text": 'Quý 3'},
-        {"value": 4, "text": 'Quý 4'}
-      ],
-      monthOptions: [
-        {"value": 1, "text": 'Tháng 1'},
-        {"value": 2, "text": 'Tháng 2'},
-        {"value": 3, "text": 'Tháng 3'},
-        {"value": 4, "text": 'Tháng 4'},
-        {"value": 5, "text": 'Tháng 5'},
-        {"value": 6, "text": 'Tháng 6'},
-        {"value": 7, "text": 'Tháng 7'},
-        {"value": 8, "text": 'Tháng 8'},
-        {"value": 9, "text": 'Tháng 9'},
-        {"value": 10, "text": 'Tháng 10'},
-        {"value": 11, "text": 'Tháng 11'},
-        {"value": 12, "text": 'Tháng 12'}
-      ],
-      time_option: 1,
-      year_input: 2024,
-      quarter_input: 1,
-      month_input: 1,
-      typeOptions: [
-        {"value": null, "text": ''},
-        {"value": 0, "text": 'Phiếu thu'},
-        {"value": 1, "text": 'Phiếu chi'}
-      ],
-      inputs: {
-        from_date: '2000-01-01',
-        to_date: '2000-01-02',
-        fund_type: null
-      },
-      items: [],
-      excel_items: [],
-      excel_fields: {
-        'Ngày sửa': 'created_at',
-        'Người sửa' : 'staff_name',
-        'Loại phiếu' : 'fund_type_str',
-        'Mã phiếu cũ' : 'fund_number_old',
-        'Mã phiếu mới': 'fund_number_new'
-      },
-      isGetExcelItems: false,
-      loadByScroll: false,
-      hasNext: true,
-      loading: false,
-      pageLimit: Constant.PAGE_LIMIT,
-      offset: 0,
-      totalRow: 0,
+const timeOptions = ref([
+  {"value": 1, "text": 'Ngày'},
+  {"value": 2, "text": 'Tháng'},
+  {"value": 3, "text": 'Quý'},
+  {"value": 4, "text": 'Năm'}
+])
+const yearOptions = ref([])
+const quarterOptions = ref([
+  {"value": 1, "text": 'Quý 1'},
+  {"value": 2, "text": 'Quý 2'},
+  {"value": 3, "text": 'Quý 3'},
+  {"value": 4, "text": 'Quý 4'}
+])
+const monthOptions = ref([
+  {"value": 1, "text": 'Tháng 1'},
+  {"value": 2, "text": 'Tháng 2'},
+  {"value": 3, "text": 'Tháng 3'},
+  {"value": 4, "text": 'Tháng 4'},
+  {"value": 5, "text": 'Tháng 5'},
+  {"value": 6, "text": 'Tháng 6'},
+  {"value": 7, "text": 'Tháng 7'},
+  {"value": 8, "text": 'Tháng 8'},
+  {"value": 9, "text": 'Tháng 9'},
+  {"value": 10, "text": 'Tháng 10'},
+  {"value": 11, "text": 'Tháng 11'},
+  {"value": 12, "text": 'Tháng 12'}
+])
+const time_option = ref(1)
+const year_input = ref(2024)
+const quarter_input = ref(1)
+const month_input = ref(1)
+const typeOptions = ref([
+  {"value": null, "text": ''},
+  {"value": 0, "text": 'Phiếu thu'},
+  {"value": 1, "text": 'Phiếu chi'}
+])
+
+const inputs = ref({
+  from_date: new Date('2000-01-01'),
+  to_date: new Date('2000-01-02'),
+  fund_type: null
+})
+const items = ref([])
+const excel_items = ref([])
+const excel_fields = ref({
+  'Ngày sửa': 'created_at',
+  'Người sửa': 'staff_name',
+  'Loại phiếu': 'fund_type_str',
+  'Mã phiếu cũ': 'fund_number_old',
+  'Mã phiếu mới': 'fund_number_new'
+})
+const isGetExcelItems = ref(false)
+const loadByScroll = ref(false)
+const hasNext = ref(true)
+const loading = ref(false)
+const pageLimit = ref(Constant.PAGE_LIMIT)
+const offset = ref(0)
+const totalRow = ref(0)
+
+const prepareDateInput = () => {
+  let dateNow = new Date()
+  inputs.value.to_date = new Date(dateNow.toJSON().slice(0,10))
+  inputs.value.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
+  let currentYear = new Date().getFullYear()
+  year_input.value = currentYear
+  yearOptions.value = []
+  for (let i = currentYear; i > currentYear - 10; i--) {
+    yearOptions.value.push({value: i, text: i})
+  }
+  month_input.value = new Date().getMonth() + 1
+}
+
+const onScroll = (event) => {
+  if(loading.value) {
+    return
+  }
+  event.preventDefault()
+  var body = document.body
+  var html = document.documentElement
+  if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
+    if(hasNext.value) {
+      offset.value = offset.value + pageLimit.value
+      loadByScroll.value = true
+      search()
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-
-    // Get today day, month, year
-    let dateNow = new Date()
-    this.today_day = dateNow.getDate()
-    this.today_month = dateNow.getMonth() + 1
-    this.today_year = dateNow.getFullYear()
-
-    // Get default from date and to date
-    this.prepareDateInput()
-
-    // Search
-    this.prepareToSearch()
-  },
-  methods: {
-
-
-    prepareDateInput() {
-      let dateNow = new Date()
-      this.inputs.to_date = dateNow.toJSON().slice(0,10)
-      this.inputs.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
-      let currentYear = new Date().getFullYear()
-      this.year_input = currentYear
-      this.yearOptions = []
-      for (let i = currentYear; i > currentYear - 10; i--) {
-        this.yearOptions.push({value: i, text: i})
-      }
-
-      this.month_input = dateNow.getMonth() + 1
-    },
-
-    /**
-     * Scroll event
-     */
-    onScroll (event) {
-      if(this.loading) {
-        return
-      }
-      event.preventDefault()
-      var body = document.body
-      var html = document.documentElement
-      if (window.pageYOffset + window.innerHeight + 25 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
-        if(this.hasNext) {
-          this.offset = this.offset + this.pageLimit
-          this.loadByScroll = true
-          this.search()
-        }
-      }
-    },
-
-    /**
-     * Prepare to search
-     */
-    prepareToSearch() {
-      this.offset = 0
-      this.items = []
-      this.hasNext = true
-      this.isGetExcelItems = false
-
-      this.search()
-    },
-
-    /**
-     * Search
-     */
-    search () {
-      if (this.loading) { return }
-      this.loading = true
-
-      let fromDate = this.inputs.from_date
-      let toDate = this.inputs.to_date
-
-      // Handle fromDate, toDate
-      if(this.time_option == 2) {
-        fromDate = this.year_input + '-' + this.month_input + '-01'
-        toDate = this.year_input + '-' + this.month_input + '-' + new Date(this.year_input, this.month_input, 0).getDate()
-      }
-      if(this.time_option == 3) {
-          let quarter = commonFunc.getMonthByQuarter(this.quarter_input)
-        fromDate = this.year_input + '-' + quarter + '-01'
-        toDate = this.year_input + '-' + (quarter + 2) + '-' + new Date(this.year_input, (quarter + 2), 0).getDate()
-      }
-      if(this.time_option == 4) {
-        fromDate = this.year_input + '-01-01'
-        toDate = this.year_input + '-12-' + new Date(this.year_input, 12, 0).getDate()
-      }
-      if(this.time_option == 5) {
-        toDate = new Date().toJSON().slice(0,10)
-        fromDate = '2000-01-01'
-      }
-
-      let params = {
-        "fund_type": this.inputs.fund_type,
-        "from_date": fromDate,
-        "to_date": toDate,
-        "limit": this.pageLimit,
-        "offset": this.offset
-      }
-
-      fundApi.getEditFundHis(params).then(res => {
-        if (res != null && res.data != null && res.data.data != null) {
-          let it = res.data.data
-
-          // Update items
-          if(this.loadByScroll) {
-            let temp = this.items
-            var newArray = temp.concat(it)
-            this.items = newArray
-          } else {
-            this.items = it
-          }
-          this.loadByScroll = false
-
-          if(!this.isGetExcelItems) {
-            this.getExcelItem(params)
-          } else {
-              if(parseInt(this.offset) + parseInt(this.pageLimit) >= parseInt(this.totalRow)) {
-                this.hasNext = false
-              }
-          }
-        } else {
-          this.items = []
-        }
-        this.loading = false
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.loading = false
-      })
-    },
-
-    getExcelItem(params) {
-      if(this.isGetExcelItems) {
-        return;
-      }
-
-      this.excel_items = []
-
-      // Define params
-      params.limit = 999999
-
-      // Search
-      fundApi.getEditFundHis(params).then(res => {
-        if(res != null && res.data != null && res.data.data != null){
-          this.excel_items = res.data.data
-          this.isGetExcelItems = true
-
-          // Check has next
-          this.totalRow = res.data.data.length
-          if(parseInt(this.offset) + parseInt(this.pageLimit) >= parseInt(this.totalRow)) {
-            this.hasNext = false
-          }
-        }
-      }).catch(err => {
-        // Handle error
-        let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
-
-        this.loading = false
-      })
-    },
-
   }
 }
+
+const prepareToSearch = () => {
+  offset.value = 0
+  items.value = []
+  hasNext.value = true
+  isGetExcelItems.value = false
+  search()
+}
+
+const search = () => {
+  if (loading.value) { return }
+  loading.value = true
+
+  let fromDate = inputs.value.from_date
+  let toDate = inputs.value.to_date
+
+  if(time_option.value == 2) {
+    fromDate = year_input.value + '-' + month_input.value + '-01'
+    toDate = year_input.value + '-' + month_input.value + '-' + new Date(year_input.value, month_input.value, 0).getDate()
+  }
+  if(time_option.value == 3) {
+    let quarter = commonFunc.getMonthByQuarter(quarter_input.value)
+    fromDate = year_input.value + '-' + quarter + '-01'
+    toDate = year_input.value + '-' + (quarter + 2) + '-' + new Date(year_input.value, (quarter + 2), 0).getDate()
+  }
+  if(time_option.value == 4) {
+    fromDate = year_input.value + '-01-01'
+    toDate = year_input.value + '-12-' + new Date(year_input.value, 12, 0).getDate()
+  }
+  if(time_option.value == 5) {
+    toDate = new Date().toJSON().slice(0,10)
+    fromDate = '2000-01-01'
+  }
+
+  let params = {
+    "fund_type": inputs.value.fund_type,
+    "from_date": fromDate,
+    "to_date": toDate,
+    "limit": pageLimit.value,
+    "offset": offset.value
+  }
+
+  fundApi.getEditFundHis(params).then(res => {
+    if (res != null && res.data != null && res.data.data != null) {
+      let it = res.data.data
+
+      if(loadByScroll.value) {
+        let temp = items.value
+        var newArray = temp.concat(it)
+        items.value = newArray
+      } else {
+        items.value = it
+      }
+      loadByScroll.value = false
+
+      if(!isGetExcelItems.value) {
+        getExcelItem(params)
+      } else {
+        if(parseInt(offset.value) + parseInt(pageLimit.value) >= parseInt(totalRow.value)) {
+          hasNext.value = false
+        }
+      }
+    } else {
+      items.value = []
+    }
+    loading.value = false
+  }).catch(err => {
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+    loading.value = false
+  })
+}
+
+const getExcelItem = (params) => {
+  if(isGetExcelItems.value) {
+    return
+  }
+
+  excel_items.value = []
+  params.limit = 999999
+
+  fundApi.getEditFundHis(params).then(res => {
+    if(res != null && res.data != null && res.data.data != null){
+      excel_items.value = res.data.data
+      isGetExcelItems.value = true
+
+      totalRow.value = res.data.data.length
+      if(parseInt(offset.value) + parseInt(pageLimit.value) >= parseInt(totalRow.value)) {
+        hasNext.value = false
+      }
+    }
+  }).catch(err => {
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
+    loading.value = false
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+  prepareDateInput()
+  prepareToSearch()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 </script>
 
-<style lang="scss" scoped>
-  .label-width {
-    width: 100%;
-  }
+<style scoped>
+.datepicker-cus {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
 </style>
