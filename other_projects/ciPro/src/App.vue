@@ -28,7 +28,7 @@
       </header>
 
        <!-- đăng nhập xong sẽ dùng đoạn code bên dưới -->
-      <header class="app-header navbar" v-if="authStore.user" >
+      <header class="header-custom app-header navbar" v-if="authStore.user" >
         <div class="header-container">
           <div class="nav-left">
             <button @click="toggleSidebarVisibility" type="button" class="navbar-toggler">
@@ -40,17 +40,17 @@
             </router-link>
           </div>
 
-          <div class="ml-auto flex items-center">
+          <div class="ml-auto flex items-center gap-3">
             <!-- hiện cho template staff -->
-            <template>
-              <span class="text-right"  v-if="authStore.user.userType == 'staff'">
+            <template v-if="authStore.user.userType == 'staff'">
+              <span class="text-right">
                 <b style="color: #0d0e10">{{ authStore.user.userName }}</b>
                 <br>
                 <span class="text-gray-500">
                   ({{ authStore.user.role }})
                 </span>
               </span>
-              <HeaderDropdownStaffAcc  v-if="authStore.user.userType == 'staff'"/>
+              <HeaderDropdownStaffAcc />
             </template>
             <!-- end -->
 
