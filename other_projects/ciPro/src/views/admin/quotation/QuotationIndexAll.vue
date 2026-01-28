@@ -4445,7 +4445,7 @@ const getTradeDetail = () => {
       .getQuotationDetail(tradeId, userRole.value)
       .then((res) => {
         if (res != null && res.data != null && res.data.data != null) {
-          trade = res.data.data;
+          Object.assign(trade, res.data.data);
 
           // Format
           trade.sub_total = currencyFormat(
@@ -5086,7 +5086,7 @@ const refreshCurrentProduct = () => {
 };
 
 const refreshTradeInfo = () => {
-  trade = {
+  Object.assign(trade, {
     id: null,
     quotation_number: null,
     status: -1,
@@ -5122,8 +5122,8 @@ const refreshTradeInfo = () => {
     show_price_project: "true",
     shipping_date: "3-5 ngày kể từ ngày đặt hàng",
     guarantee: "Mới 100% bảo hành theo nhà Sản Xuất",
-    attach_doc: null,
-  };
+    attach_doc: null
+  });
   if (url.includes("quotation-project")) {
     trade.type = 1; // Báo giá dự án
     trade.guarantee = "1 năm"; // Báo giá dự án
@@ -6855,7 +6855,7 @@ const chooseUnit = () => {
 };
 
 const editPaymentMethod = (index) => {
-  paymentMethod = itemsPaymentMethod[index];
+  Object.assign(paymentMethod, itemsPaymentMethod[index]);
   btn_payment_method_text.value = "Cập nhật";
 };
 
@@ -6995,7 +6995,7 @@ const cleanShippingAgreement = () => {
 };
 
 const editShippingAgreement = (index) => {
-  shippingAgreement = itemsShippingAgreement[index];
+  Object.assign(shippingAgreement, itemsShippingAgreement[index]);
   btn_shipping_agreement_text.value = "Cập nhật";
 };
 
