@@ -16,4 +16,8 @@ export default {
     return session.post(RootAPI + 'staff/reset-pass', params)
   },
 
+  getMenuBar(id) {
+    return session.get(RootAPI + 'staff/get-menu-bar/' + id)
+  },
+
 }

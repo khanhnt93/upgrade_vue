@@ -32,7 +32,7 @@
 
               <!-- Sửa số lượng -->
               <b-form-input
-                type="number"
+                type="text"
                 min="1"
                 :value="item.quantity"
                 @input="updateQty(index, $event)"
@@ -175,7 +175,7 @@
           </b-button>
 
           <!-- In hóa đơn -->
-          <b-button v-if="trade.id && trade.products.length" variant="outline-warning" class="mr-2" @click="printReceipt">
+          <b-button v-if="trade.id && trade.products.length" variant="outline-warning" class="mr-2" @click="printReceipt(true)">
             🧾 In hóa đơn tạm tính
           </b-button>
 
@@ -273,7 +273,7 @@
                     </b-button>
                     <span v-show="product.price_buy == null">Hàng chưa nhập kho</span>
                   </div>
-                  <div class="text-muted text-right" style="flex: 1;">
+                  <div class="text-muted text-right mr-2" style="flex: 1;">
                     Đơn vị: {{ product.unit_name }}
                   </div>
                 </div>
@@ -331,7 +331,7 @@
                 <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
                   <div>{{ currencyFormat(item.price_sell) }}</div>
                   <div>{{ currencyFormat(item.quantity) }}</div>
-                  <div>{{ currencyFormat(item.price_sell * item.quantity) }}</div>
+                  <div>{{ currencyFormat(item.amount) }}</div>
                 </div>
               </div>
             </div>
@@ -340,16 +340,20 @@
               <span>{{ currencyFormat(trade.sub_total) }}</span>
             </p>
             <p v-if="trade.extra_fee"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-              <strong>Chi phí thêm: </strong>
+              <span>Chi phí thêm: </span>
               <span>{{ currencyFormat(trade.extra_fee) }}</span>
             </p>
             <p v-if="trade.fixed_discount"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-              <strong>Giảm tiền: </strong>
+              <span>Giảm tiền: </span>
               <span>{{ currencyFormat(trade.fixed_discount) }}</span>
             </p>
             <p v-if="trade.discount_amount"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-              <strong>Khuyến mãi:</strong>
+              <span>Khuyến mãi:</span>
               <span>{{ currencyFormat(trade.discount_amount) }}</span>
+            </p>
+            <p v-if="trade.vat_value"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+              <span>VAT:</span>
+              <span>{{ currencyFormat(trade.vat_value) }}</span>
             </p>
             <p style="display: flex; justify-content: space-between; font-size: 0.875rem;">
               <strong>Thanh toán:</strong>
@@ -366,7 +370,7 @@
       <div class="w-50 p-3 d-flex flex-column h-100">
         <b-row>
           <b-col>
-            <b-button variant="outline-primary" class="pull-left px-4 btn-width-220" @click="printReceipt()">
+            <b-button variant="outline-primary" class="pull-left px-4 btn-width-220" @click="printReceipt(false)">
               🖨️ In hóa đơn
             </b-button>
           </b-col>
@@ -389,16 +393,29 @@
     </div>
 
     <!-- Vùng in hoá đơn tạm tính -->
-    <div ref="receiptArea" class="receipt-container"  style="display: none;">
+    <div ref="receiptAreaTemp" class="receipt-container"  style="display: none;">
       <div class="receipt-content">
-        <!-- Logo -->
-        <div>
-          <img src="/static/img/project/logo.png" alt="Spa" style="width: 100%; height: auto;" />
-        </div>
+        <div v-if="storeInfo.logo" style="display: flex; align-items: center; gap: 5px;">
+          <!-- Logo -->
+          <div style="flex: 1; max-width: 25%; padding-right: 5px;">
+            <img :src="storeInfo.logo" alt="Spa" style="width: 100%; height: auto;" />
+          </div>
 
-        <h4 style="font-size: 18px; text-align: center;">{{ storeInfo.name }}</h4>
-        <p style="text-align: center;">Địa chỉ: {{ storeInfo.address }}</p>
-        <p style="text-align: center;">SĐT: {{ storeInfo.phone_number }}</p>
+          <!-- Thông tin -->
+          <div style="flex: 1;">
+            <h4 style="font-size: 22px; margin: 0;">
+              <strong>{{ storeInfo.name }}</strong>
+            </h4>
+            <p style="margin: 4px 0;">Địa chỉ: {{ storeInfo.address }}</p>
+            <p style="margin: 4px 0;">SĐT: {{ storeInfo.phone_number }}</p>
+          </div>
+        </div>
+        
+        <div v-if="!storeInfo.logo">
+          <h3 style="font-size: 20px; text-align: center;"><strong>{{ storeInfo.name }}</strong></h3>
+          <p style="text-align: center;">Địa chỉ: {{ storeInfo.address }}</p>
+          <p style="text-align: center;">SĐT: {{ storeInfo.phone_number }}</p>
+        </div>
 
         <h4 style="text-align: center; margin-bottom: 0.5rem; margin-top: 0.5rem;">HÓA ĐƠN TẠM TÍNH</h4>
         <p>Số hóa đơn: {{ trade.bill_number }}</p>
@@ -420,7 +437,7 @@
             <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
               <div>{{ currencyFormat(item.price_sell) }}</div>
               <div>{{ currencyFormat(item.quantity) }}</div>
-              <div>{{ currencyFormat(item.price_sell * item.quantity) }}</div>
+              <div>{{ currencyFormat(item.amount) }}</div>
             </div>
           </div>
         </div>
@@ -429,16 +446,20 @@
           <span>{{ currencyFormat(trade.sub_total) }}</span>
         </p>
         <p v-if="trade.extra_fee"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-          <strong>Chi phí thêm: </strong>
+          <span>Chi phí thêm: </span>
           <span>{{ currencyFormat(trade.extra_fee) }}</span>
         </p>
         <p v-if="trade.fixed_discount"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-          <strong>Giảm tiền: </strong>
+          <span>Giảm tiền: </span>
           <span>{{ currencyFormat(trade.fixed_discount) }}</span>
         </p>
         <p v-if="trade.discount_amount"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
-          <strong>Khuyến mãi:</strong>
+          <span>Khuyến mãi:</span>
           <span>{{ currencyFormat(trade.discount_amount) }}</span>
+        </p>
+        <p v-if="trade.vat_value"  style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+          <span>VAT:</span>
+          <span>{{ currencyFormat(trade.vat_value) }}</span>
         </p>
         <p style="display: flex; justify-content: space-between; font-size: 0.875rem;">
           <strong>Thanh toán:</strong>
@@ -508,7 +529,7 @@
               </b-col>
               <b-col md="6">
                 <b-form-group label="Loại khách hàng">
-                  <b-form-input v-model="newCustomer.type"></b-form-input>
+                  <b-form-select v-model="newCustomer.type" :options="optionsCustomerType"></b-form-select>
                 </b-form-group>
               </b-col>
               <b-col md="6">
@@ -521,7 +542,7 @@
               </b-col>
               <b-col md="6">
                 <b-form-group label="Ngày sinh">
-                  <b-form-input type="date" v-model="newCustomer.birthday"></b-form-input>
+                  <b-form-input type="date" v-model="newCustomer.birthday" :min="minDate" :max="maxDate"></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col md="6">
@@ -1084,6 +1105,10 @@ export default {
         {value: '2', text: 'Nữ'},
         {value: '3', text: 'Khác'}
       ],
+      optionsCustomerType: [
+        {value: '0', text: 'Cá nhân'},
+        {value: '1', text: 'Cty'}
+      ],
       selectedCustomer: {},
       customerSearchQuery: '',
       customerList: [],
@@ -1159,6 +1184,8 @@ export default {
           label: 'Số lượng bán'
         }
       ],
+      minDate: '1926-01-01',
+      maxDate: '2099-01-01'
     }
   },
   computed: {
@@ -1170,6 +1197,16 @@ export default {
     },
   },
   mounted() {
+    const today = new Date()
+
+    this.maxDate = today.toISOString().split('T')[0]
+
+    const minDateObj = new Date()
+    minDateObj.setFullYear(minDateObj.getFullYear() - 100)
+
+    this.minDate = minDateObj.toISOString().split('T')[0]
+
+
     // check Add hay edit
      const path = window.location.pathname;
      if(path.includes('bill/edit')) {
@@ -1216,8 +1253,11 @@ export default {
       const products = JSON.parse(JSON.stringify(this.trade.products))
       if(products && products.length > 0) {
         for(const product of products) {
-          product.price_sell = this.currencyFormat((product.price_sell + '').replaceAll(",", ""))
-          product.quantity = this.currencyFormat((product.quantity + '').replaceAll(",", ""))
+          const price_sell = (product.price_sell + '').replaceAll(",", "")
+          product.price_sell = this.currencyFormat(price_sell)
+          const quantity = (product.quantity + '').replaceAll(",", "")
+          product.quantity = this.currencyFormat(quantity)
+          product.amount = parseInt(parseInt(price_sell) * parseFloat(quantity))
         }
       }
       this.trade.products = products
@@ -1227,8 +1267,11 @@ export default {
       const products = JSON.parse(JSON.stringify(this.trade.products))
       if(products && products.length > 0) {
         for(const product of products) {
-          product.price_sell = parseInt((product.price_sell + '').replaceAll(",", ""))
-          product.quantity = parseFloat((product.quantity + '').replaceAll(",", ""))
+          const price_sell = parseInt((product.price_sell + '').replaceAll(",", ""))
+          product.price_sell = price_sell
+          const quantity = parseFloat((product.quantity + '').replaceAll(",", ""))
+          product.quantity = quantity
+          product.amount = parseInt(parseInt(price_sell) * parseFloat(quantity))
         }
       }
       return products
@@ -1413,14 +1456,14 @@ export default {
 
     // Cập nhật giá bán
     updatePrice(index, value) {
-      const parsed = parseFloat(value);
+      const parsed = parseInt(value);
       if (!isNaN(parsed)) {
         this.trade.products[index].price_sell = parsed;
       }
     },
     // Cập nhật số lượng
     updateQty(index, value) {
-      const parsed = parseInt(value);
+      const parsed = parseFloat(value);
       if (!isNaN(parsed) && parsed >= 1) {
         this.trade.products[index].quantity = parsed;
       }
@@ -1462,11 +1505,16 @@ export default {
       this.handleSaveDraft()
     },
     formatNumericInput(index, field) {
+      console.log("aaaaaaaaaaaaaaaaa")
       let value = this.trade.products[index][field];
+      console.log(value)
       if(value) {
         value = this.currencyFormat((value + '').replaceAll(",", ""))
         this.trade.products[index][field] = value;
       }
+      
+      console.log(value)
+      console.log("aaaaaaaaaaaaaaaaa")
     },
 
     showModal(type) {
@@ -1579,14 +1627,25 @@ export default {
 
       // sub_total
       // const sub_total = this.trade.products.reduce((total, item) => total + parseInt((item.price_sell + '').replaceAll(",", "")) * parseFloat((item.quantity + '').replaceAll(",", "")), 0);
-      const sub_total = this.trade.products.reduce((total, item) => {
+      
+      let sub_total = 0
+      for(let item of this.trade.products) {
         if (item.price_sell) {
           const price = parseInt((item.price_sell + '').replaceAll(",", ""));
           const quantity = parseFloat((item.quantity + '').replaceAll(",", ""));
-          return total + price * quantity;
+          const amount = parseInt(price * quantity);
+          item.amount = amount
+          sub_total += amount
         }
-        return total;
-      }, 0);
+      }
+      // const sub_total = this.trade.products.reduce((total, item) => {
+      //   if (item.price_sell) {
+      //     const price = parseInt((item.price_sell + '').replaceAll(",", ""));
+      //     const quantity = parseFloat((item.quantity + '').replaceAll(",", ""));
+      //     return total + price * quantity;
+      //   }
+      //   return total;
+      // }, 0);
       this.trade.sub_total = sub_total
       if(!this.trade.sub_total) {
         this.trade.sub_total = 0 
@@ -1625,6 +1684,8 @@ export default {
         
       // Total
       this.trade.total = total;
+      this.trade.total_paid = total
+      this.paymentType = 'full'
     },
 
     // Tìm kiếm khách hàng
@@ -1821,8 +1882,14 @@ export default {
     /**
      * In hóa đơn: Mẫu in bill
      */
-    printReceipt() {
-      const printContent = this.$refs.receiptArea.innerHTML;
+    printReceipt(isTemp) {
+      let printContent = null
+      if(isTemp) {
+        printContent = this.$refs.receiptAreaTemp.innerHTML;
+      } else {
+        printContent = this.$refs.receiptArea.innerHTML;
+      }
+
       var mywindow = window.open('', 'PRINT', 'height=900,width=1200');
 
       mywindow.document.write('<html><head><title> </title><style>');

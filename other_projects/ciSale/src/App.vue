@@ -49,7 +49,7 @@
 
           <!-- hiện cho template staff -->
           <template>
-            <span class="white text-right"  v-if="this.$store.state.user.userType == 'staff'">
+            <span class="text-right"  v-if="this.$store.state.user.userType == 'staff'">
               {{ this.$store.state.user.userName }}
               <br>
               <span class="text-muted">
@@ -117,7 +117,8 @@ import HeaderDropdownCusAcc from '@/components/common/HeaderDropdownCusAcc'
 import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc'
 import HeaderDropdownGift from '@/components/common/HeaderDropdownGift'
 import {Constant} from '@/common/constant'
-import { RootAPI } from '@/api/index'
+import staffAPI from '@/api/staff'
+import commonFunc from "@/common/commonFunc";
 import { SidebarMenu } from 'vue-sidebar-menu'
 
 
@@ -153,7 +154,15 @@ export default {
       this.activePushedMenu = false
     }
   },
+  mounted() {
+    // Check login
+    if(!this.$store.state.user || !this.$store.state.user.id) {
+      this.$router.push('/staff-login')
+    }
 
+    // Get lại menu bar nếu có user
+    this.getMenuBar()
+  },
   computed: {
     name () {
       return this.$route.name
@@ -162,9 +171,19 @@ export default {
       return this.$route.matched.filter((route) => route.name || route.meta.label)
     }
   },
-  created () {
-  },
   methods: {
+    /**
+   * Make toast without title
+   */
+    popToast(variant, content) {
+      this.$bvToast.toast(content, {
+        toastClass: 'my-toast',
+        noCloseButton: true,
+        variant: variant,
+        autoHideDelay: 3000
+      })
+    },
+    
     /**
      * Go to notification
      */
@@ -179,7 +198,22 @@ export default {
       var audio = document.getElementById("audioNotification")
       audio.muted = false;
       audio.play();
-    }
+    },
+
+    getMenuBar() {
+      if(this.$store.state && this.$store.state.user && this.$store.state.user.id) {
+        staffAPI.getMenuBar(this.$store.state.user.id).then(res => {
+          if(res != null && res.data != null && res.data.data != null){
+            this.$store.commit('updateMenu', res.data.data)
+          }
+        }).catch(err => {
+          // Handle error
+          let errorMess = commonFunc.handleStaffError(err)
+          this.popToast('danger', errorMess)
+        })
+      }
+    },
+
   }
 }
 </script>
@@ -230,7 +264,7 @@ export default {
     margin-left: 0;
   }
   .header-custom {
-    background-color: #444444 !important;
+    background-color: white !important;
     ul.navbar-nav {
       li.nav-item {
         min-width: unset;
