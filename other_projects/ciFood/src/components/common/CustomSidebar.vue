@@ -9,42 +9,99 @@
             </li>
             <li v-else class="sidebar-item" :class="{ 'has-children': item.child }">
               <!-- Item without children -->
-              <router-link
-                v-if="!item.child"
-                :to="item.href"
-                class="sidebar-link"
-                :class="{ 'active': isActive(item.href) }"
-                @click="handleMenuClick"
-              >
-                <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
-                <span class="sidebar-title">{{ item.title }}</span>
-              </router-link>
+              <template v-if="!item.child">
+                <div
+                  class="sidebar-parent-wrapper"
+                  @mouseenter="handleParentHover(item.title)"
+                  @mouseleave="handleParentLeave"
+                >
+                  <router-link
+                    :to="item.href"
+                    class="sidebar-link"
+                    :class="{ 'active': isActive(item.href) }"
+                    @click="handleMenuClick"
+                  >
+                    <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                    <span class="sidebar-title">{{ item.title }}</span>
+                  </router-link>
+
+                  <!-- Popover for items without children (header only) -->
+                  <div
+                    v-show="shouldShowPopover(item.title)"
+                    class="sidebar-popover"
+                    @mouseenter="handleParentHover(item.title)"
+                  >
+                    <router-link
+                      :to="item.href"
+                      class="popover-header popover-header-clickable"
+                      @click="handleMenuClick"
+                    >
+                      <i v-if="item.icon" :class="getIconClass(item.icon)" class="popover-header-icon" aria-hidden="true"></i>
+                      <span class="popover-header-title">{{ item.title }}</span>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
 
               <!-- Item with children -->
               <template v-else>
-                <a
-                  href="#"
-                  class="sidebar-link"
-                  :class="{ 'active': hasActiveChild(item.child), 'open': openMenus[item.title] }"
-                  @click.prevent="toggleMenu(item.title)"
+                <div
+                  class="sidebar-parent-wrapper"
+                  @mouseenter="handleParentHover(item.title)"
+                  @mouseleave="handleParentLeave"
                 >
-                  <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
-                  <span class="sidebar-title">{{ item.title }}</span>
-                  <i class="fa fa-chevron-right sidebar-arrow" :class="{ 'open': openMenus[item.title] }" aria-hidden="true"></i>
-                </a>
-                <ul v-show="openMenus[item.title]" class="sidebar-submenu">
-                  <li v-for="child in item.child" :key="child.href" class="sidebar-item">
-                    <router-link
-                      :to="child.href"
-                      class="sidebar-link"
-                      :class="{ 'active': isActive(child.href) }"
-                      @click="handleMenuClick"
-                    >
-                      <i v-if="child.icon" :class="getIconClass(child.icon)" class="sidebar-icon" aria-hidden="true"></i>
-                      <span class="sidebar-title">{{ child.title }}</span>
-                    </router-link>
-                  </li>
-                </ul>
+                  <a
+                    href="#"
+                    class="sidebar-link"
+                    :class="{ 'active': hasActiveChild(item.child), 'open': openMenus[item.title] }"
+                    @click.prevent="toggleMenu(item.title)"
+                  >
+                    <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                    <span class="sidebar-title">{{ item.title }}</span>
+                    <i class="fa fa-chevron-right sidebar-arrow" :class="{ 'open': openMenus[item.title] }" aria-hidden="true"></i>
+                  </a>
+
+                  <!-- Regular submenu (shown when expanded) -->
+                  <ul v-show="!collapsed && openMenus[item.title]" class="sidebar-submenu">
+                    <li v-for="child in item.child" :key="child.href" class="sidebar-item">
+                      <router-link
+                        :to="child.href"
+                        class="sidebar-link"
+                        :class="{ 'active': isActive(child.href) }"
+                        @click="handleMenuClick"
+                      >
+                        <i v-if="child.icon" :class="getIconClass(child.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                        <span class="sidebar-title">{{ child.title }}</span>
+                      </router-link>
+                    </li>
+                  </ul>
+
+                  <!-- Popover (shown when collapsed and hovering/clicked) -->
+                  <div
+                    v-show="shouldShowPopover(item.title)"
+                    class="sidebar-popover"
+                    @mouseenter="handleParentHover(item.title)"
+                  >
+                    <div class="popover-header">
+                      <i v-if="item.icon" :class="getIconClass(item.icon)" class="popover-header-icon" aria-hidden="true"></i>
+                      <span class="popover-header-title">{{ item.title }}</span>
+                      <i class="fa fa-caret-left popover-header-arrow" aria-hidden="true"></i>
+                    </div>
+                    <ul class="popover-menu">
+                      <li v-for="child in item.child" :key="child.href" class="popover-item">
+                        <router-link
+                          :to="child.href"
+                          class="popover-link"
+                          :class="{ 'active': isActive(child.href) }"
+                          @click="handleMenuClick"
+                        >
+                          <i v-if="child.icon" :class="getIconClass(child.icon)" class="popover-icon" aria-hidden="true"></i>
+                          <span class="popover-title">{{ child.title }}</span>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </template>
             </li>
           </template>
@@ -92,6 +149,8 @@ const emit = defineEmits(['toggle', 'close'])
 
 const route = useRoute()
 const openMenus = ref({})
+const hoveredMenu = ref(null)
+const clickedMenu = ref(null)
 
 // Get icon class - handles both object {class: 'fa fa-icon'} and string 'fa fa-icon' formats
 // Also handles Font Awesome 4 to 5+ icon name mapping
@@ -143,15 +202,59 @@ const hasActiveChild = (children) => {
 
 // Toggle submenu
 const toggleMenu = (title) => {
-  openMenus.value[title] = !openMenus.value[title]
+  if (props.collapsed) {
+    // When collapsed, toggle the clicked menu to show/hide popover on click
+    if (clickedMenu.value === title) {
+      clickedMenu.value = null
+      hoveredMenu.value = null
+    } else {
+      clickedMenu.value = title
+      hoveredMenu.value = title
+    }
+  } else {
+    // When expanded, toggle the submenu and close others
+    const isCurrentlyOpen = openMenus.value[title]
+
+    // Close all other menus
+    Object.keys(openMenus.value).forEach(key => {
+      openMenus.value[key] = false
+    })
+
+    // Toggle the current menu
+    openMenus.value[title] = !isCurrentlyOpen
+  }
 }
 
 // Handle menu click - close sidebar on mobile
 const handleMenuClick = () => {
+  // Close popover when child item is clicked in collapsed mode
+  if (props.collapsed) {
+    clickedMenu.value = null
+    hoveredMenu.value = null
+  }
   // Close sidebar when menu item is clicked
   if (props.visible) {
     emit('close')
   }
+}
+
+// Handle hover for popover in collapsed state
+const handleParentHover = (title) => {
+  if (props.collapsed) {
+    hoveredMenu.value = title
+  }
+}
+
+const handleParentLeave = () => {
+  if (props.collapsed && !clickedMenu.value) {
+    // Only clear hover if menu wasn't clicked (just hovering)
+    hoveredMenu.value = null
+  }
+}
+
+// Check if popover should be shown
+const shouldShowPopover = (title) => {
+  return props.collapsed && hoveredMenu.value === title
 }
 
 // Auto-open menu if child is active
@@ -162,6 +265,19 @@ watch(() => route.path, () => {
     }
   })
 }, { immediate: true })
+
+// Close all menus when sidebar collapses
+watch(() => props.collapsed, (isCollapsed) => {
+  if (isCollapsed) {
+    // Close all expanded menus
+    Object.keys(openMenus.value).forEach(key => {
+      openMenus.value[key] = false
+    })
+    // Close any clicked/hovered popover
+    clickedMenu.value = null
+    hoveredMenu.value = null
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -183,22 +299,10 @@ watch(() => route.path, () => {
 
   &.collapsed {
     width: 60px !important;
+    overflow: visible;
 
     .sidebar-title {
-      opacity: 0;
-      visibility: hidden;
-      position: absolute;
-      left: 60px;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: #2f353a;
-      padding: 8px 15px;
-      border-radius: 4px;
-      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-      white-space: nowrap;
-      z-index: 1001;
-      pointer-events: none;
-      transition: opacity 0.2s ease, visibility 0.2s ease;
+      display: none;
     }
 
     .sidebar-arrow {
@@ -215,13 +319,6 @@ watch(() => route.path, () => {
       justify-content: center;
       padding: 12px 0;
       position: relative;
-
-      &:hover {
-        .sidebar-title {
-          opacity: 1;
-          visibility: visible;
-        }
-      }
     }
 
     .sidebar-icon {
@@ -231,7 +328,7 @@ watch(() => route.path, () => {
     }
 
     .has-children {
-      .sidebar-link {
+      > .sidebar-parent-wrapper > .sidebar-link {
         padding-right: 0;
       }
     }
@@ -246,13 +343,18 @@ watch(() => route.path, () => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 .sidebar-nav {
   padding: 0;
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
+
+  .collapsed & {
+    overflow: visible;
+  }
 }
 
 .sidebar-toggle-wrapper {
@@ -293,6 +395,7 @@ watch(() => route.path, () => {
   list-style: none;
   margin: 0;
   padding: 0;
+  overflow: visible;
 }
 
 .sidebar-header {
@@ -307,10 +410,17 @@ watch(() => route.path, () => {
   position: relative;
 
   &.has-children {
-    > .sidebar-link {
+    > .sidebar-parent-wrapper > .sidebar-link {
       padding-right: 45px;
     }
   }
+}
+
+.sidebar-parent-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  z-index: 1;
 }
 
 .sidebar-link {
@@ -388,6 +498,135 @@ watch(() => route.path, () => {
 
   .sidebar-link {
     padding-left: 55px;
+  }
+}
+
+// Popover styles
+.sidebar-popover {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 1px;
+  min-width: 220px;
+  max-width: 320px;
+  background-color: #2f353a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  animation: popoverFadeIn 0.2s ease-out;
+  pointer-events: auto;
+}
+
+.popover-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  color: #fff;
+
+  &.popover-header-clickable {
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+.popover-header-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: 0;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.popover-header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  font-size: 18px;
+  color: #ff8c42;
+}
+
+.popover-header-title {
+  flex: 1;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.popover-menu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.popover-item {
+  position: relative;
+}
+
+.popover-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    border-left: 3px solid #ff8c42;
+    padding-left: 17px;
+  }
+}
+
+.popover-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+.popover-title {
+  flex: 1;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
