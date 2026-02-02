@@ -1,0 +1,67 @@
+// If you want to override variables do it here
+@use "variables";
+
+// Import styles
+@use "@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+// @use "coreui_dark";
+
+// ie fixes
+@use "ie-fix";
+
+.input-date {
+  width: 100%;
+  border: 0px;
+}
+
+.loading-more {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+// Slide image in home page
+.slider-entertainment {
+  height: 175px;
+  width: 300px;
+  background: #FFF;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+// Responsive table stacking for mobile
+@media (max-width: 768px) {
+  .table-responsive-stack thead {
+    display: none;
+  }
+
+  .table-responsive-stack tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+  }
+
+  .table-responsive-stack tbody td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-top: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .table-responsive-stack tbody td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 0.75rem;
+    font-weight: bold;
+    text-align: left;
+  }
+}

@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn-primary {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: #007bff;
+        border: 1px solid #007bff;
+        color: #fff;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+        color: #fff;
+    }
+
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        background-color: #007bff;
+        border-color: #007bff;
+        opacity: 0.65;
+    }
+
+    .btn-outline-primary {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: transparent;
+        border: 1px solid #007bff;
+        color: #007bff;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
+
+    /* Success Button */
+    .btn-success {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: #28a745;
+        border: 1px solid #28a745;
+        color: #fff;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        color: #fff;
+    }
+
+    /* Danger Button */
+    .btn-danger {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: #dc3545;
+        border: 1px solid #dc3545;
+        color: #fff;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+        color: #fff;
+    }
+
+    /* Secondary Button */
+    .btn-secondary {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: #6c757d;
+        border: 1px solid #6c757d;
+        color: #fff;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: #fff;
+    }
+
+    /* Outline Warning Button */
+    .btn-outline-warning {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: transparent;
+        border: 1px solid #ffc107;
+        color: #ffc107;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    /* Outline Danger Button */
+    .btn-outline-danger {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: transparent;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    /* Outline Success Button */
+    .btn-outline-success {
+        @apply inline-block font-normal text-center select-none align-middle transition-colors duration-200 ease-in-out;
+        background-color: transparent;
+        border: 1px solid #28a745;
+        color: #28a745;
+        padding: 6px 12px;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+        /* Using 4px for consistency */
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+}

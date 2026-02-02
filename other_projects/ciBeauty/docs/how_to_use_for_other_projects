@@ -1,0 +1,39 @@
+# Copy to .github directory
+mkdir -p .github
+cp docs/COPILOT_VUE2_TO_VUE3_UPGRADE_INSTRUCTIONS.md .github/copilot-instructions.md
+
+Option 3: Reference in Chat
+When asking GitHub Copilot for help, say:
+
+"Follow the migration guide in COPILOT_VUE2_TO_VUE3_UPGRADE_INSTRUCTIONS.md to upgrade this project from Vue 2 to Vue 3"
+
+
+
+
+Upgrade this project from Vue 2 to Vue 3, migrate from bootstrap-vue to taiwindcss. Refer the docs and todo list below:
+
+Updated all core dependencies (Vue, Router, State Management) that can run npm install only do not allow to run npm install -f or npm install --legacy-peer-deps
+Migrated from Webpack to Vite build tool
+Converted Vuex store to Pinia
+Updated Vue Router from v3 to v4
+Fixed global API changes (createApp instead of new Vue)
+Updated component lifecycle hooks
+Migrated environment variables (process.env → import.meta.env)
+Fixed Sass deprecation warnings (@import → @use)
+Installed and configured Font Awesome icons
+Removed Vue 2 filters (replaced with methods/composables)
+Created useFormatters composable for currency/date formatting
+Migrated from Vuex (this.$store) to Pinia (useAuthStore) replace new syntax in all components.
+Migrate all the components from to new syntax for vue 3
+Migrate component that using vue-bootstrap to taiwinds css
+Update toast notification following the guide in docs
+Update sidebar following the guide and keep the style
+Testing run without error
+For each todo list above try to refer in copilo.github/t-instructions.md or docs/*.md
+
+Then create document to tracking below:
+MIGRATION_COMPLETE_SUMMARY.md - Complete overview
+MIGRATION_STATUS.md - Component migration guide
+INSTALLATION_AND_NEXT_STEPS.md - Setup instructions
+MIGRATION_CHECKLIST.md - Detailed checklist
+README_MIGRATION.md - Quick start guide

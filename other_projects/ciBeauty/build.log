@@ -1,0 +1,64 @@
+
+> ciBeauty@1.0.0 build
+> vite build
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+vite v5.4.21 building for production...
+transforming...
+(node:7306) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/postcss.config.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+3 │   @import 'assets/scss/style';
+  │           ^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/App.vue 3:11  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+4 │   @import 'assets/scss/rsw';
+  │           ^^^^^^^^^^^^^^^^^
+  ╵
+    src/App.vue 4:11  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+5 │   @import 'assets/scss/sidebar.scss';
+  │           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/App.vue 5:11  root stylesheet
+
+✓ 98 modules transformed.
+x Build failed in 822ms
+error during build:
+[vite:vue] [vue/compiler-sfc] Missing semicolon. (91:24)
+
+/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/src/views/brand_manager/report/StoreTodayReport.vue
+328|      confirmChooseStore() {
+329|        // Show modal chọn store
+330|      confirmChooseStore() {
+   |                          ^
+331|        // Show modal chọn store
+332|        // this.$bvModal.hide('modal-choose-store')
+file: /Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/src/views/brand_manager/report/StoreTodayReport.vue:91:24
+    at constructor (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:365:19)
+    at Parser.raise (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:6599:19)
+    at Parser.semicolon (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:6895:10)
+    at Parser.parseExpressionStatement (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:13275:10)
+    at Parser.parseStatementContent (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:12889:19)
+    at Parser.parseStatementLike (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:12757:17)
+    at Parser.parseStatementListItem (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:12737:17)
+    at Parser.parseBlockOrModuleBlockBody (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:13306:61)
+    at Parser.parseBlockBody (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:13299:10)
+    at Parser.parseBlock (/Users/khanhnguyen/work/thaico/all_up_node-main/ciBeauty/node_modules/@babel/parser/lib/index.js:13287:10)
