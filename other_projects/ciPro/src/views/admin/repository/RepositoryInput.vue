@@ -276,7 +276,7 @@
       <div class="fixed inset-0 bg-black bg-opacity-50" @click="hideModalSearchOrderBuy"></div>
       <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full p-6">
-          <h4 class="text-2xl font-semibold text-center text-green-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
+          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -362,7 +362,7 @@
       <div class="fixed inset-0 bg-black bg-opacity-50" @click="hideModalRepoKeep"></div>
       <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full p-6">
-          <h4 class="text-2xl font-semibold text-center text-green-600 mb-4">
+          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">
             Bạn có muốn giữ hàng cho các đơn hàng bán dưới đây?
           </h4>
           <hr class="mb-4">

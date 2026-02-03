@@ -239,7 +239,7 @@
     <!-- Modal Bank Account List -->
     <div v-if="showBankAccountModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalListBankAccount">
       <div class="bg-white rounded-lg p-6 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h4 class="text-xl font-semibold text-center text-green-600 mb-4">Danh Sách Tài Khoản Ngân Hàng</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Tài Khoản Ngân Hàng</h4>
         <hr class="my-4">
 
         <div class="overflow-x-auto">

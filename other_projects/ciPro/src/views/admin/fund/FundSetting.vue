@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-gray-700">Nhóm - Loại Thu Chi</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600">Nhóm - Loại Thu Chi</h4>
       </div>
       <hr class="my-4">
 

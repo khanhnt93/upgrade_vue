@@ -18,7 +18,7 @@
       </div>
 
       <!-- Title -->
-      <h4 class="text-2xl font-semibold text-center text-blue-600 mb-4">Lịch Sử Xuất-Nhập Kho</h4>
+      <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Xuất-Nhập Kho</h4>
       <hr class="mb-6">
 
       <!-- Filter Section - Row 1 -->

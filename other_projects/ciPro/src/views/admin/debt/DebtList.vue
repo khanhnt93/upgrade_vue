@@ -12,7 +12,7 @@
       </div>
 
       <!-- Title -->
-      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Danh Sách Nợ Phải Thu</h4>
+      <h4 class="text-2xl font-bold text-center text-orange-600 mb-6">Danh Sách Nợ Phải Thu</h4>
 
       <!-- Summary Statistics -->
       <div class="grid grid-cols-2 gap-4 mb-6">
@@ -196,7 +196,7 @@
       @click.self="hideModalOverPayment"
     >
       <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-6xl max-h-screen overflow-y-auto">
-        <h4 class="text-2xl font-bold text-center text-green-600 mb-4">Cấn Trừ Công Nợ</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
         <hr class="mb-4" />
 
         <div class="mb-4">

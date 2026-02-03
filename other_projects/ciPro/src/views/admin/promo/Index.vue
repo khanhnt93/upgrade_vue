@@ -17,7 +17,7 @@
         </div>
 
         <div class="text-center mb-4">
-          <h4 class="text-xl font-semibold text-gray-700">Khuyến Mãi</h4>
+          <h4 class="text-xl font-semibold text-orange-600">Khuyến Mãi</h4>
         </div>
         <hr class="mb-4">
 

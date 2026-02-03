@@ -12,7 +12,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Danh Sách Nợ Phải Trả</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Danh Sách Nợ Phải Trả</h4>
 
         <!-- Summary Information -->
         <div class="grid grid-cols-2 gap-4 mb-6">
@@ -210,7 +210,7 @@
     <div v-if="showOverPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-6xl max-h-screen overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-2xl font-bold text-center text-green-600 mb-4">Cấn Trừ Công Nợ</h4>
+          <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
           <hr class="mb-4" />
 
           <div class="mb-4">

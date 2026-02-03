@@ -13,7 +13,7 @@
 
         <!-- Title -->
         <div class="mb-4">
-          <h4 class="text-2xl font-bold text-center text-blue-600">Thêm Mới ĐH Nhập Từ ĐH Bán</h4>
+          <h4 class="text-2xl font-bold text-center text-orange-600">Thêm Mới ĐH Nhập Từ ĐH Bán</h4>
         </div>
         <hr class="my-4"/>
 
@@ -408,7 +408,7 @@
         <div class="p-6">
           <!-- Modal header -->
           <div class="mb-4">
-            <h4 class="text-2xl font-bold text-center text-green-600">Tìm kiếm đơn hàng bán</h4>
+            <h4 class="text-2xl font-bold text-center text-orange-600">Tìm kiếm đơn hàng bán</h4>
           </div>
           <hr class="my-4"/>
 

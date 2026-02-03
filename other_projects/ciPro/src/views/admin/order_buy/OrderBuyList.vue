@@ -18,7 +18,7 @@
       </div>
 
       <!-- Title -->
-      <h4 class="text-xl font-semibold text-center text-blue-600 mb-4">Danh Sách Đơn Hàng Nhập</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Đơn Hàng Nhập</h4>
       <hr class="mb-4">
 
       <!-- Filters Row 1 -->
@@ -38,7 +38,6 @@
             v-show="time_option == 1"
             v-model="inputs.from_date"
             :format="'yyyy-MM-dd'"
-            :input-class="'w-full px-3 py-2 border border-gray-300 rounded-md'"
           />
           <select
             v-show="time_option != 1 && time_option != 5"
@@ -57,7 +56,6 @@
             v-show="time_option == 1"
             v-model="inputs.to_date"
             :format="'yyyy-MM-dd'"
-            :input-class="'w-full px-3 py-2 border border-gray-300 rounded-md'"
           />
           <select
             v-show="time_option == 2"
@@ -263,7 +261,7 @@
     <div v-if="showUpdateNoteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-green-600 mb-4">Cập nhật ghi chú</h4>
+          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Cập nhật ghi chú</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -305,7 +303,7 @@
     <div v-if="showUpdateInvoiceNoteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-green-600 mb-4">Cập nhật HĐ VAT vào</h4>
+          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Cập nhật HĐ VAT vào</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -347,7 +345,7 @@
     <div v-if="showCreateBallotModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-green-600 mb-4">Tạo phiếu liên quan</h4>
+          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Tạo phiếu liên quan</h4>
           <hr class="mb-4">
 
           <div class="space-y-3">
@@ -393,7 +391,7 @@
     <div v-if="showDetailPaymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-green-600 mb-4">Chi tiết thanh toán</h4>
+          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Chi tiết thanh toán</h4>
           <hr class="mb-4">
 
           <div class="overflow-x-auto">

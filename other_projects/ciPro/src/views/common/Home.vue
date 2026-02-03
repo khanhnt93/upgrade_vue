@@ -279,7 +279,7 @@
             <div class="w-full lg:w-4/12 md:w-7/12 px-4">
               <div class="footer-link mt-12 fadeIn">
                 <div class="footer-title mb-6">
-                  <h4 class="text-2xl font-bold text-gray-600">ciPro</h4>
+                  <h4 class="text-2xl font-bold text-orange-600">ciPro</h4>
                 </div>
                 <ul class="link space-y-4">
                   <li>
@@ -317,7 +317,7 @@
             <div class="w-full lg:w-4/12 md:w-5/12 px-4">
               <div class="footer-contact mt-12 fadeIn">
                 <div class="footer-title mb-6">
-                  <h4 class="text-2xl font-bold text-gray-600">Thông tin liên hệ</h4>
+                  <h4 class="text-2xl font-bold text-orange-600">Thông tin liên hệ</h4>
                 </div>
                 <ul class="contact space-y-2 text-gray-600">
                   <li>Cty CiInTech</li>

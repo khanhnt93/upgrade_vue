@@ -234,7 +234,7 @@
     <div v-if="showModalKeepProduct" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalDetailKeepProduct">
       <div class="bg-white rounded-lg shadow-lg max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center text-green-600 mb-4">Danh Sách Giữ Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Giữ Hàng</h4>
 
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>Mã SP: {{currentProduct.product_code}}</div>
@@ -287,7 +287,7 @@
     <div v-if="isShowModalPrintTem" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="isShowModalPrintTem = false">
       <div class="bg-white rounded-lg shadow-lg max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center text-green-600 mb-4">Chọn Sản Phẩm In Tem Nhãn</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chọn Sản Phẩm In Tem Nhãn</h4>
 
           <label class="flex items-center mb-4">
             <input type="checkbox" v-model="selectAll" @change="toggleAll" class="mr-2" />

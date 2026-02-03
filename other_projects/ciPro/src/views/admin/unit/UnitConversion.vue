@@ -11,7 +11,7 @@
         </div>
 
         <div class="text-center mb-4">
-          <h4 class="text-xl font-semibold text-gray-700">Chuyển Đổi Đơn Vị</h4>
+          <h4 class="text-xl font-semibold text-orange-600">Chuyển Đổi Đơn Vị</h4>
         </div>
         <hr class="mb-4">
 
@@ -75,7 +75,7 @@
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-green-600 text-center mb-4">{{ modalTitle }} Chuyển Đổi Đơn Vị</h4>
+          <h4 class="text-xl font-semibold text-orange-600 text-center mb-4">{{ modalTitle }} Chuyển Đổi Đơn Vị</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-12 gap-4 mb-4">

@@ -17,7 +17,7 @@
         </div>
 
         <div class="mb-4">
-          <h4 class="text-center text-xl font-semibold text-gray-700">{{prefix_title}} Nhà Cung Cấp</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600">{{prefix_title}} Nhà Cung Cấp</h4>
         </div>
         <hr class="mb-6">
 

@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="mb-4">
-          <h4 class="text-center text-xl font-semibold text-gray-700">Lịch Sử Nhà Cung Cấp</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600">Lịch Sử Nhà Cung Cấp</h4>
         </div>
         <hr class="mb-6">
 

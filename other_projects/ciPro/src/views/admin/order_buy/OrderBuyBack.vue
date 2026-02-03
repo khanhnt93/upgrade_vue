@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-gray-700">Phiếu Trả Hàng Nhập</h4>
+        <h4 class="text-2xl text-center font-semibold text-orange-600">Phiếu Trả Hàng Nhập</h4>
       </div>
       <hr class="my-4"/>
 

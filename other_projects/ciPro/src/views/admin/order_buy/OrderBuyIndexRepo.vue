@@ -11,7 +11,7 @@
       </div>
 
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-gray-700">{{prefix_title}} ĐH Nhập Tồn Kho</h4>
+        <h4 class="text-2xl text-center font-semibold text-orange-600">{{prefix_title}} ĐH Nhập Tồn Kho</h4>
       </div>
       <hr class="my-4"/>
 
@@ -349,8 +349,7 @@
               <div class="col-span-8">
                 <Datepicker
                   v-model="orderBuy.shipping_date"
-                  input-format="yyyy-MM-dd"
-                  :input-class-name="'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'">
+                  input-format="yyyy-MM-dd">
                 </Datepicker>
               </div>
             </div>
@@ -407,7 +406,7 @@
     <div v-if="showSearchProductModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" @click="hideModalSearchProduct">
       <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-5xl shadow-lg rounded-md bg-white" @click.stop>
         <div class="mb-4">
-          <h4 class="text-2xl text-center font-semibold text-green-600">Tìm kiếm sản phẩm</h4>
+          <h4 class="text-2xl text-center font-semibold text-orange-600">Tìm kiếm sản phẩm</h4>
         </div>
         <hr class="my-4"/>
 

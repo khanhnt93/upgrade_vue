@@ -18,7 +18,7 @@
 
         <!-- Title -->
         <div class="mb-4">
-          <h4 class="text-center text-2xl font-bold text-gray-800">Chi Tiết Báo Giá</h4>
+          <h4 class="text-center text-2xl font-bold text-orange-600">Chi Tiết Báo Giá</h4>
         </div>
         <hr class="my-4">
 
@@ -613,7 +613,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-green-600 mb-4">Chọn File In Báo Giá</h4>
+            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Chọn File In Báo Giá</h4>
             <hr class="mb-4">
 
             <div class="flex justify-between">

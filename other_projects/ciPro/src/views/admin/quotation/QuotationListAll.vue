@@ -25,16 +25,17 @@
 
       <!-- Title -->
       <div class="text-center mb-4">
-        <h4 class="text-2xl font-semibold text-gray-800">Danh Sách Báo Giá</h4>
+        <h4 class="text-2xl font-semibold text-orange-600">Danh Sách Báo Giá</h4>
       </div>
 
       <hr class="my-4">
 
       <!-- Filter Section -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
 
+        <!-- Row 1 -->
         <!-- Time Option -->
-        <div :class="userRole === 'admin' ? 'md:col-span-1' : 'md:col-span-1'">
+        <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian</label>
           <select v-model="time_option" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option v-for="opt in timeOptions" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
@@ -42,7 +43,7 @@
         </div>
 
         <!-- From Date / Year -->
-        <div :class="userRole === 'admin' ? 'md:col-span-1' : 'md:col-span-1'">
+        <div>
           <label v-show="time_option !== 5" class="block text-sm font-medium text-gray-700 mb-1">
             {{ time_option === 1 ? 'Từ ngày' : 'Năm' }}
           </label>
@@ -51,7 +52,6 @@
             v-show="time_option === 1"
             v-model="inputs.from_date"
             :format="'yyyy-MM-dd'"
-            :input-class="'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'"
             placeholder="yyyy-MM-dd" />
           <!-- Year Select -->
           <select
@@ -63,7 +63,7 @@
         </div>
 
         <!-- To Date / Month / Quarter -->
-        <div :class="userRole === 'admin' ? 'md:col-span-1' : 'md:col-span-1'">
+        <div>
           <label v-show="time_option === 1 || time_option === 2 || time_option === 3" class="block text-sm font-medium text-gray-700 mb-1">
             {{ time_option === 1 ? 'Đến ngày' : time_option === 2 ? 'Tháng' : 'Quý' }}
           </label>
@@ -72,7 +72,6 @@
             v-show="time_option === 1"
             v-model="inputs.to_date"
             :format="'yyyy-MM-dd'"
-            :input-class="'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'"
             placeholder="yyyy-MM-dd" />
           <!-- Month Select -->
           <select
@@ -91,7 +90,7 @@
         </div>
 
         <!-- Status -->
-        <div class="md:col-span-1">
+        <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái báo giá</label>
           <select
             v-model="inputs.status"
@@ -100,10 +99,13 @@
           </select>
         </div>
 
-        <!-- Staff (Admin only) -->
-        <div v-if="userRole === 'admin'" class="md:col-span-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nhân viên phụ trách</label>
+        <!-- Staff (Admin only) / Brand -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ userRole === 'admin' ? 'Nhân viên phụ trách' : 'Hãng sản phẩm' }}
+          </label>
           <Multiselect
+            v-if="userRole === 'admin'"
             v-model="inputs.staff_in_charge"
             :options="optionsStaff"
             :loading="loadingOptions"
@@ -112,16 +114,8 @@
             placeholder="--Tất cả--"
             label="name"
             track-by="name" />
-        </div>
-      </div>
-
-      <!-- Second Filter Row -->
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
-
-        <!-- Brand -->
-        <div class="md:col-span-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Hãng sản phẩm</label>
           <Multiselect
+            v-else
             v-model="inputs.brand"
             :options="brandOptions"
             :loading="loadingOptions"
@@ -132,10 +126,24 @@
             track-by="name" />
         </div>
 
-        <!-- Quotation Number -->
-        <div class="md:col-span-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Số báo giá</label>
+        <!-- Row 2 -->
+        <!-- Brand (Admin only) / Quotation Number -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ userRole === 'admin' ? 'Hãng sản phẩm' : 'Số báo giá' }}
+          </label>
+          <Multiselect
+            v-if="userRole === 'admin'"
+            v-model="inputs.brand"
+            :options="brandOptions"
+            :loading="loadingOptions"
+            :select-label="''"
+            :deselect-label="''"
+            placeholder="--Tất cả--"
+            label="name"
+            track-by="name" />
           <input
+            v-else
             v-model="inputs.quotation_number"
             type="text"
             maxlength="100"
@@ -143,18 +151,51 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Company Type -->
-        <div class="md:col-span-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Loại CTY</label>
+        <!-- Quotation Number (Admin) / Company Type -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ userRole === 'admin' ? 'Số báo giá' : 'Loại CTY' }}
+          </label>
+          <input
+            v-if="userRole === 'admin'"
+            v-model="inputs.quotation_number"
+            type="text"
+            maxlength="100"
+            autocomplete="new-password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           <select
+            v-else
             v-model="inputs.customer_company_type_id"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option v-for="opt in optionsCompanyType" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
           </select>
         </div>
 
-        <!-- Customer -->
-        <div class="md:col-span-3">
+        <!-- Company Type (Admin) / Customer -->
+        <div :class="userRole === 'staff' ? 'md:col-span-3' : ''">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ userRole === 'admin' ? 'Loại CTY' : 'Khách hàng' }}
+          </label>
+          <select
+            v-if="userRole === 'admin'"
+            v-model="inputs.customer_company_type_id"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option v-for="opt in optionsCompanyType" :key="opt.value" :value="opt.value">{{ opt.text }}</option>
+          </select>
+          <Multiselect
+            v-else
+            v-model="inputs.customer"
+            :options="customerOptionStore"
+            :loading="loadingOptions"
+            :select-label="''"
+            :deselect-label="''"
+            placeholder="--Tất cả--"
+            label="name"
+            track-by="name" />
+        </div>
+
+        <!-- Customer (Admin spans 2 columns) -->
+        <div v-if="userRole === 'admin'" class="md:col-span-2">
           <label class="block text-sm font-medium text-gray-700 mb-1">Khách hàng</label>
           <Multiselect
             v-model="inputs.customer"
@@ -295,7 +336,7 @@
     <div v-if="showUpdateStatusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center text-green-600 mb-4">
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
             Cập nhật trạng thái báo giá
           </h4>
           <hr class="my-4">
@@ -353,7 +394,7 @@
     <div v-if="showCopyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center mb-4">
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
             Đang copy báo giá: <span class="text-green-600">{{ copyQuotation.quotation_number }}</span>
           </h4>
           <hr class="my-4">
@@ -369,7 +410,7 @@
     <div v-if="showSettingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center text-green-600 mb-4">
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
             Cài Đặt Báo Giá
           </h4>
           <hr class="my-4">

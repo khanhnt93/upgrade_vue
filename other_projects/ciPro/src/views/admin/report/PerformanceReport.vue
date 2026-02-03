@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
-      <h4 class="text-center text-xl font-semibold text-gray-800 mb-4">Báo Cáo Hiệu Quả Kinh Doanh</h4>
+      <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Báo Cáo Hiệu Quả Kinh Doanh</h4>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-3">

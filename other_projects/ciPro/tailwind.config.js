@@ -19,6 +19,10 @@ export default {
           800: '#1e40af',
           900: '#1e3a8a',
         },
+        header: '#ea580c', // orange-600 for page titles
+      },
+      textColor: {
+        'header': '#ea580c', // orange-600 for page titles
       },
     },
   },

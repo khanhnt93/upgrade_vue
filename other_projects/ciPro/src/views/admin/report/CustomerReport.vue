@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
-      <h4 class="text-center text-xl font-semibold text-gray-800 mb-4">Báo Cáo Khách Hàng</h4>
+      <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Báo Cáo Khách Hàng</h4>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-2">
@@ -214,7 +214,7 @@
     <div v-if="showModalOrderSell" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalOrderSellHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Lịch Sử Mua Hàng</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Lịch Sử Mua Hàng</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>
@@ -313,7 +313,7 @@
     <div v-if="showModalQuotation" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalQuotationHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Lịch Sử Báo Giá</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Lịch Sử Báo Giá</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>
@@ -410,7 +410,7 @@
     <div v-if="showModalDebt" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalDebtHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Chi Tiết Công Nợ</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Chi Tiết Công Nợ</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>

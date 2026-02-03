@@ -12,7 +12,7 @@
       </div>
 
       <!-- Title -->
-      <h4 class="text-2xl font-semibold text-center text-blue-600 mb-4">Danh Sách Tạm Ứng</h4>
+      <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Tạm Ứng</h4>
       <hr class="mb-6">
 
       <!-- Filter Section -->
@@ -194,7 +194,7 @@
     <div v-if="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden">
         <div class="p-6">
-          <h4 class="text-2xl font-semibold text-center text-green-600 mb-4">Danh Sách Thanh Toán</h4>
+          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Thanh Toán</h4>
           <hr class="mb-4">
 
           <div v-show="loadingPayment" class="text-center py-4">

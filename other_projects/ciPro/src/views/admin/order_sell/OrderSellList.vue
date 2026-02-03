@@ -13,7 +13,7 @@
         </div>
 
         <!-- Title -->
-        <h4 class="text-2xl font-semibold text-center text-green-600 mb-4">Danh Sách Đơn Hàng Bán</h4>
+        <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Đơn Hàng Bán</h4>
         <hr class="mb-6">
 
         <!-- Filters Row 1 -->
@@ -276,7 +276,7 @@
     <div v-if="showChangeInvoiceStatusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalChangeInvoiceStatus">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Cập Nhật Trạng Thái Hoá Đơn</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Cập Nhật Trạng Thái Hoá Đơn</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -314,7 +314,7 @@
     <div v-if="showChangeAccountingNoteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalChangeAccountingNote">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Cập Nhật Ghi Chú Kế Toán</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Cập Nhật Ghi Chú Kế Toán</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -345,7 +345,7 @@
     <div v-if="showCreateBallotModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalCreateBallot">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Tạo Phiếu Nhập Kho - Xuất Hàng</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Tạo Phiếu Nhập Kho - Xuất Hàng</h4>
           <hr class="mb-4">
 
           <div class="text-center mb-4">
@@ -378,7 +378,7 @@
     <div v-if="showConfirmOrderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalConfirmOrderSell">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Xác Nhận Đơn Hàng</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Xác Nhận Đơn Hàng</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -438,7 +438,7 @@
     <div v-if="showCancelOrderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalCancelOrderSell">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">Huỷ Đơn Hàng</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Huỷ Đơn Hàng</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -470,7 +470,7 @@
     <div v-if="showListIncomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalDetailPayment">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-green-600 mb-4">{{title_modal_income_expend_list}}</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">{{title_modal_income_expend_list}}</h4>
           <hr class="mb-4">
 
           <div v-if="loadingIncome" class="text-center py-4">

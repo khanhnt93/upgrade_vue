@@ -13,7 +13,7 @@
             class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded"
             @click="isShowIntroduction = !isShowIntroduction"
           >
-            <h4 class="text-2xl font-bold text-blue-600">Giới thiệu hệ thống</h4>
+            <h4 class="text-2xl font-bold text-orange-600">Giới thiệu hệ thống</h4>
             <i
               :class="isShowIntroduction ? 'fa fa-minus' : 'fa fa-plus'"
               class="text-blue-600 text-xl"
@@ -43,7 +43,7 @@
             class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded"
             @click="isShowBaseSetting = !isShowBaseSetting"
           >
-            <h4 class="text-2xl font-bold text-blue-600">Thiết lập</h4>
+            <h4 class="text-2xl font-bold text-orange-600">Thiết lập</h4>
             <i
               :class="isShowBaseSetting ? 'fa fa-minus' : 'fa fa-plus'"
               class="text-blue-600 text-xl"
@@ -171,7 +171,7 @@
             class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded"
             @click="isShowUseGuide = !isShowUseGuide"
           >
-            <h4 class="text-2xl font-bold text-blue-600">Sử dụng</h4>
+            <h4 class="text-2xl font-bold text-orange-600">Sử dụng</h4>
             <i
               :class="isShowUseGuide ? 'fa fa-minus' : 'fa fa-plus'"
               class="text-blue-600 text-xl"
@@ -204,7 +204,7 @@
             class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded"
             @click="isShowVideoGuide = !isShowVideoGuide"
           >
-            <h4 class="text-2xl font-bold text-blue-600">Video hướng dẫn</h4>
+            <h4 class="text-2xl font-bold text-orange-600">Video hướng dẫn</h4>
             <i
               :class="isShowVideoGuide ? 'fa fa-minus' : 'fa fa-plus'"
               class="text-blue-600 text-xl"

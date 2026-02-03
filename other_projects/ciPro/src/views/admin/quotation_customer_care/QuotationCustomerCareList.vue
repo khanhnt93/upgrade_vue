@@ -12,7 +12,7 @@
 
       <!-- Title -->
       <div class="mb-4">
-        <h4 class="text-center text-2xl font-bold text-gray-800">Danh Sách Chăm Sóc Khách Hàng</h4>
+        <h4 class="text-center text-2xl font-bold text-orange-600">Danh Sách Chăm Sóc Khách Hàng</h4>
       </div>
       <hr class="my-4">
 
@@ -259,7 +259,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-green-600 mb-4">Cập nhật kết quả chăm sóc báo giá lần {{ currentQuotation.note_number }}</h4>
+            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật kết quả chăm sóc báo giá lần {{ currentQuotation.note_number }}</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -314,7 +314,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-green-600 mb-4">Cập nhật ghi chú nhóm sản phẩm</h4>
+            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật ghi chú nhóm sản phẩm</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -365,7 +365,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-red-600 mb-4">Cập nhật trạng thái báo giá rớt</h4>
+            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật trạng thái báo giá rớt</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -426,7 +426,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-green-600 mb-4">Cài Đặt Chăm Sóc Báo Giá</h4>
+            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cài Đặt Chăm Sóc Báo Giá</h4>
             <hr class="mb-4">
 
             <div class="mb-4">

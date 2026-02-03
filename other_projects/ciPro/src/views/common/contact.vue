@@ -4,7 +4,7 @@
       <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
         <!-- Header -->
         <div class="text-center mb-6">
-          <h4 class="text-3xl font-bold text-gray-800">Liên hệ</h4>
+          <h4 class="text-3xl font-bold text-orange-600">Liên hệ</h4>
         </div>
         <hr class="mb-6"/>
 

@@ -17,7 +17,7 @@
         </div>
 
         <div class="text-center mb-4">
-          <h4 class="text-xl font-semibold text-gray-700">{{ prefix_text }}Dự Án Mẫu</h4>
+          <h4 class="text-xl font-semibold text-orange-600">{{ prefix_text }}Dự Án Mẫu</h4>
         </div>
         <hr class="mb-4">
 

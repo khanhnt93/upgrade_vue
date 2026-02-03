@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
-        <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Thanh Toán Khoản Đi Vay</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Thanh Toán Khoản Đi Vay</h4>
         <hr class="mb-6" />
 
         <!-- Loan Information -->

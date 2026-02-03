@@ -11,7 +11,7 @@
       </div>
 
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-gray-700">Chi Tiết Đơn Hàng Bán</h4>
+        <h4 class="text-2xl text-center font-semibold text-orange-600">Chi Tiết Đơn Hàng Bán</h4>
       </div>
       <hr class="my-4"/>
 

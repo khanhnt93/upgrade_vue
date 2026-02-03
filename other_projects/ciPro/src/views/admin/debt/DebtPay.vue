@@ -11,7 +11,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-bold text-center text-gray-800 mb-4">Thanh Toán Nợ Phải Thu</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Thanh Toán Nợ Phải Thu</h4>
         <hr class="mb-6" />
 
         <!-- Customer Selection -->

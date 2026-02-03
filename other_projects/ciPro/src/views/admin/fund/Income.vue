@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-gray-700">{{title_prefix}} Khoản Thu</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600">{{title_prefix}} Khoản Thu</h4>
       </div>
       <hr class="my-4">
 
@@ -248,7 +248,7 @@
     <!-- Modal tìm kiếm đơn hàng bán -->
     <div v-if="showOrderSellModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalSearchOrderSell">
       <div class="bg-white rounded-lg p-6 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h4 class="text-xl font-semibold text-center text-green-600 mb-4">Tìm kiếm đơn hàng bán</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng bán</h4>
         <hr class="my-4">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -315,7 +315,7 @@
     <!-- Modal tìm kiếm đơn hàng nhập -->
     <div v-if="showOrderBuyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalSearchOrderBuy">
       <div class="bg-white rounded-lg p-6 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h4 class="text-xl font-semibold text-center text-green-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
         <hr class="my-4">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
