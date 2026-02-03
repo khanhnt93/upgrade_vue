@@ -15,7 +15,7 @@
 
           <div class="row mb-3">
             <div class="col-md-12">
-              <h4 class="mt-2 text-center">Thương Hiệu</h4>
+              <h4 class="mt-2 text-center text-orange-500">Thương Hiệu</h4>
             </div>
           </div>
           <hr>

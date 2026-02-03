@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Nguyên liệu - Mặt hàng</h4>
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4 text-orange-500">Nguyên liệu - Mặt hàng</h4>
       <hr class="mb-4">
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -41,8 +41,8 @@
       </div>
 
       <div class="flex justify-end mb-4">
-        <button 
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50" 
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -106,7 +106,7 @@
     <div v-if="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeAddModal">
       <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
         <h5 class="text-center text-lg font-semibold mb-4">Thêm số lượng</h5>
-        
+
         <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
         <div class="space-y-4">
@@ -171,7 +171,7 @@
     <div v-if="showMinusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeMinusModal">
       <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
         <h5 class="text-center text-lg font-semibold mb-4">Giảm số lượng</h5>
-        
+
         <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
         <div class="space-y-4">
@@ -236,7 +236,7 @@
     <div v-if="showUpdateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeUpdateModal">
       <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
         <h5 class="text-center text-lg font-semibold mb-4">Cập nhật số lượng</h5>
-        
+
         <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
         <div class="space-y-4">

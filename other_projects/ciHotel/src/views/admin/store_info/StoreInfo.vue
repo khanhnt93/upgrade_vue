@@ -5,8 +5,8 @@
       <div class="bg-white rounded-lg shadow-md p-6">
 
         <div class="flex justify-end mb-4">
-          <button 
-            @click="save()" 
+          <button
+            @click="save()"
             :disabled="saving == true"
             class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
             style="min-width: 120px"
@@ -16,7 +16,7 @@
         </div>
 
         <div class="mb-4">
-          <h4 class="mt-2 text-center text-xl font-semibold">Thông Tin Nhà Hàng</h4>
+          <h4 class="mt-2 text-center text-xl font-semibold text-orange-500">Thông Tin Nhà Hàng</h4>
         </div>
 
         <div class="grid grid-cols-12 gap-4 mb-4">
@@ -55,13 +55,13 @@
           </div>
           <div class="col-span-12 md:col-span-9">
             <div class="flex">
-              <input 
+              <input
                 v-model="inputs.image"
                 type="text"
                 readonly
                 class="flex-1 border border-gray-300 rounded-l px-3 py-2 bg-white"
               >
-              <button 
+              <button
                 @click="$refs.file.click()"
                 class="px-4 py-2 bg-gray-200 border border-l-0 border-gray-300 rounded-r hover:bg-gray-300"
               >

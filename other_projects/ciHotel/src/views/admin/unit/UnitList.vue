@@ -5,7 +5,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
           <div class="grid grid-cols-1 mb-4">
             <div>
-              <button 
+              <button
                 class="px-4 py-2 border border-green-500 text-green-600 rounded hover:bg-green-50 float-right w-30"
                 @click="goToAdd()">
                 Thêm
@@ -15,7 +15,7 @@
 
           <div class="grid grid-cols-1 mb-4">
             <div>
-              <h4 class="mt-2 text-center text-xl font-semibold">Đơn vị</h4>
+              <h4 class="mt-2 text-center text-xl font-semibold text-orange-500">Đơn vị</h4>
             </div>
           </div>
           <hr class="mb-4">
@@ -34,13 +34,13 @@
                 <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
                 <td class="border border-gray-300 px-4 py-2">
                   <div class="flex gap-2 justify-center">
-                    <button 
+                    <button
                       class="p-2 text-blue-600 hover:bg-blue-50 rounded"
                       @click="edit(item.id)"
                       title="Edit">
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button 
+                    <button
                       class="p-2 text-red-600 hover:bg-red-50 rounded"
                       @click="deleted(item.id, item.name, item.stt)"
                       title="Delete">
@@ -72,7 +72,7 @@ export default {
   setup() {
     const router = useRouter()
     const toast = useToast()
-    
+
     return {
       router,
       toast

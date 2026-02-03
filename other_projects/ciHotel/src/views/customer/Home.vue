@@ -39,7 +39,7 @@
                 <i class="lni-cog"></i>
               </div>
               <div class="services-content mt-30">
-                <h4 class="services-title">
+                <h4 class="services-title text-orange-500">
                   <a href="#">Quản lý từ xa</a>
                 </h4>
                 <p class="text">
@@ -68,7 +68,7 @@
                 <i class="lni-baloon"></i>
               </div>
               <div class="services-content mt-30">
-                <h4 class="services-title">
+                <h4 class="services-title text-orange-500">
                   <a href="#">Hiệu quả nhân viên</a>
                 </h4>
                 <p class="text">
@@ -97,7 +97,7 @@
                 <i class="lni-bolt-alt"></i>
               </div>
               <div class="services-content mt-30">
-                <h4 class="services-title">
+                <h4 class="services-title text-orange-500">
                   <a href="#">Tiết kiệm chi phí</a>
                 </h4>
                 <p class="text">
@@ -268,7 +268,7 @@
                   class="link-wrapper fadeIn"
                 >
                   <div class="footer-title">
-                    <h4 class="title">ciHotel</h4>
+                    <h4 class="title text-orange-500">ciHotel</h4>
                   </div>
                   <ul class="link">
                     <li><a @click="scrollToTop">Trang chủ</a></li>
@@ -284,7 +284,7 @@
                 class="footer-contact mt-50 fadeIn"
               >
                 <div class="footer-title">
-                  <h4 class="title">Thông tin liên hệ</h4>
+                  <h4 class="title text-orange-500">Thông tin liên hệ</h4>
                 </div>
                 <ul class="contact">
                   <li>Cty CiInTech</li>

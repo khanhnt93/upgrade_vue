@@ -7,16 +7,16 @@
 
               <div class="grid grid-cols-2 gap-4">
               <div>
-                <button 
+                <button
                   class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 float-left w-30"
                   @click="back">
                   Quay lại
                 </button>
               </div>
               <div>
-                <button 
+                <button
                   class="px-4 py-2 border border-green-500 text-green-600 rounded hover:bg-green-50 float-right w-30"
-                  @click="save" 
+                  @click="save"
                   :disabled="saving">
                   Lưu
                 </button>
@@ -25,7 +25,7 @@
 
               <div class="grid grid-cols-1 mt-4">
                 <div>
-                  <h4 class="mt-2 text-center text-xl font-semibold">Đơn vị</h4>
+                  <h4 class="mt-2 text-center text-xl font-semibold text-orange-500">Đơn vị</h4>
                 </div>
               </div>
               <hr class="my-4"/>
@@ -68,7 +68,7 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const toast = useToast()
-    
+
     return {
       router,
       route,

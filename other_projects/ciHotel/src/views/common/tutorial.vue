@@ -12,7 +12,7 @@
 
             <div class="grid grid-cols-1 border-b border-yellow-500 pt-4 pb-2">
               <div class="md:col-span-12">
-                <h4 class="font-semibold text-lg cursor-pointer" @click="isShowIntroduction = !isShowIntroduction">
+                <h4 class="font-semibold text-lg cursor-pointer text-orange-500" @click="isShowIntroduction = !isShowIntroduction">
                   Giới thiệu hệ thống
                   <i v-show="!isShowIntroduction" class="fa fa-plus pl-3"></i>
                   <i v-show="isShowIntroduction" class="fa fa-minus pl-3"></i>
@@ -33,7 +33,7 @@
 
             <div class="grid grid-cols-1 border-b border-yellow-500 pt-4 pb-2">
               <div class="md:col-span-12">
-                <h4 class="font-semibold text-lg cursor-pointer" @click="isShowDownApp = !isShowDownApp">
+                <h4 class="font-semibold text-lg cursor-pointer text-orange-500" @click="isShowDownApp = !isShowDownApp">
                   Hướng dẫn tải app
                   <i v-show="!isShowDownApp" class="fa fa-plus pl-3"></i>
                   <i v-show="isShowDownApp" class="fa fa-minus pl-3"></i>
@@ -51,7 +51,7 @@
 
             <div class="grid grid-cols-1 border-b border-yellow-500 pt-4 pb-2">
               <div class="md:col-span-12">
-                <h4 class="font-semibold text-lg cursor-pointer" @click="isShowBaseSetting = !isShowBaseSetting">
+                <h4 class="font-semibold text-lg cursor-pointer text-orange-500" @click="isShowBaseSetting = !isShowBaseSetting">
                   Thiết lập ban đầu
                   <i v-show="!isShowBaseSetting" class="fa fa-plus pl-3"></i>
                   <i v-show="isShowBaseSetting" class="fa fa-minus pl-3"></i>
@@ -154,7 +154,7 @@
 
             <div class="grid grid-cols-1 border-b border-yellow-500 pt-4 pb-2">
               <div class="md:col-span-12">
-                <h4 class="font-semibold text-lg cursor-pointer" @click="isShowFunctionGuide = !isShowFunctionGuide">
+                <h4 class="font-semibold text-lg cursor-pointer text-orange-500" @click="isShowFunctionGuide = !isShowFunctionGuide">
                   Hướng dẫn sử dụng chức năng
                   <i v-show="!isShowFunctionGuide" class="fa fa-plus pl-3"></i>
                   <i v-show="isShowFunctionGuide" class="fa fa-minus pl-3"></i>
@@ -283,7 +283,7 @@
 
             <div class="grid grid-cols-1 border-b border-yellow-500 pt-4 pb-2">
               <div class="md:col-span-12">
-                <h4 class="font-semibold text-lg cursor-pointer" @click="isShowVideoGuide = !isShowVideoGuide">
+                <h4 class="font-semibold text-lg cursor-pointer text-orange-500" @click="isShowVideoGuide = !isShowVideoGuide">
                   Video hướng dẫn
                   <i v-show="!isShowVideoGuide" class="fa fa-plus pl-3"></i>
                   <i v-show="isShowVideoGuide" class="fa fa-minus pl-3"></i>

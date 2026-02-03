@@ -15,7 +15,7 @@
       </div>
 
       <div class="text-center mb-4">
-        <h4 class="text-xl font-semibold mt-2">Khách hàng</h4>
+        <h4 class="text-xl font-semibold mt-2 text-orange-500">Khách hàng</h4>
       </div>
       <hr class="mb-4">
 
@@ -118,7 +118,7 @@
     <div v-show="showImportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
         <div class="mb-4">
-          <h4 class="text-xl font-semibold">Upload khách hàng từ file excel</h4>
+          <h4 class="text-xl font-semibold text-orange-500">Upload khách hàng từ file excel</h4>
         </div>
         <div class="mb-4">
           <form method="post" id="formImport" enctype="multipart/form-data">

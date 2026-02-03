@@ -10,7 +10,7 @@
         </button>
       </div>
 
-      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Nguyên liệu - Mặt hàng</h4>
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4 text-orange-500">Nguyên liệu - Mặt hàng</h4>
       <hr class="mb-4"/>
 
       <!-- Loading -->

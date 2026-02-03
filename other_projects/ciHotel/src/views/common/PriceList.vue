@@ -5,7 +5,7 @@
         <div class="p-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 class="text-center text-xl font-semibold mb-4">Bảng giá</h4>
+              <h4 class="text-center text-xl font-semibold mb-4 text-orange-500">Bảng giá</h4>
               <p class="mb-4">Chỉ với ~3k/ngày, sở hữu ngay phần mềm quản lý nhà hàng, quán ăn, quán nhậu, cafe, trà sữa chuyên nghiệp</p>
               <h5 class="text-lg mb-2">- Gói 6 tháng: 900.000 (150.000/tháng)</h5>
               <h5 class="text-lg mb-2">- Gói 1 năm: 1.500.000 (125.000/tháng)</h5>
@@ -14,7 +14,7 @@
               <h5 class="text-lg mb-2">- Gói 5 năm: 4.800.000 (80.000/tháng)</h5>
             </div>
             <div>
-              <h4 class="text-center text-xl font-semibold mb-4">Tuyển dụng</h4>
+              <h4 class="text-center text-xl font-semibold mb-4 text-orange-500">Tuyển dụng</h4>
               <p class="mb-4">
                 CiInTech luôn tuyển sales, CTV trên toàn quốc với mức hoa hồng cực hấp dẫn, môi trường làm việc
                 thoải mái, không KPI, không áp lực.

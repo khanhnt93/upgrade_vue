@@ -2,7 +2,7 @@
   <div id="general-information" class="container-fluid mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="mb-6">
-        <h4 class="text-2xl font-bold text-center text-gray-800">THÔNG TIN CHUNG</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-500">THÔNG TIN CHUNG</h4>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">

@@ -6,7 +6,7 @@
           <form @submit.prevent>
             <div class="grid grid-cols-1">
               <div class="md:col-span-12">
-                <h4 class="text-center text-xl font-semibold">Liên hệ</h4>
+                <h4 class="text-center text-xl font-semibold text-orange-500">Liên hệ</h4>
               </div>
             </div>
             <hr class="my-4"/>

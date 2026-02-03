@@ -2,7 +2,7 @@
   <div class="container-fluid mx-auto px-4">
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="text-center mb-4">
-        <h4 class="text-xl font-semibold mt-1">{{ title }}</h4>
+        <h4 class="text-xl font-semibold mt-1 text-orange-500">{{ title }}</h4>
       </div>
       <hr class="mb-4" />
 

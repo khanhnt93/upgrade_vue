@@ -5,7 +5,7 @@
         <div class="p-4">
           <div class="grid grid-cols-1 gap-4">
             <div class="col-span-1">
-              <h4 class="mt-2 text-center">{{ $route.params.id ? 'Sửa Khách Sạn' : 'Thêm Khách Sạn' }}</h4>
+              <h4 class="mt-2 text-center text-orange-500">{{ $route.params.id ? 'Sửa Khách Sạn' : 'Thêm Khách Sạn' }}</h4>
             </div>
           </div>
           <hr />

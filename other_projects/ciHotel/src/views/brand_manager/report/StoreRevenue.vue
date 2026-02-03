@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col">
         <div class="bg-white shadow-sm rounded p-4">
-          <h4 class="text-center mb-4 font-weight-bold">BIỂU ĐỒ DOANH THU</h4>
+          <h4 class="text-center mb-4 font-weight-bold text-orange-500">BIỂU ĐỒ DOANH THU</h4>
 
           <div class="row mb-3">
             <div class="col-md-3">

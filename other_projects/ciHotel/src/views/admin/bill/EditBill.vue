@@ -55,7 +55,7 @@
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-3 pb-3">
             <!-- Left Column -->
             <div class="w-full md:col-span-6">
-              <h4 class="mt-3"><b>Tên phòng:</b> {{paymentInfo.room_name}}</h4>
+              <h4 class="mt-3 text-orange-500"><b>Tên phòng:</b> {{paymentInfo.room_name}}</h4>
               <p class="mt-3"><b>Loại phòng: </b>{{paymentInfo.room_type_name}}</p>
               <p class="mt-3">
                 <b>Khách hàng: </b>{{paymentInfo.customer_name}}
@@ -87,7 +87,7 @@
 
             <!-- Right Column -->
             <div class="w-full md:col-span-6">
-              <h4 class="mt-3">
+              <h4 class="mt-3 text-orange-500">
                 <b>Thành tiền: </b>
                 <span class="float-right">
                   <i class="fa fa-edit cursor-pointer" @click="showModalEditTotal = true"></i>

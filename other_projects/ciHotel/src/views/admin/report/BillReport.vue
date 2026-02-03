@@ -4,7 +4,7 @@
     <div class="grid grid-cols-1 mb-4">
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="mb-4">
-          <h4 class="text-center text-xl font-semibold">BÁO CÁO BÁN HÀNG</h4>
+          <h4 class="text-center text-xl font-semibold text-orange-500">BÁO CÁO BÁN HÀNG</h4>
         </div>
 
         <div class="grid grid-cols-12 gap-4 items-end">

@@ -18,7 +18,7 @@
 
       <!-- Title -->
       <div class="text-center mb-4">
-        <h4 class="text-2xl font-semibold text-gray-800">PHÒNG</h4>
+        <h4 class="text-2xl font-semibold text-orange-500">PHÒNG</h4>
       </div>
       <hr class="mb-4"/>
 

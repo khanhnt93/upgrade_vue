@@ -12,7 +12,7 @@
           </div>
 
           <div class="col-span-1">
-            <h4 class="mt-2 text-center">Admin Store</h4>
+            <h4 class="mt-2 text-center text-orange-500">Admin Store</h4>
           </div>
         </div>
         <hr />

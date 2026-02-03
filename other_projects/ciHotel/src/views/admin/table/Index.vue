@@ -7,16 +7,16 @@
 
               <div class="grid grid-cols-2 gap-4">
               <div>
-                <button 
+                <button
                   class="px-4 py-2 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 float-left"
                   @click="back">
                   Quay lại
                 </button>
               </div>
               <div>
-                <button 
+                <button
                   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 float-right"
-                  @click="save" 
+                  @click="save"
                   :disabled="saving">
                   Lưu
                 </button>
@@ -25,7 +25,7 @@
 
               <div class="grid grid-cols-1 mt-4">
                 <div>
-                  <h4 class="mt-2 text-center text-xl font-semibold">Bàn Ăn</h4>
+                  <h4 class="mt-2 text-center text-xl font-semibold text-orange-500">Bàn Ăn</h4>
                 </div>
               </div>
               <hr class="my-4"/>
@@ -105,7 +105,7 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const toast = useToast()
-    
+
     return {
       router,
       route,
@@ -187,7 +187,7 @@ export default {
       this.click = true
       this.saving = true
       let result = this.checkValidate()
-      if(result) {  
+      if(result) {
         let tableId = this.route.params.id
         if(tableId){
           // Edit

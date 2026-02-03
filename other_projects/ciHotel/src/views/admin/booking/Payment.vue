@@ -38,7 +38,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Left Column - Room Info -->
         <div>
-          <h4 class="text-xl font-bold mb-3">Tên phòng: {{paymentInfo.room_name}}</h4>
+          <h4 class="text-xl font-bold mb-3 text-orange-500">Tên phòng: {{paymentInfo.room_name}}</h4>
           <p class="mb-2"><b>Loại phòng:</b> {{paymentInfo.room_type_name}}</p>
           <p class="mb-2"><b>Khách hàng:</b> {{paymentInfo.customer_name}}</p>
           <p class="mb-2">
@@ -58,7 +58,7 @@
 
         <!-- Right Column - Payment Info -->
         <div>
-          <h4 class="text-xl font-bold mb-3 flex justify-between items-center">
+          <h4 class="text-xl font-bold mb-3 flex justify-between items-center text-orange-500">
             <span>Thành tiền:</span>
             <span>
               <button

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h4 class="text-xl font-semibold text-center mt-2 mb-4">Lịch sử kho hàng</h4>
+      <h4 class="text-xl font-semibold text-center mt-2 mb-4 text-orange-500">Lịch sử kho hàng</h4>
       <hr class="mb-4">
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -56,8 +56,8 @@
       </div>
 
       <div class="flex justify-end mb-4">
-        <button 
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50" 
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-[120px] disabled:opacity-50"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm

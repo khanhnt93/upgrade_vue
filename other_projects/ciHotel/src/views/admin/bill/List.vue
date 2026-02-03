@@ -3,7 +3,7 @@
     <!-- Search Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="mb-6">
-        <h4 class="text-2xl font-bold text-center text-gray-800">QUẢN LÝ HÓA ĐƠN</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-500">QUẢN LÝ HÓA ĐƠN</h4>
       </div>
       <hr class="mb-6">
 

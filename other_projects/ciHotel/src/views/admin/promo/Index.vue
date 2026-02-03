@@ -25,7 +25,7 @@
 
             <div class="grid grid-cols-1 mt-4">
               <div>
-                <h4 class="mt-1 text-center text-xl font-semibold">KHUYẾN MÃI</h4>
+                <h4 class="mt-1 text-center text-xl font-semibold text-orange-500">KHUYẾN MÃI</h4>
               </div>
             </div>
             <hr class="my-4"/>

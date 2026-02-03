@@ -26,7 +26,7 @@
           </div>
 
           <div class="mb-4">
-            <h4 class="mt-2 text-center text-xl font-semibold">Nhận phòng {{booking.room_name}}</h4>
+            <h4 class="mt-2 text-center text-xl font-semibold text-orange-500">Nhận phòng {{booking.room_name}}</h4>
           </div>
           <hr class="mb-4"/>
 

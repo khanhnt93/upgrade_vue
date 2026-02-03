@@ -12,7 +12,7 @@
           </div>
 
           <div class="col-span-1">
-            <h4 class="mt-2 text-center">Danh Sách Khách Sạn</h4>
+            <h4 class="mt-2 text-center text-orange-500">Danh Sách Khách Sạn</h4>
           </div>
         </div>
         <hr />

@@ -3,7 +3,7 @@
     <!-- Today's Stats Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <div class="mb-4">
-        <h4 class="text-2xl font-bold text-center text-gray-800">Hôm Nay</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-500">Hôm Nay</h4>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -38,7 +38,7 @@
 
     <!-- Revenue Chart Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Doanh Thu</h4>
+      <h4 class="text-2xl font-bold text-center text-orange-500 mb-6">Doanh Thu</h4>
 
       <div class="mb-4">
         <GChart
@@ -55,7 +55,7 @@
 
     <!-- Most Booked Room Type Card -->
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h4 class="text-2xl font-bold text-center text-gray-800 mb-6">Loại Phòng Đặt Nhiều Nhất</h4>
+      <h4 class="text-2xl font-bold text-center text-orange-500 mb-6">Loại Phòng Đặt Nhiều Nhất</h4>
 
       <div class="mb-4">
         <p class="font-bold text-gray-700 mb-4">Phòng đặt nhiều nhất (7 ngày qua)</p>

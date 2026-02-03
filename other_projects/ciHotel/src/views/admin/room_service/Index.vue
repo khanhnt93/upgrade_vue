@@ -16,7 +16,7 @@
       </div>
 
       <div class="text-center mb-4">
-        <h4 class="text-xl font-semibold mt-1">DỊCH VỤ PHÒNG</h4>
+        <h4 class="text-xl font-semibold mt-1 text-orange-500">DỊCH VỤ PHÒNG</h4>
       </div>
       <hr class="mb-4" />
 

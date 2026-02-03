@@ -15,11 +15,11 @@
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
           <div class="md:col-span-12">
-            <h4 class="mt-1 text-center text-xl font-semibold">CÀI ĐẶT HỆ THỐNG</h4>
+            <h4 class="mt-1 text-center text-xl font-semibold text-orange-500">CÀI ĐẶT HỆ THỐNG</h4>
           </div>
         </div>
         <hr class="mb-4">
-        
+
         <!-- Loading -->
         <div v-show="loading" class="text-center mb-4">
           <icon name="loading" width="60" />

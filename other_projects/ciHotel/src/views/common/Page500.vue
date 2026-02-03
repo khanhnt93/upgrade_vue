@@ -7,7 +7,7 @@
             <h1 class="float-left text-7xl mr-4">
               500
             </h1>
-            <h4 class="pt-3 text-xl font-semibold">
+            <h4 class="pt-3 text-xl font-semibold text-orange-500">
               Houston, we have a problem!
             </h4>
             <p class="text-gray-500">

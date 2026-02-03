@@ -4,7 +4,7 @@
       <div class="col">
         <!-- Total Summary Card -->
         <div class="bg-white shadow-sm rounded p-4 mb-4">
-          <h4 class="text-center mb-4 font-weight-bold">Tổng chuỗi</h4>
+          <h4 class="text-center mb-4 font-weight-bold text-orange-500">Tổng chuỗi</h4>
 
           <div class="row mb-3">
             <div class="col text-center">
@@ -51,7 +51,7 @@
 
         <!-- Individual Store Cards -->
         <div v-for="item in data" :key="item.store_id" class="bg-white shadow-sm rounded p-4 mb-4">
-          <h4 class="text-center mb-4 font-weight-bold">{{ item.store_name }}</h4>
+          <h4 class="text-center mb-4 font-weight-bold text-orange-500">{{ item.store_name }}</h4>
 
           <div class="row mb-3">
             <div class="col text-center">

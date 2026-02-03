@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="grid grid-cols-1">
       <div class="bg-white rounded-lg shadow-md p-6">
-        <h4 class="text-center text-xl font-semibold mb-4">THỐNG KÊ</h4>
+        <h4 class="text-center text-xl font-semibold mb-4 text-orange-500">THỐNG KÊ</h4>
 
         <div class="grid grid-cols-12 gap-4 items-end mb-4">
           <div class="col-span-12 md:col-span-3">

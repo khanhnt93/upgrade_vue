@@ -12,7 +12,7 @@
 
       <!-- Header -->
       <div class="mb-4">
-        <h4 class="text-2xl font-bold text-center">KHUYẾN MÃI</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-500">KHUYẾN MÃI</h4>
       </div>
       <hr class="mb-4">
 

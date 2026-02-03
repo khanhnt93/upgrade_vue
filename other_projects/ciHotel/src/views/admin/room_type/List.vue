@@ -10,7 +10,7 @@
       </div>
 
       <div class="text-center mb-4">
-        <h4 class="text-xl font-semibold mt-1">LOẠI PHÒNG</h4>
+        <h4 class="text-xl font-semibold mt-1 text-orange-500">LOẠI PHÒNG</h4>
       </div>
       <hr class="mb-4" />
 

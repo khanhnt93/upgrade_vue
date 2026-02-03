@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow-md p-6">
       <!-- Header -->
       <div class="mb-4">
-        <h4 class="text-2xl font-bold text-center">KÉT TIỀN</h4>
+        <h4 class="text-2xl font-bold text-center text-orange-500">KÉT TIỀN</h4>
       </div>
 
       <!-- Action Buttons -->
@@ -44,19 +44,19 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="text-center border-t pt-4">
           <h5 class="text-lg font-semibold mb-2">Tiền vốn đầu ngày</h5>
-          <h4 class="text-xl font-bold">{{ formatCurrency(detail.fund) }}</h4>
+          <h4 class="text-xl font-bold text-orange-500">{{ formatCurrency(detail.fund) }}</h4>
         </div>
         <div class="text-center border-t pt-4">
           <h5 class="text-lg font-semibold mb-2">Tiền mặt</h5>
-          <h4 class="text-xl font-bold">{{ formatCurrency(detail.cash) }}</h4>
+          <h4 class="text-xl font-bold text-orange-500">{{ formatCurrency(detail.cash) }}</h4>
         </div>
         <div class="text-center border-t pt-4">
           <h5 class="text-lg font-semibold mb-2">Tài khoản thẻ</h5>
-          <h4 class="text-xl font-bold">{{ formatCurrency(detail.credit) }}</h4>
+          <h4 class="text-xl font-bold text-orange-500">{{ formatCurrency(detail.credit) }}</h4>
         </div>
         <div class="text-center border-t pt-4">
           <h5 class="text-lg font-semibold mb-2">Tiền điện tử</h5>
-          <h4 class="text-xl font-bold">{{ formatCurrency(detail.e_money) }}</h4>
+          <h4 class="text-xl font-bold text-orange-500">{{ formatCurrency(detail.e_money) }}</h4>
         </div>
       </div>
 
@@ -64,7 +64,7 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div class="text-center border-t pt-4">
           <h5 class="text-lg font-semibold mb-2">Số hóa đơn:</h5>
-          <h4 class="text-xl font-bold">{{ detail.bill_number }}</h4>
+          <h4 class="text-xl font-bold text-orange-500">{{ detail.bill_number }}</h4>
         </div>
         <div class="flex items-end justify-center">
           <button

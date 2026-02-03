@@ -5,7 +5,7 @@
         <form @submit.prevent>
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
             <div class="md:col-span-8">
-              <h4 class="text-xl font-semibold">Thông Tin Cá Nhân</h4>
+              <h4 class="text-xl font-semibold text-orange-500">Thông Tin Cá Nhân</h4>
             </div>
             <div class="md:col-span-4">
               <button
