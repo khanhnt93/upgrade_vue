@@ -1,98 +1,96 @@
 <template>
   <div class="app">
-    <template v-if="this.$route.name != 'Login'">
-      <AppHeader fixed v-if="this.$store.state.user == null" class="header-custom">
+    <template v-if="route.name != 'Login'">
+      <header v-if="!authStore.user" class="app-header bg-white shadow-sm">
         <div class="container-fluid">
           <div class="nav-left">
-            <button @click="activePushedMenu = !activePushedMenu" display="lg" type="button" class="navbar-toggler">
-                <!--<span class="navbar-toggler-icon"></span>-->
+            <button @click="toggleSidebarVisibility" type="button" class="navbar-toggler">
               <img src="/static/img/icons/sticker_1.png" class="iconsCustom"/>
             </button>
 
-            <b-link class="nav-link home-icon" to="/">
-                <span class="mr-2"></span>
-              <img src="/static/img/icons/sticker_2.png" class="iconsCustom"/>
-            </b-link>
-          </div>
-        </div>
-      </AppHeader>
-
-       <!-- đăng nhập xong sẽ dùng đoạn code bên dưới -->
-      <AppHeader fixed v-if="this.$store.state.user"  class="header-custom">
-        <div class="header-container">
-          <div class="nav-left">
-            <button @click="activePushedMenu = !activePushedMenu" display="lg" type="button" class="navbar-toggler" >
-
-              <!--<span class="navbar-toggler-icon"></span>-->
-              <img src="/static/img/icons/sticker_1.png" class="iconsCustom"/>
-            </button>
-            <b-link class="nav-link home-icon" to="/">
+            <router-link class="nav-link home-icon" to="/">
               <span class="mr-2"></span>
               <img src="/static/img/icons/sticker_2.png" class="iconsCustom"/>
-            </b-link>
+            </router-link>
+          </div>
+        </div>
+      </header>
+
+      <!-- đăng nhập xong sẽ dùng đoạn code bên dưới -->
+      <header v-if="authStore.user" class="app-header bg-white shadow-sm">
+        <div class="header-container">
+          <div class="nav-left">
+            <button @click="toggleSidebarVisibility" type="button" class="navbar-toggler">
+              <img src="/static/img/icons/sticker_1.png" class="iconsCustom"/>
+            </button>
+            <router-link class="nav-link home-icon" to="/">
+              <span class="mr-2"></span>
+              <img src="/static/img/icons/sticker_2.png" class="iconsCustom"/>
+            </router-link>
           </div>
 
-        <b-navbar-nav>
-          <!-- hiện cho template customer -->
-           <HeaderDropdownGift v-if="this.$store.state.user.userType == 'customer'"/>
-          <li class="nav-item b-nav-dropdown dropdown">
-            <a href="" class="nav-link dropdown-toggle dropdown-toggle-no-caret">
-              <span class="white mr-3" v-if="this.$store.state.user.userType == 'customer'">
-                <img @click.prevent="goToNotification" src="/static/img/icons/sticker_3.png" class="iconsCustom"/>
-                <span class="badge">{{ notifyNumber }}</span>
+          <nav class="navbar-nav">
+            <!-- hiện cho template customer -->
+            <HeaderDropdownGift v-if="authStore.user?.userType == 'customer'"/>
+            <li class="nav-item dropdown" v-if="authStore.user?.userType == 'customer'">
+              <a href="" class="nav-link dropdown-toggle dropdown-toggle-no-caret">
+                <span class="white mr-3">
+                  <img @click.prevent="goToNotification" src="/static/img/icons/sticker_3.png" class="iconsCustom"/>
+                  <span class="badge">{{ notifyNumber }}</span>
+                </span>
+              </a>
+            </li>
+            <HeaderDropdownCusAcc v-if="authStore.user?.userType == 'customer'"/>
+            <!-- end -->
+
+            <!-- hiện cho template staff -->
+            <div v-if="authStore.user?.userType == 'staff'" class="staff-info-wrapper">
+              <span class="text-right">
+                {{ authStore.user.userName }}
+                <br>
+                <span class="text-muted">
+                  ({{ authStore.user.role }})
+                </span>
               </span>
-            </a>
-          </li>
-
-           <HeaderDropdownCusAcc v-if="this.$store.state.user.userType == 'customer'"/>
-          <!-- end -->
-
-          <!-- hiện cho template staff -->
-          <template>
-            <span class="text-right"  v-if="this.$store.state.user.userType == 'staff'">
-              {{ this.$store.state.user.userName }}
-              <br>
-              <span class="text-muted">
-                ({{ this.$store.state.user.role }})
-              </span>
-            </span>
-            <HeaderDropdownStaffAcc  v-if="this.$store.state.user.userType == 'staff'"/>
-          </template>
-          <!-- end -->
-
-        </b-navbar-nav>
+              <HeaderDropdownStaffAcc />
+            </div>
+            <!-- end -->
+          </nav>
         </div>
+      </header>
 
-        <!--TODO-->
-        <!--<ListRoom ref="listRoom" hidden></ListRoom>-->
-      </AppHeader>
+      <div class="app-body">
+        <div class="bg-pushed-menu" v-if="sidebarVisible && !sidebarCollapsed" @click="toggleSidebarVisibility"></div>
 
-      <div class="app-body" >
-        <template>
-          <div class="bg-pushed-menu" v-if="activePushedMenu" @click="activePushedMenu = false"></div>
-          <template>
+        <!-- Menu: User not login -->
+        <CustomSidebar
+          v-if="!authStore.user"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="250px"
+          :menu="navCusNotLogin"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
-            <!-- Menu: User not login -->
-            <sidebar-menu v-if="!this.$store.state.user" width="250px" fixed v-show="activePushedMenu"
-                          :menu="navCusNotLogin">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            </sidebar-menu>
+        <!-- Menu: staff -->
+        <CustomSidebar
+          v-if="authStore.user && !authStore.user.isSuper"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="280px"
+          :menu="authStore.menu"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
-            <!-- Menu: staff -->
-            <sidebar-menu v-if="this.$store.state.user && !this.$store.state.user.isSuper"
-                          width="280px" fixed v-show="activePushedMenu" :menu="this.$store.state.menu">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-              <span slot="dropdown-icon"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-            </sidebar-menu>
-
-            <!-- Menu: super admin -->
-            <sidebar-menu v-if="this.$store.state.user && this.$store.state.user.isSuper"
-                          width="250px" fixed v-show="activePushedMenu" :menu="navSpAdmin">
-              <span slot="toggle-icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            </sidebar-menu>
-          </template>
-
-        </template>
+        <!-- Menu: super admin -->
+        <CustomSidebar
+          v-if="authStore.user && authStore.user.isSuper"
+          :collapsed="sidebarCollapsed"
+          :visible="sidebarVisible"
+          width="250px"
+          :menu="navSpAdmin"
+          @toggle="toggleSidebar"
+          @close="toggleSidebarVisibility" />
 
         <main class="main">
           <router-view />
@@ -101,7 +99,7 @@
       </div>
     </template>
 
-    <template v-if="this.$route.name == 'Login'">
+    <template v-if="route.name == 'Login'">
       <main class="main">
         <router-view />
       </main>
@@ -109,125 +107,105 @@
   </div>
 </template>
 
-<script>
-import navSpAdmin from '@/navSpAdmin'
-import navCusNotLogin from '@/navCusNotLogin'
-import { Header as AppHeader} from '@coreui/vue'
-import HeaderDropdownCusAcc from '@/components/common/HeaderDropdownCusAcc'
-import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc'
-import HeaderDropdownGift from '@/components/common/HeaderDropdownGift'
-import {Constant} from '@/common/constant'
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useToastNotification } from '@/composables/useToast'
+import navSpAdminData from '@/navSpAdmin'
+import navCusNotLoginData from '@/navCusNotLogin'
+import HeaderDropdownCusAcc from '@/components/common/HeaderDropdownCusAcc.vue'
+import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc.vue'
+import HeaderDropdownGift from '@/components/common/HeaderDropdownGift.vue'
+import CustomSidebar from '@/components/common/CustomSidebar.vue'
+import { Constant } from '@/common/constant'
 import staffAPI from '@/api/staff'
-import commonFunc from "@/common/commonFunc";
-import { SidebarMenu } from 'vue-sidebar-menu'
+import commonFunc from "@/common/commonFunc"
 
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const { popToast } = useToastNotification()
 
-export default {
-  name: 'App',
-  components: {
-    SidebarMenu,
-    AppHeader,
-    HeaderDropdownCusAcc,
-    HeaderDropdownStaffAcc,
-    HeaderDropdownGift
-  },
-  data () {
-    return {
-      language: 'en',
-      navCusNotLogin: navCusNotLogin.items,
-      navSpAdmin: navSpAdmin.items,
-      fullName: '',
-      size: 40,
-      roleCus: Constant.ROLE_CUS,
-      roleBrandManager: Constant.ROLE_BRAND_MANGER,
-      roleAdmin: Constant.ROLE_ADMIN,
-      roleCashier: Constant.ROLE_CASHIER,
-      roleStaff: Constant.ROLE_STAFF,
-      roleKitchen: Constant.ROLE_KITCHEN,
-      roleSpAdmin: Constant.ROLE_SP_ADMIN,
-      notifyNumber: 0,
-      activePushedMenu: false,
-    }
-  },
-  watch: {
-    '$route' (newVal, oldVal) {
-      this.activePushedMenu = false
-    }
-  },
-  mounted() {
-    // Check login
-    if(!this.$store.state.user || !this.$store.state.user.id) {
-      this.$router.push('/staff-login')
-    }
+const navCusNotLogin = ref(navCusNotLoginData.items || [])
+const navSpAdmin = ref(navSpAdminData.items || [])
+const notifyNumber = ref(0)
+const sidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true')
 
-    // Get lại menu bar nếu có user
-    this.getMenuBar()
-  },
-  computed: {
-    name () {
-      return this.$route.name
-    },
-    list () {
-      return this.$route.matched.filter((route) => route.name || route.meta.label)
-    }
-  },
-  methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-    
-    /**
-     * Go to notification
-     */
-    goToNotification() {
-      this.$router.push("/notification")
-    },
+// Always start with sidebar closed after refresh
+const sidebarVisible = ref(false)
 
-    /**
-     * Play sound notify
-     */
-    playNotify() {
-      var audio = document.getElementById("audioNotification")
-      audio.muted = false;
-      audio.play();
-    },
+// Toggle sidebar visibility (show/hide) - don't persist to localStorage
+const toggleSidebarVisibility = () => {
+  sidebarVisible.value = !sidebarVisible.value
+}
 
-    getMenuBar() {
-      if(this.$store.state && this.$store.state.user && this.$store.state.user.id) {
-        staffAPI.getMenuBar(this.$store.state.user.id).then(res => {
-          if(res != null && res.data != null && res.data.data != null){
-            this.$store.commit('updateMenu', res.data.data)
-          }
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
-    },
+// Toggle sidebar collapsed state (expand/collapse)
+const toggleSidebar = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed.value.toString())
+}
 
+// Go to notification
+const goToNotification = () => {
+  router.push("/notification")
+}
+
+// Play sound notify
+const playNotify = () => {
+  const audio = document.getElementById("audioNotification")
+  if (audio) {
+    audio.muted = false
+    audio.play()
   }
 }
+
+// Get menu bar
+const getMenuBar = () => {
+  if (authStore && authStore.user && authStore.user.id) {
+    staffAPI.getMenuBar(authStore.user.id).then(res => {
+      if (res != null && res.data != null && res.data.data != null) {
+        authStore.updateMenu(res.data.data)
+      }
+    }).catch(err => {
+      // Handle error
+      let errorMess = commonFunc.handleStaffError(err)
+      popToast('danger', errorMess)
+    })
+  }
+}
+
+// Watch route changes
+watch(() => route.path, () => {
+  // Close sidebar on mobile when route changes
+  if (window.innerWidth < 992 && sidebarVisible.value) {
+    sidebarVisible.value = false
+  }
+})
+
+onMounted(() => {
+  // Check login
+  if (!authStore.user || !authStore.user.id) {
+    router.push('/staff-login')
+  }
+
+  // Get lại menu bar nếu có user
+  getMenuBar()
+})
 </script>
 
-
 <style lang="scss">
-// CoreUI Icons Set
+  @use '@/assets/css/tailwind.css';
+  // Import Font Awesome
+  @use '@fortawesome/fontawesome-free/scss/fontawesome' as *;
+  @use '@fortawesome/fontawesome-free/scss/solid' as *;
+  @use '@fortawesome/fontawesome-free/scss/regular' as *;
+  @use '@fortawesome/fontawesome-free/scss/brands' as *;
+  @use '@fortawesome/fontawesome-free/scss/v4-shims' as *;
+
   /* Import Font Awesome Icons Set */
-  $fa-font-path: '~font-awesome/fonts/';
-  @import '~font-awesome/scss/font-awesome';
-  @import '~bootstrap-vue/dist/bootstrap-vue';
-  @import 'assets/scss/style';
-  @import 'assets/scss/rsw';
-  @import 'assets/scss/sidebar.scss';
+  @use 'assets/scss/style';
+  @use 'assets/scss/rsw';
 
   .center-xy {
     display: flex;
@@ -255,45 +233,104 @@ export default {
   }
   .nav-left {
     display: flex;
-    align-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
     .home-icon {
       padding: .5rem .5rem .5rem .2rem;
+      display: flex;
+      align-items: center;
     }
   }
-  .app-body .sidebar.active {
-    margin-left: 0;
+  .bg-pushed-menu {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
   }
-  .header-custom {
+  .app-header {
     background-color: white !important;
-    ul.navbar-nav {
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      > * {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
       li.nav-item {
         min-width: unset;
+        position: relative;
+
         a {
-          display: block;
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: inherit;
+
           span {
-            display: block;
+            display: flex;
+            align-items: center;
+            position: relative;
           }
         }
       }
+
+      .text-right {
+        font-size: 0.875rem;
+        line-height: 1.2;
+        margin-right: 0.5rem;
+        text-align: right;
+
+        .text-muted {
+          font-size: 0.75rem;
+          color: #6c757d;
+        }
+      }
+
+      .staff-info-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        position: relative;
+      }
     }
+
     .badge {
-      top: 10px!important;
-      left: unset!important;
-      right: 5px;
+      position: absolute;
+      top: -5px;
+      right: -5px;
       border-radius: 50%;
-      background: white;
-      width: 25px;
-      height: 25px;
-      color: red;
-      display: flex!important;
+      background: red;
+      width: 20px;
+      height: 20px;
+      color: white;
+      display: flex !important;
       align-items: center;
       justify-content: center;
-      font-size: 0.8em;
+      font-size: 0.7em;
+      font-weight: bold;
     }
   }
   .iconsCustom {
     width: 40px;
     height: 40px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
   .inline-center {
     display: flex;
@@ -301,17 +338,6 @@ export default {
   }
   .default-btn-bg {
     background-color: #444444 !important;
-  }
-  .bg-pushed-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
-  }
-  .sidebar-minimizer {
-    display: none!important;
   }
   .card {
     border: none!important;
@@ -328,12 +354,41 @@ export default {
   button {
     &:focus {outline:0;}
   }
+
+  // HeadlessUI Menu dropdown styles
+  .relative.inline-block {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .absolute.right-0 {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    z-index: 1050;
+  }
   .header-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    height: 55px;
     padding: 0 15px;
+  }
+
+  .navbar-toggler {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
   .text-header {
     color: #ed592a !important;
@@ -343,10 +398,20 @@ export default {
     position: fixed !important;
     padding: 0!important;
     height: 55px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1020;
+
+    // Ensure dropdowns appear above other content
+    .navbar-nav {
+      position: relative;
+      z-index: 1030;
+    }
   }
-  .v-sidebar-menu {
-    top: 55px!important;
-    height: calc(100vh - 55px);
+
+  .app-body {
+    margin-top: 55px;
   }
 
   .ow-table {

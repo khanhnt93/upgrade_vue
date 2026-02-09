@@ -1,93 +1,95 @@
 <template>
-  <div class="app flex-row align-items-center is-fixed-page">
+  <div class="app flex items-center justify-center">
     <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form @submit.prevent="logIn">
-                  <!--<h1 class="text-center">-->
-                    <!--ciSale-->
-                  <!--</h1>-->
-                  <b-row>
-                    <b-col class="text-center">
-                      <img src="/static/img/project/home/logo_login.png" alt="logo" class="logo-login" />
-                    </b-col>
-                  </b-row>
-
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="errorFlag">
-                      {{errorMess}}
-                  </b-form-invalid-feedback>
-                  <div class="form-group">
-                    <label>Số Điện Thoại</label><span class="error-sybol"></span>
-                    <input
-                      id="phone"
-                      v-model="inputs.phone_number"
-                      type="text"
-                      maxlength="20"
-                      autocomplete="new-password"
-                      class="form-control"
-                      placeholder="Nhập số điện thoại" phoneNumberCheck
-                      @keyup="intergerOnly($event.target)"
-                      v-on:change="checkPhoneNumberFormat($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="phoneNumberCheckFlag">
-                      Số điện thoại không đúng
-                    </b-form-invalid-feedback>
+      <div class="flex justify-center">
+        <div class="w-full md:w-2/3 px-2">
+          <div class="card">
+            <div class="p-8">
+              <form @submit.prevent="logIn">
+                <!--<h1 class="text-center">-->
+                  <!--ciSale-->
+                <!--</h1>-->
+                <div class="flex flex-wrap">
+                  <div class="w-full text-center flex items-center justify-center">
+                    <img src="/static/img/project/home/logo_login.png" alt="logo" class="logo-login" />
                   </div>
-                  <div class="form-group">
-                    <label>Mật Khẩu</label><span class="error-sybol"></span>
-                    <input
-                      id="password"
-                      v-model="inputs.password"
-                      type="password"
-                      class="form-control"
-                      placeholder="Nhập mật khẩu">
-                  </div>
+                </div>
 
-                  <b-row>
-                    <b-col
-                      cols="12"
-                      class="mb-2 text-center">
-                      <b-button
-                        variant="primary"
-                        class="px-4 default-btn-bg"
-                        @click.prevent="logIn"
+                <div v-if="!errorFlag" class="invalid-feedback" style="display: block;">
+                    {{errorMess}}
+                </div>
+                <div class="form-group">
+                  <label>Số Điện Thoại</label><span class="error-sybol"></span>
+                  <input
+                    id="phone"
+                    v-model="inputs.phone_number"
+                    type="text"
+                    maxlength="20"
+                    autocomplete="new-password"
+                    :class="['form-control', { 'is-invalid': !phoneNumberCheckFlag }]"
+                    placeholder="Nhập số điện thoại"
+                    @keyup="intergerOnly($event.target)"
+                    v-on:change="checkPhoneNumberFormat($event.target)">
+                  <div v-if="!phoneNumberCheckFlag" class="invalid-feedback" style="display: block;">
+                    Số điện thoại không đúng
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Mật Khẩu</label><span class="error-sybol"></span>
+                  <input
+                    id="password"
+                    v-model="inputs.password"
+                    type="password"
+                    class="form-control"
+                    placeholder="Nhập mật khẩu">
+                </div>
+
+                <div class="flex flex-wrap">
+                  <div class="w-full mb-2 mt-4 text-center">
+                    <button
+                      type="button"
+                      class="btn btn-primary px-4 default-btn-bg"
+                      @click.prevent="logIn"
                       :disabled="onLogin">
-                        {{ onLogin ? 'Đăng Nhập...' : 'Đăng Nhập' }}
-                      </b-button>
-                    </b-col>
-                  </b-row>
+                      {{ onLogin ? 'Đăng Nhập...' : 'Đăng Nhập' }}
+                    </button>
+                  </div>
+                </div>
 
-                  <b-row>
-                    <b-col
-                      cols="12"
-                      class="mb-2">
-                      <button @click.prevent="forgetpass" class="forget-pass">
-                        Quên Mật Khẩu
-                      </button>
-                    </b-col>
-                  </b-row>
+                <div class="flex flex-wrap">
+                  <div class="w-full mb-2">
+                    <button @click.prevent="forgetpass" class="forget-pass">
+                      Quên Mật Khẩu
+                    </button>
+                  </div>
+                </div>
 
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { useAuthStore } from '@/stores/auth'
+import { useToastNotification } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 import StaffMapper from '@/mapper/staff'
 import Staff from '@/api/staff'
-import {Constant} from '@/common/constant'
+import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
 export default {
   name: 'Login',
-  data () {
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToastNotification()
+    const router = useRouter()
+    return { authStore, popToast, router }
+  },
+  data() {
     return {
       inputs: {
         phone_number: '',
@@ -113,24 +115,24 @@ export default {
          Staff.logIn(this.inputs).then(res => {
 
           // Store token
-          this.$store.commit('updateToken', res.data.data.token)
+          this.authStore.updateToken(res.data.data.token)
 
           // Store menu
           let menu = res.data.data.menu
-          this.$store.commit('updateMenu', menu)
+          this.authStore.updateMenu(menu)
 
           // Store staff info
           const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
-          this.$store.commit('updateUser', usr)
+          this.authStore.updateUser(usr)
 
            // Check user and redirect
            if(usr.isSuper) {
-               this.$router.push("/home-sp-admin")
+               this.router.push("/home-sp-admin")
            } else {
                if(menu.length > 0 && menu[0].title == "Tổng quan") {
-                   this.$router.push("/overview")
+                   this.router.push("/overview")
                } else {
-                   this.$router.push("/")
+                   this.router.push("/")
                }
 
            }
@@ -187,12 +189,7 @@ export default {
 
     forgetpass() {
       let message = "Hãy liên hệ với admin của bạn để được reset lại mật khẩu. Nếu bạn là chủ kinh doanh, hãy liên hệ với chúng tôi (ciinTech) theo thông tin ở màn hình “Liên hệ”. Xin chân thành cảm ơn!"
-      this.$bvModal.msgBoxOk(message, {
-        title: "Quên Mật Khẩu",
-        centered: true,
-        size: 'sm',
-        headerClass: 'bg-success',
-      })
+      this.popToast('info', message)
     },
   }
 }
@@ -200,7 +197,7 @@ export default {
 
 <style lang="scss">
   .logo-login {
-    width: 32%;
+    width: 80%;
     height: auto;
     text-align: center;
   }

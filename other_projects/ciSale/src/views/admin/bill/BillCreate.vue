@@ -12,38 +12,38 @@
               <strong class="font-big">{{ item.name }}</strong><br />
 
               <!-- Sửa giá bán -->
-              <b-input-group size="sm" class="mb-1" style="max-width: 150px;">
-                <b-input-group-prepend>
-                  <b-input-group-text>₫</b-input-group-text>
-                </b-input-group-prepend>
-                <b-form-input
+              <div class="input-group input-group-sm mb-1" style="max-width: 150px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">₫</span>
+                </div>
+                <input
                   type="text"
+                  class="form-control"
                   :value="item.price_sell"
                   @input="updatePrice(index, $event)"
                   @blur="formatNumericInput(index, 'price_sell')"
                   @change="calculatePaymentInfo(); handleSaveDraft();"
                 />
-              </b-input-group>
+              </div>
             </div>
 
             <div class="d-flex align-items-center">
               <span class="text-muted mr-2">{{ item.unit_name }}</span>
-              <b-button size="sm" variant="outline-primary" @click="decreaseQty(index)">−</b-button>
+              <button class="btn btn-sm btn-outline-primary" @click="decreaseQty(index)">−</button>
 
               <!-- Sửa số lượng -->
-              <b-form-input
+              <input
                 type="text"
                 min="1"
                 :value="item.quantity"
                 @input="updateQty(index, $event)"
                 @blur="formatNumericInput(index, 'quantity')"
                 @change="calculatePaymentInfo(); handleSaveDraft();"
-                size="sm"
-                class="mx-2"
+                class="form-control mx-2"
                 style="width: 60px;"
               />
-              <b-button size="sm" variant="outline-primary" @click="increaseQty(index)">+</b-button>
-              <b-button size="sm" variant="outline-danger" class="ml-2" @click="removeItem(index)">×</b-button>
+              <button class="btn btn-sm btn-outline-primary" @click="increaseQty(index)">+</button>
+              <button class="btn btn-sm btn-outline-danger ml-2" @click="removeItem(index)">×</button>
             </div>
           </div>
         </div>
@@ -57,17 +57,16 @@
             <div class="d-flex justify-content-between">
               <span>Khách hàng:</span>
               <div class="d-flex align-items-center justify-content-end">
-                <b-link @click="showModal('customer')">{{ selectedCustomer.name || 'Chưa chọn' }}</b-link>
+                <a href="javascript:void(0)" @click="showModal('customer')">{{ selectedCustomer.name || 'Chưa chọn' }}</a>
                 <!-- Icon xoá nếu đã chọn khách -->
-                <b-button
+                <button
                   v-if="selectedCustomer.name"
-                  variant="link"
-                  class="p-0 ml-2 text-danger"
+                  class="btn btn-link p-0 ml-2 text-danger"
                   @click="selectedCustomer = {}; trade.customer_id = null;"
                   title="Bỏ khách hàng đã chọn"
                 >
                   <i class="fa fa-trash" />
-                </b-button>
+                </button>
               </div>
             </div>
             <div class="d-flex justify-content-between">
@@ -77,33 +76,31 @@
             <div class="d-flex justify-content-between">
               <span>Chi phí thêm / Giảm tiền:</span>
               <div class="d-flex align-items-center justify-content-end">
-                <b-link @click="showModal('extraFee')">{{ currencyFormat(parseInt(trade.extra_fee) - parseInt(trade.fixed_discount)) }}</b-link>
+                <a href="javascript:void(0)" @click="showModal('extraFee')">{{ currencyFormat(parseInt(trade.extra_fee) - parseInt(trade.fixed_discount)) }}</a>
                 <!-- Icon xoá nếu đã chọn khách -->
-                <b-button
+                <button
                   v-if="trade.extra_fee || trade.fixed_discount"
-                  variant="link"
-                  class="p-0 ml-2 text-danger"
+                  class="btn btn-link p-0 ml-2 text-danger"
                   @click="trade.extra_fee = 0; trade.fixed_discount = 0; handleSaveDraft()"
                   title="Bỏ chi phí thêm / Giảm tiền"
                 >
                   <i class="fa fa-trash" />
-                </b-button>
+                </button>
               </div>
             </div>
             <div class="d-flex justify-content-between">
               <span>Khuyến mãi:</span>
               <div class="d-flex align-items-center justify-content-end">
-                <b-link @click="showModal('promotion')">{{ currencyFormat(trade.discount_amount) || 'Chưa áp dụng' }}</b-link>
+                <a href="javascript:void(0)" @click="showModal('promotion')">{{ currencyFormat(trade.discount_amount) || 'Chưa áp dụng' }}</a>
                 <!-- Icon xoá nếu đã chọn khách -->
-                <b-button
+                <button
                   v-if="trade.discount_amount"
-                  variant="link"
-                  class="p-0 ml-2 text-danger"
+                  class="btn btn-link p-0 ml-2 text-danger"
                   @click="trade.promotions = []; trade.discount_amount = 0; handleSaveDraft()"
                   title="Bỏ phụ thu"
                 >
                   <i class="fa fa-trash" />
-                </b-button>
+                </button>
               </div>
             </div>
             <!-- VAT -->
@@ -113,29 +110,29 @@
               <!-- <label class="mb-0 mr-2"><small>Thuế VAT:</small></label> -->
 
               <!-- Checkbox -->
-              <b-form-checkbox
+              <input
+                type="checkbox"
                 v-model="trade.have_vat"
-                switch
-                class="mr-3"
-                size="sm"
+                class="form-check-input mr-3"
                 @change="onVatEnabledChange"
-              ></b-form-checkbox>
+              />
 
               <!-- Input % VAT -->
-              <b-input-group size="sm" class="mr-3" style="max-width: 100px;">
-                <b-form-input
+              <div class="input-group input-group-sm mr-3" style="max-width: 100px;">
+                <input
                   type="number"
+                  class="form-control"
                   v-model.number="trade.vat_percent"
                   :disabled="!trade.have_vat"
                   min="0"
                   max="100"
                   step="1"
                   @change="handleSaveDraft"
-                ></b-form-input>
-                <b-input-group-append>
-                  <b-input-group-text>%</b-input-group-text>
-                </b-input-group-append>
-              </b-input-group>
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
 
               <!-- Tiền VAT -->
               <span class="ml-auto">{{ currencyFormat(trade.vat_value) || 0 }} đ</span>
@@ -143,57 +140,85 @@
 
             <div class="d-flex justify-content-between">
               <span>Loại tiền:</span>
-              <b-link @click="showModal('currency')">{{ selectedCurrency || 'Tiền mặt' }}</b-link>
+              <a href="javascript:void(0)" @click="showModal('currency')">{{ selectedCurrency || 'Tiền mặt' }}</a>
             </div>
 
-            <div class="d-flex justify-content-between" @click="handlePaymentTypeChange">
+            <div class="d-flex justify-content-between align-items-center">
               <span>Loại thanh toán:</span>
-              <b-form-radio-group
-                v-model="paymentType"
-                :options="[
-                  { text: 'Tất toán', value: 'full' },
-                  { text: 'Ghi nợ', value: 'debt' }
-                ]"
-                buttons
-                button-variant="outline-primary"
-                size="sm"
-                @change="handlePaymentTypeChange"
-                @click="handlePaymentTypeChange"
-              ></b-form-radio-group>
+              <div class="btn-group btn-group-sm" role="group">
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="paymentType"
+                  id="paymentTypeFull"
+                  value="full"
+                  v-model="paymentType"
+                  @change="handlePaymentTypeChange"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="paymentTypeFull">Tất toán</label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="paymentType"
+                  id="paymentTypeDebt"
+                  value="debt"
+                  v-model="paymentType"
+                  @change="handlePaymentTypeChange"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="paymentTypeDebt">Ghi nợ</label>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Nút hành động cuối cùng -->
         <div class="mt-auto pt-2 d-flex justify-content-between">
-          <b-button
+          <button
             v-if="trade.id"
-            variant="primary"
-            @click="$router.push('/bill/history')"
+            class="btn btn-primary"
+            @click="router.push('/bill/history')"
           >
             Danh sách bill
-          </b-button>
+          </button>
 
           <!-- In hóa đơn -->
-          <b-button v-if="trade.id && trade.products.length" variant="outline-warning" class="mr-2" @click="printReceipt(true)">
+          <button
+            v-if="trade.id && trade.products.length"
+            class="btn btn-outline-warning mr-2"
+            @click="printReceipt(true)"
+          >
             🧾 In hóa đơn tạm tính
-          </b-button>
+          </button>
 
           <!-- Tạo bill mới -->
-          <b-button
+          <button
             v-if="trade.id"
-            variant="success"
-             @click="showModal('newBill')"
+            class="btn btn-success"
+            @click="showModal('newBill')"
           >
             Tạo bill mới
-          </b-button>
+          </button>
 
           <!-- Lưu nháp -->
-          <b-button v-if="trade.trade_status == 0 && trade.products.length" variant="secondary" @click="saveDraft(true)">Lưu nháp</b-button>
+          <button
+            v-if="trade.trade_status == 0 && trade.products.length"
+            class="btn btn-secondary"
+            @click="saveDraft(true)"
+          >
+            Lưu nháp
+          </button>
 
           <!-- Thanh toán -->
-          <b-button v-if="trade.id && trade.trade_status == 0" variant="danger" 
-          @click="checkBeforeSell">Thanh toán</b-button>
+          <button
+            v-if="trade.id && trade.trade_status == 0"
+            class="btn btn-danger"
+            @click="checkBeforeSell"
+          >
+            Thanh toán
+          </button>
         </div>
 
       </div>
@@ -202,7 +227,7 @@
       <div class="w-50 p-3 d-flex flex-column h-100">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <h5 class="mb-0">Danh sách Sản phẩm</h5>
-          <b-form-input
+          <input
             v-model="searchProductQuery"
             @input="handleFilterProduct"
             placeholder="Tìm theo tên/mã sản phẩm..."
@@ -214,14 +239,14 @@
 
         <!-- <h5>Danh sách Sản phẩm</h5> -->
         <div class="mb-3">
-          <b-button
+          <button
             :variant="activeGroupId === null ? 'primary' : 'outline-primary'"
             @click="handleSelectGroup(null)"
             class="mr-1 mt-1"
           >
             Tất cả
-          </b-button>
-          <b-button
+          </button>
+          <button
             v-for="group in productGroups"
             :key="group.id || 'all'"
             :variant="activeGroupId === group.id ? 'primary' : 'outline-primary'"
@@ -229,19 +254,17 @@
             class="mr-1 mt-1"
           >
             {{ group.name }}
-          </b-button>
+          </button>
         </div>
 
         <!-- Danh sách sản phẩm -->
         <div class="flex-grow-1 overflow-auto product-list">
-          <b-card
+          <div class="card mb-2 cursor-pointer"
             v-for="product in filteredProducts"
             :key="product.id"
-            class="mb-2 cursor-pointer"
-            no-body
           >
             <div class="d-flex align-items-center">
-              <b-img
+              <img
                 :src="product.image"
                 alt="Ảnh sản phẩm"
                 fluid
@@ -260,17 +283,15 @@
                     <span class="mr-2" v-show="product.price_buy != null" title="Xem giá nhập">
                       Giá nhập: <strong>{{ showBuyPrice[product.id] ? currencyFormat(product.price_buy) + ' đ' : '***' }}</strong>
                     </span>
-                    <b-button
+                    <button
                       v-show="product.price_buy != null"
-                      variant="link"
-                      size="sm"
+                      class="btn btn-link btn-sm p-0"
                       @click="toggleBuyPrice(product.id)"
-                      class="p-0"
                       style="font-size: 1rem;"
                     >
                       <i v-show="!showBuyPrice[product.id]" class="fa fa-eye" aria-hidden="true" title="Xem giá nhập"></i>
                       <i v-show="showBuyPrice[product.id]" class="fa fa-eye-slash" aria-hidden="true" title="Đóng giá nhập"></i>
-                    </b-button>
+                    </button>
                     <span v-show="product.price_buy == null">Hàng chưa nhập kho</span>
                   </div>
                   <div class="text-muted text-right mr-2" style="flex: 1;">
@@ -280,18 +301,18 @@
 
               </div>
             </div>
-          </b-card>
+          </div>
         </div>
 
         <!-- Ghi chú -->
         <div class="mt-3" v-show="trade.id">
-          <b-form-textarea
+          <form-textarea
             v-model="trade.note"
             placeholder="Ghi chú cho đơn hàng..."
             rows="2"
             max-rows="4"
             class="mb-3"
-          ></b-form-textarea>
+          />
         </div>
       </div>
     </div>
@@ -368,27 +389,27 @@
 
       <!-- Nửa phải: Các buttons  -->
       <div class="w-50 p-3 d-flex flex-column h-100">
-        <b-row>
-          <b-col>
-            <b-button variant="outline-primary" class="pull-left px-4 btn-width-220" @click="printReceipt(false)">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
+            <button class="btn btn-outline-primary pull-left px-4 btn-width-220" @click="printReceipt(false)">
               🖨️ In hóa đơn
-            </b-button>
-          </b-col>
-        </b-row>
-        <!-- <b-row class="mt-4">
-          <b-col>
-            <b-button variant="outline-primary" class="pull-left px-4 btn-width-220" @click="printInvoice()">
+            </button>
+          </div>
+        </div>
+        <!-- <div class="mt-4">
+          <div class="w-full px-2">
+            <button class="btn btn-outline-primary pull-left px-4 btn-width-220" @click="printInvoice()">
               🧾 In hóa đơn GTGT
-            </b-button>
-          </b-col>
-        </b-row> -->
-        <b-row class="mt-4">
-          <b-col>
-            <b-button variant="outline-success" class="pull-left px-4 btn-width-220" @click="resetBill()">
+            </button>
+          </div>
+        </div> -->
+        <div class="mt-4">
+          <div class="w-full px-2">
+            <button class="btn btn-outline-success pull-left px-4 btn-width-220" @click="resetBill()">
               🆕 Tạo bill mới
-            </b-button>
-          </b-col>
-        </b-row>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -410,7 +431,7 @@
             <p style="margin: 4px 0;">SĐT: {{ storeInfo.phone_number }}</p>
           </div>
         </div>
-        
+
         <div v-if="!storeInfo.logo">
           <h3 style="font-size: 20px; text-align: center;"><strong>{{ storeInfo.name }}</strong></h3>
           <p style="text-align: center;">Địa chỉ: {{ storeInfo.address }}</p>
@@ -472,118 +493,139 @@
     </div>
 
     <!-- Modal Khách hàng -->
-    <b-modal
-      v-model="modalCustomer"
+    <div
+      v-if="modalCustomer"
       id="customer-modal"
-      title="Khách hàng"
-      size="xl"
-      scrollable
-      ok-only
-      ok-title="Đóng"
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
-      <b-tabs pills card>
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Khách hàng</h5>
+            <button type="button" class="close" @click="modalCustomer = false">&times;</button>
+          </div>
+          <div class="modal-body">
+      <div class="tabs-container">
         <!-- Tab 1: Tìm kiếm -->
-        <b-tab title="Khách hàng cũ" active>
+        <div class="tab-content">
           <!-- Form tìm kiếm -->
           <div class="my-3 d-flex gap-2 align-items-center">
-            <b-form-input
+            <input
               v-model="customerSearchQuery"
               placeholder="Nhập tên hoặc số điện thoại"
               class="flex-grow-1"
-            ></b-form-input>
-            <b-button variant="primary" @click="searchCustomers" class="ml-2" style="white-space: nowrap;">
+            >
+            <button class="btn btn-primary ml-2" @click="searchCustomers" style="white-space: nowrap;">
               Tìm kiếm
-            </b-button>
+            </button>
           </div>
 
           <!-- Kết quả -->
-          <b-table
-            :items="customerList"
-            :fields="customerFields"
-            striped
-            bordered
-            small
-          >
-            <template #cell(index)="data">
-              {{ data.index + 1 }}
-            </template>
-            <template #cell(action)="data">
-              <b-button variant="primary" @click="selectCustomer(data.item)">
-                Chọn
-              </b-button>
-            </template>
-          </b-table>
-        </b-tab>
+          <table class="table table-striped table-bordered table-sm">
+            <thead>
+              <tr>
+                <th v-for="f in customerFields" :key="f.key">{{ f.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in customerList" :key="item.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.birthday }}</td>
+                <td>{{ item.gender_str }}</td>
+                <td>{{ item.mst }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.type_str }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" @click="selectCustomer(item)">Chọn</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Tab 2: Tạo mới -->
-        <b-tab title="Thêm mới">
-          <b-form @submit.prevent="createCustomer">
-            <b-row>
-              <b-col md="6">
-                <b-form-group label="Tên khách hàng *"
+        <div class="tab-content">
+          <form @submit.prevent="createCustomer">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Tên khách hàng *"
                   :state="formCustomerErrors.name ? false : null"
                   :invalid-feedback="formCustomerErrors.name"
                 >
-                  <b-form-input v-model="newCustomer.name" required :state="formCustomerErrors.name ? false : null"></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Loại khách hàng">
-                  <b-form-select v-model="newCustomer.type" :options="optionsCustomerType"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Số điện thoại *"
+                  <input v-model="newCustomer.name" required :state="formCustomerErrors.name ? false : null">
+                </div>
+              </div>
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Loại khách hàng">
+                  <select class="form-control" v-model="newCustomer.type" :options="optionsCustomerType"></select>
+                </div>
+              </div>
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Số điện thoại *"
                   :state="formCustomerErrors.phone_number ? false : null"
                   :invalid-feedback="formCustomerErrors.phone_number"
                 >
-                  <b-form-input v-model="newCustomer.phone_number" :state="formCustomerErrors.phone_number ? false : null"></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Ngày sinh">
-                  <b-form-input type="date" v-model="newCustomer.birthday" :min="minDate" :max="maxDate"></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Giới tính">
-                  <b-form-select v-model="newCustomer.gender" :options="optionsGender"></b-form-select>
-                </b-form-group>
-              </b-col>
-              <b-col md="6">
-                <b-form-group label="Mã số thuế">
-                  <b-form-input v-model="newCustomer.mst"></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col cols="12">
-                <b-form-group label="Địa chỉ">
-                  <b-form-input v-model="newCustomer.address"></b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-row>
+                  <input v-model="newCustomer.phone_number" :state="formCustomerErrors.phone_number ? false : null">
+                </div>
+              </div>
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Ngày sinh">
+                  <input type="date" v-model="newCustomer.birthday" :min="minDate" :max="maxDate">
+                </div>
+              </div>
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Giới tính">
+                  <select class="form-control" v-model="newCustomer.gender" :options="optionsGender"></select>
+                </div>
+              </div>
+              <div class="w-full md:w-6 px-2">
+                <div class="form-group" label="Mã số thuế">
+                  <input v-model="newCustomer.mst">
+                </div>
+              </div>
+              <div class="w-12 px-2">
+                <div class="form-group" label="Địa chỉ">
+                  <input v-model="newCustomer.address">
+                </div>
+              </div>
+            </div>
 
             <div class="text-right">
-              <b-button variant="success" type="submit">Tạo khách hàng</b-button>
+              <button class="btn btn-success" type="submit">Tạo khách hàng</button>
             </div>
-          </b-form>
-        </b-tab>
-      </b-tabs>
-    </b-modal>
+          </form>
+        </div>
+      </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
     <!-- Modal khuyến mãi -->
-    <b-modal
-      v-model="modalPromotion"
+    <div
+      v-if="modalPromotion"
       id="promotion-modal"
-      title="Khuyến mãi"
-      size="xl"
-      scrollable
-      hide-footer
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Khuyến mãi</h5>
+            <button type="button" class="close" @click="modalPromotion = false">&times;</button>
+          </div>
+          <div class="modal-body">
       <!-- Danh sách khuyến mãi -->
       <div class="mb-3">
         <h6 class="mb-2">Danh sách khuyến mãi:</h6>
         <div class="d-flex flex-wrap">
-          <b-button
+          <button
             v-for="promo in promotionList"
             :key="promo.id"
             size="sm"
@@ -592,7 +634,7 @@
             @click="addPromotion(promo)"
           >
             {{ promo.name }}
-          </b-button>
+          </button>
         </div>
       </div>
 
@@ -609,10 +651,10 @@
               <strong>{{ promo.name }}</strong>
             </div>
             <div class="d-flex align-items-center">
-              <b-button size="sm" @click="decreaseQtyPmt(index)" variant="outline-primary">−</b-button>
+              <button class="btn btn-sm btn-outline-primary" @click="decreaseQtyPmt(index)">−</button>
               <span class="mx-2">{{ promo.quantity }}</span>
-              <b-button size="sm" @click="increaseQtyPmt(index)" variant="outline-primary">+</b-button>
-              <b-button size="sm" variant="outline-danger" class="ml-2" @click="removePromotion(index)">×</b-button>
+              <button class="btn btn-sm btn-outline-primary" @click="increaseQtyPmt(index)">+</button>
+              <button class="btn btn-sm btn-outline-danger ml-2" @click="removePromotion(index)">×</button>
             </div>
           </li>
         </ul>
@@ -620,59 +662,71 @@
 
       <!-- Nút -->
       <div v-if="selectedPromotions.length" class="d-flex justify-content-between">
-        <b-button variant="secondary" @click="hideModalPmt">Bỏ qua</b-button>
-        <b-button variant="success" @click="applyPromotions">Áp dụng</b-button>
+        <button class="btn btn-secondary" @click="hideModalPmt">Bỏ qua</button>
+        <button class="btn btn-success" @click="applyPromotions">Áp dụng</button>
       </div>
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Modal Chi phí thêm / Giảm tiền -->
-    <b-modal
-      v-model="modalExtraFee"
+    <div
+      v-if="modalExtraFee"
       id="extraFee-modal"
-      title="Chi phí thêm / Giảm tiền"
-      size="lg"
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Chi phí thêm / Giảm tiền</h5>
+            <button type="button" class="close" @click="modalExtraFee = false">&times;</button>
+          </div>
+          <div class="modal-body"
       scrollable
       hide-footer
     >
       <!-- Form thêm phí -->
-      <b-form @submit.prevent="addExtraFee">
+      <form @submit.prevent="addExtraFee">
 
-        <b-row class="align-items-end">
+        <div class="align-items-end">
           <!-- Tên phí -->
-          <b-col md="12">
+          <div class="w-full md:w-12 px-2">
             <div class="input-group">
               <input type="radio" v-model="newFee.type" name="type" value="0" class="mt-2">
               <label class="ml-4 mt-1">Chi phí thêm</label>
               <input type="radio" v-model="newFee.type" name="type" value="1" class="ml-5 mt-2">
               <label class="ml-4 mt-1">Giảm tiền</label>
             </div>
-            <!-- <b-form-group label="Lý do phụ thu / thêm phí">
-              <b-form-input v-model="newFee.name" required></b-form-input>
-            </b-form-group> -->
-          </b-col>
-        </b-row>
+            <!-- <div class="form-group" label="Lý do phụ thu / thêm phí">
+              <input v-model="newFee.name" required>
+            </div> -->
+          </div>
+        </div>
 
-        <b-row class="align-items-end">
+        <div class="align-items-end">
           <!-- Số tiền -->
-          <b-col md="12">
-            <b-form-group label="Số tiền">
-              <b-form-input
+          <div class="w-full md:w-12 px-2">
+            <div class="form-group" label="Số tiền">
+              <input
                 type="number"
                 v-model.number="newFee.price"
                 min="0"
                 required
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-        </b-row>
+              >
+            </div>
+          </div>
+        </div>
 
         <!-- Button Thêm -->
-        <b-row class="text-center">
-          <b-col md="12" class="text-center">
-            <b-button type="submit" variant="success" size="sm">Thêm</b-button>
-          </b-col>
-        </b-row>
-      </b-form>
+        <div class="text-center">
+          <div md="12" class="text-center">
+            <button class="btn "type="submit" variant="success" size="sm">Thêm</button>
+          </div>
+        </div>
+      </form>
 
       <!-- Danh sách phí đã thêm -->
       <div v-if="extraFees.length" class="mt-4">
@@ -690,7 +744,7 @@
               </small>
             </div>
             <div class="d-flex align-items-center">
-              <b-button size="sm" variant="outline-danger" class="ml-2" @click="removeExtraFee(index)">×</b-button>
+              <button class="btn btn-sm btn-outline-danger ml-2" @click="removeExtraFee(index)">×</button>
             </div>
           </li>
         </ul>
@@ -698,42 +752,50 @@
 
       <!-- Nút -->
       <div v-if="extraFees.length" class="d-flex justify-content-between">
-        <b-button variant="secondary" @click="hideModalExtraFees">Bỏ qua</b-button>
-        <b-button variant="success" @click="applyExtraFees">Áp dụng</b-button>
+        <button class="btn btn-secondary" @click="hideModalExtraFees">Bỏ qua</button>
+        <button class="btn btn-success" @click="applyExtraFees">Áp dụng</button>
       </div>
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Modal chọn loại tiền thanh toán -->
-    <b-modal
-      v-model="modalCurrency"
+    <div
+      v-if="modalCurrency"
       id="currency-modal"
-      title="Chọn loại tiền thanh toán"
-      size="lg"
-      scrollable
-      hide-footer
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Chọn loại tiền thanh toán</h5>
+            <button type="button" class="close" @click="modalCurrency = false">&times;</button>
+          </div>
+          <div class="modal-body">
       <!-- Tổng tiền cần thanh toán -->
       <p class="font-weight-bold text-center mb-4">
         Số tiền cần thanh toán: {{ currencyFormat(trade.total) }}
       </p>
 
       <!-- Các loại thanh toán -->
-      <b-form-group v-for="(method, key) in paymentOptions" :key="key" class="mb-3">
-        <b-form-checkbox
+      <div v-for="(method, key) in paymentOptions" :key="key" class="form-group mb-3">
+        <input type="checkbox"
           v-model="method.checked"
           @change="onCheckboxChange(key)"
         >
           {{ method.label }}
-        </b-form-checkbox>
 
-        <b-form-input
+        <input
           v-model.number="method.amount"
           type="number"
           min="0"
           class="mt-2"
           :placeholder="`Nhập số tiền ${method.label.toLowerCase()}`"
-        ></b-form-input>
-      </b-form-group>
+        >
+      </div>
 
       <!-- Error nếu tổng nhỏ hơn -->
       <p v-if="paymentError" class="text-danger text-center font-weight-bold">
@@ -742,21 +804,25 @@
 
       <!-- Buttons -->
       <div class="d-flex justify-content-between mt-4">
-        <b-button variant="secondary" @click="hideModalCurrency">Bỏ qua</b-button>
-        <b-button variant="success" @click="applyCurrency">Áp dụng</b-button>
+        <button class="btn btn-secondary" @click="hideModalCurrency">Bỏ qua</button>
+        <button class="btn btn-success" @click="applyCurrency">Áp dụng</button>
       </div>
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Modal xác nhận thanh toán -->
-    <b-modal
-      v-model="modalPayment"
+    <div
+      v-if="modalPayment"
       id="payment-modal"
-      hide-footer
-      hide-header
-      centered
-      size="md"
-      modal-class="custom-payment-modal"
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
       <div class="text-center px-4 py-3">
         <!-- Custom title -->
         <h4 class="font-weight-bold mb-4" style="color: #3b82f6;">Xác nhận thanh toán</h4>
@@ -778,29 +844,32 @@
 
         <!-- Buttons -->
         <div class="d-flex justify-content-center gap-3">
-          <b-button variant="outline-secondary" class="rounded-pill px-4 py-2 shadow-sm"
+          <button class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm"
             @click="modalPayment = false">
             ❌ Hủy
-          </b-button>
+          </button>
 
-          <b-button variant="success" class="rounded-pill px-4 py-2 shadow-sm"
+          <button class="btn btn-success rounded-pill px-4 py-2 shadow-sm"
             @click="confirmPayment">
             ✅ Xác nhận thanh toán
-          </b-button>
+          </button>
         </div>
       </div>
-      
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal xác nhận tạo bill mới -->
-    <b-modal
-      v-model="modalNewBill"
+    <div
+      v-if="modalNewBill"
       id="new-bill-modal"
-      hide-footer
-      hide-header
-      centered
-      size="md"
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
       <div class="text-center px-4 py-3">
         <!-- Custom title -->
         <h4 class="font-weight-bold mb-4" style="color: #3b82f6;">Xác nhận tạo bill mới</h4>
@@ -813,40 +882,47 @@
 
         <!-- Buttons -->
         <div class="d-flex justify-content-center gap-3">
-          <b-button variant="outline-secondary" class="rounded-pill px-4 py-2 shadow-sm"
+          <button class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm"
             @click="modalNewBill = false">
             ❌ Hủy
-          </b-button>
+          </button>
 
-          <b-button variant="success" class="rounded-pill px-4 py-2 shadow-sm"
+          <button class="btn btn-success rounded-pill px-4 py-2 shadow-sm"
             @click="resetBill">
             ✅ Xác nhận
-          </b-button>
+          </button>
         </div>
       </div>
-      
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal ghi nợ -->
-    <b-modal
-      v-model="showDebtModal"
+    <div
+      v-if="showDebtModal"
       id="debt-modal"
-      title="Thông tin ghi nợ"
-      size="xl"
-      scrollable
-      hide-footer
+      class="modal-overlay"
+      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
     >
-    <b-row class="form-row">
-      <b-col md="12" class="mt-2">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Thông tin ghi nợ</h5>
+            <button type="button" class="close" @click="showDebtModal = false">&times;</button>
+          </div>
+          <div class="modal-body">
+    <div class="form-row">
+      <div md="12" class="mt-2">
         <h4>Số tiền cần thanh toán: <span class="text-header">{{currencyFormat(trade.total)}}</span></h4>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row class="form-row">
-      <b-col md="3" class="mt-1">
+    <div class="form-row">
+      <div md="3" class="mt-1">
         <label>Số tiền khách trả</label>
-      </b-col>
-      <b-col md="9" class="mt-1">
+      </div>
+      <div md="9" class="mt-1">
         <input
           id="total_paid"
           type="text"
@@ -855,20 +931,20 @@
           autocomplete="new-password"
           maxlength="14"
           @keyup="integerAndPointOnly($event.target)">
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row class="form-row" v-show="currentDebt.total_paid && currentDebt.total_paid < trade.total">
-      <b-col md="12" class="mt-2">
+    <div class="form-row" v-show="currentDebt.total_paid && currentDebt.total_paid < trade.total">
+      <div md="12" class="mt-2">
         <h4>Số tiền ghi nợ: <span class="text-header">{{currencyFormat(trade.total - currentDebt.total_paid)}}</span></h4>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row class="form-row">
-      <b-col md="3" class="mt-1">
+    <div class="form-row">
+      <div md="3" class="mt-1">
         <label>Lãi suất (%)</label>
-      </b-col>
-      <b-col md="9" class="mt-1">
+      </div>
+      <div md="9" class="mt-1">
         <input
           id="interest_rate"
           type="text"
@@ -877,40 +953,39 @@
           autocomplete="new-password"
           maxlength="5"
           @keyup="integerAndPointOnly($event.target)">
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row class="form-row">
-      <b-col md="3" class="mt-1">
+    <div class="form-row">
+      <div md="3" class="mt-1">
         <label>Kỳ hạn tính lãi</label>
-      </b-col>
-      <b-col md="9" class="mt-1">
-        <b-form-select
+      </div>
+      <div md="9" class="mt-1">
+        <select class="form-control"
           :options="periodOptions"
           id="interest_period"
           type="text"
           autocomplete="new-password"
-          class="form-control"
           v-model="currentDebt.interest_period">
-        </b-form-select>
-      </b-col>
-    </b-row>
+        </select>
+      </div>
+    </div>
 
-    <b-row class="form-row">
-      <b-col md="3" class="mt-1">
+    <div class="form-row">
+      <div md="3" class="mt-1">
         <label>Ngày hẹn thanh toán </label>
-      </b-col>
-      <b-col md="9" class="mt-1">
+      </div>
+      <div md="9" class="mt-1">
         <datepicker v-model="currentDebt.appointment_date" format="yyyy-MM-dd" :typeable="true"
                     placeholder="" input-class="datepicker-cus" ></datepicker>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row class="form-row">
-      <b-col md="3" class="mt-1">
+    <div class="form-row">
+      <div md="3" class="mt-1">
         <label>Nhắc hẹn thanh toán trước số ngày </label>
-      </b-col>
-      <b-col md="9" class="mt-1">
+      </div>
+      <div md="9" class="mt-1">
         <input
           id="forewarning"
           type="text"
@@ -919,52 +994,70 @@
           class="form-control"
           v-model="currentDebt.forewarning"
           @keyup="integerOnly($event.target)">
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
       <!-- Nút -->
       <div class="d-flex justify-content-between mt-2">
-        <b-button variant="secondary" @click="cancelDebt">Bỏ qua</b-button>
-        <b-button variant="success" @click="applyDebt">Áp dụng</b-button>
+        <button class="btn btn-secondary" @click="cancelDebt">Bỏ qua</button>
+        <button class="btn btn-success" @click="applyDebt">Áp dụng</button>
       </div>
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--Modal cảnh báo bán quá số lượng trong kho -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-confirm-sell">
-      <b-row>
-        <b-col md="12">
+    <div class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-body">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-12 px-2">
           <h4 class="modal-title text-center text-success">Sản phẩm bán vượt quá số lượng trong kho</h4>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="productImportFields"
-            :items="productNotEnoughQuantity">
-          </b-table>
-        </b-col>
-      </b-row>
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th v-for="f in productImportFields" :key="f.key">{{ f.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in productNotEnoughQuantity" :key="item.stt">
+                <td>{{ item.stt }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity_repo }}</td>
+                <td>{{ item.quantity }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <b-row>
-        <b-col cols="4" class="text-left mt-3">
+      <div class="flex flex-wrap -mx-2">
+        <div cols="4" class="text-left mt-3">
           <button class="btn btn-danger px-4" @click="hideModalConfirmSell">
             Hủy bán
           </button>
-        </b-col>
-        <b-col cols="8" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" 
+        </div>
+        <div cols="8" class="text-right mt-3">
+          <button class="btn btn-primary px-4 default-btn-bg"
           @click="modalPayment = true; hideModalConfirmSell();">
             Tiếp tục bán
           </button>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    </b-modal>
+
 
     <!-- Hoá đơn, khu vực ẩn để in -->
     <div ref="invoiceArea" style="display: none;">
@@ -1041,12 +1134,20 @@
 <script>
 import billApi from '@/api/bill'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
   components: {
     Datepicker
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
   },
   data() {
     return {
@@ -1060,6 +1161,7 @@ export default {
       modalCurrency: false,
       modalPayment: false,
       modalNewBill: false,
+      showModalConfirmSell: false,
       isFisrtSaveDraft: true,
       // So sánh với trade của màn hình bán hàng cũ
       trade: {
@@ -1210,7 +1312,7 @@ export default {
     // check Add hay edit
      const path = window.location.pathname;
      if(path.includes('bill/edit')) {
-      const billId = this.$route.params.id;
+      const billId = this.route.params.id;
       this.getBillDetail(billId)
      }
 
@@ -1223,12 +1325,7 @@ export default {
   methods: {
     // Make toast without title
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -1286,7 +1383,7 @@ export default {
           // Format trước khi show
           this.formatProductBeforeShow()
 
-          // Get customer 
+          // Get customer
           if(this.trade.customer) {
             this.selectedCustomer = this.trade.customer
           }
@@ -1308,7 +1405,7 @@ export default {
           if(this.trade.fixed_discount) {
             this.extraFees.push({type: '1', price: this.trade.fixed_discount});
           }
-          
+
         }
       }).catch(err => {
         // Handle error
@@ -1347,14 +1444,14 @@ export default {
 
       if(this.productNotEnoughQuantity.length > 0) {
         // Show modal cảnh báo bán quá số lượng trong kho
-        this.$bvModal.show('modal-confirm-sell')
+        this.showModalConfirmSell = true
         return
       }
       this.modalPayment = true
     },
 
     hideModalConfirmSell() {
-      this.$bvModal.hide('modal-confirm-sell')
+      this.showModalConfirmSell = false
     },
 
     // Get danh sách khách hàng, khuyến mại, staff
@@ -1512,7 +1609,7 @@ export default {
         value = this.currencyFormat((value + '').replaceAll(",", ""))
         this.trade.products[index][field] = value;
       }
-      
+
       console.log(value)
       console.log("aaaaaaaaaaaaaaaaa")
     },
@@ -1627,7 +1724,7 @@ export default {
 
       // sub_total
       // const sub_total = this.trade.products.reduce((total, item) => total + parseInt((item.price_sell + '').replaceAll(",", "")) * parseFloat((item.quantity + '').replaceAll(",", "")), 0);
-      
+
       let sub_total = 0
       for(let item of this.trade.products) {
         if (item.price_sell) {
@@ -1648,7 +1745,7 @@ export default {
       // }, 0);
       this.trade.sub_total = sub_total
       if(!this.trade.sub_total) {
-        this.trade.sub_total = 0 
+        this.trade.sub_total = 0
       }
       total += sub_total
 
@@ -1681,7 +1778,7 @@ export default {
         this.trade.credit = 0
         this.trade.e_money = 0
       }
-        
+
       // Total
       this.trade.total = total;
       this.trade.total_paid = total
@@ -1792,7 +1889,7 @@ export default {
     },
 
     hideModalPmt() {
-      this.$bvModal.hide('promotion-modal')
+      this.modalPromotion = false
     },
 
     /**
@@ -1831,7 +1928,7 @@ export default {
       this.handleSaveDraft()
     },
     hideModalExtraFees() {
-      this.$bvModal.hide('extraFee-modal')
+      this.modalExtraFee = false
     },
 
     /**
@@ -1876,7 +1973,7 @@ export default {
     },
 
     hideModalCurrency() {
-      this.$bvModal.hide('currency-modal')
+      this.modalCurrency = false
     },
 
     /**
@@ -2009,7 +2106,7 @@ export default {
     },
 
   },
-  
+
 }
 </script>
 
@@ -2057,7 +2154,7 @@ export default {
   .gap-3 > *:not(:last-child) {
     margin-right: 1rem;
   }
-  
+
   .receipt-container {
     width: 72mm;
     font-family: monospace, Arial;

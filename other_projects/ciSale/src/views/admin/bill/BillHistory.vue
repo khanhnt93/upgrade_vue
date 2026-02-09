@@ -1,21 +1,22 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-              <h4 class="mt-2 text-center text-header">Lịch Sử Bán Hàng</h4>
-            </b-col>
-          </b-row>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Lịch Sử Bán Hàng</h4>
+              </div>
+            </div>
 
-          <b-row>
+            <div class="flex flex-wrap -mx-2 mt-4">
 
-            <b-col md="6">
-              <label>
-                Thời gian:
-              </label>
+              <div class="w-full md:w-1/2 px-2 mb-3">
+                <label>
+                  Thời gian:
+                </label>
               <div class="input-group">
                   <span class="input-group-addon pr-1">Từ ngày</span>
                   <input
@@ -50,43 +51,43 @@
                     class="form-control"
                     @change="inputs.toDate=$event.target.value"> -->
                 </div>
-            </b-col>
+              </div>
 
-            <b-col md="3">
-              <label>
-                Trạng thái đơn:
-              </label>
-              <b-form-select
-              :options="statusOption"
-              id="status"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.status">
-              </b-form-select>
-            </b-col>
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label>
+                  Trạng thái đơn:
+                </label>
+                <select
+                  id="status"
+                  class="form-control"
+                  v-model="inputs.status">
+                  <option v-for="option in statusOption" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
 
-            <b-col md="3">
-              <label class="label-width text-white">
-                 Xem
-              </label>
-              <b-button variant="outline-primary" class="pull-right px-4 btn-width-120"
-                :disabled="onSearch" @click.prevent="search">
-                Xem
-              </b-button>
-            </b-col>
-          </b-row>
-          
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label class="label-width text-white">
+                   Xem
+                </label>
+                <button class="btn btn-outline-primary float-right px-4 btn-width-120"
+                  :disabled="onSearch" @click.prevent="search">
+                  Xem
+                </button>
+              </div>
+            </div>
 
-          <b-row v-show="firstSearch == false && bills.length">
-            <b-col>
-              <b-row>
-                <b-col md="4">
-                  Số kết quả: {{bills.length}}
-                </b-col>
-                <!-- <b-col md="8" class="text-right">
+            <!-- Loading -->
+            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+
+            <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length">
+              <div class="w-full px-2">
+                <div class="flex flex-wrap -mx-2 mb-3">
+                  <div class="w-full md:w-1/3 px-2">
+                    Số kết quả: {{bills.length}}
+                  </div>
+                  <!-- <div class="w-full md:w-2/3 px-2 text-right">
                   <download-excel
                     class   = "btn btn-default text-header"
                     :data   = "bills"
@@ -95,11 +96,11 @@
                     name    = "bao_cao_theo_bill.xls">
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col> -->
-              </b-row>
-              <b-row>
-                <b-col>
-                  <table class="table table-bordered table-striped fixed_header">
+                </div> -->
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <table class="table table-bordered table-striped fixed_header">
                     <thead>
                       <tr>
                         <th>STT</th>
@@ -128,44 +129,62 @@
                         </td>
                         <td class="text-right">
                           <div v-if="bill.trade_status == 0" class="button-group" style="white-space: nowrap;">
-                            <button class="btn btn-sm btn-primary" @click="$router.push('/bill/edit/' + bill.id)">Sửa</button>
+                            <button class="btn btn-sm btn-primary" @click="router.push('/bill/edit/' + bill.id)">Sửa</button>
                             <button class="btn btn-sm btn-danger ml-2" @click.prevent="deleteBill(bill)">Xoá</button>
                           </div>
-                          <b-button v-if="bill.trade_status == 1" variant="outline-success" 
-                          class="pull-right btn-width-120 mt-2 mr-2" @click="$router.push('/bill/edit/' + bill.id)">
+                          <button v-if="bill.trade_status == 1" class="btn btn-outline-success float-right btn-width-120 mt-2 mr-2"
+                          @click="router.push('/bill/edit/' + bill.id)">
                             In hóa đơn
-                          </b-button>
+                          </button>
                         </td>
                       </tr>
                     </tbody>
                   </table>
 
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <b-row v-show="firstSearch == false && bills.length == 0">
-            <b-col class="text-center">
-              Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
-        </b-card>
+            <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length == 0">
+              <div class="w-full px-2 text-center">
+                Không tìm thấy kết quả nào
+              </div>
+            </div>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <!-- Modal xác nhận xoá -->
-    <b-modal
-      v-model="modalDeleteBill"
-      id="modal-delete-bill"
-      hide-footer
-      hide-header
-      centered
-      size="md"
-      modal-class="custom-modal-delete-bill"
-    >
-      <div class="text-center px-4 py-3">
+    <TransitionRoot appear :show="modalDeleteBill" as="template">
+      <Dialog as="div" @close="modalDeleteBill = false" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+                <div class="text-center px-4 py-3">
         <!-- Custom title -->
         <h4 class="font-weight-bold mb-4" style="color: #3b82f6;">Xác nhận xoá bill</h4>
 
@@ -188,35 +207,51 @@
           💰 {{ currencyFormat(selectedBill.total) }}
         </p>
 
-        <!-- Buttons -->
-        <div class="d-flex justify-content-center gap-3">
-          <b-button variant="outline-secondary" class="rounded-pill px-4 py-2 shadow-sm"
-            @click="modalDeleteBill = false">
-            ❌ Hủy
-          </b-button>
+                  <!-- Buttons -->
+                  <div class="flex justify-center gap-3">
+                    <button class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm"
+                      @click="modalDeleteBill = false">
+                      ❌ Hủy
+                    </button>
 
-          <b-button variant="danger" class="rounded-pill px-4 py-2 shadow-sm"
-            @click="confirmDeleteBill">
-            ✅ Xác nhận xoá
-          </b-button>
+                    <button class="btn btn-danger rounded-pill px-4 py-2 shadow-sm"
+                      @click="confirmDeleteBill">
+                      ✅ Xác nhận xoá
+                    </button>
+                  </div>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
         </div>
-      </div>
-      
-    </b-modal>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
 <script>
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import billApi from '@/api/bill'
 import commonFunc from '@/common/commonFunc'
-// import Vue from 'vue'
+//
 // import JsonExcel from 'vue-json-excel'
 
-// Vue.component('downloadExcel', JsonExcel)
+//
 
 
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    TransitionRoot,
+    TransitionChild
+  },
+  setup() {
+    const { popToast } = useToast()
+    const router = useRouter()
+    return { popToast, router }
   },
   data () {
     return {
@@ -251,41 +286,29 @@ export default {
   },
   methods: {
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Check valid from date and to date
      */
     checkFromDateAndToDate() {
       if(this.inputs.fromDate == "" || this.inputs.fromDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục từ ngày không đúng")
+        this.popToast('error', "Mục từ ngày không đúng")
         return false
       }
       if(this.inputs.toDate == "" || this.inputs.toDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục đến ngày không đúng")
+        this.popToast('error', "Mục đến ngày không đúng")
         return false
       }
       let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
       let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        this.popToast('error', "Từ ngày không thể lớn hớn đến ngày")
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
 
       if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+        this.popToast('error', "Thời gian không quá 62 ngày")
         return false
       }
 
@@ -322,7 +345,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.firstSearch = false
         this.onSearch = false
@@ -344,7 +367,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 

@@ -1,36 +1,36 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-              <b-row class="form-row">
-                <b-col md='12'>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+              <div class="form-row">
+                <div md='12'>
                   <h4 class="mt-2 text-center">Admin store</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="name"
                   type="text"
                   class="form-control"
                   v-model="adminStore.name"
                   maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div :class="{'invalid-feedback d-block': errorName}">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Số Điện Thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="phone"
                   type="text"
@@ -38,66 +38,66 @@
                   v-model="adminStore.phone_number"
                   autocomplete="new-password"
                   maxlength="20">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPhone">
+                  <div :class="{'invalid-feedback d-block': errorPhone}">
                     Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <!--<b-row class="form-row">-->
-                <!--<b-col md="3" class="mt-2">-->
+              <!--<div class="form-row">-->
+                <!--<div md="3" class="mt-2">-->
                   <!--<label> Quyền </label><span class="error-sybol"></span>-->
-                <!--</b-col>-->
-                <!--<b-col md="9">-->
-                  <!--<b-form-select-->
+                <!--</div>-->
+                <!--<div class="w-full md:w-9 px-2">-->
+                  <!--<select class="form-control"-->
                   <!--:options="options"-->
                   <!--id="city_id"-->
                   <!--type="text"-->
                   <!--class="form-control"-->
                   <!--v-model="adminStore.role_id"-->
-                  <!--v-on:change="changeRole()"></b-form-select>-->
+                  <!--v-on:change="changeRole()"></select>-->
 
                   <!--<b-form-invalid-feedback  class="invalid-feedback" :state="!errorRole">-->
                     <!--Vui lòng chọn quyền-->
                   <!--</b-form-invalid-feedback>-->
-                <!--</b-col>-->
-              <!--</b-row>-->
+                <!--</div>-->
+              <!--</div>-->
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Thương hiệu </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <select
                   :options="optionsBrand"
                   id="brand_id"
                   type="text"
                   class="form-control"
                   v-model="adminStore.brand_id"
-                  v-on:change="changeBrand()"></b-form-select>
+                  v-on:change="changeBrand()"></select>
                   <!--<b-form-invalid-feedback  class="invalid-feedback" :state="!errorBrand">-->
                     <!--Vui lòng chọn thương hiệu-->
                   <!--</b-form-invalid-feedback>-->
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Cửa Hàng </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select :options="optionsStore" v-model="adminStore.store_id" v-on:change="changeStore()">
-                  </b-form-select>
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <select class="form-control" :options="optionsStore" v-model="adminStore.store_id" v-on:change="changeStore()">
+                  </select>
                   <!--<b-form-invalid-feedback  class="invalid-feedback" :state="!errorStore">-->
                     <!--Vui lòng chọn cửa hàng-->
                   <!--</b-form-invalid-feedback>-->
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+                </div>
+              </div>
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Mật Khẩu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="pasword"
                   type="password"
@@ -105,31 +105,31 @@
                   v-model="adminStore.password"
                   autocomplete="new-password"
                   maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPassword">
+                  <div :class="{'invalid-feedback d-block': errorPassword}">
                     Vui lòng nhập mật khẩu
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorLengthPassword">
+                  </div>
+                  <div :class="{'invalid-feedback d-block': errorLengthPassword}">
                     Mật khẩu phải ít nhất 6 kí tự
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="mt-3">
-                <b-col cols="6">
-                  <b-button variant="secondary" class="pull-left px-4" @click="back">
+              <div class="mt-3">
+                <div cols="6">
+                  <button class="btn btn-secondary pull-left px-4" @click="back">
                     Quay lại
-                  </b-button>
-                </b-col>
-                <b-col cols="6">
+                  </button>
+                </div>
+                <div cols="6">
                   <button class="btn btn-primary pull-left px-4 default-btn-bg" :disabled="saving" @click="save">
                       Lưu
                   </button>
-                </b-col>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -189,7 +189,7 @@ export default {
     //   return false
     // },
     errorPassword: function () {
-      if(!this.$route.params.id) {
+      if(!this.route.params.id) {
         return this.checkInfo(this.adminStore.password)
       }
       return false
@@ -215,12 +215,8 @@ export default {
    * Make toast without title
    */
   popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+    this.toast(content, variant === 'danger' ? 'error' : variant)
   },
 
     /**
@@ -243,7 +239,7 @@ export default {
      * Get detail
      */
     getAdminStoreDetail() {
-      let AdminStoreId = this.$route.params.id
+      let AdminStoreId = this.route.params.id
       if(AdminStoreId){
         superAdminAPI.getAdminStoreDetail(AdminStoreId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -264,7 +260,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {
-        let adminStoreId = this.$route.params.id
+        let adminStoreId = this.route.params.id
         if(adminStoreId){
           // Edit
           let adminStore = this.adminStore
@@ -281,7 +277,7 @@ export default {
                   size: 'sm',
                   headerClass: 'bg-success',
                 }).then(res => {
-                  this.$router.push("/admin-store/list")
+                  this.router.push("/admin-store/list")
                 })
               }
             }
@@ -316,7 +312,7 @@ export default {
                   size: 'sm',
                   headerClass: 'bg-success',
                 }).then(res => {
-                  this.$router.push("/admin-store/list")
+                  this.router.push("/admin-store/list")
                 })
               }
             }
@@ -391,7 +387,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/admin-store/list")
+      this.router.push("/admin-store/list")
     }
   }
 }

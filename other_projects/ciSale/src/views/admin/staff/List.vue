@@ -1,25 +1,25 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="gotoAdd()">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-1 text-center text-header">NHÂN VIÊN</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-            <b-row class="form-row">
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Tên </label>
                 <input
                 id="name"
@@ -28,8 +28,8 @@
                 autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.name">
-              </b-col>
-              <b-col md="3">
+              </div>
+              <div class="w-full md:w-1/4 px-2">
                 <label> Số Điện Thoại </label>
                 <input
                 id="phone"
@@ -39,93 +39,103 @@
                 class="form-control"
                 v-model="inputs.phone"
                 @keyup="integerOnly($event.target)">
-              </b-col>
-              <b-col md="3">
+              </div>
+              <div class="w-full md:w-1/4 px-2">
                 <label> Quyền </label>
-                <b-form-select
+                <select
                 id="permision"
-                :options="roleOptions"
                 type="text"
                 autocomplete="new-password"
                 class="form-control"
-                v-model="inputs.role"></b-form-select>
-              </b-col>
+                v-model="inputs.role">
+                  <option v-for="option in roleOptions" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-1/4 px-2">
                   <label class="label-width text-white">
                      Xem
                   </label>
-                  <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
+                  <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
                     Tìm Kiếm
-                  </b-button>
-              </b-col>
-            </b-row>
+                  </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-            <b-list-group horizontal v-if="isRoot">
-              <b-list-group-item v-b-tooltip.hover title="Reset password" @click="showModalConfirmResetPass(dataId.item)">
-                <i class="fa fa-refresh" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th v-for="field in fields" :key="field.key" :class="field.class">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index">
+                <td>{{ item.stt }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.role_name }}</td>
+                <td>{{ item.created_at }}</td>
+                <td class="actions-cell">
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-link" title="Edit" @click="edit(item.id)">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button type="button" class="btn btn-sm btn-link" title="Delete" @click="deleted(item.id, item.name, item.stt)">
+                      <i class="fa fa-trash" />
+                    </button>
+                    <button v-if="isRoot" type="button" class="btn btn-sm btn-link" title="Reset password" @click="showModalConfirmResetPass(item)">
+                      <i class="fa fa-refresh" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal xác nhận reset pass -->
-    <b-modal centered hide-footer hide-header id="modal-confirm-reset-pass">
-      <b-row>
-        <b-col>
+    <div centered hide-footer hide-header id="modal-confirm-reset-pass">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h5 class="text-center text-header">Reset password</h5>
           <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
           <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row>
-        <b-col class="text-center mt-3" v-show="!resetting">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2 text-center mt-3" v-show="!resetting">
           <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
             Đóng
           </button>
           <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
             Xác nhận
           </button>
-        </b-col>
-        <b-col v-show="resetting">
+        </div>
+        <div class="w-full px-2" v-show="resetting">
           <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -134,9 +144,16 @@ import adminAPI from '@/api/admin'
 import staffAPI from '@/api/staff'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore
+    }
+  },
   data () {
     return {
       roleOptions:[],
@@ -194,7 +211,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$store.state && this.$store.state.user && this.$store.state.user.isRoot) {
+    if(this.authStore.user && this.authStore.user.isRoot) {
       this.isRoot = true
     }
 
@@ -326,7 +343,7 @@ export default {
         "name": this.inputs.name,
         "phone_number": this.inputs.phone,
         "role_id": this.inputs.role,
-        "store_name": "store ".concat(this.$store.state.user.storeId),
+        "store_name": "store ".concat(this.authStore.user.storeId),
         "limit": this.pageLimit,
         "offset": this.offset
       }

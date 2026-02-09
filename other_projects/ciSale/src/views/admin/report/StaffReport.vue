@@ -1,18 +1,18 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="text-center text-header">BÁO CÁO THEO NHÂN VIÊN</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
+          <div class="flex flex-wrap -mx-2">
 
-            <b-col md="7">
+            <div class="w-full md:w-7/12 px-2">
               <label>
                 Thời gian:
               </label>
@@ -36,50 +36,52 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
                 </div>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label>
                 Sắp xếp theo:
               </label>
-              <b-form-select
-              :options="orderByOption"
+              <select
               id="status"
               type="text"
               autocomplete="new-password"
               class="form-control"
               v-model="inputs.orderBy">
-              </b-form-select>
-            </b-col>
+                <option v-for="option in orderByOption" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
 
-            <b-col md="2">
+            <div class="w-full md:w-2/12 px-2">
               <label class="label-width text-white">
                  Xem
               </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                 Xem
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
 
-        <b-card >
+        <div class="card">
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <b-row v-show="firstSearch == false && items.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4">
+          <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && items.length > 0">
+            <div class="w-full px-2">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-1/3 px-2">
                   Số kết quả: {{items.length}}
-                </b-col>
-                <b-col md="8" class="text-right">
+                </div>
+                <div class="w-full md:w-2/3 px-2 text-right">
                   <download-excel
                     class   = "btn btn-default text-header"
                     :data   = "items"
@@ -88,10 +90,10 @@
                     name    = "bao_cao_theo_nhan_vien.xls">
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                       <tr>
@@ -113,20 +115,20 @@
                     </tbody>
                   </table>
 
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-row v-show="firstSearch == false && items.length == 0">
-            <b-col class="text-center">
+          <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && items.length == 0">
+            <div class="w-full px-2 text-center">
               Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
-        </b-card>
+            </div>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -134,13 +136,13 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-
-Vue.component('downloadExcel', JsonExcel)
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   components: {
   },
   data () {
@@ -185,42 +187,32 @@ export default {
     this.search()
   },
   methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Check valid from date and to date
      */
     checkFromDateAndToDate() {
       if(this.inputs.fromDate == "" || this.inputs.fromDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục từ ngày không đúng")
+        this.toast("Mục từ ngày không đúng", 'error')
         return false
       }
       if(this.inputs.toDate == "" || this.inputs.toDate == null || commonFunc.dateFormatCheck(this.inputs.fromDate) == false) {
-        this.popToast('danger', "Mục đến ngày không đúng")
+        this.toast("Mục đến ngày không đúng", 'error')
         return false
       }
       let fromDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.fromDate))
       let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        this.toast("Từ ngày không thể lớn hớn đến ngày", 'error')
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
 
       if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+        this.toast("Thời gian không quá 62 ngày", 'error')
         return false
       }
 
@@ -280,7 +272,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
 
         this.firstSearch = false
         this.onSearch = false

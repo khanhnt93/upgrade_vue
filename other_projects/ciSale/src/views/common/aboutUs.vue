@@ -1,38 +1,37 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-form>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-              <b-row class="form-row">
-                <b-col md='12'>
+              <div class="form-row">
+                <div md='12'>
                   <h4 class="text-center text-header">Giới thiệu</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
 
-              <b-row class="form-row">
-                <b-col md='12'>
+              <div class="form-row">
+                <div md='12'>
                   <img src="/static/img/project/logo.png" class="imageLogo"/>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <br>
 
-              <b-row>
-                <b-col md="12">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-12 px-2">
                   <p><b>-	OrderWay là ứng dụng giải pháp nhà hàng trực tuyến thay thế cho ứng dụng nhà hàng truyền thống.</b></p>
                   <p><b>-	POS, app nhân viên, app quản lý được thay thế bằng 1 ứng dụng duy nhất.</b></p>
                   <p><b>-	Với công nghệ hiện đại trong web app, OrderWay đem đến trải nghiệm nhanh như app nhưng vẫn chạy tốt trên mọi nền tảng, mọi hệ điều hành.</b></p>
                   <p><b>-	Không chỉ là công nghệ, OrderWay còn cung cấp các giải pháp tiện ích, đem lại cho bạn lợi thế lớn về quản lý và chăm sóc khách hàng.</b></p>
                   <br>
 
-                  <b-row class="form-row">
-                    <b-col md='12'>
+                  <div class="form-row">
+                    <div md='12'>
                       <img src="/static/img/project/functions.png" class="imageLogo"/>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
 
 
@@ -53,24 +52,23 @@
                   <br>
                   <p><b>Và rất nhiều tiện ích khác đang được đội ngũ phát triển, tích hợp miễn phí vào orderway.vn trong thời gian tới</b></p>
 
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <br>
 
-              <b-row>
-                <b-col>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <p class="text-header">
                     <b>Nhanh tay click qua menu "liên hệ", liên hệ với chúng tôi để được tư vấn dịch vụ, dùng thử
                       sản phẩm miễn phí.</b>
                   </p>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              </b-form>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

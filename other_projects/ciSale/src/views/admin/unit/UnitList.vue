@@ -1,55 +1,76 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="px-2 w-full">
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="px-2 w-full">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="goToAdd()">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="px-2 w-full">
               <h4 class="mt-2 text-center">Đơn vị</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-table
-          hover
-          bordered
-          :fields="fields"
-          :items="items"
-          >
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên</th>
+                  <th class="actions-cell"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in items" :key="item.id">
+                  <td>{{ item.stt }}</td>
+                  <td>{{ item.name }}</td>
+                  <td class="actions-cell">
+                    <div class="flex">
+                      <button class="btn btn-sm btn-outline-primary mr-1" title="Edit" @click="edit(item.id)">
+                        <i class="fa fa-edit" />
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" title="Delete" @click="deleted(item.id, item.name, item.stt)">
+                        <i class="fa fa-trash" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+
+    return {
+      toast,
+      router
+    }
+  },
   data () {
     return {
       fields: [
@@ -86,7 +107,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
         variant: variant,
@@ -111,7 +132,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -122,25 +143,18 @@ export default {
      * @param rowIndex
      */
     deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          unitAPI.deleteUnit(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
+      if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+        unitAPI.deleteUnit(id).then(res => {
+          // Remove item in list
+          let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+          this.items.splice(indexTemp, 1)
+          this.listIdDeleted.push(rowIndex - 1)
+        }).catch(err => {
+          // Handle error
+          let errorMess = commonFunc.handleStaffError(err)
+          this.popToast('error', errorMess)
+        })
+      }
     },
 
     /**
@@ -148,14 +162,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/unit/index/' + id)
+      this.router.push('/unit/index/' + id)
     },
 
     /**
      * Go to add
      */
     goToAdd () {
-      this.$router.push('/unit/index/')
+      this.router.push('/unit/index/')
     }
   }
 }

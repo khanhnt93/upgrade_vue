@@ -1,19 +1,19 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-1 text-center text-header">Lịch Sử Kho Hàng</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row class="form-row">
+          <div class="flex flex-wrap -mx-2 form-row">
 
-            <b-col md="2">
+            <div class="w-full md:w-1/6 px-2">
               <label> Nhóm SP </label>
               <multiselect
                 v-model="productGroupSelect"
@@ -24,9 +24,9 @@
                 track-by="name"
                 @input="changeProductGroup">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="2">
+            <div class="w-full md:w-1/6 px-2">
               <label> Loại SP </label>
               <multiselect
                 v-model="productTypeSelect"
@@ -36,46 +36,46 @@
                 label="name"
                 track-by="name">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="2">
+            <div class="w-full md:w-1/6 px-2">
               <label> Loại hoạt động </label>
-              <b-form-select
+              <select
                 id="type"
                 :options="typeOptions"
                 type="text"
                 autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.type_id"></b-form-select>
-            </b-col>
+                class="form-select"
+                v-model="inputs.type_id"></select>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Từ ngày </label>
               <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Đến ngày </label>
               <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-          </b-row>
+          </div>
 
-          <b-row>
-            <b-col md="12">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <label class="label-width text-white">
                 Xem
               </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="12">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
               <download-excel
                 class   = "btn btn-default text-header btn-width-120 pull-right"
@@ -85,37 +85,48 @@
                 name    = "Sản phẩm trong kho">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-            <template v-slot:cell(price)="data">
-                {{currencyFormat(data.item.price)}}
-              </template>
-              <template v-slot:cell(amount)="data">
-                {{currencyFormat(data.item.amount)}}
-              </template>
-              <template v-slot:cell(quantity)="data">
-                {{currencyFormat(data.item.quantity)}}
-              </template>
-            <template v-slot:cell(properties)="data">
-              <p v-for="(pro) in data.item.properties" :key="pro.name">
-                + {{pro.name}}: {{pro.value}}
-              </p>
-            </template>
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td v-for="field in fields" :key="field.key">
+                    <template v-if="field.key === 'price'">
+                      {{currencyFormat(item.price)}}
+                    </template>
+                    <template v-else-if="field.key === 'amount'">
+                      {{currencyFormat(item.amount)}}
+                    </template>
+                    <template v-else-if="field.key === 'quantity'">
+                      {{currencyFormat(item.quantity)}}
+                    </template>
+                    <template v-else-if="field.key === 'properties'">
+                      <p v-for="(pro) in item.properties" :key="pro.name">
+                        + {{pro.name}}: {{pro.value}}
+                      </p>
+                    </template>
+                    <template v-else>
+                      {{ item[field.key] }}
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -123,14 +134,19 @@ import tradeApi from '@/api/trade'
 import repositoryApi from '@/api/repository'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Multiselect from 'vue-multiselect'
-Vue.component('downloadExcel', JsonExcel)
+
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -242,12 +258,7 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**

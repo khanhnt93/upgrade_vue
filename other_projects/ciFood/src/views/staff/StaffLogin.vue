@@ -2,7 +2,7 @@
   <div class="app flex items-center justify-center is-fixed-page bg-gray-100">
     <div class="container-fluid mx-auto px-4">
       <div class="flex justify-center">
-        <div class="w-full">
+        <div>
           <div class="bg-white rounded-lg shadow-lg">
             <div class="p-6">
               <form @submit.prevent="logIn">

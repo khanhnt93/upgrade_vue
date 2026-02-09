@@ -1,100 +1,102 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-              <b-button variant="outline-danger" class="pull-right btn-width-160 ml-2" @click="minusMoney">
-                Thêm khoản chi
-              </b-button>
-              <b-button variant="outline-success" class="pull-right btn-width-160 ml-2" @click="plusMoney">
-                Thêm khoản thu
-              </b-button>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-danger float-right btn-width-160 ml-2" @click="minusMoney">
+                  Thêm khoản chi
+                </button>
+                <button class="btn btn-outline-success float-right btn-width-160 ml-2" @click="plusMoney">
+                  Thêm khoản thu
+                </button>
 
-            </b-col>
-          </b-row>
-          <h2 class="text-center text-header">Báo Cáo Quỹ</h2>
+              </div>
+            </div>
+            <h2 class="text-center text-header">Báo Cáo Quỹ</h2>
 
-          <b-row>
-            <b-col>
-              <h1 :class="fund_class" class="text-center">{{fund | format_currency}}đ</h1>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h1 :class="[fund_class, 'text-center']" >{{formatCurrency(fund)}}đ</h1>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="4">
-              <p>Tiền mặt: {{cash | format_currency}}đ</p>
-            </b-col>
-            <b-col md="4">
-              <p>Tài khoản NH: {{credit | format_currency}}đ</p>
-            </b-col>
-            <b-col md="4">
-              <p>Tiền điện tử: {{e_money | format_currency}}đ</p>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                <p>Tiền mặt: {{formatCurrency(cash)}}đ</p>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <p>Tài khoản NH: {{formatCurrency(credit)}}đ</p>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <p>Tiền điện tử: {{formatCurrency(e_money)}}đ</p>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="4">
-              <p>Nợ công (Nợ phải trả) sắp tới: <span class="text-danger">{{public_debt | format_currency}}đ</span></p>
-            </b-col>
-            <b-col md="4">
-              <p>Công nợ (Nợ cần thu hồi) sắp tới: <span class="text-success">{{debit | format_currency}}đ</span></p>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <p>Nợ công (Nợ phải trả) sắp tới: <span class="text-danger">{{formatCurrency(public_debt)}}đ</span></p>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <p>Công nợ (Nợ cần thu hồi) sắp tới: <span class="text-success">{{formatCurrency(debit)}}đ</span></p>
+              </div>
+            </div>
 
+          </div>
+        </div>
 
-        </b-card>
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h3 class="text-header text-center">Lịch Sử Quỹ</h3>
+              </div>
+            </div>
 
-      <b-card>
-        <b-row>
-          <b-col>
-            <h3 class="text-header text-center">Lịch Sử Quỹ</h3>
-          </b-col>
-        </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                <label> Từ ngày </label>
+                <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
+                            placeholder="yyyy-mm-dd" input-class="datepicker-cus" ></datepicker>
+              </div>
 
-          <b-row>
-            <b-col md="4">
-              <label> Từ ngày </label>
-              <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
-                          placeholder="yyyy-mm-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+              <div class="w-full md:w-1/3 px-2">
+                <label> Đến ngày </label>
+                <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <label class="label-width text-white">
+                   Xem
+                </label>
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="getFundHistory">
+                  Xem
+                </button>
+              </div>
+            </div>
 
-            <b-col md="4">
-              <label> Đến ngày </label>
-              <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-            </b-col>
-            <b-col md="4">
-              <label class="label-width text-white">
-                 Xem
-              </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="getFundHistory">
-                Xem
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
 
-        <b-row>
-            <b-col md="12">
-              <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
-
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Lịch sử quỹ"
-                name    = "Lịch sử quỹ">
-                <b>Xuất Excel</b>
-              </download-excel>
-            </b-col>
-          </b-row>
+                <download-excel
+                  class   = "btn btn-default text-header btn-width-120 pull-right"
+                  :data   = "items"
+                  :fields = "excel_fields"
+                  worksheet = "Lịch sử quỹ"
+                  name    = "Lịch sử quỹ">
+                  <b>Xuất Excel</b>
+                </download-excel>
+              </div>
+            </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
 
-          <b-card-body class="p-4">
-            <b-row>
-              <b-col md="12">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <table class="table table-bordered table-striped fixed_header">
                   <thead>
                     <tr>
@@ -113,11 +115,11 @@
                   <tbody>
                     <tr>
                       <td class="total text-center font-weight-bold text-header" :colspan="3">Tổng</td>
-                      <td class="text-right total font-weight-bold text-header">{{total_plus | format_currency}}đ</td>
-                      <td class="text-right total font-weight-bold text-header">{{total_minus | format_currency}}đ</td>
-                      <td class="text-right total font-weight-bold text-header">{{total_cash | format_currency}}đ</td>
-                      <td class="text-right total font-weight-bold text-header">{{total_credit | format_currency}}đ</td>
-                      <td class="text-right total font-weight-bold text-header">{{total_e_money | format_currency}}đ</td>
+                      <td class="text-right total font-weight-bold text-header">{{formatCurrency(total_plus)}}đ</td>
+                      <td class="text-right total font-weight-bold text-header">{{formatCurrency(total_minus)}}đ</td>
+                      <td class="text-right total font-weight-bold text-header">{{formatCurrency(total_cash)}}đ</td>
+                      <td class="text-right total font-weight-bold text-header">{{formatCurrency(total_credit)}}đ</td>
+                      <td class="text-right total font-weight-bold text-header">{{formatCurrency(total_e_money)}}đ</td>
                       <td></td>
                       <td></td>
                     </tr>
@@ -125,130 +127,183 @@
                       <td>{{item.stt}}</td>
                       <td>{{item.created_at}}</td>
                       <td>{{item.type_str}}</td>
-                      <td class="text-right">{{handleAmountPlus(item.type, item.amount) | format_currency}}đ</td>
-                      <td class="text-right">{{handleAmountMinus(item.type, item.amount) | format_currency}}đ</td>
-                      <td class="text-right">{{item.cash | format_currency}}đ</td>
-                      <td class="text-right">{{item.credit | format_currency}}đ</td>
-                      <td class="text-right">{{item.e_money | format_currency}}đ</td>
-                      <td class="text-right">{{item.fund | format_currency}}đ</td>
+                      <td class="text-right">{{formatCurrency(handleAmountPlus(item.type, item.amount))}}đ</td>
+                      <td class="text-right">{{formatCurrency(handleAmountMinus(item.type, item.amount))}}đ</td>
+                      <td class="text-right">{{formatCurrency(item.cash)}}đ</td>
+                      <td class="text-right">{{formatCurrency(item.credit)}}đ</td>
+                      <td class="text-right">{{formatCurrency(item.e_money)}}đ</td>
+                      <td class="text-right">{{formatCurrency(item.fund)}}đ</td>
                       <td>{{item.note}}</td>
                     </tr>
 
                   </tbody>
                 </table>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- Modal plus/minus money-->
-    <b-modal :title="modalTitle" centered hide-footer id="modal-change-money">
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>{{moneyNumber}}</label><span class="error-sybol"></span>
-            <input
-              v-model="fundUpdate.total"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              maxlength="11"
-              @keyup="integerOnly($event.target)"
-            @change="changeCurrency($event.target)">
+    <TransitionRoot appear :show="modalChangeMoney" as="template">
+      <Dialog as="div" @close="cancelChangeMoney" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h5" class="text-center">
+                  {{modalTitle}}
+                </DialogTitle>
+                <hr class="my-3">
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <div class="form-group">
+                      <label>{{moneyNumber}}</label><span class="error-sybol"></span>
+                      <input
+                        v-model="fundUpdate.total"
+                        type="text"
+                        autocomplete="new-password"
+                        class="form-control"
+                        maxlength="11"
+                        @keyup="integerOnly($event.target)"
+                      @change="changeCurrency($event.target)">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <div class="form-group">
+                      <label>{{moneyContent}}</label><span class="error-sybol"></span>
+                      <textarea
+                        rows="5"
+                        class="form-control"
+                        v-model="fundUpdate.note">
+                      </textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <div class="flex flex-wrap -mx-2 mt-2">
+                      <div class="w-full px-2">
+                        <label>Tiền mặt</label>
+                        <input
+                          type="text"
+                          autocomplete="new-password"
+                          class="form-control"
+                          maxlength="14"
+                          v-model="fundUpdate.cash"
+                          @keyup="integerOnly($event.target)"
+                          @change="changeCash()">
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-2 mt-2">
+                      <div class="w-full px-2">
+                        <label>Chuyển khoản</label>
+                        <input
+                          type="text"
+                          autocomplete="new-password"
+                          class="form-control"
+                          maxlength="14"
+                          v-model="fundUpdate.credit"
+                          @keyup="integerOnly($event.target)"
+                          @change="changeCredit()">
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-2 mt-2">
+                      <div class="w-full px-2">
+                        <label>Tiền điện tử</label>
+                        <input
+                          type="text"
+                          autocomplete="new-password"
+                          class="form-control"
+                          maxlength="14"
+                          v-model="fundUpdate.e_money"
+                          @keyup="integerOnly($event.target)"
+                          @change="changeEMoney()">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/3 px-2 text-left mt-3">
+                    <button class="btn btn-danger px-4" @click="cancelChangeMoney">
+                      Hủy
+                    </button>
+                  </div>
+                  <div class="w-full md:w-2/3 px-2 text-right mt-3">
+                    <button class="btn btn-primary px-4 default-btn-bg" @click="confirmChangeMoney" :disabled="saving">
+                      Xác nhận
+                    </button>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
           </div>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>{{moneyContent}}</label><span class="error-sybol"></span>
-            <b-form-textarea
-              rows="5"
-              v-model="fundUpdate.note">
-            </b-form-textarea>
-          </div>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <b-row content-class="mt-2">
-            <b-col md="12">
-              <label>Tiền mặt</label>
-              <input
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="14"
-                v-model="fundUpdate.cash"
-                @keyup="integerOnly($event.target)"
-                @change="changeCash()">
-            </b-col>
-          </b-row>
-
-          <b-row content-class="mt-2">
-            <b-col md="12">
-              <label>Chuyển khoản</label>
-              <input
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="14"
-                v-model="fundUpdate.credit"
-                @keyup="integerOnly($event.target)"
-                @change="changeCredit()">
-            </b-col>
-          </b-row>
-
-          <b-row content-class="mt-2">
-            <b-col md="12">
-              <label>Tiền điện tử</label>
-              <input
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="14"
-                v-model="fundUpdate.e_money"
-                @keyup="integerOnly($event.target)"
-                @change="changeEMoney()">
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="4" class="text-left mt-3">
-          <button class="btn btn-danger px-4" @click="cancelChangeMoney">
-            Hủy
-          </button>
-        </b-col>
-        <b-col cols="8" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="confirmChangeMoney" :disabled="saving">
-            Xác nhận
-          </button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
 
 <script>
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import fundAPI from "@/api/fund";
 import commonFunc from "@/common/commonFunc";
-import Datepicker from 'vuejs-datepicker'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+
 
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild,
     Datepicker
+  },
+  setup() {
+    const { toast } = useToast()
+    const { formatCurrency, currencyFormat } = useFormatters()
+
+    return {
+      toast,
+      formatCurrency,
+      currencyFormat
+    }
   },
   data() {
     return {
@@ -294,6 +349,7 @@ export default {
         e_money: 0
       },
       saving: false,
+      modalChangeMoney: false,
     };
   },
   computed: {
@@ -323,12 +379,7 @@ export default {
       return !(this.errorFromDate || this.errorToDate)
     },
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
+      this.toast(content, variant)
     },
 
     /**
@@ -356,7 +407,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -385,7 +436,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -433,7 +484,7 @@ export default {
       this.moneyNumber = "Số tiền thêm"
       this.moneyContent = "Nội dung thêm"
       this.fundUpdate.type = 0
-      this.$bvModal.show('modal-change-money')
+      this.modalChangeMoney = true
     },
 
     /**
@@ -445,7 +496,7 @@ export default {
       this.moneyNumber = "Số tiền chi"
       this.moneyContent = "Nội dung chi"
       this.fundUpdate.type = 1
-      this.$bvModal.show('modal-change-money')
+      this.modalChangeMoney = true
     },
 
     /**
@@ -502,7 +553,7 @@ export default {
      * Cancel change money
      */
     cancelChangeMoney() {
-      this.$bvModal.hide('modal-change-money')
+      this.modalChangeMoney = false
     },
     /**
      * Reset modal
@@ -517,7 +568,7 @@ export default {
       this.fundUpdate.cash = 0
       this.fundUpdate.credit = 0
       this.fundUpdate.e_money = 0
-      this.$bvModal.hide('modal-change-money')
+      this.modalChangeMoney = false
     },
 
     /**
@@ -526,11 +577,11 @@ export default {
     confirmChangeMoney() {
       // Check validate
       if(!this.fundUpdate.total) {
-        this.popToast('danger', "Vui lòng nhập số tiền")
+        this.popToast('error', "Vui lòng nhập số tiền")
         return
       }
       if(!this.fundUpdate.note) {
-        this.popToast('danger', "Vui lòng nhập nội dung")
+        this.popToast('error', "Vui lòng nhập nội dung")
         return
       }
 
@@ -538,7 +589,7 @@ export default {
           parseInt((this.fundUpdate.cash + '').replaceAll(",", ""))
           + parseInt((this.fundUpdate.credit + '').replaceAll(",", ""))
           + parseInt((this.fundUpdate.e_money + '').replaceAll(",", ""))) {
-        this.popToast('danger', "Tổng loại tiền phải bằng số tiền nhập")
+        this.popToast('error', "Tổng loại tiền phải bằng số tiền nhập")
         return
       }
       this.fundUpdate.total = (this.fundUpdate.total +'').replaceAll(",", "")
@@ -564,7 +615,7 @@ export default {
           this.saving = false
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
     },
 

@@ -1,19 +1,19 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="text-center text-header">BÁO CÁO BÁN HÀNG</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-3 px-2">
                 <label> Cửa hàng </label>
-                <b-form-select
+                <select
                   :options="optionsStore"
                   id="status"
                   type="text"
@@ -21,14 +21,14 @@
                   class="form-control"
                   v-model="inputs.store_id"
                   :disabled="onSearch">
-                </b-form-select>
-              </b-col>
+                </select>
+              </div>
 
-            <b-col md="2">
+            <div class="w-full md:w-2 px-2">
               <label>
                 Báo cáo theo:
               </label>
-              <b-form-select
+              <select
               :options="reportByOption"
               id="status"
               type="text"
@@ -36,10 +36,10 @@
               class="form-control"
               v-model="inputs.reportBy"
               @change="changeReportBy">
-              </b-form-select>
-            </b-col>
+              </select>
+            </div>
 
-            <b-col md="4">
+            <div class="w-full md:w-4 px-2">
               <label>
                 Thời gian:
               </label>
@@ -63,49 +63,49 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
                 </div>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-3 px-2">
               <label>
                 Sắp xếp theo:
               </label>
-              <b-form-select
+              <select
               :options="orderByOption"
               id="status"
               type="text"
               autocomplete="new-password"
               class="form-control"
               v-model="inputs.orderBy">
-              </b-form-select>
-            </b-col>
-          </b-row>
+              </select>
+            </div>
+          </div>
 
-          <b-row class="mt-2">
-            <b-col>
-              <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
+          <div class="mt-2">
+            <div class="w-full px-2">
+              <button class="btn btn-primary pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
                 Xem
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row v-show="inputs.reportBy == 'bill'" >
-      <b-col>
+    <div v-show="inputs.reportBy == 'bill'" >
+      <div class="w-full px-2">
 
-        <b-card >
+        <div class="card">
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <b-row v-show="firstSearch == false && bills.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4">
+          <div v-show="firstSearch == false && bills.length > 0">
+            <div class="w-full px-2">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-4 px-2">
                   Số kết quả: {{bills.length}}
-                </b-col>
-                <b-col md="8" class="text-right">
+                </div>
+                <div md="8" class="text-right">
                   <download-excel
                     class   = "btn btn-default text-header"
                     :data   = "bills"
@@ -114,10 +114,10 @@
                     name    = "filename.xls">
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                       <tr>
@@ -174,35 +174,35 @@
                     </tbody>
                   </table>
 
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-row v-show="firstSearch == false && bills.length == 0">
-            <b-col class="text-center">
+          <div v-show="firstSearch == false && bills.length == 0">
+            <div class="text-center">
               Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
-        </b-card>
+            </div>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row v-show="inputs.reportBy == 'food'" >
-      <b-col>
-        <b-card>
+    <div v-show="inputs.reportBy == 'food'" >
+      <div class="w-full px-2">
+        <div class="card">
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <b-row v-show="firstSearch == false && foods.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4">
+          <div v-show="firstSearch == false && foods.length > 0">
+            <div class="w-full px-2">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-4 px-2">
                   Số kết quả: {{foods.length}}
-                </b-col>
-                <b-col md="8" class="text-right">
+                </div>
+                <div md="8" class="text-right">
                   <download-excel
                     class   = "btn btn-default text-header"
                     :data   = "foods"
@@ -211,10 +211,10 @@
                     name    = "filename.xls">
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <table class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -258,21 +258,21 @@
                       </tr>
                     </tbody>
                   </table>
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-row v-show="firstSearch == false && foods.length == 0">
-            <b-col class="text-center">
+          <div v-show="firstSearch == false && foods.length == 0">
+            <div class="text-center">
               Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-        </b-card>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
 
   </div>
@@ -281,10 +281,10 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
 
-Vue.component('downloadExcel', JsonExcel)
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+
+
 
 
 export default {
@@ -369,12 +369,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     /**

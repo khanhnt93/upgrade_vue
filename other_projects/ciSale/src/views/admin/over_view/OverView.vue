@@ -1,207 +1,177 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
 
-        <b-card>
+        <div class="bg-white shadow rounded-lg p-4">
 
-            <b-row class="mb-2">
-              <b-col>
+            <div class="flex flex-wrap -mx-2 mb-2">
+              <div class="w-full px-2">
                 <h4 class="text-center text-header"><b>Hôm Nay</b></h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          <b-row>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(229 249 255)"
-                >
+          <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(229 249 255)">
                   <h5>Số bill</h5>
                   <div class="form-group">
                     <div class="input-group">
                       <i class="fa fa-clipboard" style="font-size:55px;color:#78B7D0;width:20%;"></i>
                       <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayBillNumber)}}</b>
+                        <b style="font-size:40px;">{{formatCurrency(todayBillNumber)}}</b>
                       </div>
                     </div>
                   </div>
-                </b-card>
-              </b-col>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(255 237 229)"
-                >
+                </div>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(255 237 229)">
                   <h5>Doanh thu</h5>
                   <div class="form-group">
                     <div class="input-group">
                       <i class="fa fa-plus" style="font-size:60px;color:#FFDBB5;width:20%;"></i>
                       <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayRevenue)}}</b>
+                        <b style="font-size:40px;">{{formatCurrency(todayRevenue)}}</b>
                       </div>
                     </div>
                   </div>
-                </b-card>
-              </b-col>
-              <b-col md="4">
-                <b-card
-                  border-variant="primary"
-                  align="center"
-                  style="background-color: rgb(234 229 255)"
-                >
+                </div>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(234 229 255)">
                   <h5>Lợi nhuận</h5>
                   <div class="form-group">
                     <div class="input-group">
                       <i class="fa fa-check" style="font-size:60px;color:#C8A1E0;width:20%;"></i>
                       <div class="text-center" style="width: 75%">
-                        <b style="font-size:40px;">{{currencyFormat(todayProfit)}}</b>
+                        <b style="font-size:40px;">{{formatCurrency(todayProfit)}}</b>
                       </div>
                     </div>
                   </div>
-                </b-card>
-              </b-col>
-            </b-row>
+                </div>
+              </div>
+            </div>
 
-        </b-card>
+        </div>
 
 
-        <b-card>
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
             <h4 class="text-center text-header"><b>Biểu Đồ Doanh Thu</b></h4>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <GChart
                   type="ColumnChart"
                   :data="chartRevenueData"
                   :options="chartOptions"
                 />
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col class="text-center">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
                 <a href="/chart-revenue">Xem nhiều hơn</a>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-        </b-card>
+        </div>
 
-        <b-card>
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
             <h4 class="text-center text-header"><b>Kho Hàng</b></h4>
 
-            <b-row>
-              <b-col md="3">
-                <b-card border-variant="secondary"
-                        header="Số Loại Sản Phẩm"
-                        header-border-variant="secondary"
-                        header-text-variant="secondary"
-                        align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-header">{{currencyFormat(repo.number_of_product)}}</h5>
-                  </b-card-text>
-                </b-card>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Số Loại Sản Phẩm</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.number_of_product)}}</h5>
+                  </div>
+                </div>
 
-              </b-col>
-              <b-col md="3">
-                <b-card border-variant="secondary"
-                        header="Tổng Tiền Mua"
-                        header-border-variant="secondary"
-                        header-text-variant="secondary"
-                        align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-header">{{currencyFormat(repo.total_price_buy)}}đ</h5>
-                  </b-card-text>
-                </b-card>
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Tổng Tiền Mua</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_buy)}}đ</h5>
+                  </div>
+                </div>
 
-              </b-col>
-              <b-col md="3">
-                <b-card border-variant="secondary"
-                        header="Tổng Tiền Bán (dự tính)"
-                        header-border-variant="secondary"
-                        header-text-variant="secondary"
-                        align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-header">{{currencyFormat(repo.total_price_sell)}}đ</h5>
-                  </b-card-text>
-                </b-card>
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Tổng Tiền Bán (dự tính)</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_sell)}}đ</h5>
+                  </div>
+                </div>
 
-              </b-col>
-              <b-col md="3">
-                <b-card border-variant="secondary"
-                        header="Lợi nhuận (dự tính)"
-                        header-border-variant="secondary"
-                        header-text-variant="secondary"
-                        align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-header">{{currencyFormat(repo.total_price_sell - repo.total_price_buy)}}đ</h5>
-                  </b-card-text>
-                </b-card>
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Lợi nhuận (dự tính)</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_sell - repo.total_price_buy)}}đ</h5>
+                  </div>
+                </div>
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col class="text-center">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
                 <a href="/repo-report">Xem nhiều hơn</a>
-              </b-col>
-            </b-row>
-        </b-card>
+              </div>
+            </div>
+        </div>
 
-        <b-card>
-          <b-card-body class="p-4">
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
+          <div class="p-4">
             <h4 class="text-center text-header"><b>Nợ công - Công nợ</b></h4>
 
-            <b-row>
-              <b-col md="6">
-                <b-card border-variant="success"
-                  header="Công nợ (Nợ cần thu hồi)"
-                  header-border-variant="success"
-                  header-text-variant="success"
-                  align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-success">Tổng công nợ: {{currencyFormat(debt_total)}}đ</h5>
-                    - Số lượng công nợ sắp đến hạn thu hồi: {{currencyFormat(debt_number)}}<br>
-                    - Tổng tiền công nợ sắp đến hạn thu hồi: <span class="text-success"><b>{{currencyFormat(debt_amount)}}đ</b></span>
-                  </b-card-text>
-                </b-card>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-success text-center">
+                  <div class="font-semibold text-success mb-2">Công nợ (Nợ cần thu hồi)</div>
+                  <div>
+                    <h5 class="text-center text-success">Tổng công nợ: {{formatCurrency(debt_total)}}đ</h5>
+                    - Số lượng công nợ sắp đến hạn thu hồi: {{formatCurrency(debt_number)}}<br>
+                    - Tổng tiền công nợ sắp đến hạn thu hồi: <span class="text-success"><b>{{formatCurrency(debt_amount)}}đ</b></span>
+                  </div>
+                </div>
 
-                <b-row>
-                  <b-col class="text-center">
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2 text-center">
                     <a href="/debt">Xem nhiều hơn</a>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-              </b-col>
-              <b-col md="6">
-                <b-card border-variant="danger"
-                  header="Nợ công (Nợ phải trả)"
-                  header-border-variant="danger"
-                  header-text-variant="danger"
-                  align="center">
-                  <b-card-text>
-                    <h5 class="text-center text-header">Tổng nợ công: {{currencyFormat(public_debt_total)}}đ</h5>
-                    - Số lượng nợ công sắp đến hạn trả: {{currencyFormat(public_debt_number)}}<br>
-                    - Tổng tiền nợ công sắp đến hạn trả: <span class="text-header"><b>{{currencyFormat(public_debt_amount)}}đ</b></span>
-                  </b-card-text>
-                </b-card>
+              </div>
+              <div class="w-full md:w-1/2 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-danger text-center">
+                  <div class="font-semibold text-danger mb-2">Nợ công (Nợ phải trả)</div>
+                  <div>
+                    <h5 class="text-center text-header">Tổng nợ công: {{formatCurrency(public_debt_total)}}đ</h5>
+                    - Số lượng nợ công sắp đến hạn trả: {{formatCurrency(public_debt_number)}}<br>
+                    - Tổng tiền nợ công sắp đến hạn trả: <span class="text-header"><b>{{formatCurrency(public_debt_amount)}}đ</b></span>
+                  </div>
+                </div>
 
-                <b-row>
-                  <b-col class="text-center">
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2 text-center">
                     <a href="/public-debt">Xem nhiều hơn</a>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -211,10 +181,17 @@
 import reportAPI from '@/api/report'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
   components: {
     GChart
+  },
+  setup() {
+    const { toast } = useToast()
+    const { formatCurrency } = useFormatters()
+    return { toast, formatCurrency }
   },
   data () {
     return {
@@ -273,13 +250,8 @@ export default {
     /**
    * Make toast without title
    */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    popToast(content, variant) {
+      this.toast(content, variant)
     },
 
     /**
@@ -347,7 +319,7 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
     },
 
@@ -391,7 +363,7 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
     },
 
@@ -408,7 +380,7 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
     },
 
@@ -431,24 +403,8 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num == 0) {
-          return 0
-        }
-      }
-      return result
     },
 
   }

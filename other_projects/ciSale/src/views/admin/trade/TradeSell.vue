@@ -1,35 +1,35 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="form-row">
+              <div md='12'>
                 <h4 class="mt-1 text-center text-header">Bán Hàng</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row class="form-row mt-2">
-              <b-col md="3" class="mt-2">
+            <div class="form-row mt-2">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>
                   <span>Từ đơn đặt hàng</span>
               </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <div class="input-group">
                   <multiselect
                     v-model="orderSelect"
@@ -41,29 +41,29 @@
                     @input="changeOrder">
                   </multiselect>
                 </div>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col md="12" class="bg-gray text-white title-partner">
+            <div class="mt-2">
+              <div class="w-full px-2 bg-gray text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin người mua</span>
                   <span class="pull-right" v-show="showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row v-show="showPartnerInfo">
-              <b-col>
+            <div v-show="showPartnerInfo">
+              <div class="w-full px-2">
 
-                <b-row class="form-row mt-2">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row mt-2">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>Khách hàng</span>
                   </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group" v-show="trade.from_type == 0">
                       <multiselect
                         v-model="customerSelect"
@@ -75,30 +75,30 @@
                         @input="changeCustomer">
                       </multiselect>
 
-                      <b-button variant="outline-primary" class="pull-right ml-2" @click="showModalSearchCustomer" >
+                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchCustomer" >
                         <i class="fa fa-search"></i>
-                      </b-button>
+                      </button>
 
-                      <b-button variant="outline-success" class="pull-right ml-2" @click="showModalAddCustomer" >
+                      <button class="btn btn-outline-success pull-right ml-2"  @click="showModalAddCustomer" >
                         <i class="fa fa-plus"></i>
-                      </b-button>
+                      </button>
 
-                      <b-button v-show="customerSelect.id" variant="outline-success" class="pull-right ml-2"
+                      <button class="btn pull-right ml-2" v-show="customerSelect.id" variant="outline-success"
                                 @click="updateCustomerInfo" >
                         <i class="fa fa-save"></i>
-                      </b-button>
+                      </button>
 
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>Tên khách hàng</span>
                   </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="customer_name"
                       type="text"
@@ -107,16 +107,16 @@
                       class="form-control"
                       v-model="trade.customer_name"
                       :disabled="saving">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>SĐT khách hàng</span>
                   </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="customer_phone"
                       type="text"
@@ -126,16 +126,16 @@
                       v-model="trade.customer_phone"
                       :disabled="saving"
                       @keyup="integerOnly($event.target)">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>Địa chỉ khách hàng</span>
                   </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="address"
                       type="text"
@@ -144,29 +144,29 @@
                       class="form-control"
                       v-model="trade.customer_address"
                       :disabled="saving">
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-info bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
                 <h5>
                   <span class="pull-left">Thông tin sản phẩm</span>
                   <span class="pull-right" v-show="showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row v-show="showProductInfo" class="mt-2">
-              <b-col md="12">
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+            <div v-show="showProductInfo" class="mt-2">
+              <div class="w-full px-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Sản phẩm</label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <div class="input-group">
                       <multiselect
                         v-model="productSelect"
@@ -178,18 +178,18 @@
                         @input="changeProduct">
                       </multiselect>
 
-                      <b-button variant="outline-primary" class="pull-right ml-2" @click="showModalSearchProduct" >
+                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchProduct" >
                         <i class="fa fa-search"></i>
-                      </b-button>
+                      </button>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row mt-2" v-show="currentProperties.length > 0">
-                  <b-col md="3">
+                <div class="form-row mt-2" v-show="currentProperties.length > 0">
+                  <div class="w-full md:w-1/4 px-2">
                     <label>Thuộc tính</label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <p v-for="(item) in currentProperties" :key="item.name">
                       <label :for="item.name">{{ item.name }}:
                         <span v-for="(value, index) in item.value" :key="value">
@@ -199,14 +199,14 @@
                         </span>
                     </label>
                     </p>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đơn giá nhập</label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <div class="input-group">
                       <input
                         v-show="isShowPriceBuy"
@@ -226,19 +226,19 @@
                         class="form-control"
                         value="****"
                         readonly>
-                      <b-button variant="outline-primary" class="pull-right ml-2" @click="isShowPriceBuy = !isShowPriceBuy" >
+                      <button class="btn btn-outline-primary pull-right ml-2"  @click="isShowPriceBuy = !isShowPriceBuy" >
                         <i v-show="!isShowPriceBuy" class="fa fa-eye" aria-hidden="true" title="Xem giá nhập"></i>
                         <i v-show="isShowPriceBuy" class="fa fa-eye-slash" aria-hidden="true" title="Đóng giá nhập"></i>
-                      </b-button>
+                      </button>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đơn giá bán</label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                       <input
                         id="price_sell"
                         type="text"
@@ -247,14 +247,14 @@
                         class="form-control"
                         v-model="currentProduct.price_sell"
                       @change="changePriceSell">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số lượng trong kho {{unit_name}}</label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="quantity_repo"
                       type="text"
@@ -264,14 +264,14 @@
                       v-model="currentProduct.quantity_repo"
                       readonly
                     >
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số lượng bán {{unit_name}}</label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="quantity"
                       type="text"
@@ -280,24 +280,24 @@
                       class="form-control"
                       v-model="currentProduct.quantity"
                     @change="changeQuantity">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="mt-2">
-                  <b-col md="12" class="text-center">
-                    <b-button variant="outline-primary" class="text-center btn-width-120" @click="confirmBuyProduct">
+                <div class="mt-2">
+                  <div class="w-full px-2 text-center" >
+                    <button class="btn btn-outline-primary text-center btn-width-120"  @click="confirmBuyProduct">
                       Xác nhận
-                    </b-button>
-                  </b-col>
-                </b-row>
+                    </button>
+                  </div>
+                </div>
 
-                <b-row v-show="trade.products.length > 0" class="mt-2">
-                  <b-col md="12">
+                <div v-show="trade.products.length > 0" class="mt-2">
+                  <div class="w-full px-2">
                     <h5>Danh sách sản phẩm đang bán</h5>
-                  </b-col>
-                </b-row>
-                <b-row class="mt-2" v-show="trade.products.length > 0" >
-                  <b-col md="12">
+                  </div>
+                </div>
+                <div class="mt-2" v-show="trade.products.length > 0" >
+                  <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                     <tr>
@@ -326,29 +326,29 @@
                     </tr>
                     </tbody>
                   </table>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-success bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                   <span class="pull-right" v-show="showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2" v-show="showPaymentInfo">
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+            <div class="mt-2" v-show="showPaymentInfo">
+              <div class="w-full px-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Tổng tiền sản phẩm </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                       id="sub_total"
                       type="text"
@@ -357,14 +357,14 @@
                       class="form-control"
                       v-model="trade.sub_total"
                       readonly>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="trade.order_id && trade.amount_paid_on_order">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="trade.order_id && trade.amount_paid_on_order">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đã thanh toán khi đặt hàng </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="amount_paid_on_order"
                       type="text"
@@ -373,14 +373,14 @@
                       class="form-control"
                       v-model="trade.amount_paid_on_order"
                       readonly>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Chi phí thêm </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                       id="extra_fee"
                       type="text"
@@ -389,14 +389,14 @@
                       class="form-control"
                       v-model="trade.extra_fee"
                       @change="calculateAmount">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số tiền giảm</label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                       id="fixed_discount"
                       type="text"
@@ -405,14 +405,14 @@
                       class="form-control"
                       v-model="trade.fixed_discount"
                       @change="calculateAmount">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Khuyến mãi</label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <div class="input-group">
                       <input
                         id="pmt"
@@ -423,9 +423,9 @@
                         v-model="trade.discount_amount"
                         readonly disabled
                       >
-                      <b-button variant="outline-success" class="pull-right ml-2" @click="showModalApplyPmt" >
+                      <button class="btn btn-outline-success pull-right ml-2"  @click="showModalApplyPmt" >
                         <i class="fa fa-plus"></i>
-                      </b-button>
+                      </button>
                     </div>
 
                     <div class="input-group" v-show="trade.promotions.length > 0">
@@ -435,14 +435,14 @@
                         <i v-show="pmt.method != 'auto'" class="fa fa-trash" @click="deletePromotion(pmt.id)"/>
                       </p>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Thuế VAT </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <div class="input-group">
                       <input type="checkbox" id="have_vat" v-model="trade.have_vat" class="mr-2" @change="calculateAmount">
                       <input
@@ -463,14 +463,14 @@
                         v-model="trade.vat_value"
                         @change="calculateAmount">
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Thành tiền </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="amount"
                       type="text"
@@ -479,14 +479,14 @@
                       class="form-control"
                       v-model="trade.total"
                       readonly>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số tiền thanh toán </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <input
                       id="total_paid"
                       type="text"
@@ -495,14 +495,14 @@
                       class="form-control"
                       v-model="trade.total_paid"
                       @change="changeTotalPaid">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="isShowApoimentPayment">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="isShowApoimentPayment">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Lãi suất (%)</label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                       id="interest_rate"
                       type="text"
@@ -511,40 +511,40 @@
                       autocomplete="new-password"
                       maxlength="5"
                       @keyup="integerAndPointOnly($event.target)">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="isShowApoimentPayment">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="isShowApoimentPayment">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Kỳ hạn tính lãi</label>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select class="form-control form-control"
                       :options="periodOptions"
                       id="interest_period"
                       type="text"
                       autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.interest_period">
-                    </b-form-select>
-                  </b-col>
-                </b-row>
 
-                <b-row class="form-row" v-show="isShowApoimentPayment">
-                  <b-col md="3" class="mt-2">
+                      v-model="trade.interest_period">
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row" v-show="isShowApoimentPayment">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Ngày hẹn thanh toán </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2" >
                     <datepicker v-model="trade.appointment_date" format="yyyy-MM-dd" :typeable="true"
                                 placeholder="2022-12-31" input-class="datepicker-cus" ></datepicker>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="isShowApoimentPayment">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="isShowApoimentPayment">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Nhắc hẹn thanh toán trước số ngày </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                       id="forewarning"
                       type="text"
@@ -553,20 +553,20 @@
                       class="form-control"
                       v-model="trade.forewarning"
                       @keyup="integerOnly($event.target)">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Loại tiền thanh toán </label>
-                  </b-col>
-                  <b-col md="9" class="pl-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 pl-2" >
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Tiền mặt </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="cash_input"
                           type="text"
@@ -575,14 +575,14 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeCash">
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Chuyển khoản </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="credit_input"
                           type="text"
@@ -591,14 +591,14 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeCredit">
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Tiền điện tử </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="e_money_input"
                           type="text"
@@ -607,62 +607,62 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeEMoney">
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Ghi chú </label>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-textarea
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <textarea class="form-control"
                       id="description"
                       style="width:100%;"
                       rows="3"
                       v-model="trade.description"
-                    ></b-form-textarea>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col md="12" class="text-center">
-                <b-button variant="outline-primary" class="pull-right btn-width-200" @click="printProvisionalInvoice">
+            <div class="mt-2">
+              <div class="w-full px-2 text-center" >
+                <button class="btn btn-outline-primary pull-right btn-width-200"  @click="printProvisionalInvoice">
                   In hóa đơn tạm tính
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col md="12" class="text-center">
-                <b-button v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="checkBeforeSell"
+            <div class="mt-2">
+              <div class="w-full px-2 text-center" >
+                <button class="btn" v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="checkBeforeSell"
                           :disabled="saving || !this.trade.id">
                   <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
                   Xác Nhận Bán
-                </b-button>
+                </button>
                 <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Mẫu in hoá đơn 1-->
-    <b-row hidden id="provisionalInvoice">
-      <b-col>
+    <div hidden id="provisionalInvoice">
+      <div class="w-full px-2">
 
         <div>
           <div class="print-text-left print-width-50-left">
             <h4>TÊN CỤC THUẾ................</h4>
           </div>
-          <b-col class="print-text-right print-width-50-right">
+          <div class="print-text-right print-width-50-right">
             <h4>Mẫu số: 02GTTT3/001</h4>
-          </b-col>
+          </div>
         </div>
 
         <h2 class="print-text-center">HOÁ ĐƠN BÁN HÀNG{{suffix_print_title}}</h2>
@@ -671,13 +671,19 @@
         <br>
         <div class="print-border print-pl-2">
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Đơn vị bán hàng: <b>{{store_name}}</b></td></tr>
             <tr><td class="print-no-border">Mã số thuế: {{store_tax_code}}</td></tr>
             <tr><td class="print-no-border">Địa chỉ: {{store_address}}</td></tr>
             <tr><td class="print-no-border">Điện thoại: {{store_phone_number}}</td></tr>
+
+            </tbody>
           </table>
           <hr>
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Họ tên người mua hàng: <b>
               <span>{{trade.customer_name}}</span>
             </b></td></tr>
@@ -688,11 +694,15 @@
             <tr><td class="print-no-border">Điện thoại:
               <span>{{trade.customer_phone}}</span>
             </td></tr>
+
+            </tbody>
           </table>
         </div>
         <br>
         <div id="print-table-border">
           <table style="width:100%">
+
+            <tbody>
             <tr class="print-text-center">
               <th>STT</th>
               <th>Tên hàng hóa, dv</th>
@@ -737,10 +747,14 @@
               <td colspan="6">Số tiền viết bằng chữ: {{convertNumberToText(trade.total)}}</td>
             </tr>
 
+            </tbody>
+
           </table>
           <br>
           <div>
             <table style="width:100%">
+
+              <tbody>
               <tr>
                 <td colspan="3" class="print-text-center print-no-border">Người mua hàng</td>
                 <td colspan="3" class="print-text-center print-no-border">Người bán hàng</td>
@@ -749,15 +763,17 @@
                 <td colspan="3" class="print-text-center print-no-border">(Ký, ghi rõ họ tên)</td>
                 <td colspan="3" class="print-text-center print-no-border">(Ký, đóng dấu, ghi rõ họ tên)</td>
               </tr>
+
+              </tbody>
             </table>
           </div>
         </div>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <!--Mẫu in hoá đơn 2-->
-    <b-row hidden id="compactInvoice">
-      <b-col>
+    <div hidden id="compactInvoice">
+      <div class="w-full px-2">
         <div>
           <h2 class="print-text-center">{{store_name}}</h2>
           <p class="print-text-center">{{store_address}}</p>
@@ -858,20 +874,20 @@
             </div>
           </div>
         </div>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <!--Modal tìm kiếm sản phẩm -->
-      <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
-        <b-row>
-          <b-col md="12">
+      <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
             <h4 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h4>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
         <hr>
 
-        <b-row class="form-row">
-          <b-col md="3" class="mt-2">
+        <div class="form-row">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
             <label>Nhóm sản phẩm </label>
             <multiselect
               v-model="productGroupSearchSelect"
@@ -882,9 +898,9 @@
               track-by="name"
               @input="changeProductGroupSearch">
             </multiselect>
-          </b-col>
+          </div>
 
-          <b-col md="3" class="mt-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
             <label>Loại sản phẩm </label>
             <multiselect
               v-model="productTypeSearchSelect"
@@ -895,9 +911,9 @@
               track-by="name"
               @input="changeProductTypeSearch">
             </multiselect>
-          </b-col>
+          </div>
 
-          <b-col md="3" class="mt-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
             <label>Mã sản phẩm </label>
             <input
               id="codeProductCus"
@@ -906,9 +922,9 @@
               class="form-control"
               v-model="productSearch.code"
               maxlength="255">
-          </b-col>
+          </div>
 
-          <b-col md="3" class="mt-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
             <label>Tên sản phẩm </label>
             <input
               id="nameProductCus"
@@ -917,60 +933,69 @@
               class="form-control"
               v-model="productSearch.name"
               maxlength="255">
-          </b-col>
-        </b-row>
+          </div>
+        </div>
 
-        <b-row class="mt-2">
-          <b-col cols="12">
-            <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="hideModalSearchProduct">
+        <div class="mt-2">
+          <div class="w-full px-2">
+            <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchProduct">
               Quay lại
-            </b-button>
+            </button>
 
-            <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchProduct"
+            <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchProduct"
                       @click.prevent="searchProduct">
               Tìm Kiếm
-            </b-button>
-          </b-col>
-        </b-row>
+            </button>
+          </div>
+        </div>
 
-        <b-row class="mt-2">
-          <b-col>
-            <b-table
-              hover
-              bordered
-              stacked="md"
-              :fields="productSearchFields"
-              :items="productSearchItems">
-              <template v-slot:cell(actions)="data">
-                <b-button variant="outline-success" class="pull-right btn-width-120"
-                  @click.prevent="chooseProduct(data.item.product_group_id, data.item.product_group_name,
-                  data.item.product_type_id, data.item.product_type_name, data.item.product_id, data.item.product_name)">
-                  Chọn
-                </b-button>
-              </template>
-            </b-table>
-          </b-col>
-        </b-row>
+        <div class="mt-2">
+          <div class="w-full px-2">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th v-for="field in productSearchFields" :key="field.key">{{ field.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in productSearchItems" :key="index">
+                  <td v-for="field in productSearchFields" :key="field.key">
+                    <template v-if="field.key === 'actions'">
+                      <button class="btn btn-outline-success pull-right btn-width-120"
+                        @click.prevent="chooseProduct(item.product_group_id, item.product_group_name,
+                        item.product_type_id, item.product_type_name, item.product_id, item.product_name)">
+                        Chọn
+                      </button>
+                    </template>
+                    <template v-else>
+                      {{ item[field.key] }}
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <b-row class="mt-3">
-          <b-col>
+        <div class="mt-3">
+          <div class="w-full px-2">
             <span>--Hết--</span>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
 
-      </b-modal>
+      </div>
 
     <!--Modal tìm kiếm khách hàng -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-customer">
-      <b-row>
-        <b-col md="12">
+    <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-customer">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row>
-        <b-col md="6">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/2 px-2">
           <label>Tên </label>
           <input
             id="nameCusSearch"
@@ -979,8 +1004,8 @@
             class="form-control"
             v-model="customerSearch.name"
             maxlength="75">
-        </b-col>
-        <b-col md="6">
+        </div>
+        <div class="w-full md:w-1/2 px-2">
           <label>Số điện thoại </label>
           <input
             id="phoneNumberCus"
@@ -990,73 +1015,82 @@
             v-model="customerSearch.phone"
             maxlength="11"
             @keyup="integerOnly($event.target)">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchCustomer">
             Quay lại
-          </b-button>
+          </button>
 
-          <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+          <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchCustomer" @click.prevent="searchCustomer">
             Tìm Kiếm
-          </b-button>
-        </b-col>
-      </b-row>
+          </button>
+        </div>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="customerSearchFields"
-            :items="customerSearchItems">
-            <template v-slot:cell(action)="data">
-              <b-button variant="outline-success" class="pull-right btn-width-120"
-                        @click.prevent="chooseCustomer(data.item.id, data.item.name, data.item.phone_number, data.item.address, data.item.tax_code)">
-                Chọn
-              </b-button>
-            </template>
-          </b-table>
-        </b-col>
-      </b-row>
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th v-for="field in customerSearchFields" :key="field.key">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in customerSearchItems" :key="index">
+                <td v-for="field in customerSearchFields" :key="field.key">
+                  <template v-if="field.key === 'action'">
+                    <button class="btn btn-outline-success pull-right btn-width-120"
+                      @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
+                      Chọn
+                    </button>
+                  </template>
+                  <template v-else>
+                    {{ item[field.key] }}
+                  </template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <b-row class="mt-3">
-        <b-col>
+      <div class="mt-3">
+        <div class="w-full px-2">
           <span>--Hết--</span>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-    </b-modal>
+    </div>
 
     <!--Modal thêm khách hàng -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-customer">
-      <b-row>
-        <b-col md="12">
+    <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-customer">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h4 class="modal-title text-center text-success">Thêm khách hàng</h4>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Loại khách hàng </label>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <div class="input-group">
             <input type="radio" v-model="customer.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
             <input type="radio" v-model="customer.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
           </div>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Tên </label><span class="error-sybol"></span>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <input
             id="nameCus"
             type="text"
@@ -1064,14 +1098,14 @@
             v-model="customer.name"
             autocomplete="new-password"
             maxlength="75">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Số Điện Thoại </label><span class="error-sybol"></span>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <input
             id="phoneCuss"
             type="text"
@@ -1081,65 +1115,65 @@
             autocomplete="new-password"
             maxlength="20"
             v-on:change="checkPhoneNumberFormat($event.target.value)">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Giới Tính</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select :options="optionsGender" v-model="customer.gender"></b-form-select>
-        </b-col>
-      </b-row>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control" :options="optionsGender" v-model="customer.gender"></select>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Ngày Tháng Năm Sinh</label>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
                                 placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Tỉnh/ Thành Phố</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control form-control"
             id="city_id"
             :options="optionsCity"
             v-model="customer.city_id"
             type="text"
-            class="form-control"
-            v-on:change="changeCity($event.target)"
-          ></b-form-select>
-        </b-col>
-      </b-row>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+            v-on:change="changeCity($event.target)"
+          ></select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Quận/ Huyện</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control form-control"
             id="district_id"
             :options="optionsDistrict"
             v-model="customer.district_id"
             type="text"
-            class="form-control"
-            :disabled="!customer.city_id"
-          ></b-form-select>
-        </b-col>
-      </b-row>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+            :disabled="!customer.city_id"
+          ></select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Địa chỉ </label>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <input
             id="addressCus"
             type="text"
@@ -1147,14 +1181,14 @@
             v-model="customer.address"
             autocomplete="new-password"
             maxlength="255">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
           <label>Mã số thuế </label>
-        </b-col>
-        <b-col md="9">
+        </div>
+        <div class="w-full md:w-3/4 px-2">
           <input
             id="tax_code"
             type="text"
@@ -1163,92 +1197,90 @@
             @keyup="integerOnly($event.target)"
             autocomplete="new-password"
             maxlength="20">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="backCustomer">
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backCustomer">
             Hủy bỏ
-          </b-button>
-          <b-button v-show="!savingCustomer" variant="outline-success"
-                    class="pull-right btn-width-120" @click="saveCustomer"
+          </button>
+          <button class="btn pull-right btn-width-120" v-show="!savingCustomer" variant="outline-success"
+                     @click="saveCustomer"
                     :disabled="savingCustomer">
             Lưu
-          </b-button>
+          </button>
           <span class="loading-more" v-show="savingCustomer"><icon name="loading" width="60" /></span>
 
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-    </b-modal>
+    </div>
 
     <!--Modal thao tác sau khi xác nhận mua -->
-      <b-modal centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-actions">
-        <b-row>
-          <b-col md="12">
+      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-actions">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
             <h4 class="modal-title text-center text-success">Bán hàng thành công!</h4>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
         <hr>
 
-        <b-row>
-          <b-col md="4" class="mt-2 text-center">
-            <b-button variant="outline-secondary" class="text-center btn-width-120" @click="back">
+        <div class="flex flex-wrap -mx-2">
+          <div md="4" class="mt-2 text-center">
+            <button class="btn btn-outline-secondary text-center btn-width-120"  @click="back">
               Quay lại
-            </b-button>
-          </b-col>
-          <b-col md="4" class="mt-2 text-center">
-            <b-button variant="outline-success" class="text-center btn-width-120" @click="buyNext">
+            </button>
+          </div>
+          <div md="4" class="mt-2 text-center">
+            <button class="btn btn-outline-success text-center btn-width-120"  @click="buyNext">
               Bán tiếp
-            </b-button>
-          </b-col>
-          <b-col md="4" class="mt-2 text-center">
-            <b-button variant="outline-primary" class="text-center btn-width-120" @click="printInvoice">
+            </button>
+          </div>
+          <div md="4" class="mt-2 text-center">
+            <button class="btn btn-outline-primary text-center btn-width-120"  @click="printInvoice">
               In hóa đơn
-            </b-button>
-          </b-col>
-        </b-row>
+            </button>
+          </div>
+        </div>
 
-      </b-modal>
+      </div>
 
     <!-- Modal apply pmt -->
-    <b-modal title="Áp dụng khuyến mãi" centered hide-header hide-footer no-close-on-backdrop id="modal-apply-pmt" size="xl">
-      <b-row>
-        <b-col>
+    <div title="Áp dụng khuyến mãi" centered hide-header hide-footer no-close-on-backdrop id="modal-apply-pmt" size="xl">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h5 class="text-center">Áp dụng khuyến mãi</h5>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row>
+      <div class="flex flex-wrap -mx-2">
 
-        <b-col>
-          <p class="col-12" v-for="pmt in this.pmtOfStore" :key="pmt.id">
+        <div class="w-full px-2">
+          <div class="col-12" v-for="pmt in this.pmtOfStore" :key="pmt.id">
             <b>- </b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span>
-            <b-list-group horizontal>
-              <b-list-group-item @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)">
+            <div class="d-inline-flex gap-2 ml-2">
+              <button class="btn btn-sm btn-outline-primary" @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)">
                 <i class="fa fa-plus"/>
-              </b-list-group-item>
-              <b-list-group-item>
-                <span :id="'pmtStore' + pmt.id">0</span>
-              </b-list-group-item>
-              <b-list-group-item @click="minusQuantityPmt(pmt.id, pmt)">
+              </button>
+              <span class="px-2" style="min-width: 30px; text-align: center;" :id="'pmtStore' + pmt.id">0</span>
+              <button class="btn btn-sm btn-outline-primary" @click="minusQuantityPmt(pmt.id, pmt)">
                 <i class="fa fa-minus"/>
-              </b-list-group-item>
-            </b-list-group>
-          </p>
-        </b-col>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      </b-row>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" @click="cancelApplyPmt()">
+      <div class="mt-2">
+        <div class="w-full md:w-1/2 px-2">
+          <button class="btn pull-left px-4" variant="secondary"  @click="cancelApplyPmt()">
             Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
+          </button>
+        </div>
+        <div class="w-full md:w-1/2 px-2">
           <!-- Loading -->
           <span class="loading-more" v-show="loadingConfirmPmt"><icon name="loading" width="60" /></span>
 
@@ -1256,46 +1288,53 @@
                   @click="confirmApplyPmt()">
             Xác nhận &nbsp;
           </button>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-    </b-modal>
+    </div>
 
     <!--Modal cảnh báo bán quá số lượng trong kho -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-confirm-sell">
-      <b-row>
-        <b-col md="12">
+    <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-confirm-sell">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h4 class="modal-title text-center text-success">Sản phẩm bán vượt quá số lượng trong kho</h4>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="productImportFields"
-            :items="productNotEnoughQuantity">
-          </b-table>
-        </b-col>
-      </b-row>
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th v-for="field in productImportFields" :key="field.key">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in productNotEnoughQuantity" :key="index">
+                <td v-for="field in productImportFields" :key="field.key">
+                  {{ item[field.key] }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <b-row>
-        <b-col cols="4" class="text-left mt-3">
+      <div class="flex flex-wrap -mx-2">
+        <div cols="4" class="text-left mt-3">
           <button class="btn btn-danger px-4" @click="hideModalConfirmSell">
             Hủy bán
           </button>
-        </b-col>
-        <b-col cols="8" class="text-right mt-3">
+        </div>
+        <div cols="8" class="text-right mt-3">
           <button class="btn btn-primary px-4 default-btn-bg" @click="save" :disabled="saving">
             Tiếp tục bán
           </button>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-    </b-modal>
+    </div>
 
   </div>
 </template>
@@ -1309,14 +1348,21 @@ import MasterApi from '@/api/master'
 import settingAPI from "@/api/setting"
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   components: {
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore
+    }
   },
   data () {
     return {
@@ -2233,7 +2279,7 @@ export default {
      * Get detail
      */
     getStoreDetail() {
-      let storeId = this.$store.state.user.storeId
+      let storeId = this.authStore.user.storeId
       if(storeId){
         superAdminAPI.getStoreDetail(storeId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -2260,7 +2306,7 @@ export default {
           this.popToast('danger', errorMess)
         })
       } else {
-        this.$store.commit('removeToken')
+        this.authStore.removeToken()
         this.$router.push('/staff-login')
       }
     },

@@ -1,37 +1,37 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+              <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
+                </button>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
                     Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-              <b-row>
-                <b-col md='12'>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <h4 class="mt-2 text-center text-header">{{prefix_text}}Hãng Sản Phẩm</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
               <!-- Loading -->
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
                   id="name"
                   type="text"
@@ -39,38 +39,47 @@
                   autocomplete="new-password"
                   class="form-control"
                   v-model="brand.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div v-if="errorName" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Mô tả </label>
-              </b-col>
-              <b-col md="9">
-                <b-form-textarea
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <textarea
                   id="description"
                   style="width:100%;"
                   rows="3"
                   v-model="brand.description"
-                ></b-form-textarea>
-              </b-col>
-            </b-row>
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import ProductBrandAPI from '@/api/productBrand'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
+  },
   data () {
     return {
       prefix_text: '',
@@ -85,7 +94,7 @@ export default {
   },
   mounted() {
     // Check prefix
-    if(this.$route.params.id) {
+    if(this.route.params.id) {
       this.prefix_text = "Cập Nhật "
     } else {
       this.prefix_text = "Thêm Mới "
@@ -110,19 +119,14 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     /**
      * Get detail
      */
     getProductBrandDetail() {
-      let brandId = this.$route.params.id
+      let brandId = this.route.params.id
       if(brandId){
         this.loading = true
 
@@ -137,7 +141,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       }
     },
@@ -147,7 +151,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/product-brand')
+      this.router.push('/product-brand')
     },
 
     /**
@@ -158,7 +162,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {
-        let brandId = this.$route.params.id
+        let brandId = this.route.params.id
         if(brandId){
           // Edit
           let brand = this.brand
@@ -175,7 +179,7 @@ export default {
             this.saving = false
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.popToast('error', errorMess)
           })
         } else {
           // Add
@@ -183,14 +187,14 @@ export default {
             this.saving = false
             if(res != null && res.data != null){
               if (res.data.status == 200) {
-                this.$router.push("/product-brand")
+                this.router.push("/product-brand")
               }
             }
           }).catch(err => {
             this.saving = false
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.popToast('error', errorMess)
           })
         }
       } else {

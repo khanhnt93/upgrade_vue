@@ -1,14 +1,9 @@
 // If you want to override variables do it here
-@import "variables";
-
-// Import styles
-@import "~@coreui/coreui/scss/coreui";
-
-// If you want to add something do it here
-// @import "coreui_dark";
+@use "variables";
 
 // ie fixes
-@import "ie-fix";
+@use "ie-fix";
+
 
 .input-date {
     width: 100%;

@@ -1,19 +1,19 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="px-2 w-full">
+        <div class="bg-white shadow rounded-lg p-4">
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="px-2 w-full">
               <h4 class="mt-1 text-center text-header">Lịch Sử Mua Hàng</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row class="form-row">
+          <div class="flex flex-wrap -mx-2 form-row">
 
-            <b-col md="3">
+            <div class="px-2 w-full md:w-1/4">
               <label> Nhóm SP </label>
               <multiselect
                 v-model="productGroupSelect"
@@ -24,9 +24,9 @@
                 track-by="name"
                 @input="changeProductGroup">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="px-2 w-full md:w-1/4">
               <label> Loại SP </label>
               <multiselect
                 v-model="productTypeSelect"
@@ -36,84 +36,107 @@
                 label="name"
                 track-by="name">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="px-2 w-full md:w-1/4">
               <label> Từ ngày </label>
               <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="px-2 w-full md:w-1/4">
               <label> Đến ngày </label>
               <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-          </b-row>
+          </div>
 
-          <b-row>
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120"
+          <div class="flex flex-wrap -mx-2">
+            <div class="px-2 w-full">
+              <button class="btn btn-outline-primary pull-right btn-width-120"
                         :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="px-2 w-full">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-            <template v-slot:cell(sub_total)="data">
-              {{currencyFormat(data.item.sub_total)}}
-            </template>
-            <template v-slot:cell(total)="data">
-              {{currencyFormat(data.item.total)}}
-            </template>
-
-            <template v-slot:cell(actions)="data">
-              <b-button v-show="data.item.trade_status != 1" variant="outline-danger" class="pull-right btn-width-120 mr-2"
-                        @click="goToUpdateTrade(data.item.id, data.item.trade_type_int)">
-                Sửa
-              </b-button>
-              <b-button v-show="data.item.trade_status == 1" variant="outline-success" class="pull-right btn-width-120 mr-2"
-                        @click="goToDetail(data.item.id)">
-                Chi tiết
-              </b-button>
-            </template>
-
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center">STT</th>
+                  <th class="text-center">Ngày</th>
+                  <th class="text-center">Số hóa đơn</th>
+                  <th class="text-center">Loại</th>
+                  <th>Tên đối tác</th>
+                  <th class="text-right">Tổng tiền SP</th>
+                  <th class="text-right">Thành tiền</th>
+                  <th class="actions-cell"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in items" :key="item.id">
+                  <td class="text-center">{{ item.stt }}</td>
+                  <td class="text-center">{{ item.created_at }}</td>
+                  <td class="text-center">{{ item.bill_number }}</td>
+                  <td class="text-center">{{ item.trade_type }}</td>
+                  <td>{{ item.partner_name }}</td>
+                  <td class="text-right">{{ currencyFormat(item.sub_total) }}</td>
+                  <td class="text-right">{{ currencyFormat(item.total) }}</td>
+                  <td class="actions-cell">
+                    <button v-show="item.trade_status != 1" class="btn btn-outline-danger pull-right btn-width-120 mr-2"
+                              @click="goToUpdateTrade(item.id, item.trade_type_int)">
+                      Sửa
+                    </button>
+                    <button v-show="item.trade_status == 1" class="btn btn-outline-success pull-right btn-width-120 mr-2"
+                              @click="goToDetail(item.id)">
+                      Chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import tradeApi from '@/api/trade'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
   components: {
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+
+    return {
+      toast,
+      router
+    }
   },
   data () {
     return {
@@ -207,7 +230,7 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
         variant: variant,
@@ -287,7 +310,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -320,7 +343,7 @@ export default {
        * Go to detail
        */
       goToDetail(id) {
-        this.$router.push('/trade-detail/' + id)
+        this.router.push('/trade-detail/' + id)
       },
 
         /**
@@ -329,9 +352,9 @@ export default {
       goToUpdateTrade(id, type) {
           console.log(type)
         if(type == 0) {
-          this.$router.push('/trade-buy/' + id)
+          this.router.push('/trade-buy/' + id)
         } else {
-          this.$router.push('/trade-sell/' + id)
+          this.router.push('/trade-sell/' + id)
         }
 
       },
@@ -394,7 +417,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearch = false
         this.loading = false

@@ -1,14 +1,14 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
             <h4 class="text-center">Thống Kê</h4>
-            <b-row>
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-3 px-2">
                 <label> Cửa hàng </label>
-                <b-form-select
+                <select
                   :options="optionsStore"
                   id="status"
                   type="text"
@@ -16,10 +16,10 @@
                   class="form-control"
                   v-model="inputs.store_id"
                   :disabled="onSearch">
-                </b-form-select>
-              </b-col>
+                </select>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-3 px-2">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <input
                   id="fromDate"
@@ -29,11 +29,11 @@
                   v-model="inputs.fromDate"
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
+                <div :class="{'invalid-feedback d-block': errorFromDate}">
                   Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
+                </div>
+              </div>
+              <div class="w-full md:w-3 px-2">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <input
                   id="toDate"
@@ -43,39 +43,39 @@
                   v-model="inputs.toDate"
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
+                <div :class="{'invalid-feedback d-block': errorToDate}">
                   Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3">
+                </div>
+              </div>
+              <div class="w-full md:w-3 px-2">
                 <label> Sắp xếp theo </label>
-                <b-form-select
+                <select
                   :options="orderByOption"
                   id="status"
                   type="text"
                   autocomplete="new-password"
                   class="form-control"
                   v-model="inputs.orderBy">
-                </b-form-select>
-              </b-col>
-            </b-row>
+                </select>
+              </div>
+            </div>
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
+            <div class="mt-2 mb-2">
+              <div class="w-full md:w-12 px-2">
+                <button class="btn btn-primary pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row v-show="items.length > 0">
-              <b-col md="4">
+            <div v-show="items.length > 0">
+              <div class="w-full md:w-4 px-2">
                 Số kết quả: {{items.length}}
-              </b-col>
-              <b-col md="8" class="text-right">
+              </div>
+              <div md="8" class="text-right">
                 <download-excel
                   class   = "btn btn-default text-header"
                   :data   = "items"
@@ -84,28 +84,42 @@
                   name    = "filename.xls">
                   <b>Xuất Excel</b>
                 </download-excel>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2 mb-2" v-show="click == true">
-              <b-col md="12">
-                <b-table
-                  hover
-                  bordered
-                  stacked="md"
-                  :fields="fields"
-                  :items="items"
-                  v-show="items.length > 0">
-                </b-table>
+            <div class="mt-2 mb-2" v-show="click == true">
+              <div class="w-full md:w-12 px-2">
+                <table class="table table-bordered table-striped" v-show="items.length > 0">
+                  <thead>
+                    <tr>
+                      <th>{{ fields[0].label }}</th>
+                      <th>{{ fields[1].label }}</th>
+                      <th>{{ fields[2].label }}</th>
+                      <th>{{ fields[3].label }}</th>
+                      <th>{{ fields[4].label }}</th>
+                      <th>{{ fields[5].label }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in items" :key="index">
+                      <td>{{ item.stt }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>{{ item.percent_quantity }}</td>
+                      <td>{{ item.amount }}</td>
+                      <td>{{ item.percent_amount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
 
                 <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </div>
@@ -115,10 +129,10 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
 
-Vue.component('downloadExcel', JsonExcel)
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+
+
 
 
 export default {
@@ -209,12 +223,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     /**

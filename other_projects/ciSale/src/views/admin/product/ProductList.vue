@@ -1,29 +1,29 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success float-right btn-width-120" @click="gotoAdd">
                 Thêm
-              </b-button>
+              </button>
 
-              <b-button variant="outline-primary" class="pull-right btn-width-120 mr-2" @click="openModalImportFile">
+              <button class="btn btn-outline-primary float-right btn-width-120 mr-2" @click="openModalImportFile">
                 Upload
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-1 text-center text-header">Danh Sách Sản Phẩm</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-            <b-row class="form-row">
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Nhóm SP </label>
                 <multiselect
                   v-model="productGroupSelect"
@@ -34,9 +34,9 @@
                   track-by="name"
                   @input="changeProductGroup">
                 </multiselect>
-              </b-col>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Loại SP </label>
                 <multiselect
                   v-model="productTypeSelect"
@@ -46,20 +46,20 @@
                   label="name"
                   track-by="name">
                 </multiselect>
-              </b-col>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Hãng SP </label>
-                <b-form-select
+                <select
                   id="productBrand"
                   :options="productBrandOptions"
                   type="text"
                   autocomplete="new-password"
                   class="form-control"
-                  v-model="inputs.product_brand_id"></b-form-select>
-              </b-col>
+                  v-model="inputs.product_brand_id"></select>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Tên SP</label>
                 <input
                 id="name"
@@ -68,102 +68,161 @@
                 autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.name">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col md="12">
-                  <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                  <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch"
                             @click.prevent="prepareToSearch">
                     Tìm Kiếm
-                  </b-button>
-              </b-col>
-            </b-row>
-
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
-
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
-
-    <b-modal centered hide-footer hide-header id="modal-import-product">
-      <b-row>
-        <b-col class="text-center">
-          <form method="post" id="formImport" enctype="multipart/form-data">
-
-              <b-row>
-                <b-col>
-                  <h4 class="modal-title">Upload sản phẩm từ file excel</h4>
-                </b-col>
-              </b-row>
-              <b-row class="text-left">
-                <b-col>
-                  <p>
-                    Tải xuống file mẫu:
-                    <a target="_blank" href="https://api.cisale.vn/files/upload_excel_template/ciSale_upload_product_template.xlsx">Tải xuống</a>
-                  </p>
-                </b-col>
-              </b-row>
-              <hr>
-              <div class="modal-body">
-                  <div class="custom-file">
-                    <label>Chọn file excel bạn muốn upload
-                      <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
-                    </label>
-                  </div>
+                  </button>
               </div>
+            </div>
 
-          </form>
-        </b-col>
-      </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              Số kết quả: {{totalRow}}
+            </div>
+          </div>
 
-      <b-row>
-        <b-col class="text-right mt-3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Nhóm SP</th>
+                      <th>Loại SP</th>
+                      <th>Hãng SP</th>
+                      <th>Mã SP</th>
+                      <th>Tên SP</th>
+                      <th class="text-center">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in items" :key="item.id">
+                      <td>{{ item.stt }}</td>
+                      <td>{{ item.product_group_name }}</td>
+                      <td>{{ item.product_type_name }}</td>
+                      <td>{{ item.product_brand_name }}</td>
+                      <td>{{ item.code }}</td>
+                      <td>{{ item.name }}</td>
+                      <td class="text-center">
+                        <div class="flex justify-center gap-2">
+                          <button class="btn btn-sm btn-outline-primary" @click="edit(item.id)" title="Edit">
+                            <i class="fa fa-edit" />
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" @click="deleted(item.id, item.name, item.stt)" title="Delete">
+                            <i class="fa fa-trash" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           <!-- Loading -->
-          <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
-          <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importProductFromExcelFile()" :disabled="!fileUpload || uploading">
-            Upload
-          </button>
-        </b-col>
-      </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <span class="loading-more" v-if="hasNext === false">--Hết--</span>
+              <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <b-row v-show="uploadErrorList.length > 0" class="mt-2">
-        <b-col>
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="uploadErrorField"
-          :items="uploadErrorList">
-          </b-table>
-        </b-col>
-      </b-row>
-    </b-modal>
+    <TransitionRoot appear :show="modalImportProduct" as="template">
+      <Dialog as="div" @close="closeModalImportFile" class="relative z-10">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-4xl transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <div class="text-center">
+                  <form method="post" id="formImport" enctype="multipart/form-data">
+                    <div class="flex flex-wrap -mx-2">
+                      <div class="w-full px-2">
+                        <h4 class="modal-title">Upload sản phẩm từ file excel</h4>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-2 text-left">
+                      <div class="w-full px-2">
+                        <p>
+                          Tải xuống file mẫu:
+                          <a target="_blank" href="https://api.cisale.vn/files/upload_excel_template/ciSale_upload_product_template.xlsx">Tải xuống</a>
+                        </p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="modal-body">
+                      <div class="custom-file">
+                        <label>Chọn file excel bạn muốn upload
+                          <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2 text-right mt-3">
+                    <!-- Loading -->
+                    <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
+                    <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importProductFromExcelFile()" :disabled="!fileUpload || uploading">
+                      Upload
+                    </button>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2 mt-2" v-show="uploadErrorList.length > 0">
+                  <div class="w-full px-2">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th v-for="field in uploadErrorField" :key="field.key">{{ field.label }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(error, index) in uploadErrorList" :key="index">
+                            <td v-for="field in uploadErrorField" :key="field.key">{{ error[field.key] }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
 <script>
@@ -172,11 +231,23 @@ import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import tradeApi from '@/api/trade'
 import Multiselect from 'vue-multiselect'
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel,
+    TransitionRoot,
+    TransitionChild
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
   },
   data () {
     return {
@@ -248,7 +319,8 @@ export default {
           key: 'mess',
           label: 'Mô tả lỗi'
         },
-      ]
+      ],
+      modalImportProduct: false
     }
   },
   mounted() {
@@ -265,12 +337,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     /**
@@ -342,7 +409,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -389,24 +456,17 @@ export default {
      */
     deleted (id, name, rowIndex) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if(res){
-            productApi.deleteProduct(id).then(res => {
-              // Reload data
-              this.search()
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
+        if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+          productApi.deleteProduct(id).then(res => {
+            // Reload data
+            this.search()
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.popToast('error', errorMess)
+          })
         }
+      }
     },
 
     /**
@@ -414,21 +474,30 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/product/index/' + id)
+      this.router.push('/product/index/' + id)
     },
 
     /**
      * Go to add
      */
     gotoAdd () {
-      this.$router.push('/product/index/')
+      this.router.push('/product/index/')
     },
 
-      /**
+    /**
      * Show modal import from file
      */
     openModalImportFile () {
-      this.$bvModal.show('modal-import-product')
+      this.modalImportProduct = true
+    },
+
+    /**
+     * Close modal import from file
+     */
+    closeModalImportFile () {
+      this.modalImportProduct = false
+      this.uploadErrorList = []
+      this.fileUpload = null
     },
 
     /**
@@ -487,7 +556,7 @@ export default {
         }).catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
 
           this.onSearch = false
           this.loading = false
@@ -505,7 +574,7 @@ export default {
         if(res != null && res.data != null && res.data.data != null){
             if(res.data.data.length == 0) {
               // Load list when load page
-              this.$bvModal.hide('modal-import-product')
+              this.closeModalImportFile()
             } else {
               this.uploadErrorList = res.data.data
             }
@@ -515,7 +584,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.uploading = false
       })

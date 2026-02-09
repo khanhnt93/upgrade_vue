@@ -1,48 +1,48 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
+                </button>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
                   Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-2 text-center text-header">Khách Hàng</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Loại khách hàng </label>
-                </b-col>
-                <b-col md="9">
-                  <div class="input-group">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <div class="input-group">
                     <input type="radio" v-model="inputs.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
                     <input type="radio" v-model="inputs.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
                   </div>
-                </b-col>
-              </b-row>
+              </div>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                   <input
                   id="name"
                   type="text"
@@ -50,17 +50,17 @@
                   v-model="inputs.name"
                   autocomplete="new-password"
                   maxlength="75">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                <div :class="['invalid-feedback', { 'd-block': errorName }]">
+                  Vui lòng nhập tên
+                </div>
+              </div>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Số Điện Thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                   <input
                   id="phone"
                   type="text"
@@ -70,29 +70,33 @@
                   autocomplete="new-password"
                   maxlength="20"
                   v-on:change="checkPhoneNumberFormat($event.target.value)">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                    Số điện thoại không đúng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                <div :class="['invalid-feedback', { 'd-block': errorPhone }]">
+                  Số điện thoại không đúng
+                </div>
+              </div>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                   <label>Giới Tính</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select :options="optionsGender" v-model="inputs.gender"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorGender">
-                    Vui lòng chọn giới tính
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <select class="form-control" v-model="inputs.gender">
+                  <option v-for="option in optionsGender" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+                <div :class="['invalid-feedback', { 'd-block': errorGender }]">
+                  Vui lòng chọn giới tính
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label>Ngày Tháng Năm Sinh</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                   <input
                       id="birthday"
                       v-model="inputs.birthday"
@@ -101,58 +105,62 @@
                       autocomplete="new-password"
                       class="form-control"
                       v-on:change="checkBirthdayFormat($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorBirthday">
-                      Vui lòng nhập ngày sinh
-                    </b-form-invalid-feedback>
-                    <b-form-invalid-feedback class="invalid-feedback" :state="birthdayCheckFlag">
-                      Ngày sinh không đúng
-                    </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  <div :class="['invalid-feedback', { 'd-block': errorBirthday }]">
+                    Vui lòng nhập ngày sinh
+                  </div>
+                  <div :class="['invalid-feedback', { 'd-block': !birthdayCheckFlag }]">
+                    Ngày sinh không đúng
+                  </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label>Tỉnh/ Thành Phố</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                      id="city_id"
-                      :options="optionsCity"
-                      v-model="inputs.city_id"
-                      type="text"
-                      class="form-control"
-                      v-on:change="changeCity($event.target)"
-                    ></b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCity">
-                      Vui lòng chọn thành phố
-                    </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
+                <label>Tỉnh/ Thành Phố</label><span class="error-sybol"></span>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <select
+                    id="city_id"
+                    v-model="inputs.city_id"
+                    type="text"
+                    class="form-control"
+                    v-on:change="changeCity($event.target)">
+                  <option v-for="option in optionsCity" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">
+                  Vui lòng chọn thành phố
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label>Quận/ Huyện</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                      id="district_id"
-                      :options="optionsDistrict"
-                      v-model="inputs.district_id"
-                      type="text"
-                      class="form-control"
-                      :disabled="!inputs.city_id"
-                    ></b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDistrict">
-                      Vui lòng nhập quận
-                    </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
+                <label>Quận/ Huyện</label><span class="error-sybol"></span>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <select
+                    id="district_id"
+                    v-model="inputs.district_id"
+                    type="text"
+                    class="form-control"
+                    :disabled="!inputs.city_id">
+                  <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">
+                  Vui lòng nhập quận
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Địa chỉ </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                 id="address"
                 type="text"
@@ -160,14 +168,14 @@
                 v-model="inputs.address"
                 autocomplete="new-password"
                 maxlength="255">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Mã số thuế </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                 id="tax_code"
                 type="text"
@@ -176,18 +184,18 @@
                 @keyup="integerOnly($event.target)"
                 autocomplete="new-password"
                 maxlength="20">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-
-
+import { useToast } from '@/composables/useToast'
+import { useRoute, useRouter } from 'vue-router'
 import customerApi from '@/api/customer'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
@@ -195,6 +203,12 @@ import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    const route = useRoute()
+    const router = useRouter()
+    return { popToast, route, router }
+  },
   data () {
     return {
       inputs: {
@@ -223,7 +237,8 @@ export default {
     }
   },
   mounted() {
-    this.getCustomerDetail()
+    let customerId = this.route.params.id
+    this.getCustomerDetail(customerId)
 
     this.getOptionCity()
   },
@@ -273,18 +288,6 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Get city options
      */
     getOptionCity() {
@@ -297,8 +300,7 @@ export default {
     /**
      *  Get detail
      */
-    getCustomerDetail() {
-      let cusId = this.$route.params.id
+    getCustomerDetail(cusId) {
       if(cusId) {
         customerApi.getCustomerDetailByStore(cusId).then(res => {
           if(res != null && res.data != null && res.data.data != null){
@@ -326,7 +328,7 @@ export default {
 
       this.saving = true
 
-      let customerId = this.$route.params.id
+      let customerId = this.route.params.id
       let params = JSON.parse(JSON.stringify(this.inputs))
       params.id = customerId
       params.phone = this.inputs.phone_number
@@ -347,7 +349,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       } else {
         // Add
@@ -356,15 +358,15 @@ export default {
           if(res != null && res.data != null){
 
             if (res.data.status == 200) {
-              this.$router.push("/customer")
+              this.router.push("/customer")
             }
           }
         }).catch(err => {
-          this.saving = false
+          this.saving =  false
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       }
 
@@ -455,7 +457,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/customer")
+      this.router.push("/customer")
     }
   }
 }

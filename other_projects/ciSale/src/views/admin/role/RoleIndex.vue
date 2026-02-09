@@ -1,95 +1,93 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-                <!--<span v-show="saving" class="loading-more pull-right btn-width-120"><icon name="loading" width="60" /></span>-->
-              </b-col>
-            </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+                Quay lại
+              </button>
+            </div>
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
+                Lưu
+              </button>
+              <!--<span v-show="saving" class="loading-more pull-right btn-width-120"><icon name="loading" width="60" /></span>-->
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
-                <h4 class="mt-1 text-center text-header">NHÓM QUYỀN</h4>
-              </b-col>
-            </b-row>
-            <hr/>
-            <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full px-2">
+              <h4 class="mt-1 text-center text-header">NHÓM QUYỀN</h4>
+            </div>
+          </div>
+          <hr/>
+          <!-- Loading -->
+          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Code </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="code"
-                  type="text"
-                  class="form-control"
-                  v-model="role.code"
-                  autocomplete="new-password"
-                  maxlength="50">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorCode">
-                    Vui lòng nhập code
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Code </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="code"
+                type="text"
+                class="form-control"
+                v-model="role.code"
+                autocomplete="new-password"
+                maxlength="50">
+              <div class="invalid-feedback { 'd-block': errorCode }" >
+                Vui lòng nhập code
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Name </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="role.name"
-                  autocomplete="new-password"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập name
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Name </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                v-model="role.name"
+                autocomplete="new-password"
+                maxlength="100">
+              <div class="invalid-feedback { 'd-block': errorName }" >
+                Vui lòng nhập name
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row mt-5">
-                <b-col>
-                  <label> Phân quyền vào chức năng </label>
-                  <br>
-                  <label> (Bạn hãy chọn những chức năng mà nhóm quyền này được quyền truy cập) </label>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4 mt-5">
+            <div class="w-full px-2">
+              <label> Phân quyền vào chức năng </label>
+              <br>
+              <label> (Bạn hãy chọn những chức năng mà nhóm quyền này được quyền truy cập) </label>
+            </div>
+          </div>
 
-              <b-row>
-                <b-col>
-                  <div v-for="group in groupScreen" :key="group.group_name">
-                    <p><b>{{ group.group_name }}</b></p>
-                    <b-row>
-                      <b-col md="4" v-for="screen in group.screen" :key="screen.screen_id">
-                        <input :id="screen.screen_id" type="checkbox" v-model="role.screen" name="screens" :value="screen.screen_id">
-                        <label :for="screen.screen_id">{{ screen.screen_name }}</label>
-                      </b-col>
-                    </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <div v-for="group in groupScreen" :key="group.group_name">
+                <p><b>{{ group.group_name }}</b></p>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/3 px-2" v-for="screen in group.screen" :key="screen.screen_id">
+                    <input :id="screen.screen_id" type="checkbox" v-model="role.screen" name="screens" :value="screen.screen_id">
+                    <label :for="screen.screen_id">{{ screen.screen_name }}</label>
                   </div>
-               </b-col>
-              </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -97,9 +95,22 @@
 
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+
+    return {
+      toast,
+      router,
+      route
+    }
+  },
   data () {
     return {
       role: {
@@ -135,10 +146,10 @@ export default {
    * Make toast without title
    */
   popToast(variant, content) {
-    this.$bvToast.toast(content, {
+    this.toast(content, {
       toastClass: 'my-toast',
       noCloseButton: true,
-      variant: variant,
+      variant: variant === 'danger' ? 'error' : variant,
       autoHideDelay: 3000
     })
   },
@@ -165,7 +176,7 @@ export default {
      *  Get detail
      */
     getRoleDetail() {
-      let roleId = this.$route.params.id
+      let roleId = this.route.params.id
       if(roleId){
         this.loading = true
 
@@ -198,7 +209,7 @@ export default {
 
       this.saving = true
 
-      let roleId = this.$route.params.id
+      let roleId = this.route.params.id
       if(roleId){
         // Edit
         this.role.id = roleId
@@ -223,7 +234,7 @@ export default {
           if(res != null && res.data != null){
 
             if (res.data.status == 200) {
-              this.$router.push("/role")
+              this.router.push("/role")
             }
           }
         }).catch(err => {
@@ -240,7 +251,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/role")
+      this.router.push("/role")
     }
   }
 }

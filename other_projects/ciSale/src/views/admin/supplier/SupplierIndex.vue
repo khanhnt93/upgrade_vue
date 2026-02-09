@@ -1,107 +1,117 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+                Quay lại
+              </button>
+            </div>
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
+                Lưu
+              </button>
+            </div>
+          </div>
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                    Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <h4 class="mt-2 text-center">Nhà Cung Cấp</h4>
+            </div>
+          </div>
+          <hr/>
+          <!-- Loading -->
+          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row>
-                <b-col md='12'>
-                  <h4 class="mt-2 text-center">Nhà Cung Cấp</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Tên </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="name"
+                type="text"
+                maxlength="100"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="supplier.name">
+              <div class="invalid-feedback { 'd-block': errorName }" >
+                Vui lòng nhập tên
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  maxlength="100"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Số điện thoại </label>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="phone_number"
+                type="text"
+                maxlength="30"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="supplier.phone_number">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Số điện thoại </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="phone_number"
-                  type="text"
-                  maxlength="30"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.phone_number">
-              </b-col>
-            </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Địa chỉ </label>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="address"
+                type="text"
+                maxlength="255"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="supplier.address">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Địa chỉ </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="address"
-                  type="text"
-                  maxlength="255"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.address">
-              </b-col>
-            </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Mã số thuế </label>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="tax_code"
+                type="text"
+                maxlength="20"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="supplier.tax_code">
+            </div>
+          </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
-                <label> Mã số thuế </label>
-              </b-col>
-              <b-col md="9">
-                <input
-                  id="tax_code"
-                  type="text"
-                  maxlength="20"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="supplier.tax_code">
-              </b-col>
-            </b-row>
-
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import supplierAPI from '@/api/supplier'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+
+    return {
+      toast,
+      router,
+      route
+    }
+  },
   data () {
     return {
       supplier: {
@@ -135,10 +145,10 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
-        variant: variant,
+        variant: variant === 'danger' ? 'error' : variant,
         autoHideDelay: 3000
       })
     },
@@ -147,7 +157,7 @@ export default {
      * Get detail
      */
     getSupplierDetail() {
-      let supplierId = this.$route.params.id
+      let supplierId = this.route.params.id
       if(supplierId){
         this.loading = true
 
@@ -172,7 +182,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/supplier')
+      this.router.push('/supplier')
     },
 
     /**
@@ -183,7 +193,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {
-        let supplierId = this.$route.params.id
+        let supplierId = this.route.params.id
         if(supplierId){
           // Edit
           let supplier = this.supplier
@@ -208,7 +218,7 @@ export default {
             this.saving = false
             if(res != null && res.data != null){
               if (res.data.status == 200) {
-                this.$router.push("/supplier")
+                this.router.push("/supplier")
               }
             }
           }).catch(err => {

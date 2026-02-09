@@ -1,119 +1,119 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-              <b-row class="form-row">
-                <b-col md='12'>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+              <div class="form-row">
+                <div md='12'>
                   <h4 class="mt-2 text-center">Store</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="name"
                   type="text"
                   class="form-control"
                   v-model="store.name"
                   maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div :class="{'invalid-feedback d-block': errorName}">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Thương hiệu </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <select
                   :options="optionsBrand"
                   id="brand_id"
                   type="text"
                   class="form-control"
                   v-model="store.brand_id"
-                  ></b-form-select>
-                </b-col>
-              </b-row>
+                  ></select>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Tỉnh/ Thành Phố </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <select
                   :options="optionsCity"
                   id="city_id"
                   type="text"
                   class="form-control"
                   v-model="store.city_id"
-                  v-on:change="changeCity($event.target)"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCiti">
+                  v-on:change="changeCity($event.target)"></select>
+                  <div :class="{'invalid-feedback d-block': errorCiti}">
                     Vui lòng nhập tỉnh/thành phố
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Quận </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <select
                     v-bind="{ disabled: store.city_id=='' }"
                     :options="optionsDistrict"
                     id="district"
                     type="text"
                     class="form-control"
                     v-model="store.district_id"
-                    ></b-form-select>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorDistrict">
+                    ></select>
+                  <div :class="{'invalid-feedback d-block': errorDistrict}">
                     Vui lòng nhập quận
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Địa Chỉ </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="address"
                   type="text"
                   class="form-control"
                   v-model="store.address">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorAddress">
+                  <div :class="{'invalid-feedback d-block': errorAddress}">
                     Vui lòng nhập địa chỉ
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Số điện thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="phone_number"
                   type="text"
                   class="form-control"
                   v-model="store.phone_number"
                   maxlength="20">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPhoneNumber">
+                  <div :class="{'invalid-feedback d-block': errorPhoneNumber}">
                     Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="form-row">
+              <div md="3" class="mt-2">
                 <label> Mã số thuế </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-9 px-2">
                 <input
                   id="tax_code"
                   type="text"
@@ -122,14 +122,14 @@
                   @keyup="integerOnly($event.target)"
                   autocomplete="new-password"
                   maxlength="20">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Hết Hạn Vào </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="expriedDate"
                   type="text"
@@ -137,37 +137,37 @@
                   v-model="store.expired_at"
                   @keyup="inputDateOnly($event.target)"
                   @change="changeExpiredDate">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredAt">
+                  <div :class="{'invalid-feedback d-block': errorExpiredAt}">
                     Vui lòng nhập ngày hết hạn
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Thời hạn </label>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <p>{{timeLive}}</p>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="mt-3">
-                <b-col cols="6">
-                  <b-button variant="secondary" class="pull-left px-4" @click="back">
+              <div class="mt-3">
+                <div cols="6">
+                  <button class="btn btn-secondary pull-left px-4" @click="back">
                     Quay lại
-                  </b-button>
-                </b-col>
-                <b-col cols="6">
+                  </button>
+                </div>
+                <div cols="6">
                   <button class="btn btn-primary pull-left px-4 default-btn-bg" :disabled="saving" @click="save" >
                       Lưu
                   </button>
-                </b-col>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -238,12 +238,8 @@ export default {
    * Make toast without title
    */
   popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+    this.toast(content, variant === 'danger' ? 'error' : variant)
   },
 
     /**
@@ -280,7 +276,7 @@ export default {
      * Get default date
      */
     getDefaultDate() {
-      if(!this.$route.params.id) {
+      if(!this.route.params.id) {
         let dateNow = new Date()
         let oneMonth = new Date(dateNow.setMonth(dateNow.getMonth() + 1))
         this.store.expired_at = commonFunc.formatDate(oneMonth.toJSON().slice(0,10))
@@ -293,7 +289,7 @@ export default {
      * Get detail
      */
     getStoreDetail() {
-      let storeId = this.$route.params.id
+      let storeId = this.route.params.id
       if(storeId){
         superAdminAPI.getStoreDetail(storeId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -324,7 +320,7 @@ export default {
         let store = JSON.parse(JSON.stringify(this.store))
         store.expired_at = commonFunc.convertDDMMYYYYToYYYYMMDD(this.store.expired_at)
 
-        let storeId = this.$route.params.id
+        let storeId = this.route.params.id
         if(storeId){
           // Edit
           store.id = storeId
@@ -341,7 +337,7 @@ export default {
                   size: 'sm',
                   headerClass: 'bg-success',
                 }).then(res => {
-                  this.$router.push("/store/list")
+                  this.router.push("/store/list")
                 })
               }
             }
@@ -375,7 +371,7 @@ export default {
                   size: 'sm',
                   headerClass: 'bg-success',
                 }).then(res => {
-                  this.$router.push("/store/list")
+                  this.router.push("/store/list")
                 })
               }
 
@@ -480,7 +476,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/store/list")
+      this.router.push("/store/list")
     },
 
     /**

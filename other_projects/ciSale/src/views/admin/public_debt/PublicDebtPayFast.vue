@@ -1,30 +1,30 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-2 text-center text-header">Thanh Toán Nhanh Nợ Công</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
-            <b-row>
-              <b-col md="12" class="bg-gray text-white title-partner">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 bg-gray text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin người trả</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row mt-2">
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2 form-row mt-2">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Khách hàng </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <div class="input-group">
                   <multiselect
                     v-model="customerSelect"
@@ -35,34 +35,34 @@
                     track-by="name"
                     @input="changeCustomer">
                   </multiselect>
-                  <b-button variant="outline-primary" class="pull-right ml-2" @click="showModalSearchCustomer" >
+                  <button class="btn btn-outline-primary pull-right ml-2" @click="showModalSearchCustomer" >
                     <i class="fa fa-search"></i>
-                  </b-button>
+                  </button>
                 </div>
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <p>Tên khách hàng: <b>{{debt.customer_name}}</b></p>
                 <p>Số điện thoại: {{debt.customer_phone_number}}</p>
                 <p>Địa chỉ: {{debt.customer_address}}</p>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-info bg-gradient text-white title-partner">
+            <div class="flex flex-wrap -mx-2 mt-3">
+              <div class="w-full px-2 bg-info bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin khoản vay</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
 
-            <b-row class="mt-2">
-              <b-col>
+            <div class="flex flex-wrap -mx-2 mt-2">
+              <div class="w-full px-2">
                 <table class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -105,28 +105,28 @@
 
                   </tbody>
                 </table>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <h5 class="text-header">Tổng tiền cần thanh toán: <b>{{sumAmount | format_currency}}đ</b></h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-success bg-gradient text-white title-partner">
+            <div class="flex flex-wrap -mx-2 mt-3">
+              <div class="w-full px-2 bg-success bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số tiền miễn trừ</label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="amount_minus"
                   type="text"
@@ -136,14 +136,14 @@
                   maxlength="14"
                   @keyup="integerOnly($event.target)"
                   @change="calculate()">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số tiền thanh toán</label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="amount_pay"
                   type="text"
@@ -153,14 +153,14 @@
                   maxlength="100"
                   @keyup="integerOnly($event.target)"
                   @change="calculate()">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Tiền mặt </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="cash_input"
                   type="text"
@@ -170,14 +170,14 @@
                   @keyup="integerOnly($event.target)"
                   @change="changeCash()"
                   maxlength="14">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Chuyển khoản </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="credit_input"
                   type="text"
@@ -187,14 +187,14 @@
                   @keyup="integerOnly($event.target)"
                   @change="changeCredit()"
                   maxlength="14">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Tiền điện tử </label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="e_money_input"
                   type="text"
@@ -204,20 +204,20 @@
                   @keyup="integerOnly($event.target)"
                   @change="changeEMoney()"
                   maxlength="14">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <p>Số tiền còn lại: {{debt.remaining}}</p>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row" v-show="debt.remaining > 0">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row" v-show="debt.remaining > 0">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Lãi suất</label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="interest_rate"
                   type="text"
@@ -226,48 +226,48 @@
                   autocomplete="new-password"
                   maxlength="5"
                   @keyup="integerAndPointOnly($event.target)">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row" v-show="debt.remaining > 0">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row" v-show="debt.remaining > 0">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Kỳ hạn tính lãi</label>
-              </b-col>
-              <b-col md="9">
-                <b-form-select
-                  :options="periodOptions"
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <select
                   id="interest_period"
-                  type="text"
-                  autocomplete="new-password"
                   class="form-control"
                   v-model="debt.interest_period">
-                </b-form-select>
-              </b-col>
-            </b-row>
+                  <option v-for="option in periodOptions" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-            <b-row class="form-row" v-show="debt.remaining > 0">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row" v-show="debt.remaining > 0">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Ngày mượn</label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <datepicker v-model="debt.created_at" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row" v-show="debt.remaining > 0">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row" v-show="debt.remaining > 0">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Ngày hẹn trả</label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <datepicker v-model="debt.appointment_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row" v-show="debt.remaining > 0">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row" v-show="debt.remaining > 0">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số ngày nhắc trước khi đến hạn</label>
-              </b-col>
-              <b-col md="9">
+              </div>
+              <div class="w-full md:w-3/4 px-2">
                 <input
                   id="forewarning"
                   type="text"
@@ -276,35 +276,38 @@
                   autocomplete="new-password"
                   maxlength="10"
                   @keyup="integerOnly($event.target)">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col md="12" class="text-center">
-                <b-button v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="confirmPayment" :disabled="saving">
+            <div class="flex flex-wrap -mx-2 mt-2">
+              <div class="w-full px-2 text-center">
+                <button v-show="!saving" class="btn btn-outline-success" style="height: 50px; width: 240px" @click="confirmPayment" :disabled="saving">
                   <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
                   Xác Nhận
-                </b-button>
+                </button>
                 <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--Modal tìm kiếm khách hàng -->
-    <b-modal centered hide-footer hide-header size="xl" id="modal-search-customer">
-      <b-row>
-        <b-col md="12">
+    <div v-if="showSearchModal" class="modal-backdrop">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-body">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <hr>
 
-      <b-row>
-        <b-col md="6">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/2 px-2">
           <label> Tên </label>
           <input
             id="nameCusSearch"
@@ -313,8 +316,8 @@
             class="form-control"
             v-model="customerSearch.name"
             maxlength="75">
-        </b-col>
-        <b-col md="6">
+        </div>
+        <div class="w-full md:w-1/2 px-2">
           <label> Số điện thoại </label>
           <input
             id="phoneNumberCus"
@@ -324,46 +327,73 @@
             v-model="customerSearch.phone"
             maxlength="11"
             @keyup="integerOnly($event.target)">
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
+      <div class="flex flex-wrap -mx-2 mt-2">
+        <div class="w-full px-2">
+          <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
             Quay lại
-          </b-button>
+          </button>
 
-          <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+          <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
             Tìm Kiếm
-          </b-button>
-        </b-col>
-      </b-row>
+          </button>
+        </div>
+      </div>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="customerSearchFields"
-            :items="customerSearchItems">
-            <template v-slot:cell(action)="data">
-              <b-button variant="outline-success" class="pull-right btn-width-120"
-                        @click.prevent="chooseCustomer(data.item.id, data.item.name, data.item.phone_number, data.item.address, data.item.tax_code)">
-                Chọn
-              </b-button>
-            </template>
-          </b-table>
-        </b-col>
-      </b-row>
+      <div class="flex flex-wrap -mx-2 mt-2">
+        <div class="w-full px-2">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Loại</th>
+                <th>Tên</th>
+                <th>Số điện thoại</th>
+                <th>Giới tính</th>
+                <th>Ngày sinh</th>
+                <th>Mã số thuế</th>
+                <th>Tỉnh/TP</th>
+                <th>Quận/Huyện</th>
+                <th>Địa chỉ</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in customerSearchItems" :key="index">
+                <td>{{item.stt}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.phone_number}}</td>
+                <td>{{item.gender}}</td>
+                <td>{{item.birthday}}</td>
+                <td>{{item.tax_code}}</td>
+                <td>{{item.city_name}}</td>
+                <td>{{item.district_name}}</td>
+                <td>{{item.address}}</td>
+                <td>
+                  <button class="btn btn-outline-success pull-right btn-width-120"
+                            @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
+                    Chọn
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <b-row class="mt-3">
-        <b-col>
+      <div class="flex flex-wrap -mx-2 mt-3">
+        <div class="w-full px-2">
           <span>--Hết--</span>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -374,14 +404,19 @@ import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import customerAPI from '@/api/customer'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
 
 
 export default {
   components: {
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    return { toast }
   },
   data() {
     return {
@@ -477,6 +512,7 @@ export default {
         }
       ],
       customerSearchItems: [],
+      showSearchModal: false
     }
   },
   mounted() {
@@ -490,18 +526,6 @@ export default {
     this.getOptionsRelated()
   },
   methods: {
-
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      *  Get tất cả các options liên quan
@@ -527,7 +551,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast( errorMess)
       })
     },
 
@@ -566,7 +590,7 @@ export default {
      */
     confirmPayment() {
       if ((this.debt.amount_pay + '').replaceAll(",", "") <= 0) {
-        this.popToast('danger', 'Số tiền trả phải lớn hơn 0')
+        this.toast( 'Số tiền trả phải lớn hơn 0')
         return;
       }
 
@@ -575,11 +599,11 @@ export default {
           parseInt((this.debt.cash + '').replaceAll(",", ""))
           + parseInt((this.debt.credit + '').replaceAll(",", ""))
           + parseInt((this.debt.e_money + '').replaceAll(",", ""))) {
-          this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+          this.toast( "Tổng loại tiền phải bằng số tiền thanh toán")
           return
         }
       } catch(err) {
-        this.popToast('danger', 'Vui lòng nhập loại tiền')
+        this.toast( 'Vui lòng nhập loại tiền')
       }
       this.saving = true
       this.debt.amount_pay = (this.debt.amount_pay + '').replaceAll(",", "")
@@ -590,7 +614,7 @@ export default {
       this.debt.total_amount = this.sumAmount
       debitAPI.payPublicDebtFast(this.debt).then(res => {
         if(res != null && res.data != null) {
-          this.popToast('success', "Thanh toán thành công")
+          this.toast( "Thanh toán thành công")
 
           // Show modal báo, reset data
           this.debtList = []
@@ -623,7 +647,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast( errorMess)
       })
     },
 
@@ -703,11 +727,11 @@ export default {
     },
 
     showModalSearchCustomer() {
-      this.$bvModal.show('modal-search-customer')
+      this.showSearchModal = true
     },
 
     hideModalSearchCustomer() {
-      this.$bvModal.hide('modal-search-customer')
+      this.showSearchModal = false
     },
 
     chooseCustomer(id, name, phone_number, address, tax_code) {
@@ -718,7 +742,7 @@ export default {
 
       this.getListDebtByCustomer()
 
-      this.$bvModal.hide('modal-search-customer')
+      this.showSearchModal = false
     },
 
     /**
@@ -747,7 +771,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast( errorMess)
 
         this.onSearchCustomer = false
       })
@@ -784,7 +808,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast( errorMess)
 
         this.loading = false
       })

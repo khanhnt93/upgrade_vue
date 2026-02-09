@@ -1,15 +1,15 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
             <h4 class="text-center">Báo cáo lợi nhuận</h4>
-            <b-row>
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-3 px-2">
                 <label> Cửa hàng </label>
-                <b-form-select
+                <select
                   :options="optionsStore"
                   id="status"
                   type="text"
@@ -17,12 +17,12 @@
                   class="form-control"
                   v-model="inputs.store_id"
                   :disabled="onSearch">
-                </b-form-select>
-              </b-col>
+                </select>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-3 px-2">
                 <label> Xem theo </label>
-                <b-form-select
+                <select
                   :options="dataByOption"
                   id="status"
                   type="text"
@@ -31,9 +31,9 @@
                   v-model="inputs.dataBy"
                   @change="changeDataBy"
                   :disabled="onSearch">
-                </b-form-select>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy != 'Month'">
+                </select>
+              </div>
+              <div md="3" v-show="inputs.dataBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <input
                   id="fromDate"
@@ -44,11 +44,11 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)"
                   :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
+                <div :class="{'invalid-feedback d-block': errorFromDate}">
                   Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy != 'Month'">
+                </div>
+              </div>
+              <div md="3" v-show="inputs.dataBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <input
                   id="toDate"
@@ -59,12 +59,12 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)"
                   :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
+                <div :class="{'invalid-feedback d-block': errorToDate}">
                   Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                </div>
+              </div>
 
-              <b-col md="3" v-show="inputs.dataBy == 'Month'">
+              <div md="3" v-show="inputs.dataBy == 'Month'">
                 <label> Từ tháng </label><span class="error-sybol"></span>
                 <input
                   id="fromMonth"
@@ -75,11 +75,11 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)"
                   :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">
+                <div :class="{'invalid-feedback d-block': errorFromMonth}">
                   Mục từ tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="3" v-show="inputs.dataBy == 'Month'">
+                </div>
+              </div>
+              <div md="3" v-show="inputs.dataBy == 'Month'">
                 <label> Đến tháng </label><span class="error-sybol"></span>
                 <input
                   id="toMonth"
@@ -90,26 +90,26 @@
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)"
                   :disabled="onSearch">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">
+                <div :class="{'invalid-feedback d-block': errorToMonth}">
                   Mục đến tháng không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                </div>
+              </div>
 
-            </b-row>
+            </div>
 
-            <b-row class="mt-2 mb-2">
-              <b-col md="12">
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
+            <div class="mt-2 mb-2">
+              <div class="w-full md:w-12 px-2">
+                <button class="btn btn-primary pull-right px-4 default-btn-bg btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row v-show="click && datas.length > 0">
-                <b-col>
+            <div v-show="click && datas.length > 0">
+                <div class="w-full px-2">
                   <table class="table table-bordered table-striped">
                     <thead>
                       <tr>
@@ -140,14 +140,14 @@
 
                     </tbody>
                   </table>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
             <p v-show="click && firstSearch == false && datas.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -227,12 +227,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     /**

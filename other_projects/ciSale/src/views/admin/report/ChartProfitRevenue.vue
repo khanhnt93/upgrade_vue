@@ -1,16 +1,15 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
             <h4 class="text-center text-header">BIỂU ĐỒ DOANH THU</h4>
-            <b-row>
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/4 px-2">
                 <label> Xem theo </label>
-                <b-form-select
-                  :options="chartByOption"
+                <select
                   id="status"
                   type="text"
                   autocomplete="new-password"
@@ -18,9 +17,12 @@
                   v-model="inputs.chartBy"
                   @change="changeChartBy"
                   :disabled="onSearch">
-                </b-form-select>
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy != 'Month'">
+                  <option v-for="option in chartByOption" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" :typeable="true"
                             placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
@@ -36,8 +38,8 @@
 <!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">-->
 <!--                  Mục từ ngày không đúng-->
 <!--                </b-form-invalid-feedback>-->
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy != 'Month'">
+              </div>
+              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toDate" format="yyyy-MM-dd" :typeable="true"
                             placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
@@ -53,9 +55,9 @@
 <!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">-->
 <!--                  Mục đến ngày không đúng-->
 <!--                </b-form-invalid-feedback>-->
-              </b-col>
+              </div>
 
-              <b-col md="3" v-show="inputs.chartBy == 'Month'">
+              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Từ tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromMonth" format="yyyy-MM" :typeable="true"
                             placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
@@ -71,8 +73,8 @@
 <!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">-->
 <!--                  Mục từ tháng không đúng-->
 <!--                </b-form-invalid-feedback>-->
-              </b-col>
-              <b-col md="3" v-show="inputs.chartBy == 'Month'">
+              </div>
+              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Đến tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toMonth" format="yyyy-MM" :typeable="true"
                             placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
@@ -88,18 +90,18 @@
 <!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">-->
 <!--                  Mục đến tháng không đúng-->
 <!--                </b-form-invalid-feedback>-->
-              </b-col>
+              </div>
 
-              <b-col md="3">
+              <div class="w-full md:w-1/4 px-2">
                 <label class="label-width text-white">
                    Xem
                 </label>
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+                <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
-                </b-button>
-              </b-col>
+                </button>
+              </div>
 
-            </b-row>
+            </div>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
@@ -111,10 +113,10 @@
               v-show="click && chartData.length > 0"
             />
             <p v-show="click && firstSearch == false && chartData.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -124,10 +126,14 @@
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 import { GChart } from 'vue-google-charts'
-import Datepicker from 'vuejs-datepicker'
-
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   components: {
     GChart,
     Datepicker
@@ -194,17 +200,7 @@ export default {
     //   return !(this.errorFromDate || this.errorToDate)
     // },
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Event change chart by
@@ -244,7 +240,7 @@ export default {
         let toDate = new Date(this.inputs.toDate)
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+          this.toast("Từ ngày không thể lớn hớn đến ngày", 'error')
           return false
         }
 
@@ -252,7 +248,7 @@ export default {
           fromDate.setMonth(fromDate.getMonth() + 1)
 
           if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 1 tháng")
+            this.toast("Thời gian không được quá 1 tháng", 'error')
             return false
           }
         }
@@ -261,7 +257,7 @@ export default {
           fromDate.setMonth(fromDate.getMonth() + 6)
 
           if(fromDate < toDate) {
-            this.popToast('danger', "Thời gian không được quá 6 tháng")
+            this.toast("Thời gian không được quá 6 tháng", 'error')
             return false
           }
         }
@@ -272,14 +268,14 @@ export default {
         let toDate = new Date(this.inputs.toMonth + "-01")
 
         if(fromDate > toDate) {
-          this.popToast('danger', "Từ tháng không thể lớn hớn đến tháng")
+          this.toast("Từ tháng không thể lớn hớn đến tháng", 'error')
           return false
         }
 
         fromDate.setMonth(fromDate.getMonth() + 12)
 
         if(fromDate < toDate) {
-          this.popToast('danger', "Thời gian không được quá 12 tháng")
+          this.toast("Thời gian không được quá 12 tháng", 'error')
           return false
         }
       }
@@ -420,7 +416,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
 
         this.firstSearch = false
         this.onSearch = false

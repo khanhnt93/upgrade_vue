@@ -1,55 +1,82 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success float-right btn-width-120" @click="goToAdd()">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center">Danh Sách Nhóm Sản Phẩm</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-table
-          hover
-          bordered
-          :fields="fields"
-          :items="items"
-          >
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Mã</th>
+                      <th>Tên</th>
+                      <th class="text-center">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in items" :key="item.id">
+                      <td>{{ item.stt }}</td>
+                      <td>{{ item.code }}</td>
+                      <td>{{ item.name }}</td>
+                      <td class="text-center">
+                        <div class="flex justify-center gap-2">
+                          <button class="btn btn-sm btn-outline-primary" @click="edit(item.id)" title="Edit">
+                            <i class="fa fa-edit" />
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" @click="deleted(item.id, item.name)" title="Delete">
+                            <i class="fa fa-trash" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <span class="loading-more">--Hết--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import productApi from '@/api/product'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
+  },
   data () {
     return {
       fields: [
@@ -85,12 +112,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     /**
@@ -110,7 +132,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -121,24 +143,17 @@ export default {
      * @param rowIndex
      */
     deleted (id, name) {
-      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          productApi.deleteProductGroup(id).then(res => {
-            // Reload data
-            this.getProductGroupList()
+      if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+        productApi.deleteProductGroup(id).then(res => {
+          // Reload data
+          this.getProductGroupList()
 
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
+        }).catch(err => {
+          // Handle error
+          let errorMess = commonFunc.handleStaffError(err)
+          this.popToast('error', errorMess)
+        })
+      }
     },
 
     /**
@@ -146,14 +161,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/product-group/index/' + id)
+      this.router.push('/product-group/index/' + id)
     },
 
     /**
      * Go to add
      */
     goToAdd () {
-      this.$router.push('/product-group/index/')
+      this.router.push('/product-group/index/')
     }
   }
 }

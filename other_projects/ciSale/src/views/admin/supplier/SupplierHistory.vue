@@ -1,64 +1,64 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center text-header">Lịch Sử Nhà Cung Cấp</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row>
-            <b-col md="3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/4 px-2">
               <label> Tên </label>
               <input
-              id="name"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.name"
-              maxlength="75">
-            </b-col>
-            <b-col md="3">
+                id="name"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="inputs.name"
+                maxlength="75">
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Số điện thoại </label>
               <input
-              id="price"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.phone"
-              maxlength="11"
-              @keyup="integerOnly($event.target)">
-            </b-col>
+                id="price"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="inputs.phone"
+                maxlength="11"
+                @keyup="integerOnly($event.target)">
+            </div>
 
 
-          <b-col md="3">
-            <label> Từ ngày </label>
-            <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-          </b-col>
+            <div class="w-full md:w-1/4 px-2">
+              <label> Từ ngày </label>
+              <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
+            </div>
 
-          <b-col md="3">
-            <label> Đến ngày </label>
-            <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-          </b-col>
-        </b-row>
+            <div class="w-full md:w-1/4 px-2">
+              <label> Đến ngày </label>
+              <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
+            </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+          <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/3 px-2">
               Số kết quả: {{items.length}}
-            </b-col>
-            <b-col md="8" class="text-right">
+            </div>
+            <div class="w-full md:w-2/3 px-2 text-right">
               <download-excel
                 class   = "btn btn-default text-header"
                 :data   = "items"
@@ -67,11 +67,11 @@
                 name    = "lich_su_nha_cung_cap.xls">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
               <table class="table table-bordered table-striped fixed_header">
                 <thead>
@@ -106,23 +106,23 @@
                   <td class="text-right">{{currencyFormat(item.sub_total)}}</td>
                   <td class="text-right">{{currencyFormat(item.total)}}</td>
                   <td class="text-center">
-                    <b-button variant="outline-success" class="pull-right btn-width-120"
+                    <button class="btn btn-outline-success pull-right btn-width-120"
                               @click="goToDetail(item.id)">
                       Chi tiết
-                    </b-button>
+                    </button>
                   </td>
                 </tr>
                 </tbody>
               </table>
 
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
           <span class="loading-more">--Hết--</span>
-        </b-card>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -132,15 +132,26 @@
 import supplierApi from '@/api/supplier'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-import Datepicker from 'vuejs-datepicker'
 
-Vue.component('downloadExcel', JsonExcel)
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+
+
 
 export default {
   components: {
     Datepicker
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+
+    return {
+      toast,
+      router
+    }
   },
   data () {
     return {
@@ -190,10 +201,10 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
-        variant: variant,
+        variant: variant === 'danger' ? 'error' : variant,
         autoHideDelay: 3000
       })
     },
@@ -202,7 +213,7 @@ export default {
      * Go to detail
      */
     goToDetail(id) {
-      let routeData = this.$router.resolve({path: '/trade-detail/' + id});
+      let routeData = this.router.resolve({path: '/trade-detail/' + id});
       // let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
       window.open(routeData.href, '_blank');
 

@@ -1,38 +1,38 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
 
-              <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+              <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save"
+                </button>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-success pull-right btn-width-120" @click="save"
                           :disabled="saving">
                     Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-              <b-row>
-                <b-col md='12'>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <h4 class="mt-2 text-center">{{prefix_text}}Thuộc Tính Sản Phẩm</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
               <!-- Loading -->
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Nhóm sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <multiselect
                     v-model="productGroupSelect"
                     :options="productGroupOptions"
@@ -42,17 +42,17 @@
                     track-by="name"
                     @input="changeProductGroup">
                   </multiselect>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProductGroup">
+                  <div v-if="errorProductGroup" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập nhóm sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Loại sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <multiselect
                     v-model="productTypeSelect"
                     :options="productTypeOptions"
@@ -62,29 +62,29 @@
                     track-by="name"
                     @input="changeProductType">
                   </multiselect>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProductType">
+                  <div v-if="errorProductType" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập loại sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row v-show="productProperties.properties.length > 0">
-                <b-col>
-                  <p v-for="(item) in productProperties.properties">
+              <div class="flex flex-wrap -mx-2" v-show="productProperties.properties.length > 0">
+                <div class="w-full px-2">
+                  <p v-for="(item) in productProperties.properties" :key="item.name">
                     + {{item.name}}:
-                    <span v-for="(value, index) in item.value" class="ml-2">
+                    <span v-for="(value, index) in item.value" :key="index" class="ml-2">
                       - {{value}}
                       <i class="fa fa-trash" title="Delete" @click="deleteItem(item.name, index)"/>
                     </span>
                   </p>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên thuộc tính (ví dụ: Size)</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <input
                   id="code"
                   type="text"
@@ -92,17 +92,17 @@
                   autocomplete="new-password"
                   class="form-control"
                   v-model="productPropertiesItem.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div v-if="errorName" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập tên thuộc tính
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Giá trị thuộc tính (ví dụ: S)</label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <input
                   id="name"
                   type="text"
@@ -110,24 +110,24 @@
                   autocomplete="new-password"
                   class="form-control"
                   v-model="productPropertiesItem.value">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorValue">
+                  <div v-if="errorValue" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập giá trị thuộc tính
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-            <b-row class="mt-2 text-center">
-              <b-col>
-                <b-button variant="outline-primary" class="btn-width-120" @click="addPropertiesItem()">
+            <div class="flex flex-wrap -mx-2 mt-2 text-center">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-primary btn-width-120" @click="addPropertiesItem()">
                   Thêm
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -135,11 +135,18 @@ import productApi from '@/api/product'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
-
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
   components: {
     Multiselect
+  },
+  setup() {
+    const toast = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
   },
   data () {
     return {
@@ -167,7 +174,7 @@ export default {
   },
   mounted() {
     // Check prefix
-    if(this.$route.params.id) {
+    if(this.route.params.id) {
       this.prefix_text = "Cập Nhật "
       this.isUpdate = true
     } else {
@@ -208,12 +215,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     resetListProductType() {
@@ -305,7 +307,7 @@ export default {
      * Get detail
      */
     getProductPropertiesDetail() {
-      let productPropertiesId = this.$route.params.id
+      let productPropertiesId = this.route.params.id
       if(productPropertiesId){
         this.loading = true
 
@@ -371,7 +373,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/product-properties')
+      this.router.push('/product-properties')
     },
 
     /**
@@ -390,7 +392,7 @@ export default {
         this.click = false
         this.saving = true
 
-        let propertiesId = this.$route.params.id
+        let propertiesId = this.route.params.id
         if(propertiesId){
           // Edit
           this.productProperties.id = propertiesId
@@ -415,7 +417,7 @@ export default {
             this.saving = false
             if(res != null && res.data != null){
               if (res.data.status == 200) {
-                this.$router.push("/product-properties")
+                this.router.push("/product-properties")
               }
             }
           }).catch(err => {

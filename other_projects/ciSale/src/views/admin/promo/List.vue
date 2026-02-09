@@ -1,25 +1,25 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right px-4 btn-width-120" @click="goToAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success pull-right px-4 btn-width-120" @click="goToAdd()">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-           <b-row>
-            <b-col md='12'>
+           <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center text-header">Khuyến Mãi</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row>
-            <b-col md="3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/4 px-2">
               <label> Tên </label>
               <input
               id="name"
@@ -27,9 +27,9 @@
               autocomplete="new-password"
               class="form-control"
               v-model="inputs.name">
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Giá </label>
               <input
               id="price"
@@ -39,86 +39,123 @@
               v-model="inputs.price"
               maxlength="11"
               @keyup="integerOnly($event.target)">
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Loại </label>
-              <b-form-select
-              :options="typeOptions"
+              <select
               id="status"
-              type="text"
-              autocomplete="new-password"
               class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
+              v-model="inputs.type">
+                <option v-for="option in typeOptions" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Hiệu lực </label>
-              <b-form-select
-              :options="expireOptions"
+              <select
               id="status"
-              type="text"
-              autocomplete="new-password"
               class="form-control"
-              v-model="inputs.expire"></b-form-select>
-            </b-col>
-          </b-row>
+              v-model="inputs.expire">
+                <option v-for="option in expireOptions" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right px-4 btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
+          <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary pull-right px-4 btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="12">
-                <b-table
-                hover
-                bordered
-                stacked="md"
-                :fields="fields"
-                :items="items">
-                <template v-slot:cell(method)="data">{{ formatMethod(data.item.method) }}</template>
-                <template v-slot:cell(actions)="dataId">
-                  <b-list-group horizontal>
-                    <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                      <i class="fa fa-edit" />
-                    </b-list-group-item>
-                    <b-list-group-item v-b-tooltip.hover title="Delete"
-                                      @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt, dataId.item.method)">
-                      <i class="fa fa-trash" />
-                    </b-list-group-item>
-                  </b-list-group>
-                </template>
-                </b-table>
-            </b-col>
-          </b-row>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Mã</th>
+                      <th>Tên</th>
+                      <th>Loại</th>
+                      <th>Phần trăm giảm giá (%)</th>
+                      <th>Giảm giá tối đa</th>
+                      <th>Trên tổng giá</th>
+                      <th>Giá trị voucher</th>
+                      <th>Item free</th>
+                      <th>Số lượng</th>
+                      <th>Còn lại</th>
+                      <th>Ngày hiệu lực</th>
+                      <th>Ngày Hết Hạn</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in items" :key="item.id">
+                      <td>{{ item.stt }}</td>
+                      <td>{{ item.code }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.type_name }}</td>
+                      <td>{{ item.discount_percent }}</td>
+                      <td>{{ item.max_discount }}</td>
+                      <td>{{ item.discount_on_amount }}</td>
+                      <td>{{ item.value_of_voucher }}</td>
+                      <td>{{ item.item_free }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>{{ item.remaining }}</td>
+                      <td>{{ item.expired_date_from }}</td>
+                      <td>{{ item.expired_date_to }}</td>
+                      <td class="actions-cell">
+                        <div class="flex justify-center gap-2">
+                          <button class="btn btn-sm btn-primary" @click="edit(item.id)" title="Edit">
+                            <i class="fa fa-edit" />
+                          </button>
+                          <button class="btn btn-sm btn-danger" @click="deleted(item.id, item.name, item.stt, item.method)" title="Delete">
+                            <i class="fa fa-trash" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
 
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import promotionApi from '@/api/promotion'
 import commonFunc from '@/common/commonFunc'
 import {Constant} from '@/common/constant'
-
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
+  },
   data () {
     return {
       inputs: {
@@ -232,24 +269,15 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      const mappedVariant = variant === 'danger' ? 'error' : variant
+      this.toast(content, mappedVariant)
     },
 
     /**
      * Make toast with title
      */
     makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     /**
@@ -276,13 +304,7 @@ export default {
      */
     deleted (id, name, rowIndex, method) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
+        if(confirm('Xóa ' + name + ". Bạn có chắc không?")) {
             let dataPost = {
               "id": id,
               "method": method
@@ -297,11 +319,10 @@ export default {
             }).catch(err => {
               // Handle error
               let errorMess = commonFunc.handleStaffError(err)
-              this.makeToast('danger', "Xóa thất bại!!!", errorMess)
+              this.makeToast('error', "Xóa thất bại!!!", errorMess)
             })
           }
-        })
-      }
+        }
     },
 
     /**
@@ -315,7 +336,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -324,14 +345,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/promotion/index/' + id)
+      this.router.push('/promotion/index/' + id)
     },
 
     /**
      * Go to add
      */
     goToAdd () {
-      this.$router.push('/promotion/index')
+      this.router.push('/promotion/index')
     },
 
     /**
@@ -402,7 +423,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
 
         this.onSearch = false
         this.loading = false
@@ -416,8 +437,7 @@ export default {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
-    },
-
+    }
   }
 }
 </script>

@@ -1,87 +1,104 @@
 <template>
   <div class="container-fluid">
-    <b-card-group>
-      <b-card no-body>
-        <b-card-body>
-          <b-form>
-            <b-row>
-              <b-col cols="8">
-                <h4>Thông Tin Cá Nhân</h4>
-              </b-col>
-              <b-col cols="4">
-                <b-button v-if="onEdit" variant="primary" class="px-4 float-right" @click="save">
-                  Save
-                </b-button>
-                <b-button v-else variant="primary" class="px-4 float-right" @click="edit">
-                  Edit
-                </b-button>
-              </b-col>
-            </b-row>
-
-            <div class="form-group">
-              <label>Tên</label><span class="error-sybol"></span>
-              <input
-                id="name"
-                v-model="inputs.name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="100"
-                :disabled="!onEdit">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                  Vui lòng nhập tên
-                </b-form-invalid-feedback>
+    <div class="card">
+      <div class="p-4">
+        <form>
+          <div class="flex flex-wrap items-center mb-4">
+            <div class="w-2/3">
+              <h4>Thông Tin Cá Nhân</h4>
             </div>
-
-            <div class="form-group">
-              <label>Số Điện Thoại</label><span class="error-sybol"></span>
-              <input
-                id="phone"
-                v-model="inputs.phone_number"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="15"
-                @keyup="integerOnly($event.target)"
-                :disabled="!onEdit"
-                v-on:change="checkPhoneNumberFormat($event.target)">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!phoneNumberCheckFlag || !errorPhone">
-                  Vui lòng nhập số điện thoại
-                </b-form-invalid-feedback>
-                <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                  Số điện thoại không đúng
-                </b-form-invalid-feedback>
+            <div class="w-1/3 text-right">
+              <button
+                v-if="onEdit"
+                type="button"
+                class="btn btn-primary px-4"
+                @click="save">
+                Save
+              </button>
+              <button
+                v-else
+                type="button"
+                class="btn btn-primary px-4"
+                @click="edit">
+                Edit
+              </button>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label>Quyền</label><span class="error-sybol"></span>
-              <input
-                id="role"
-                v-model="inputs.role_name"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="15"
-                readonly
-                >
+          <div class="form-group">
+            <label>Tên</label><span class="error-sybol"></span>
+            <input
+              id="name"
+              v-model="inputs.name"
+              type="text"
+              autocomplete="new-password"
+              class="form-control { 'is-invalid': errorName }"
+              :
+              maxlength="100"
+              :disabled="!onEdit">
+            <div v-if="errorName" class="invalid-feedback" style="display: block;">
+              Vui lòng nhập tên
             </div>
-          </b-form>
-        </b-card-body>
-      </b-card>
-    </b-card-group>
+          </div>
+
+          <div class="form-group">
+            <label>Số Điện Thoại</label><span class="error-sybol"></span>
+            <input
+              id="phone"
+              v-model="inputs.phone_number"
+              type="text"
+              autocomplete="new-password"
+              class="form-control { 'is-invalid': (!phoneNumberCheckFlag || errorPhone) }"
+              :
+              maxlength="15"
+              @keyup="integerOnly($event.target)"
+              :disabled="!onEdit"
+              v-on:change="checkPhoneNumberFormat($event.target)">
+            <div v-if="!phoneNumberCheckFlag || errorPhone" class="invalid-feedback" style="display: block;">
+              Vui lòng nhập số điện thoại
+            </div>
+            <div v-if="!phoneNumberCheckFlag" class="invalid-feedback" style="display: block;">
+              Số điện thoại không đúng
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Quyền</label><span class="error-sybol"></span>
+            <input
+              id="role"
+              v-model="inputs.role_name"
+              type="text"
+              autocomplete="new-password"
+              class="form-control"
+              maxlength="15"
+              readonly>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { useToast } from '@/composables/useToast'
 import CustomerAPI from '@/api/customer'
 import StaffAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
 import commonFunc from '@/common/commonFunc'
 import 'vue2-datepicker/index.css'
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   name: 'Register',
+  setup() {
+    const authStore = useAuthStore()
+    const { popToast } = useToast()
+
+    return {
+      authStore,
+      popToast
+    }
+  },
   data () {
     return {
       inputs: {
@@ -114,22 +131,10 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Get staff information
      */
     getStaffInfo () {
-      let staffId = this.$store.state.user.id
+      let staffId = this.authStore.user.id
       StaffAPI.getStaffDetail(staffId).then(res => {
         if(res != null && res.data != null && res.data.data != null){
           this.inputs = Mapper.mapStaffDetailModelToDto(res.data.data)
@@ -137,7 +142,7 @@ export default {
       }).catch(err => {
         // Handle error
           let errorMess = commonFunc.handleCusError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
       })
     },
 
@@ -178,17 +183,12 @@ export default {
         }).catch(err => {
           this.formatBirthday()
           let message = ""
-          if(err.response.data.status == 422) {
+          if(err.response && err.response.data && err.response.data.status == 422) {
             message = err.response.data.mess
           } else {
             message = "Lỗi hệ thống"
           }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập Nhật Thông Tin",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
+          this.popToast('error', message)
         })
       }
     },

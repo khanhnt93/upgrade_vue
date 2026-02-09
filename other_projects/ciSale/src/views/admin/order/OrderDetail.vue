@@ -1,74 +1,74 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-1 text-center text-header">Chi Tiết Đặt Hàng</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row>
-              <b-col md="12" class="bg-gray text-white title-partner">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 bg-gray text-white title-partner">
                 <h5>
-                  <span class="pull-left">Thông tin khách hàng</span>
+                  <span class="float-left">Thông tin khách hàng</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label>
                       <span>Tên khách hàng: {{trade.customer_name}}</span>
                     </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label>
                       <span>SĐT khách hàng: {{trade.customer_phone}}</span>
                     </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label>
                       <span>Địa chỉ khách hàng: {{trade.customer_address}}</span>
                     </label>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-info bg-gradient text-white title-partner">
+            <div class="flex flex-wrap -mx-2 mt-3">
+              <div class="w-full px-2 bg-info bg-gradient text-white title-partner">
                 <h5>
-                  <span class="pull-left">Danh sách sản phẩm</span>
+                  <span class="float-left">Danh sách sản phẩm</span>
                 </h5>
 
-              </b-col>
-            </b-row>
-            <b-row class="mt-2" v-show="trade.products.length > 0">
-                  <b-col md="12">
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2 mt-2" v-show="trade.products.length > 0">
+                  <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                     <tr>
@@ -95,39 +95,39 @@
                     </tr>
                     </tbody>
                   </table>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-success bg-gradient text-white title-partner">
+            <div class="flex flex-wrap -mx-2 mt-3">
+              <div class="w-full px-2 bg-success bg-gradient text-white title-partner">
                 <h5>
-                  <span class="pull-left">Thông tin thanh toán</span>
+                  <span class="float-left">Thông tin thanh toán</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+            <div class="flex flex-wrap -mx-2 mt-2">
+              <div class="w-full px-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Tổng tiền sản phẩm: {{currencyFormat(trade.sub_total)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Chi phí thêm: {{currencyFormat(trade.extra_fee)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Số tiền giảm: {{currencyFormat(trade.fixed_discount)}}  </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Khuyến mãi: {{currencyFormat(trade.discount_amount)}}</label>
                     <div v-show="trade.promotions.length > 0">
                       <p class="ml-3">Danh sách khuyến mãi đang áp dụng</p>
@@ -135,54 +135,54 @@
                         {{" - " + pmt.quantity_apply + " x " + pmt.name}}
                       </p>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Thuế VAT<span v-show="trade.vat_value > 0">({{trade.vat_percent}}%)</span>: {{currencyFormat(trade.vat_value)}} </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Thành tiền: {{currencyFormat(trade.total)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Số tiền đã thanh toán: {{currencyFormat(trade.total_paid)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Ngày hẹn lấy hàng: {{trade.appointment_date}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Loại tiền thanh toán </label>
                     <p class="ml-3">- Tiền mặt: {{currencyFormat(trade.cash)}}</p>
                     <p class="ml-3">- Chuyển khoản: {{currencyFormat(trade.credit)}}</p>
                     <p class="ml-3">- Tiền điện tử: {{currencyFormat(trade.e_money)}}</p>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full px-2 mt-2">
                     <label> Ghi chú: {{trade.description}}</label>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </div>
@@ -192,9 +192,18 @@
 <script>
 import orderApi from '@/api/order'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+
+    return { toast, router, route }
+  },
   data () {
     return {
       trade: {
@@ -232,19 +241,14 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
       /**
      *  Get detail
      */
     getTradeDetail() {
-      let orderId = this.$route.params.id
+      let orderId = this.route.params.id
       if(orderId){
         this.loading = true
 
@@ -260,7 +264,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       }
     },
@@ -270,7 +274,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/order-list")
+      this.router.push("/order-list")
     },
 
     /**
