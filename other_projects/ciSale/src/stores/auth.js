@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     updateUser(user) {
-      Cookies.set(APP_USR, user, { expires: 365 })
+      Cookies.set(APP_USR, JSON.stringify(user), { expires: 365 })
       this.user = user
     },
 

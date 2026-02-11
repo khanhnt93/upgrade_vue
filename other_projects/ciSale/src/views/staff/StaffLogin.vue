@@ -122,8 +122,9 @@ export default {
           this.authStore.updateMenu(menu)
 
           // Store staff info
-          const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
-          this.authStore.updateUser(usr)
+           const usr = StaffMapper.mapStaffModelToDto(res.data.data.staff_info)
+           console.log(usr)
+           this.authStore.updateUser(usr)
 
            // Check user and redirect
            if(usr.isSuper) {
