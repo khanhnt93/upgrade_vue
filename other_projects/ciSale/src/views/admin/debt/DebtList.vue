@@ -1,25 +1,25 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
-                <!--<b-icon icon="plus" aria-hidden="true"></b-icon>-->
-                Tạo mới
-              </b-button>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Công Nợ</h4>
-              <p class="text-center">(Nợ cần thu hồi)</p>
-            </b-col>
-          </b-row>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="goToAdd">
+                  Tạo mới
+                </button>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Danh Sách Công Nợ</h4>
+                <p class="text-center">(Nợ cần thu hồi)</p>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/4 px-2">
               <label> Khách hàng </label>
               <multiselect
                 v-model="customerSelect"
@@ -30,9 +30,9 @@
                 track-by="name"
                 @input="changeCustomer">
               </multiselect>
-            </b-col>
-            <b-col md="3">
-              <label> Tên </label>
+              </div>
+              <div class="w-full md:w-1/4 px-2">
+                <label> Tên </label>
               <input
                 id="name"
                 type="text"
@@ -41,9 +41,9 @@
                 v-model="inputs.customer_name"
                 maxlength="75"
               :disabled="customerSelect.id">
-            </b-col>
-            <b-col md="3">
-              <label> Số điện thoại </label>
+              </div>
+              <div class="w-full md:w-1/4 px-2">
+                <label> Số điện thoại </label>
               <input
                 id="price"
                 type="text"
@@ -52,33 +52,34 @@
                 v-model="inputs.customer_phone_number"
                 maxlength="11"
               :disabled="customerSelect.id">
-            </b-col>
-            <b-col md="3">
-              <label>
-                Trạng thái
-              </label>
-              <b-form-select
-                :options="status"
-                id="status"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                v-model="inputs.status">
-              </b-form-select>
-            </b-col>
-          </b-row>
+              </div>
+              <div class="w-full md:w-1/4 px-2">
+                <label>
+                  Trạng thái
+                </label>
+                <select
+                  id="status"
+                  type="text"
+                  autocomplete="new-password"
+                  class="form-control"
+                  v-model="inputs.status">
+                  <option v-for="option in status" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                <!--<b-icon icon="search" aria-hidden="true"></b-icon>-->
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+                  Tìm Kiếm
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="12">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
 
               <download-excel
@@ -89,13 +90,13 @@
                 name    = "Danh sách nợ thu hồi">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
-          <hr>
+            <hr>
 
-          <b-row>
-            <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
               <table class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -119,13 +120,13 @@
                 <tbody>
                   <tr>
                     <td class="total text-center font-weight-bold text-header" :colspan="7">Tổng</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_total | format_currency}}đ</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_remaining | format_currency}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_total)}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_remaining)}}đ</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_interest | format_currency}}</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_amount | format_currency}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_interest)}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_amount)}}</td>
                     <td></td>
                   </tr>
                   <tr v-for="(item) in items">
@@ -136,186 +137,235 @@
                     <td>{{item.status_str}}</td>
                     <td>{{item.created_at}}</td>
                     <td>{{item.appointment_date}}</td>
-                    <td class="text-right">{{item.total | format_currency}}</td>
-                    <td class="text-right">{{item.remaining | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.total)}}</td>
+                    <td class="text-right">{{formatCurrency(item.remaining)}}</td>
                     <td>{{item.interest_rate}}%</td>
                     <td>{{convertPeriodCodeToName(item.interest_period)}}</td>
                     <td>{{item.interest_period_real}}</td>
-                    <td class="text-right">{{item.interest | format_currency}}</td>
-                    <td class="text-right">{{item.amount | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.interest)}}</td>
+                    <td class="text-right">{{formatCurrency(item.amount)}}</td>
 
                     <td>
-                      <b-list-group horizontal v-if="item.status === 0">
-                        <b-list-group-item v-b-tooltip.hover title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-check-square-o text-danger"/>
-                        </b-list-group-item>
-                        <b-list-group-item v-b-tooltip.hover title="Sửa" @click="edit(item.id)">
+                      <div class="flex gap-1" v-if="item.status === 0">
+                        <button class="btn btn-sm btn-outline-danger" title="Thanh toán" @click="openPayModal(item)">
+                          <i class="fa fa-check-square-o"/>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
-                        </b-list-group-item>
-                        <b-list-group-item v-b-tooltip.hover title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
                           <i class="fa fa-trash" />
-                        </b-list-group-item>
-                      </b-list-group>
+                        </button>
+                      </div>
                     </td>
                   </tr>
 
                 </tbody>
               </table>
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
-
-
-    <b-modal centered hide-footer hide-header id="modal-pay">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Thanh toán</h5>
-          <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-          <b-col md="12">
-            <label>
-              Số tiền còn lại: <b>{{payData.remaining | format_currency}}đ</b>
-            </label>
-          </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Lãi suất: {{payData.interest_rate}}%
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Kỳ hạn: {{payData.interest_period}}
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Thời gian tính lãi: {{payData.interest_period_real}}
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Số tiền lãi: <b>{{payData.interest | format_currency}}đ</b>
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Tổng tiền phải trả:
-            <b class="text-header">{{payData.total_amount | format_currency}}đ</b>
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-          <b-col md="12">
-            <label>
-              Số tiền trả
-            </label>
-            <input
-              id="amount"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="payData.amount"
-              @keyup="integerOnly($event.target)"
-              @change="changeAmount()"
-              maxlength="14">
-          </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Tiền mặt </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="cash_input"
-          type="text"
-          class="form-control"
-          v-model="payData.cash"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeCash()"
-          maxlength="14">
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Chuyển khoản </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="credit_input"
-          type="text"
-          class="form-control"
-          v-model="payData.credit"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeCredit()"
-          maxlength="14">
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Tiền điện tử </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="e_money_input"
-          type="text"
-          class="form-control"
-          v-model="payData.e_money"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeEMoney()"
-          maxlength="14">
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
-            Thanh toán
-          </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+    <!-- Payment Modal -->
+    <TransitionRoot appear :show="modalPayment" as="template">
+      <Dialog as="div" @close="hidePayModal" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h5" class="text-center">
+                  Thanh toán
+                </DialogTitle>
+                <hr class="my-3">
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Lãi suất: {{payData.interest_rate}}%
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Kỳ hạn: {{payData.interest_period}}
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Thời gian tính lãi: {{payData.interest_period_real}}
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Tổng tiền phải trả:
+                      <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
+                    </label>
+                  </div>
+                </div>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>
+                      Số tiền trả
+                    </label>
+                    <input
+                      id="amount"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="payData.amount"
+                      @keyup="integerOnly($event.target)"
+                      @change="changeAmount()"
+                      maxlength="14">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/3 px-2 mt-2">
+                    <label> Tiền mặt </label>
+                  </div>
+                  <div class="w-full md:w-2/3 px-2">
+                    <input
+                    id="cash_input"
+                    type="text"
+                    class="form-control"
+                    v-model="payData.cash"
+                    autocomplete="new-password"
+                    @keyup="integerOnly($event.target)"
+                    @change="changeCash()"
+                    maxlength="14">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/3 px-2 mt-2">
+                    <label> Chuyển khoản </label>
+                  </div>
+                  <div class="w-full md:w-2/3 px-2">
+                    <input
+                    id="credit_input"
+                    type="text"
+                    class="form-control"
+                    v-model="payData.credit"
+                    autocomplete="new-password"
+                    @keyup="integerOnly($event.target)"
+                    @change="changeCredit()"
+                    maxlength="14">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/3 px-2 mt-2">
+                    <label> Tiền điện tử </label>
+                  </div>
+                  <div class="w-full md:w-2/3 px-2">
+                    <input
+                    id="e_money_input"
+                    type="text"
+                    class="form-control"
+                    v-model="payData.e_money"
+                    autocomplete="new-password"
+                    @keyup="integerOnly($event.target)"
+                    @change="changeEMoney()"
+                    maxlength="14">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2 text-right mt-3">
+                    <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
+                      Thanh toán
+                    </button>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 </template>
 
 
 <script>
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+import { useFormatters } from '@/composables/useFormatters'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
 
 export default {
   components: {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild,
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const { formatCurrency, currencyFormat } = useFormatters()
+
+    return {
+      toast,
+      router,
+      formatCurrency,
+      currencyFormat
+    }
   },
   data () {
     return {
@@ -375,6 +425,7 @@ export default {
       },
       loading: false,
       onSearch: false,
+      modalPayment: false,
     }
   },
   computed: {
@@ -405,27 +456,16 @@ export default {
       this.search()
     },
     /**
-     * Make toast without title
+     * Only input integer
      */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    integerOnly(item) {
+      let valueInput = item.value
+      let result = commonFunc.intergerOnly(valueInput)
+      item.value = result
     },
 
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title, content) {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
+    popToast(variant, content) {
+      this.toast(content, variant)
     },
 
     //   /**
@@ -473,7 +513,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -495,25 +535,19 @@ export default {
      *  Delete
      */
     deleted (id, name) {
+      if (!confirm('Xóa nợ [' + name + "]. Bạn có chắc không?")) {
+        return
+      }
 
-      this.$bvModal.msgBoxConfirm('Xóa nợ [' + name + "]. Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          debitAPI.deleteDebt(id).then(res => {
-            if(res != null && res.data != null) {
-              this.prepareToSearch()
-            }
-            this.popToast('success', 'Xóa nợ thành công!!!')
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
+      debitAPI.deleteDebt(id).then(res => {
+        if(res != null && res.data != null) {
+          this.prepareToSearch()
         }
+        this.popToast('success', 'Xóa nợ thành công!!!')
+      }).catch(err => {
+        // Handle error
+        let errorMess = commonFunc.handleStaffError(err)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -521,7 +555,11 @@ export default {
      *  Go to edit
      */
     edit (id) {
-      this.$router.push('/debt/edit/' + id)
+      this.router.push('/debt/edit/' + id)
+    },
+
+    hidePayModal() {
+      this.modalPayment = false
     },
 
     openPayModal(pay) {
@@ -540,7 +578,7 @@ export default {
       this.payData.amount = JSON.parse(JSON.stringify(this.currencyFormat(pay.amount)))
       this.payData.cash = JSON.parse(JSON.stringify(this.currencyFormat(pay.amount)))
 
-      this.$bvModal.show('modal-pay')
+      this.modalPayment = true
     },
 
     /**
@@ -550,7 +588,7 @@ export default {
         console.log("luc pay")
         console.log(this.payData)
       if (this.payData.amount.replaceAll(",", "") <= 0) {
-        this.popToast('danger', 'Số tiền trả phải lớn hơn 0')
+        this.toast('Số tiền trả phải lớn hơn 0', 'error')
         return;
       }
 
@@ -559,11 +597,11 @@ export default {
             parseInt((this.payData.cash + '').replaceAll(",", ""))
             + parseInt((this.payData.credit + '').replaceAll(",", ""))
             + parseInt((this.payData.e_money + '').replaceAll(",", ""))) {
-          this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+          this.toast("Tổng loại tiền phải bằng số tiền thanh toán", 'error')
           return
         }
       } catch(err) {
-        this.popToast('danger', 'Vui lòng nhập loại tiền')
+        this.toast('Vui lòng nhập loại tiền', 'error')
       }
 
       this.payData.remaining = (this.payData.remaining + '').replaceAll(",", "")
@@ -585,12 +623,12 @@ export default {
         this.payData.credit = 0
         this.payData.cash = 0
         this.payData.e_money = 0
-        this.$bvModal.hide('modal-pay')
-        this.popToast('success', 'Đã thanh toán thành công!!')
+        this.modalPayment = false
+        this.toast('Đã thanh toán thành công!!', 'success')
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -598,7 +636,7 @@ export default {
      *  Go to add
      */
     goToAdd () {
-      this.$router.push('/debt/add')
+      this.router.push('/debt/add')
     },
 
     /**
@@ -632,7 +670,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -680,30 +718,7 @@ export default {
          }
       },
 
-    /**
-     * Only input integer
-     */
-    integerOnly(item) {
-      let valueInput = item.value
-      let result = commonFunc.intergerOnly(valueInput)
-      item.value = result
-    },
-
-      /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = ""
-        if(num == 0) {
-            return "0"
-        }
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      }
-      return result
-    },
-
-      convertPeriodCodeToName(code) {
+    convertPeriodCodeToName(code) {
         if (code == 'day') {
             return "Ngày"
         }

@@ -1,26 +1,26 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
 
-          <b-row>
-            <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="gotoAdd()">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+                <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="gotoAdd()">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div md='12'>
               <h4 class="mt-2 text-center">Store</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-            <b-row>
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-3 px-2">
                 <label>Tên</label>
                 <input
                   id="name"
@@ -28,69 +28,82 @@
                   class="form-control"
                   v-model="inputs.name"
                   maxlength="100">
-              </b-col>
-              <b-col md="3">
+              </div>
+              <div class="w-full md:w-3 px-2">
                 <label>Thương hiệu</label>
-                <b-form-select
+                <select
                   :options="optionsBrand"
                   id="brand_id"
                   type="text"
                   class="form-control"
-                  v-model="inputs.brand_id"></b-form-select>
-              </b-col>
-              <b-col md="3">
+                  v-model="inputs.brand_id"></select>
+              </div>
+              <div class="w-full md:w-3 px-2">
                   <label>Tỉnh/ Thành Phố</label>
-                  <b-form-select
+                  <select
                     :options="optionsCity"
                     id="city_id"
                     type="text"
                     class="form-control"
                     v-model="inputs.city_id"
-                    v-on:change="changeCity($event.target)"></b-form-select>
-                </b-col>
-            <b-col md="3">
+                    v-on:change="changeCity($event.target)"></select>
+                </div>
+            <div class="w-full md:w-3 px-2">
                 <label>Quận</label>
-                <b-form-select 
+                <select
                   v-bind="{ disabled: inputs.city_id=='' }"
                   :options="optionsDistrict"
                   id="district"
-                  type="text" 
+                  type="text"
                   class="form-control"
-                  v-model="inputs.district_id"></b-form-select>
-              </b-col>
-          </b-row>
-           <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch"
+                  v-model="inputs.district_id"></select>
+              </div>
+          </div>
+           <div class="mt-2 mb-2">
+            <div class="w-full md:w-12 px-2">
+              <button class="btn btn-primary mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch"
                         @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-            </b-row>
+              </button>
+            </div>
+            </div>
 
-          <b-table 
-          hover
-          bordered
-          stacked="md"
-          :fields="fields" 
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th v-for="field in fields" :key="field.key" :class="field.class">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index">
+                <td>{{ item.stt }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.brand_name }}</td>
+                <td>{{ item.branch_name }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.tax_code }}</td>
+                <td>{{ item.expired_at }}</td>
+                <td>{{ item.created_at }}</td>
+                <td class="actions-cell">
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-link" title="Edit" @click="edit(item.id)">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button type="button" class="btn btn-sm btn-link" title="Delete" @click="deleted(item.id, item.name, item.stt)">
+                      <i class="fa fa-trash" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">Hết</span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -184,12 +197,8 @@ export default {
    * Make toast without title
    */
   popToast(variant, content) {
-    this.$bvToast.toast(content, {
-      toastClass: 'my-toast',
-      noCloseButton: true,
-      variant: variant,
-      autoHideDelay: 3000
-    })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+    this.toast(content, variant === 'danger' ? 'error' : variant)
   },
 
     /**
@@ -275,14 +284,14 @@ export default {
      *  Go to edit
      */
     edit (id) {
-      this.$router.push('/store/index/' + id)
+      this.router.push('/store/index/' + id)
     },
 
     /**
      *  Go to add
      */
     gotoAdd () {
-      this.$router.push('/store/index/')
+      this.router.push('/store/index/')
     },
 
     /**
@@ -293,7 +302,7 @@ export default {
 
       this.onSearch = true
       this.loading = true
-      
+
       this.inputs.city_id = this.inputs.city_id.toString()
       this.inputs.district_id = this.inputs.district_id.toString()
         this.inputs.limit = this.pageLimit

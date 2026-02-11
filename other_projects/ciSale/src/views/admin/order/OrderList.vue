@@ -1,43 +1,43 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
 
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success float-right btn-width-120" @click="gotoAdd">
                 Thêm
-              </b-button>
+              </button>
 
-              <b-button variant="outline-primary" class="pull-right btn-width-200 mr-2" @click="openModalCheckProductNeedImport">
+              <button class="btn btn-outline-primary float-right btn-width-200 mr-2" @click="openModalCheckProductNeedImport">
                 Xem SP cần nhập hàng
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-1 text-center text-header">Danh sách Đặt Hàng</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row class="form-row">
+          <div class="flex flex-wrap -mx-2 form-row">
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label>Từ ngày</label>
               <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label>Đến ngày</label>
               <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" :typeable="true"
                           placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label>Tên khách hàng</label>
               <input
                 id="customer_name"
@@ -47,9 +47,9 @@
                 class="form-control"
                 v-model="inputs.customer_name"
                 :disabled="onSearch">
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label>SĐT khách hàng</label>
               <input
                 id="customer_phone"
@@ -60,133 +60,178 @@
                 v-model="inputs.customer_phone"
                 :disabled="onSearch"
                 @keyup="integerOnly($event.target)">
-            </b-col>
+            </div>
 
-          </b-row>
+          </div>
 
-          <b-row class="mt-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+          <div class="flex flex-wrap -mx-2 mt-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch"
                         @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="fields"
-            :items="items">
-            <template v-slot:cell(order_number)="data">
-              <a :href="'/order-detail/' + data.item.id">{{data.item.order_number}}</a>
-            </template>
-            <template v-slot:cell(total)="data">
-              {{currencyFormat(data.item.total)}}
-            </template>
-            <template v-slot:cell(total_paid)="data">
-              {{currencyFormat(data.item.total_paid)}}
-            </template>
-            <!--<template v-slot:cell(profit)="data">-->
-              <!--{{currencyFormat(data.item.profit)}}-->
-            <!--</template>-->
-
-            <template v-slot:cell(actions)="dataId">
-              <b-list-group horizontal v-show="dataId.item.status != 2">
-                <b-list-group-item v-b-tooltip.hover title="Sửa"
-                         @click="goToUpdate(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Xoá"
-                         @click="deleteOrder(dataId.item.id, dataId.item.order_number, dataId.item.customer_name)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-
-            <template v-slot:cell(go_to_sell)="dataId">
-              <b-button v-show="dataId.item.status == 1" variant="outline-success" class="mr-2"
-                        @click="goToTrade(dataId.item.id)">
-                Bán
-              </b-button>
-            </template>
-
-          </b-table>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-center">Mã ĐH</th>
+                    <th class="text-center">Ngày hẹn lấy</th>
+                    <th class="text-center">Khách hàng</th>
+                    <th class="text-center">SĐT</th>
+                    <th class="text-center">Tổng tiền đặt</th>
+                    <th class="text-center">Số tiền đã trả</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                    <th class="text-center">Bán hàng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in items" :key="item.id">
+                    <td>
+                      <a :href="'/order-detail/' + item.id">{{item.order_number}}</a>
+                    </td>
+                    <td>{{item.appointment_date}}</td>
+                    <td>{{item.customer_name}}</td>
+                    <td>{{item.customer_phone}}</td>
+                    <td class="text-right">{{currencyFormat(item.total)}}</td>
+                    <td class="text-right">{{currencyFormat(item.total_paid)}}</td>
+                    <td>{{item.status_str}}</td>
+                    <td class="text-center">
+                      <div class="flex justify-center gap-2" v-show="item.status != 2">
+                        <button class="btn btn-sm btn-outline-primary" title="Sửa"
+                         @click="goToUpdate(item.id)">
+                          <i class="fa fa-edit" />
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" title="Xoá"
+                         @click="deleteOrder(item.id, item.order_number, item.customer_name)">
+                          <i class="fa fa-trash" />
+                        </button>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <button v-show="item.status == 1" class="btn btn-outline-success mr-2"
+                        @click="goToTrade(item.id)">
+                        Bán
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
 
-    <!--Modal tìm kiếm khách hàng -->
-    <b-modal centered hide-footer hide-header size="xl" id="modal-check-product-need-import">
-      <b-row>
-        <b-col md="12">
-          <h4 class="modal-title text-center text-success">Danh sách sản phẩm cần nhập hàng</h4>
-        </b-col>
-      </b-row>
-      <hr>
+    <!--Modal check product need import -->
+    <TransitionRoot appear :show="modalCheckProductImport" as="template">
+      <Dialog as="div" @close="hideModalCheckProductNeedImport" class="relative z-10">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
 
-      <b-row class="mt-2">
-        <b-col>
-          <span class="loading-more" v-show="loadingCheckProductImport"><icon name="loading" width="60" /></span>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="productImportFields"
-            :items="productImportItems">
-              <template v-slot:cell(quantity_repo)="data">
-                {{currencyFormat(data.item.quantity_repo)}}
-              </template>
-              <template v-slot:cell(quantity)="data">
-                {{currencyFormat(data.item.quantity)}}
-              </template>
-              <template v-slot:cell(price_sell)="data">
-                {{currencyFormat(data.item.price_sell)}}
-              </template>
-              <template v-slot:cell(amount_sell)="data">
-                {{currencyFormat(data.item.amount_sell)}}
-              </template>
-          </b-table>
-        </b-col>
-      </b-row>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-6xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <h4 class="modal-title text-center text-success">Danh sách sản phẩm cần nhập hàng</h4>
+                  </div>
+                </div>
+                <hr>
 
-      <b-row class="mt-3">
-        <b-col class="text-center">
-          <span>--Hết--</span>
-        </b-col>
-      </b-row>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2">
+                    <span class="loading-more" v-show="loadingCheckProductImport"><icon name="loading" width="60" /></span>
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th class="text-center">Mã ĐH đặt</th>
+                          <th class="text-center">Ngày hẹn lấy</th>
+                          <th class="text-center">Sản phẩm</th>
+                          <th class="text-center">Số lượng kho</th>
+                          <th class="text-center">Số lượng đặt</th>
+                          <th class="text-center">Đơn giá đặt</th>
+                          <th class="text-center">Thành tiền</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="item in productImportItems" :key="item.id">
+                          <td>{{item.order_number}}</td>
+                          <td>{{item.appointment_date}}</td>
+                          <td>{{item.product_name}}</td>
+                          <td class="text-right">{{currencyFormat(item.quantity_repo)}}</td>
+                          <td class="text-right">{{currencyFormat(item.quantity)}}</td>
+                          <td class="text-right">{{currencyFormat(item.price_sell)}}</td>
+                          <td class="text-right">{{currencyFormat(item.amount_sell)}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
-      <b-row>
-        <b-col md="6">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="hideModalCheckProductNeedImport">
-            Quay lại
-          </b-button>
-        </b-col>
-        <b-col md="6" class="text-right pull-right">
-            <download-excel
-              class   = "btn btn-default text-header"
-              :data   = "productImportItems"
-              :fields = "productImportExcelFields"
-              worksheet = "Sản phẩm cần nhập hàng"
-              name    = "san_pham_can_nhap_hang.xls">
-              <b>Xuất Excel</b>
-            </download-excel>
-        </b-col>
-      </b-row>
+                <div class="flex flex-wrap -mx-2 mt-3">
+                  <div class="w-full px-2 text-center">
+                    <span>--Hết--</span>
+                  </div>
+                </div>
 
-    </b-modal>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/2 px-2">
+                    <button class="btn btn-outline-secondary float-left btn-width-120" @click="hideModalCheckProductNeedImport">
+                      Quay lại
+                    </button>
+                  </div>
+                  <div class="w-full md:w-1/2 px-2 text-right">
+                      <download-excel
+                        class   = "btn btn-default text-header"
+                        :data   = "productImportItems"
+                        :fields = "productImportExcelFields"
+                        worksheet = "Sản phẩm cần nhập hàng"
+                        name    = "san_pham_can_nhap_hang.xls">
+                        <b>Xuất Excel</b>
+                      </download-excel>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
 <script>
@@ -195,15 +240,28 @@
 import orderApi from '@/api/order'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+
 
 
 export default {
   components: {
     Datepicker,
+    Dialog,
+    DialogPanel,
+    TransitionRoot,
+    TransitionChild
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+
+    return { toast, router }
   },
   data () {
     return {
@@ -213,6 +271,7 @@ export default {
         from_date: '2000-01-01',
         to_date: '2000-01-02'
       },
+      modalCheckProductImport: false,
       fields: [
         {
           key: 'stt',
@@ -334,12 +393,7 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     /**
@@ -374,7 +428,7 @@ export default {
        * Go to detail
        */
       goToDetail(id) {
-        this.$router.push('/order-detail/' + id)
+        this.router.push('/order-detail/' + id)
       },
 
     /**
@@ -434,7 +488,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -469,25 +523,18 @@ export default {
      */
     deleteOrder(id, order_number, customer_name) {
       if(id) {
-        this.$bvModal.msgBoxConfirm('Xóa đơn đặt hàng [' + order_number + "] của khách hàng [" + customer_name + "]. Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            orderApi.deleteOrder(id).then(res => {
-              if(res != null && res.data != null) {
-                this.search()
-              }
+        if(confirm('Xóa đơn đặt hàng [' + order_number + "] của khách hàng [" + customer_name + "]. Bạn có chắc không?")) {
+          orderApi.deleteOrder(id).then(res => {
+            if(res != null && res.data != null) {
+              this.search()
+            }
 
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.makeToast('danger', "Xóa thất bại!!!", errorMess)
-            })
-          }
-        })
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.popToast('error', "Xóa thất bại!!!" + errorMess)
+          })
+        }
       }
     },
 
@@ -495,32 +542,32 @@ export default {
      * Go to add
      */
     gotoAdd() {
-      this.$router.push('/order-index')
+      this.router.push('/order-index')
     },
 
     /**
      * Go to update
      */
     goToUpdate(id) {
-      this.$router.push('/order-index/' + id)
+      this.router.push('/order-index/' + id)
     },
 
     /**
      * Go to trade
      */
     goToTrade(id) {
-      this.$router.push('/trade-sell-from-order/' + id)
+      this.router.push('/trade-sell-from-order/' + id)
     },
 
     openModalCheckProductNeedImport() {
-      this.$bvModal.show('modal-check-product-need-import')
+      this.modalCheckProductImport = true
 
       this.getProductNeedImport()
     },
 
     hideModalCheckProductNeedImport() {
       this.productImportItems = []
-      this.$bvModal.hide('modal-check-product-need-import')
+      this.modalCheckProductImport = false
     },
 
     getProductNeedImport () {
@@ -537,7 +584,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.loadingCheckProductImport = false
       })

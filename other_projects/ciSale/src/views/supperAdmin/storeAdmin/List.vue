@@ -1,26 +1,26 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
 
-          <b-row>
-            <b-col>
-                <b-button variant="primary" class="pull-right px-4 default-btn-bg" @click="gotoAdd()">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+                <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="gotoAdd()">
                   Thêm
-                </b-button>
-            </b-col>
-          </b-row>
+                </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div md='12'>
               <h4 class="mt-2 text-center">Admin Store</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-            <b-row>
-              <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-3 px-2">
                 <label>Tên</label>
                 <input
                   id="name"
@@ -28,8 +28,8 @@
                   class="form-control"
                   v-model="inputs.name"
                   maxlength="100">
-              </b-col>
-            <b-col md="3">
+              </div>
+            <div class="w-full md:w-3 px-2">
                 <label>Số Điện Thoại</label>
                 <input
                   id="phone"
@@ -38,17 +38,17 @@
                   v-model="inputs.phone_number"
                   @keyup="integerOnly($event.target)"
                   maxlength="20">
-              </b-col>
-            <b-col md="2">
+              </div>
+            <div class="w-full md:w-2 px-2">
                 <label>Quyền</label>
-                <b-form-select
+                <select
                   :options="options"
                   id="phone"
                   type="text"
                   class="form-control"
-                  v-model="inputs.role_id"></b-form-select>
-              </b-col>
-              <b-col md="2">
+                  v-model="inputs.role_id"></select>
+              </div>
+              <div class="w-full md:w-2 px-2">
                 <label>Tên Cửa Hàng</label>
                 <input
                   id="nameStore"
@@ -56,85 +56,94 @@
                   class="form-control"
                   maxlength="100"
                   v-model="inputs.store_name">
-              </b-col>
+              </div>
 
-              <b-col md="2">
+              <div class="w-full md:w-2 px-2">
                 <label>Thương hiệu</label>
-                <b-form-select
+                <select
                   :options="optionsBrand"
                   id="brand_id"
                   type="text"
                   class="form-control"
-                  v-model="inputs.brand_id"></b-form-select>
-              </b-col>
-          </b-row>
+                  v-model="inputs.brand_id"></select>
+              </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="primary" class="mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
+          <div class="mt-2 mb-2">
+            <div class="w-full md:w-12 px-2">
+              <button class="btn btn-primary mb-3 pull-right px-4 default-btn-bg" :disabled="onSearch" @click.prevent="prepareToSearch">
               Tìm Kiếm
-            </b-button>
-            </b-col>
-            </b-row>
+            </button>
+            </div>
+            </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Reset password" @click="showModalConfirmResetPass(dataId.item)">
-                <i class="fa fa-refresh" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th v-for="field in fields" :key="field.key" :class="field.class">{{ field.label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index">
+                <td>{{ item.stt }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.phone_number }}</td>
+                <td>{{ item.role_name }}</td>
+                <td>{{ item.store_name }}</td>
+                <td>{{ item.brand_name }}</td>
+                <td>{{ item.created_at }}</td>
+                <td class="actions-cell">
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-link" title="Edit" @click="edit(item.id)">
+                      <i class="fa fa-edit" />
+                    </button>
+                    <button type="button" class="btn btn-sm btn-link" title="Delete" @click="deleted(item.id, item.name, item.stt)">
+                      <i class="fa fa-trash" />
+                    </button>
+                    <button type="button" class="btn btn-sm btn-link" title="Reset password" @click="showModalConfirmResetPass(item)">
+                      <i class="fa fa-refresh" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">Hết</span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal xác nhận reset pass -->
-    <b-modal centered hide-footer hide-header id="modal-confirm-reset-pass">
-      <b-row>
-        <b-col>
+    <div centered hide-footer hide-header id="modal-confirm-reset-pass">
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <h5 class="text-center text-header">Reset password</h5>
           <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-2">
+        <div class="w-full px-2">
           <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
           <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
 
-      <b-row>
-        <b-col class="text-center mt-3" v-show="!resetting">
+      <div class="flex flex-wrap -mx-2">
+        <div class="text-center mt-3" v-show="!resetting">
           <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
             Đóng
           </button>
           <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
             Xác nhận
           </button>
-        </b-col>
-        <b-col v-show="resetting">
+        </div>
+        <div v-show="resetting">
           <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
-        </b-col>
-      </b-row>
-    </b-modal>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -225,12 +234,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -317,14 +322,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/admin-store/index/' + id)
+      this.router.push('/admin-store/index/' + id)
     },
 
     /**
      * Go to add
      */
     gotoAdd () {
-      this.$router.push('/admin-store/index/')
+      this.router.push('/admin-store/index/')
     },
 
     /**

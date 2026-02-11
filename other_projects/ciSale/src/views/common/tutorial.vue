@@ -1,26 +1,25 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
-            <b-form>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-              <b-row class="form-row border-bottom border-warning">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning">
+                <div md='12'>
                   <h2 class="text-center">Hướng dẫn sử dụng</h2>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Giới thiệu hệ thống
                     <i v-show="!isShowIntroduction" class="fa fa-plus pl-3" @click="isShowIntroduction = !isShowIntroduction"></i>
                     <i v-show="isShowIntroduction" class="fa fa-minus pl-3" @click="isShowIntroduction = !isShowIntroduction"></i>
                   </h4>
-                  <b-row v-show="isShowIntroduction">
-                    <b-col>
+                  <div v-show="isShowIntroduction">
+                    <div class="w-full px-2">
                       <h5>ciSale:</h5>
                       <p class="lv2">
                         - Là hệ thống phần mềm cung cấp giải pháp quản lý bán hàng và tài chính.
@@ -29,41 +28,41 @@
                         - Hệ thống bao gồm: website quản lý (<a target="_blank" href="https://cisale.vn">cisale.vn</a>)
                         và app điện thoại
                       </p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Hướng dẫn tải app
                     <i v-show="!isShowDownApp" class="fa fa-plus pl-3" @click="isShowDownApp = !isShowDownApp"></i>
                     <i v-show="isShowDownApp" class="fa fa-minus pl-3" @click="isShowDownApp = !isShowDownApp"></i>
                   </h4>
-                  <b-row v-show="isShowDownApp">
-                    <b-col>
+                  <div v-show="isShowDownApp">
+                    <div class="w-full px-2">
                       <p>App điện thoại giúp bạn kiểm tra tình hình kinh doanh, công nợ, nợ công, kho hàng, ... một cách dễ dàng.</p>
                       <p>Để tải app điện thoại:</p>
                       <p class="lv2">- Đối với điện thoại android: Bạn lên CH play hoặc google play, tìm và tải app "ciSale"</p>
                       <p class="lv2">- Đối với điện thoại iOS: Bạn lên app store, tìm và tải app "ciSale"</p>
                       <p class="lv1">Sau khi tải app, bạn có thể đăng nhập bằng tài khoản mà chúng tôi (ciinTech) đã cung cấp hoặc từ người quản lý của bạn.</p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Thiết lập căn bản
                     <i v-show="!isShowBaseSetting" class="fa fa-plus pl-3" @click="isShowBaseSetting = !isShowBaseSetting"></i>
                     <i v-show="isShowBaseSetting" class="fa fa-minus pl-3" @click="isShowBaseSetting = !isShowBaseSetting"></i>
                   </h4>
-                  <b-row v-show="isShowBaseSetting">
-                    <b-col>
+                  <div v-show="isShowBaseSetting">
+                    <div class="w-full px-2">
                       <p>
                         Bạn truy cập web quản lý <a target="_blank" href="https://cisale.vn">https://cisale.vn</a>
                         đăng nhập, vào menu "Thiết lập" và thực hiện các bước sau đây:
@@ -130,21 +129,21 @@
                       <p class="pt-3">
                         <img src="/static/img/project/guide/menu_base_setting.PNG" class="image-logo"/>
                       </p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Thiết lập nâng cao
                     <i v-show="!isShowSetting" class="fa fa-plus pl-3" @click="isShowSetting = !isShowSetting"></i>
                     <i v-show="isShowSetting" class="fa fa-minus pl-3" @click="isShowSetting = !isShowSetting"></i>
                   </h4>
-                  <b-row v-show="isShowSetting">
-                    <b-col>
+                  <div v-show="isShowSetting">
+                    <div class="w-full px-2">
                       <p>Bạn truy cập web quản lý <a target="_blank" href="https://cisale.vn">https://cisale.vn</a> đăng nhập và thực hiện các bước sau đây</p>
                       <p class="text-primary">** Nếu bạn chưa rõ cách làm, bạn có thể đăng nhập bằng tài khoản demo của chúng tôi (Số điện thoại: 0999888999, mật khẩu: 12345678), xem mẫu và làm tương tự </p>
 
@@ -153,8 +152,8 @@
                         <i v-show="!isShowPromotion" class="fa fa-plus pl-3" @click="isShowPromotion = !isShowPromotion"></i>
                         <i v-show="isShowPromotion" class="fa fa-minus pl-3" @click="isShowPromotion = !isShowPromotion"></i>
                       </h5>
-                      <b-row v-show="isShowPromotion" class="lv3">
-                        <b-col>
+                      <div v-show="isShowPromotion" class="lv3">
+                        <div class="w-full px-2">
                           <p>Để thêm khuyến mãi, bạn vào menu “Thiết lập”, chọn “Khuyến mãi”.</p>
                           <p>Bạn bấm nút “Thêm” ở góc trên bên phải. Màn hình tạo mới khuyến mãi sẽ xuất hiện.
                             Trong màn hình, những mục có dấu sao màu đỏ (<span class="text-danger">*</span>) là những mục bắt buộc nhập.
@@ -174,32 +173,32 @@
 
                           <p>Sau khi hoàn thành khai báo, bạn nhớ nhấn nút "lưu" ở góc trên bên phải nha</p>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thêm hình ảnh cho sản phẩm
                         <i v-show="!isShowImageProduct" class="fa fa-plus pl-3" @click="isShowImageProduct = !isShowImageProduct"></i>
                         <i v-show="isShowImageProduct" class="fa fa-minus pl-3" @click="isShowImageProduct = !isShowImageProduct"></i>
                       </h5>
-                      <b-row v-show="isShowImageProduct" class="lv3">
-                        <b-col>
+                      <div v-show="isShowImageProduct" class="lv3">
+                        <div class="w-full px-2">
                           <p>Để thêm hình ảnh cho sản phẩm, bạn vào menu “Thiết lập”, chọn “Hình ảnh sản phẩm”.</p>
                           <p>Tại màn hình "Hình Ảnh Sản Phẩm", bạn chọn sản phẩm muốn thêm hình ảnh</p>
                           <p class="lv4">Tại mục "Thêm hình ảnh", bạn chọn hình ảnh muốn thêm</p>
                           <p class="lv4">Tại mục "Hình mặc định của sản phẩm", bạn chọn "Có" nếu muốn đây là hình đại diện cho sản phẩm</p>
                           <p class="lv4">Click nút "Upload hình" để thêm hình ảnh mới</p>
                           <p>Danh sách hình ảnh của sản phẩm sẽ show phía dưới cùng.</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Thêm thuộc tính cho sản phẩm
                         <i v-show="!isShowProductProperties" class="fa fa-plus pl-3" @click="isShowProductProperties = !isShowProductProperties"></i>
                         <i v-show="isShowProductProperties" class="fa fa-minus pl-3" @click="isShowProductProperties = !isShowProductProperties"></i>
                       </h5>
-                      <b-row v-show="isShowProductProperties" class="lv3">
-                        <b-col>
+                      <div v-show="isShowProductProperties" class="lv3">
+                        <div class="w-full px-2">
                           <p>Thường được sử dụng cho shop quần áo, mỹ phẩm với thuộc tính như: màu, size, ...</p>
                           <p>Để thêm thuộc tính cho sản phẩm, bạn vào menu “Thiết lập”, chọn “Thuộc tính sản phẩm”.</p>
                           <p>Bạn bấm nút “Thêm” ở góc trên bên phải. Màn hình "Thêm Mới Thuộc Tính Sản Phẩm" sẽ xuất hiện.
@@ -208,157 +207,156 @@
                           <p>Sau khi nhập xong các mục *, bạn click nút "Thêm" để thêm thuộc tính mới</p>
                           <p>Sau khi hoàn tất, bạn click nút "Lưu" ở góc trên bên phải để lưu lại</p>
 
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
                       <p>
                         <img src="/static/img/project/guide/menu_adv_setting.png" class="image-guide"/>
                       </p>
 
                       <p class="lv1 mb-2"><b>Tham khảo thêm tại mục "Video hướng dẫn"</b></p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Hướng dẫn sử dụng chức năng
                     <i v-show="!isShowFunctionGuide" class="fa fa-plus pl-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
                     <i v-show="isShowFunctionGuide" class="fa fa-minus pl-3" @click="isShowFunctionGuide = !isShowFunctionGuide"></i>
                   </h4>
-                  <b-row v-show="isShowFunctionGuide">
-                    <b-col>
+                  <div v-show="isShowFunctionGuide">
+                    <div class="w-full px-2">
 
                       <h5 class="lv2 pt-3">
                         Bán hàng
                         <i v-show="!isShowGuideOrderSell" class="fa fa-plus pl-3" @click="isShowGuideOrderSell = !isShowGuideOrderSell"></i>
                         <i v-show="isShowGuideOrderSell" class="fa fa-minus pl-3" @click="isShowGuideOrderSell = !isShowGuideOrderSell"></i>
                       </h5>
-                      <b-row v-show="isShowGuideOrderSell" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideOrderSell" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Nhập hàng
                         <i v-show="!isShowGuideOrderBuy" class="fa fa-plus pl-3" @click="isShowGuideOrderBuy = !isShowGuideOrderBuy"></i>
                         <i v-show="isShowGuideOrderBuy" class="fa fa-minus pl-3" @click="isShowGuideOrderBuy = !isShowGuideOrderBuy"></i>
                       </h5>
-                      <b-row v-show="isShowGuideOrderBuy" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideOrderBuy" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Kiểm tra sản phẩm đang có trong kho
                         <i v-show="!isShowGuideProInRepo" class="fa fa-plus pl-3" @click="isShowGuideProInRepo = !isShowGuideProInRepo"></i>
                         <i v-show="isShowGuideProInRepo" class="fa fa-minus pl-3" @click="isShowGuideProInRepo = !isShowGuideProInRepo"></i>
                       </h5>
-                      <b-row v-show="isShowGuideProInRepo" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideProInRepo" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                       Quản lý quỹ
                       <i v-show="!isShowGuideFund" class="fa fa-plus pl-3" @click="isShowGuideFund = !isShowGuideFund"></i>
                       <i v-show="isShowGuideFund" class="fa fa-minus pl-3" @click="isShowGuideFund = !isShowGuideFund"></i>
                       </h5>
-                      <b-row v-show="isShowGuideFund" class="lv3">
-                      <b-col>
+                      <div v-show="isShowGuideFund" class="lv3">
+                      <div class="w-full px-2">
                       <p>Xem video hướng dẫn tại mục bên dưới</p>
-                      </b-col>
-                      </b-row>
+                      </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý công nợ (Nợ cần thu hồi)
                         <i v-show="!isShowGuideDebt" class="fa fa-plus pl-3" @click="isShowGuideDebt = !isShowGuideDebt"></i>
                         <i v-show="isShowGuideDebt" class="fa fa-minus pl-3" @click="isShowGuideDebt = !isShowGuideDebt"></i>
                       </h5>
-                      <b-row v-show="isShowGuideDebt" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideDebt" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý nợ công (Nợ cần phải trả)
                         <i v-show="!isShowGuidePublicDebt" class="fa fa-plus pl-3" @click="isShowGuidePublicDebt = !isShowGuidePublicDebt"></i>
                         <i v-show="isShowGuidePublicDebt" class="fa fa-minus pl-3" @click="isShowGuidePublicDebt = !isShowGuidePublicDebt"></i>
                       </h5>
-                      <b-row v-show="isShowGuidePublicDebt" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuidePublicDebt" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý khách hàng
                         <i v-show="!isShowGuideCustomer" class="fa fa-plus pl-3" @click="isShowGuideCustomer = !isShowGuideCustomer"></i>
                         <i v-show="isShowGuideCustomer" class="fa fa-minus pl-3" @click="isShowGuideCustomer = !isShowGuideCustomer"></i>
                       </h5>
-                      <b-row v-show="isShowGuideCustomer" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideCustomer" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Quản lý nhà cung cấp
                         <i v-show="!isShowGuideSupplier" class="fa fa-plus pl-3" @click="isShowGuideSupplier = !isShowGuideSupplier"></i>
                         <i v-show="isShowGuideSupplier" class="fa fa-minus pl-3" @click="isShowGuideSupplier = !isShowGuideSupplier"></i>
                       </h5>
-                      <b-row v-show="isShowGuideSupplier" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideSupplier" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
                       <h5 class="lv2 pt-3">
                         Xem báo cáo
                         <i v-show="!isShowGuideReport" class="fa fa-plus pl-3" @click="isShowGuideReport = !isShowGuideReport"></i>
                         <i v-show="isShowGuideReport" class="fa fa-minus pl-3" @click="isShowGuideReport = !isShowGuideReport"></i>
                       </h5>
-                      <b-row v-show="isShowGuideReport" class="lv3">
-                        <b-col>
+                      <div v-show="isShowGuideReport" class="lv3">
+                        <div class="w-full px-2">
                           <p>Xem video hướng dẫn tại mục bên dưới</p>
-                        </b-col>
-                      </b-row>
+                        </div>
+                      </div>
 
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row border-bottom border-warning pt-2">
-                <b-col md='12'>
+              <div class="form-row border-bottom border-warning pt-2">
+                <div md='12'>
                   <h4 class="text-header">
                     Video hướng dẫn
                     <i v-show="!isShowVideoGuide" class="fa fa-plus pl-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
                     <i v-show="isShowVideoGuide" class="fa fa-minus pl-3" @click="isShowVideoGuide = !isShowVideoGuide"></i>
                   </h4>
-                  <b-row v-show="isShowVideoGuide">
-                    <b-col>
+                  <div v-show="isShowVideoGuide">
+                    <div class="w-full px-2">
                       <p>1. Video hướng dẫn thiết lập căn bản và nâng cao trên web quản lý: <a href="https://www.youtube.com/watch?v=LuHb0-AAxkQ" target="_blank">Xem</a></p>
                       <p>2. Video hướng dẫn thực hiện chức năng trên web quản lý: <a href="https://www.youtube.com/watch?v=ngW-HFhtEC4" target="_blank">Xem</a></p>
                       <p>3. Video hướng dẫn tải app và quản lý công việc trên điện thoại: <a href="https://www.youtube.com/watch?v=w8w_wvmp-jE" target="_blank">Xem</a></p>
-                    </b-col>
-                  </b-row>
+                    </div>
+                  </div>
                   <br>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              </b-form>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

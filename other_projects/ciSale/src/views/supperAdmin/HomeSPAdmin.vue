@@ -1,47 +1,53 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='6'>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/2 px-2">
               <h6 class="mt-2">Super admin</h6>
-            </b-col>
+            </div>
 
-          </b-row>
+          </div>
           <hr/>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToBrandList()">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-primary pull-center px-4 default-btn-bg" @click="goToBrandList()">
                 Quản lý thương hiệu
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
           <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToStoreList()">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-primary pull-center px-4 default-btn-bg" @click="goToStoreList()">
                 Quản lý cửa hàng
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
           <br>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" class="pull-center px-4 default-btn-bg" @click="goToAdminStoreList()">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-primary pull-center px-4 default-btn-bg" @click="goToAdminStoreList()">
                 Quản lý admin
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
           <br>
 
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import { useRouter } from 'vue-router'
+
 export default {
+  setup() {
+    const router = useRouter()
+    return { router }
+  },
   data () {
     return {
     }
@@ -50,13 +56,13 @@ export default {
   },
   methods: {
     goToBrandList () {
-      this.$router.push('/brand/list')
+      this.router.push('/brand/list')
     },
     goToStoreList () {
-      this.$router.push('/store/list')
+      this.router.push('/store/list')
     },
     goToAdminStoreList () {
-      this.$router.push('/admin-store/list')
+      this.router.push('/admin-store/list')
     }
   }
 }

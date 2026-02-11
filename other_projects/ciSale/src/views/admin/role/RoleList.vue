@@ -1,46 +1,58 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="gotoAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="gotoAdd()">
                 Thêm mới
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-1 text-center text-header">NHÓM QUYỀN</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-          <template v-slot:cell(actions)="dataId">
-            <b-list-group horizontal>
-              <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                <i class="fa fa-edit" />
-              </b-list-group-item>
-              <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name)">
-                <i class="fa fa-trash" />
-              </b-list-group-item>
-            </b-list-group>
-          </template>
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã nhóm quyền</th>
+                  <th>Tên nhóm quyền</th>
+                  <th class="actions-cell"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in items" :key="item.id">
+                  <td>{{ item.stt }}</td>
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.name }}</td>
+                  <td class="actions-cell">
+                    <div class="flex gap-2">
+                      <button class="btn btn-sm btn-outline-primary" title="Edit" @click="edit(item.id)">
+                        <i class="fa fa-edit" />
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" title="Delete" @click="deleted(item.id, item.name)">
+                        <i class="fa fa-trash" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,30 +61,22 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+
+    return {
+      toast,
+      router
+    }
+  },
   data () {
     return {
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'code',
-          label: 'Mã nhóm quyền'
-        },
-        {
-          key: 'name',
-          label: 'Tên nhóm quyền'
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
       items: [],
       loading: false,
     }
@@ -90,10 +94,10 @@ export default {
    * Make toast without title
    */
   popToast(variant, content) {
-    this.$bvToast.toast(content, {
+    this.toast(content, {
       toastClass: 'my-toast',
       noCloseButton: true,
-      variant: variant,
+      variant: variant === 'danger' ? 'error' : variant,
       autoHideDelay: 3000
     })
   },
@@ -103,23 +107,16 @@ export default {
      */
     deleted (id, name) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa [' + name + "]. Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if(res){
-            adminAPI.deleteRole(id).then(res => {
-              this.items = res.data.data
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
+        if (confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+          adminAPI.deleteRole(id).then(res => {
+            this.items = res.data.data
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.popToast('danger', errorMess)
+          })
         }
+      }
     },
 
     /**
@@ -127,14 +124,14 @@ export default {
      * @param id
      */
     edit (id) {
-      this.$router.push('/role/index/' + id)
+      this.router.push('/role/index/' + id)
     },
 
     /**
      * Go to add
      */
     gotoAdd () {
-      this.$router.push('/role/index/')
+      this.router.push('/role/index/')
     },
 
     /**

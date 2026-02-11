@@ -1,52 +1,53 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-1 text-center text-header">Thiết Lập Mẫu In Hoá Đơn</h4>
-            </b-col>
-          </b-row>
-          <hr>
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-1 text-center text-header">Thiết Lập Mẫu In Hoá Đơn</h4>
+              </div>
+            </div>
+            <hr>
+            <!-- Loading -->
+            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <b-row>
-            <b-col md="12" class="text-center">
-              <b-button v-bind:variant="invoiceTemplate == 'template_1' ? 'outline-danger' : 'outline-primary'"
-                        class="btn-width-200" @click="invoiceTemplate = 'template_1'" >
-                Mẫu A
-              </b-button>
-              <b-button v-bind:variant="invoiceTemplate == 'template_2' ? 'outline-danger' : 'outline-primary'"
-                        class="btn-width-200 ml-2" @click="invoiceTemplate = 'template_2'" >
-                Mẫu B
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
+                <button v-bind:class="[invoiceTemplate == 'template_1' ? 'btn-outline-danger' : 'btn-outline-primary', 'btn', 'btn-width-200']"
+                           @click="invoiceTemplate = 'template_1'" >
+                  Mẫu A
+                </button>
+                <button v-bind:class="[invoiceTemplate == 'template_2' ? 'btn-outline-danger' : 'btn-outline-primary', 'btn', 'btn-width-200', 'ml-2']"
+                           @click="invoiceTemplate = 'template_2'" >
+                  Mẫu B
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="12" class="text-center mt-2">
-              <b-button variant="outline-success" class="btn-width-120" @click="updateStoreSetting()" >
-                Chọn
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center mt-2">
+                <button class="btn btn-outline-success btn-width-120" @click="updateStoreSetting()" >
+                  Chọn
+                </button>
+              </div>
+            </div>
 
-          <hr>
+            <hr>
 
           <!-- Mẫu template 1 -->
-          <b-row v-show="invoiceTemplate == 'template_1'" class="vh-100 text-center" align-v="center">
-            <b-col md="3">    </b-col>
-            <b-col md="6">
+            <div v-show="invoiceTemplate == 'template_1'" class="vh-100 text-center flex items-center">
+              <div class="w-full md:w-1/4 px-2">    </div>
+              <div class="w-full md:w-1/2 px-2">
               <div>
                 <div class="text-left print-width-50-left">
                   <h4>TÊN CỤC THUẾ................</h4>
                 </div>
-                <b-col class="text-right print-width-50-right">
+                <div class="text-right print-width-50-right">
                   <h4>Mẫu số: 02GTTT3/001</h4>
-                </b-col>
+                </div>
               </div>
 
               <div style="width: 100%">
@@ -57,13 +58,19 @@
               <br>
               <div class="print-border print-pl-2">
                 <table style="width:100%">
+
+                  <tbody>
                   <tr style="width:100%"><td class="print-no-border text-left">Đơn vị bán hàng: <b>CTY A</b></td></tr>
                   <tr style="width:100%"><td class="print-no-border text-left">Mã số thuế: 123456789</td></tr>
                   <tr style="width:100%"><td class="print-no-border text-left">Địa chỉ: 364 Cộng Hoà, P13, Tân Bình, HCM</td></tr>
                   <tr style="width:100%"><td class="print-no-border text-left">Điện thoại: 0968.668.668</td></tr>
+
+                  </tbody>
                 </table>
                 <hr>
                 <table style="width:100%">
+
+                  <tbody>
                   <tr><td class="print-no-border text-left">Họ tên người mua hàng: <b>
                     <span>Nguyễn Văn B</span>
                   </b></td></tr>
@@ -74,11 +81,15 @@
                   <tr><td class="print-no-border text-left">Điện thoại:
                     <span>0969.669.669</span>
                   </td></tr>
+
+                  </tbody>
                 </table>
               </div>
               <br>
               <div id="print-table-border">
                 <table style="width:100%">
+
+                  <tbody>
                   <tr class="text-center">
                     <th>STT</th>
                     <th>Tên hàng hóa, dv</th>
@@ -123,25 +134,25 @@
                     <td colspan="6">Số tiền viết bằng chữ: Hai trăm sáu mươi bốn ngàn đồng</td>
                   </tr>
 
+                  </tbody>
+
                 </table>
                 <br>
-                <div>
-                  <b-row>
-                    <b-col md="6">
-                      <p class="text-center">Người mua hàng</p>
-                      <p class="text-center">(Ký, ghi rõ họ tên)</p>
-                    </b-col>
-                    <b-col md="6">
-                      <p class="text-center">Người bán hàng</p>
-                      <p class="text-center">(Ký, đóng dấu, ghi rõ họ tên)</p>
-                    </b-col>
-                  </b-row>
+                <div class="flex flex-wrap">
+                  <div class="w-full md:w-1/2">
+                    <p class="text-center">Người mua hàng</p>
+                    <p class="text-center">(Ký, ghi rõ họ tên)</p>
+                  </div>
+                  <div class="w-full md:w-1/2">
+                    <p class="text-center">Người bán hàng</p>
+                    <p class="text-center">(Ký, đóng dấu, ghi rõ họ tên)</p>
+                  </div>
                 </div>
 
               </div>
-            </b-col>
-            <b-col md="3">    </b-col>
-          </b-row>
+              </div>
+              <div class="w-full md:w-1/4 px-2">    </div>
+            </div>
 
           <!-- Mẫu template 2 -->
           <div v-show="invoiceTemplate == 'template_2'">
@@ -245,9 +256,10 @@
             </div>
           </div>
 
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -255,9 +267,16 @@
 <script>
   import commonFunc from '@/common/commonFunc'
   import settingAPI from "@/api/setting"
+  import { useToast } from '@/composables/useToast'
 
 
   export default {
+    setup() {
+      const { toast } = useToast()
+      return {
+        toast
+      }
+    },
     data () {
       return {
         invoiceTemplate: 'template_1',
@@ -274,12 +293,7 @@
        * Make toast without title
        */
       popToast(variant, content) {
-        this.$bvToast.toast(content, {
-          toastClass: 'my-toast',
-          noCloseButton: true,
-          variant: variant,
-          autoHideDelay: 3000
-        })
+        this.toast(content, variant)
       },
 
       /**
@@ -298,7 +312,7 @@
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -324,7 +338,7 @@
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       },
     }

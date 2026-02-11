@@ -1,126 +1,140 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
-                  Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
-                  <!--<span v-show="saving" class="loading-more"><icon name="loading" width="60" /></span>-->
-                </b-button>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+                Quay lại
+              </button>
+            </div>
+            <div class="w-full md:w-1/2 px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
+                Lưu
+                <!--<span v-show="saving" class="loading-more"><icon name="loading" width="60" /></span>-->
+              </button>
 
-              </b-col>
-            </b-row>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md='12'>
-                  <h4 class="mt-1 text-center text-header">NHÂN VIÊN</h4>
-                </b-col>
-              </b-row>
-              <hr/>
-              <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full px-2">
+              <h4 class="mt-1 text-center text-header">NHÂN VIÊN</h4>
+            </div>
+          </div>
+          <hr/>
+          <!-- Loading -->
+          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="name"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  v-model="staff.name"
-                  maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
-                    Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Số Điện Thoại </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="phone"
-                  type="text"
-                  class="form-control"
-                  v-model="staff.phone_number"
-                  @keyup="integerOnly($event.target)"
-                  autocomplete="new-password"
-                  maxlength="10"
-                  v-on:change="checkPhoneNumberFormat($event.target.value)">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
-                    Vui lòng nhập số điện thoại
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="phoneNumberCheckFlag">
-                    Số điện thoại không đúng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Tên </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="name"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="staff.name"
+                maxlength="100">
+              <div class="invalid-feedback { 'd-block': errorName }" >
+                Vui lòng nhập tên
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Số Điện Thoại </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="phone"
+                type="text"
+                class="form-control"
+                v-model="staff.phone_number"
+                @keyup="integerOnly($event.target)"
+                autocomplete="new-password"
+                maxlength="10"
+                v-on:change="checkPhoneNumberFormat($event.target.value)">
+              <div class="invalid-feedback { 'd-block': errorPhone }" >
+                Vui lòng nhập số điện thoại
+              </div>
+              <div class="invalid-feedback { 'd-block': phoneNumberCheckFlag === false }" >
+                Số điện thoại không đúng
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
-                  <label> Quyền </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
-                  :options="roleOptions"
-                  id="permission"
-                  type="text"
-                  autocomplete="new-password"
-                  class="form-control"
-                  maxlength="100"
-                  v-model="staff.role_id"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorRole">
-                    Vui lòng nhập quyền
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Quyền </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <select
+                id="permission"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                maxlength="100"
+                v-model="staff.role_id">
+                <option v-for="option in roleOptions" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+              <div class="invalid-feedback { 'd-block': errorRole }" >
+                Vui lòng nhập quyền
+              </div>
+            </div>
+          </div>
 
-              <b-row class="form-row" v-if="this.$route.params.id == null">
-                <b-col md="3" class="mt-2">
-                  <label> Mật Khẩu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
-                  <input
-                  id="password"
-                  type="password"
-                  class="form-control"
-                  v-model="staff.password"
-                  autocomplete="new-password"
-                  maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorPassword">
-                    Vui lòng nhập mật khẩu
-                  </b-form-invalid-feedback>
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorLengthPassword">
-                    Mật khẩu phải ít nhất 6 kí tự
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div class="flex flex-wrap -mx-2 mb-4" v-if="this.route.params.id == null">
+            <div class="w-full md:w-1/4 px-2 mt-2">
+              <label> Mật Khẩu </label><span class="error-sybol"></span>
+            </div>
+            <div class="w-full md:w-3/4 px-2">
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                v-model="staff.password"
+                autocomplete="new-password"
+                maxlength="100">
+              <div class="invalid-feedback { 'd-block': errorPassword }" >
+                Vui lòng nhập mật khẩu
+              </div>
+              <div class="invalid-feedback { 'd-block': errorLengthPassword }" >
+                Mật khẩu phải ít nhất 6 kí tự
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import adminAPI from '@/api/admin'
 import Mapper from '@/mapper/staff'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+
+    return {
+      toast,
+      router,
+      route
+    }
+  },
   data () {
     return {
       roleOptions: [],
@@ -153,7 +167,7 @@ export default {
       return this.checkInfo(this.staff.role_id)
     },
     errorPassword: function () {
-      if(this.$route.params.id != null) {
+      if(this.route.params.id != null) {
         return false
       }
       return this.checkInfo(this.staff.password)
@@ -163,7 +177,7 @@ export default {
         return false
       if(!this.click)
         return false
-      return (this.staff.password.length < 6) 
+      return (this.staff.password.length < 6)
     },
   },
   methods: {
@@ -172,10 +186,10 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
-        variant: variant,
+        variant: variant === 'danger' ? 'error' : variant,
         autoHideDelay: 3000
       })
     },
@@ -184,7 +198,7 @@ export default {
       return (this.click && (info == null || info.length <= 0))
     },
     checkValidate () {
-      return !(this.errorName || this.errorPhone || this.errorRole || this.errorPassword 
+      return !(this.errorName || this.errorPhone || this.errorRole || this.errorPassword
             || this.errorLengthPassword || !this.phoneNumberCheckFlag)
     },
 
@@ -210,7 +224,7 @@ export default {
      *  Get detail
      */
     getStaffDetail() {
-      let staffId = this.$route.params.id
+      let staffId = this.route.params.id
       if(staffId){
         this.loading = true
 
@@ -238,8 +252,8 @@ export default {
       this.saving = true
       this.checkPhoneNumberFormat(this.staff.phone_number)
       let result = this.checkValidate()
-      if(result) { 
-        let staffId = this.$route.params.id
+      if(result) {
+        let staffId = this.route.params.id
         let staff = this.staff
         staff.id = staffId
         if(staffId){
@@ -263,12 +277,7 @@ export default {
             } else {
               message = "Lỗi hệ thống"
             }
-            this.$bvModal.msgBoxOk(message, {
-              title: "Cập Nhật Nhân Viên",
-              centered: true, 
-              size: 'sm',
-              headerClass: 'bg-danger',
-            })
+            this.popToast('error', message)
           })
         } else {
           // Add
@@ -278,7 +287,7 @@ export default {
 
               let message = ""
               if (res.data.status == 200) {
-                this.$router.push("/staff")
+                this.router.push("/staff")
               }
             }
           }).catch(err => {
@@ -289,18 +298,13 @@ export default {
               } else {
                 message = "Lỗi hệ thống"
               }
-              this.$bvModal.msgBoxOk(message, {
-                title: "Thêm Nhân Viên",
-                centered: true, 
-                size: 'sm',
-                headerClass: 'bg-danger',
-              })
+              this.popToast('error', message)
           })
         }
       } else {
         this.saving = false
       }
-      
+
     },
 
     /**
@@ -333,7 +337,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/staff")
+      this.router.push("/staff")
     }
   }
 }

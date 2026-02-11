@@ -1,8 +1,8 @@
 <template>
   <div class="bg-white" ref="scrollParent">
     <header class="header-area" id="bodyHome">
-      <div id="home" >
-        <img src="/static/img/project/home/banner-bg.jpg" style="width: 100%"/>
+      <div id="home">
+        <img src="/static/img/project/home/banner-bg.jpg" class="w-full" alt="Banner"/>
       </div>
     </header>
     <section id="features" class="services-area pt-120">

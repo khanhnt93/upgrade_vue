@@ -1,25 +1,25 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd()">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+                <button class="btn btn-outline-success pull-right btn-width-120" @click="goToAdd()">
                   Thêm
-                </b-button>
-            </b-col>
-          </b-row>
+                </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center">Nguyên liệu - Mặt hàng</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row>
-            <b-col md="4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/3 px-2">
               <label> Tên </label>
               <input
               id="name"
@@ -27,296 +27,332 @@
               autocomplete="new-password"
               class="form-control"
               v-model="inputs.name">
-            </b-col>
-            <b-col md="4" v-if="units.length > 0">
+            </div>
+            <div class="w-full md:w-1/3 px-2" v-if="units.length > 0">
               <label> Đơn vị </label>
-              <b-form-select
+              <select
               :options="units"
               id="status"
               type="text"
               autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.unit"></b-form-select>
-            </b-col>
-            <b-col md="4">
+              class="form-select"
+              v-model="inputs.unit"></select>
+            </div>
+            <div class="w-full md:w-1/3 px-2">
               <label> Trạng Thái </label>
-              <b-form-select
+              <select
               :options="statusOptions"
               id="status"
               type="text"
               autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.status"></b-form-select>
-            </b-col>
-          </b-row>
+              class="form-select"
+              v-model="inputs.status"></select>
+            </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+          <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch"
                         @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(quantity)="data">{{ currencyFormat(data.item.quantity) }}</template>
-            <template v-slot:cell(min_quantity)="data">{{ currencyFormat(data.item.min_quantity) }}</template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Plus quantity" @click="addQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-plus" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Minus quantity" @click="minusQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-minus" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Update quantity" @click="updateQuantity(dataId.item.id, dataId.item.quantity, dataId.item.unit_name)">
-                  <i class="fa fa-balance-scale" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-                <b-list-group-item v-b-tooltip.hover title="Delete" @click="deleted(dataId.item.id, dataId.item.name, dataId.item.stt)">
-                  <i class="fa fa-trash" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td v-for="field in fields" :key="field.key">
+                    <template v-if="field.key === 'quantity'">
+                      {{ currencyFormat(item.quantity) }}
+                    </template>
+                    <template v-else-if="field.key === 'min_quantity'">
+                      {{ currencyFormat(item.min_quantity) }}
+                    </template>
+                    <template v-else-if="field.key === 'action'">
+                      <div class="flex gap-2 justify-center">
+                        <button class="btn btn-sm btn-outline-primary px-2 py-1" @click="addQuantity(item.id, item.quantity, item.unit_name)" title="Plus quantity">
+                          <i class="fa fa-plus" />
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning px-2 py-1" @click="minusQuantity(item.id, item.quantity, item.unit_name)" title="Minus quantity">
+                          <i class="fa fa-minus" />
+                        </button>
+                        <button class="btn btn-sm btn-outline-info px-2 py-1" @click="updateQuantity(item.id, item.quantity, item.unit_name)" title="Update quantity">
+                          <i class="fa fa-balance-scale" />
+                        </button>
+                        <button class="btn btn-sm btn-outline-success px-2 py-1" @click="edit(item.id)" title="Edit">
+                          <i class="fa fa-edit" />
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger px-2 py-1" @click="deleted(item.id, item.name, item.stt)" title="Delete">
+                          <i class="fa fa-trash" />
+                        </button>
+                      </div>
+                    </template>
+                    <template v-else>
+                      {{ item[field.key] }}
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <!-- Modal add quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-add-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Thêm số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <Dialog :open="showModalAddQuantity" @close="showModalAddQuantity = false" class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel class="bg-white rounded-lg shadow-xl max-w-2xl w-full">
+          <div class="p-6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center text-header">
+                <h5>Thêm số lượng </h5>
+              </div>
+            </div>
+            <br>
+            <!-- Loading -->
+            <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng hiện tại</label>
-            <div class="input-group">
-              <input
-              id="currentQuantity"
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="form-group">
+                  <label>Số lượng hiện tại</label>
+                  <div class="input-group">
+                    <input
+                    id="currentQuantity"
+                    v-model="quantityChange.currentQuantity"
+                    type="text"
+                    class="form-control"
+                    :disabled="1==1">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Số lượng thêm vào</label><span class="error-sybol"></span>
+                  <div class="input-group">
+                    <input
+                      id="quantityBonus"
+                      v-model="quantityChange.quantityBonus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      maxlength="11"
+                      @keyup="integerAndPointOnly($event.target)">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                    <div :class="['invalid-feedback', {'d-block': errorQuantityBonus}]">
+                    Vui lòng nhập số lượng thêm vào
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Nguyên nhân thêm</label><span class="error-sybol"></span>
+                  <textarea
+                    id="reasonBonus"
+                    v-model="quantityChange.reasonBonus"
+                    type="text"
+                    autocomplete="new-password"
+                    class="form-control"
+                    placeholder="Nhập hàng"
+                    maxlength="255"
+                    rows="3">
+                  </textarea>
+                    <div :class="['invalid-feedback', {'d-block': errorReasonBonus}]">
+                      Vui lòng nhập nguyên nhân thêm
+                    </div>
+                </div>
+
+             </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center mt-3">
+                <button class="btn btn-outline-success btn-width-120" @click="confirmBonusQuantity">
+                  Xác nhận
+                </button>
+              </div>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Số lượng thêm vào</label><span class="error-sybol"></span>
-            <div class="input-group">
-              <input
-                id="quantityBonus"
-                v-model="quantityChange.quantityBonus"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="11"
-                @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
-            </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
-              Vui lòng nhập số lượng thêm vào
-            </b-form-invalid-feedback>
-          </div>
-
-          <div class="form-group">
-            <label>Nguyên nhân thêm</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
-              v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              placeholder="Nhập hàng"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân thêm
-              </b-form-invalid-feedback>
-          </div>
-
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-center mt-3">
-          <b-button variant="outline-success" class="btn-width-120" @click="confirmBonusQuantity">
-            Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </DialogPanel>
+      </div>
+    </Dialog>
 
     <!-- Modal minus quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-minus-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Giảm số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <Dialog :open="showModalMinusQuantity" @close="showModalMinusQuantity = false" class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel class="bg-white rounded-lg shadow-xl max-w-2xl w-full">
+          <div class="p-6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center text-header">
+                <h5>Giảm số lượng </h5>
+              </div>
+            </div>
+            <br>
+            <!-- Loading -->
+            <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng hiện tại</label>
-            <div class="input-group">
-              <input
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="form-group">
+                  <label>Số lượng hiện tại</label>
+                  <div class="input-group">
+                    <input
+                    v-model="quantityChange.currentQuantity"
+                    type="text"
+                    class="form-control"
+                    :disabled="1==1">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Số lượng giảm đi</label><span class="error-sybol"></span>
+                  <div class="input-group">
+                    <input
+                      v-model="quantityChange.quantityBonus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      maxlength="11"
+                      @keyup="integerAndPointOnly($event.target)">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                  <div :class="['invalid-feedback', {'d-block': errorQuantityBonus}]">
+                    Vui lòng nhập số lượng giảm đi
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Nguyên nhân giảm</label><span class="error-sybol"></span>
+                  <textarea
+                    id="reasonBonus"
+                    v-model="quantityChange.reasonBonus"
+                    type="text"
+                    autocomplete="new-password"
+                    class="form-control"
+                    placeholder="Hư hỏng"
+                    maxlength="255"
+                    rows="3">
+                  </textarea>
+                    <div :class="['invalid-feedback', {'d-block': errorReasonBonus}]">
+                      Vui lòng nhập nguyên nhân giảm
+                    </div>
+                </div>
+
+             </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center mt-3">
+                <button class="btn btn-outline-success btn-width-120" @click="confirmBonusQuantity">
+                  Xác nhận
+                </button>
+              </div>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Số lượng giảm đi</label><span class="error-sybol"></span>
-            <div class="input-group">
-              <input
-                v-model="quantityChange.quantityBonus"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="11"
-                @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
-            </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
-              Vui lòng nhập số lượng giảm đi
-            </b-form-invalid-feedback>
-          </div>
-
-          <div class="form-group">
-            <label>Nguyên nhân giảm</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
-              v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              placeholder="Hư hỏng"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân giảm
-              </b-form-invalid-feedback>
-          </div>
-
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-center mt-3">
-          <b-button variant="outline-success" class="btn-width-120" @click="confirmBonusQuantity">
-            Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </DialogPanel>
+      </div>
+    </Dialog>
 
     <!-- Modal update quantity resource -->
-    <b-modal centered hide-footer hide-header id="modal-update-quantity-resource">
-      <b-row>
-        <b-col class="text-center text-header">
-          <h5>Cập nhật số lượng </h5>
-        </b-col>
-      </b-row>
-      <br>
-      <!-- Loading -->
-      <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+    <Dialog :open="showModalUpdateQuantity" @close="showModalUpdateQuantity = false" class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel class="bg-white rounded-lg shadow-xl max-w-2xl w-full">
+          <div class="p-6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center text-header">
+                <h5>Cập nhật số lượng </h5>
+              </div>
+            </div>
+            <br>
+            <!-- Loading -->
+            <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
 
-      <b-row>
-        <b-col>
-          <div class="form-group">
-            <label>Số lượng cũ</label>
-            <div class="input-group">
-              <input
-              v-model="quantityChange.currentQuantity"
-              type="text"
-              class="form-control"
-              :disabled="1==1">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="form-group">
+                  <label>Số lượng cũ</label>
+                  <div class="input-group">
+                    <input
+                    v-model="quantityChange.currentQuantity"
+                    type="text"
+                    class="form-control"
+                    :disabled="1==1">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Số lượng mới</label><span class="error-sybol"></span>
+                  <div class="input-group">
+                    <input
+                      v-model="quantityChange.quantityBonus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      maxlength="11"
+                      @keyup="integerAndPointOnly($event.target)">
+                    <label class="pl-2">{{quantityChange.unit_name}}</label>
+                  </div>
+                  <div class="invalid-feedback">
+                    Vui lòng nhập số lượng mới
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Nguyên nhân thay đổi</label><span class="error-sybol"></span>
+                  <textarea
+                    id="reasonBonus"
+                    v-model="quantityChange.reasonBonus"
+                    type="text"
+                    autocomplete="new-password"
+                    class="form-control"
+                    placeholder="Kiểm kê hàng ngày"
+                    maxlength="255"
+                    rows="3">
+                  </textarea>
+                    <div class="invalid-feedback">
+                      Vui lòng nhập nguyên nhân thay đổi
+                    </div>
+                </div>
+
+             </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center mt-3">
+                <button class="btn btn-outline-success btn-width-120" @click="confirmUpdateQuantity">
+                  Xác nhận
+                </button>
+              </div>
             </div>
           </div>
-
-          <div class="form-group">
-            <label>Số lượng mới</label><span class="error-sybol"></span>
-            <div class="input-group">
-              <input
-                v-model="quantityChange.quantityBonus"
-                type="text"
-                autocomplete="new-password"
-                class="form-control"
-                maxlength="11"
-                @keyup="integerAndPointOnly($event.target)">
-              <label class="pl-2">{{quantityChange.unit_name}}</label>
-            </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorQuantityBonus">
-              Vui lòng nhập số lượng mới
-            </b-form-invalid-feedback>
-          </div>
-
-          <div class="form-group">
-            <label>Nguyên nhân thay đổi</label><span class="error-sybol"></span>
-            <b-form-textarea
-              id="reasonBonus"
-              v-model="quantityChange.reasonBonus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              placeholder="Kiểm kê hàng ngày"
-              maxlength="255">
-            </b-form-textarea>
-              <b-form-invalid-feedback class="invalid-feedback" :state="!errorReasonBonus">
-                Vui lòng nhập nguyên nhân thay đổi
-              </b-form-invalid-feedback>
-          </div>
-
-       </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col cols="12" class="text-center mt-3">
-          <b-button variant="outline-success" class="btn-width-120" @click="confirmUpdateQuantity">
-            Xác nhận
-          </b-button>
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </DialogPanel>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -326,11 +362,25 @@ import adminAPI from '@/api/admin'
 import unitAPI from '@/api/unit'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
-
+import { Dialog, DialogPanel } from '@headlessui/vue'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
+  },
+  components: {
+    Dialog,
+    DialogPanel
+  },
   data () {
     return {
+      showModalAddQuantity: false,
+      showModalMinusQuantity: false,
+      showModalUpdateQuantity: false,
       inputs: {
         name: null,
         unit: null,
@@ -419,12 +469,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -554,28 +599,21 @@ export default {
      */
     deleted (id, name, rowIndex) {
       if(id && name) {
-        this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
-          title: false,
-          buttonSize: 'sm',
-          centered: true, size: 'sm',
-          footerClass: 'p-2'
-        }).then(res => {
-          if (res) {
-            adminAPI.deleteResource(id).then(res => {
+        if(confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+          adminAPI.deleteResource(id).then(res => {
 
-              // Remove item in list
-              let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-              this.items.splice(indexTemp, 1)
-              this.listIdDeleted.push(rowIndex - 1)
+            // Remove item in list
+            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+            this.items.splice(indexTemp, 1)
+            this.listIdDeleted.push(rowIndex - 1)
 
-              this.totalRow = this.totalRow - 1
-            }).catch(err => {
-              // Handle error
-              let errorMess = commonFunc.handleStaffError(err)
-              this.popToast('danger', errorMess)
-            })
-          }
-        })
+            this.totalRow = this.totalRow - 1
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.popToast('error', errorMess)
+          })
+        }
       }
     },
 
@@ -589,7 +627,7 @@ export default {
       this.quantityChange.type = "plus"
       this.quantityChange.reasonBonus = "Nhập hàng"
 
-      this.$bvModal.show('modal-add-quantity-resource')
+      this.showModalAddQuantity = true
     },
 
     /**
@@ -602,7 +640,7 @@ export default {
       this.quantityChange.type = "minus"
       this.quantityChange.reasonBonus = "Hư hỏng"
 
-      this.$bvModal.show('modal-minus-quantity-resource')
+      this.showModalMinusQuantity = true
     },
 
     /**
@@ -614,7 +652,7 @@ export default {
       this.quantityChange.unit_name = unit_name
       this.quantityChange.reasonBonus = "Kiểm kê hàng"
 
-      this.$bvModal.show('modal-update-quantity-resource')
+      this.showModalUpdateQuantity = true
     },
 
     /**
@@ -660,8 +698,8 @@ export default {
             this.click = false
 
             // Hidden modal
-            this.$bvModal.hide('modal-add-quantity-resource')
-            this.$bvModal.hide('modal-minus-quantity-resource')
+            this.showModalAddQuantity = false
+            this.showModalMinusQuantity = false
           }
         }
         this.saving = false
@@ -726,7 +764,7 @@ export default {
             this.click = false
 
             // Hidden modal
-            this.$bvModal.hide('modal-update-quantity-resource')
+            this.showModalUpdateQuantity = false
           }
         }
         this.saving = false
@@ -761,14 +799,14 @@ export default {
      * Go to page edit
      */
     edit (id) {
-      this.$router.push('/resource/index/' + id)
+      this.router.push('/resource/index/' + id)
     },
 
     /**
      * Go to page add
      */
     goToAdd () {
-      this.$router.push('/resource/index')
+      this.router.push('/resource/index')
     }
   }
 }

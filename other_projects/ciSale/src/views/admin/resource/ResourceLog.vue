@@ -1,38 +1,38 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4">
 
-          <b-row>
-            <b-col md='12'>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center">Lịch sử kho hàng</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
           <hr>
 
-          <b-row>
-            <b-col md="3" v-if="resourceOptions.length > 0">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/4 px-2" v-if="resourceOptions.length > 0">
               <label> Nguyên liệu </label>
-              <b-form-select
+              <select
               :options="resourceOptions"
               id="status"
               type="text"
               autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.resource"></b-form-select>
-            </b-col>
-            <b-col md="3">
+              class="form-select"
+              v-model="inputs.resource"></select>
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Loại </label>
-              <b-form-select
+              <select
               :options="typeOptions"
               id="status"
               type="text"
               autocomplete="new-password"
-              class="form-control"
-              v-model="inputs.type"></b-form-select>
-            </b-col>
-            <b-col md="3">
+              class="form-select"
+              v-model="inputs.type"></select>
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Từ ngày </label>
               <input
                 id="fromDate"
@@ -42,11 +42,11 @@
                 v-model="inputs.fromDate"
                 maxlength="10"
                 @keyup="inputDateOnly($event.target)">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
+              <div class="invalid-feedback"
                 Mục từ ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
-            <b-col md="3">
+              </div>
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Đến ngày </label>
               <input
                 id="toDate"
@@ -56,47 +56,57 @@
                 v-model="inputs.toDate"
                 maxlength="10"
                 @keyup="inputDateOnly($event.target)">
-              <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
+              <div class="invalid-feedback"
                 Mục đến ngày không đúng
-              </b-form-invalid-feedback>
-            </b-col>
-          </b-row>
+              </div>
+            </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+          <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch"
                         @click.prevent="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(quantity)="data" >
-              <b v-if="data.item.type == 'plus'">+</b><b v-if="data.item.type == 'minus'">-</b>{{ currencyFormat(data.item.quantity) }}
-            </template>
-
-          </b-table>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td v-for="field in fields" :key="field.key">
+                    <template v-if="field.key === 'quantity'">
+                      <b v-if="item.type == 'plus'">+</b><b v-if="item.type == 'minus'">-</b>{{ currencyFormat(item.quantity) }}
+                    </template>
+                    <template v-else>
+                      {{ item[field.key] }}
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,9 +115,15 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from '@/composables/useToast'
 
-
-export default {
+export default {  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   data () {
     return {
       resourceOptions: [{value: null, text: ''}],
@@ -193,12 +209,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**

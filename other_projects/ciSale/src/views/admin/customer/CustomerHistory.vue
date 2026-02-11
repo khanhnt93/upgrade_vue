@@ -1,18 +1,18 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Lịch Sử Khách Hàng</h4>
+              </div>
+            </div>
+            <hr>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Lịch Sử Khách Hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
-
-          <b-row>
-            <b-col md="3">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/4 px-2 mb-3">
               <label> Tên </label>
               <input
               id="name"
@@ -21,9 +21,9 @@
               class="form-control"
               v-model="inputs.name"
               maxlength="75">
-            </b-col>
-            <b-col md="3">
-              <label> Số điện thoại </label>
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label> Số điện thoại </label>
               <input
               id="price"
               type="text"
@@ -32,48 +32,49 @@
               v-model="inputs.phone"
               maxlength="11"
               @keyup="integerOnly($event.target)">
-            </b-col>
+              </div>
 
-          <b-col md="3">
-            <label> Từ ngày </label>
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label> Từ ngày </label>
             <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" :typeable="true"
                         placeholder="yyyy-mm-dd" input-class="datepicker-cus" ></datepicker>
-          </b-col>
+              </div>
 
-          <b-col md="3">
-            <label> Đến ngày </label>
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label> Đến ngày </label>
             <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" :typeable="true"
                         placeholder="yyyy-mm-dd" input-class="datepicker-cus" ></datepicker>
-          </b-col>
-        </b-row>
+              </div>
+            </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+                  Tìm Kiếm
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="4">
-              Số kết quả: {{items.length}}
-            </b-col>
-            <b-col md="8" class="text-right">
-              <download-excel
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                Số kết quả: {{items.length}}
+              </div>
+              <div class="w-full md:w-2/3 px-2 text-right">
+              <!-- TODO: Replace with xlsx library -->
+              <!-- <download-excel
                 class   = "btn btn-default text-header"
                 :data   = "items"
                 :fields = "excel_fields"
                 worksheet = "Lịch sử khách hàng"
                 name    = "lich_su_khach_hang.xls">
                 <b>Xuất Excel</b>
-              </download-excel>
-            </b-col>
-          </b-row>
+              </download-excel> -->
+              </div>
+            </div>
 
-          <b-row>
-            <b-col>
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
               <table class="table table-bordered table-striped fixed_header">
                 <thead>
                 <tr>
@@ -106,40 +107,45 @@
                   <td class="text-right">{{currencyFormat(item.sub_total)}}</td>
                   <td class="text-right">{{currencyFormat(item.total)}}</td>
                   <td class="text-center">
-                    <b-button variant="outline-success" class="pull-right btn-width-120"
+                    <button class="btn btn-outline-success float-right btn-width-120"
                               @click="goToDetail(item.id)">
                       Chi tiết
-                    </b-button>
+                    </button>
                   </td>
                 </tr>
                 </tbody>
               </table>
 
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
-          <span class="loading-more">--Hết--</span>
-        </b-card>
+            <span class="loading-more">--Hết--</span>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
 
 
 <script>
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 import customerApi from '@/api/customer'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-import Datepicker from 'vuejs-datepicker'
-
-Vue.component('downloadExcel', JsonExcel)
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import Datepicker from 'vue3-datepicker'
 
 export default {
   components: {
     Datepicker
+  },
+  setup() {
+    const { popToast } = useToast()
+    const router = useRouter()
+    return { popToast, router }
   },
   data () {
     return {
@@ -189,12 +195,20 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      const toastOptions = {
+        timeout: 3000,
+        closeButton: false
+      }
+
+      if (variant === 'success') {
+        this.toast.success(content, toastOptions)
+      } else if (variant === 'danger' || variant === 'error') {
+        this.toast.error(content, toastOptions)
+      } else if (variant === 'warning') {
+        this.toast.warning(content, toastOptions)
+      } else {
+        this.toast.info(content, toastOptions)
+      }
     },
 
     /**
@@ -269,7 +283,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -280,11 +294,11 @@ export default {
      * Go to detail
      */
     goToDetail(id) {
-      let routeData = this.$router.resolve({path: '/trade-detail/' + id});
-      // let routeData = this.$router.resolve({name: 'routeName', query: {data: "someData"}});
+      let routeData = this.router.resolve({path: '/trade-detail/' + id});
+      // let routeData = this.router.resolve({name: 'routeName', query: {data: "someData"}});
       window.open(routeData.href, '_blank');
 
-      // this.$router.push('/trade-detail/' + id)
+      // this.router.push('/trade-detail/' + id)
     },
 
     /**

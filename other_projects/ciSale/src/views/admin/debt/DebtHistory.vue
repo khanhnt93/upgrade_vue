@@ -1,18 +1,19 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Lịch Sử Công Nợ</h4>
-            </b-col>
-          </b-row>
-          <hr>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Lịch Sử Công Nợ</h4>
+              </div>
+            </div>
+            <hr>
 
-          <b-row>
-            <b-col md="2">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/6 px-2">
               <label> Khách hàng </label>
               <multiselect
                 v-model="customerSelect"
@@ -23,9 +24,9 @@
                 track-by="name"
                 @input="changeCustomer">
               </multiselect>
-            </b-col>
-            <b-col md="2">
-              <label> Tên </label>
+              </div>
+              <div class="w-full md:w-1/6 px-2">
+                <label> Tên </label>
               <input
               id="name"
               type="text"
@@ -34,9 +35,9 @@
               v-model="inputs.customer_name"
               maxlength="75"
               :disabled="customerSelect.id">
-            </b-col>
-            <b-col md="2">
-              <label> Số điện thoại </label>
+              </div>
+              <div class="w-full md:w-1/6 px-2">
+                <label> Số điện thoại </label>
               <input
               id="price"
               type="text"
@@ -46,32 +47,32 @@
               maxlength="11"
               @keyup="integerOnly($event.target)"
               :disabled="customerSelect.id">
-            </b-col>
+              </div>
 
-          <b-col md="3">
-            <label> Từ ngày </label>
-            <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus"  :typeable="true" ></datepicker>
-          </b-col>
+              <div class="w-full md:w-1/4 px-2">
+                <label> Từ ngày </label>
+                <datepicker v-model="inputs.from_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus"  :typeable="true" ></datepicker>
+              </div>
 
-          <b-col md="3">
-            <label> Đến ngày </label>
-            <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true" ></datepicker>
-          </b-col>
-        </b-row>
+              <div class="w-full md:w-1/4 px-2">
+                <label> Đến ngày </label>
+                <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true" ></datepicker>
+              </div>
+            </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+            <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+                  Tìm Kiếm
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md="4">
-              Số kết quả: {{items.length}}
-            </b-col>
-            <b-col md="8" class="text-right">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                Số kết quả: {{items.length}}
+              </div>
+              <div class="w-full md:w-2/3 px-2 text-right">
               <download-excel
                 class   = "btn btn-default text-header"
                 :data   = "items"
@@ -80,11 +81,11 @@
                 name    = "lich_su_cong_no.xls">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
               <table class="table table-bordered table-striped fixed_header">
                 <thead>
@@ -115,31 +116,37 @@
                 </tbody>
               </table>
 
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
-          <span class="loading-more">--Hết--</span>
-        </b-card>
+            <span class="loading-more">--Hết--</span>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
 
 
 <script>
+import { useToast } from '@/composables/useToast'
 import debitApi from '@/api/debt'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-import Datepicker from 'vuejs-datepicker'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import Datepicker from 'vue3-datepicker'
 import tradeApi from '@/api/trade'
 import Multiselect from 'vue-multiselect'
-Vue.component('downloadExcel', JsonExcel)
+
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   components: {
     Datepicker,
     Multiselect
@@ -194,18 +201,6 @@ export default {
   methods: {
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      *  Get tất cả các options liên quan
      */
     getOptionsRelated() {
@@ -229,7 +224,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -288,7 +283,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearch = false
         this.loading = false

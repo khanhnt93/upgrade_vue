@@ -1,38 +1,38 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left px-4 btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-secondary pull-left px-4 btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right px-4 btn-width-120" @click="save" :disabled="saving">
+                </button>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-success pull-right px-4 btn-width-120" @click="save" :disabled="saving">
                     Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-2 text-center text-header">Khuyến Mãi</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
                   id="name"
                   type="text"
@@ -40,50 +40,49 @@
                   class="form-control"
                   v-model="promo.name"
                   maxlength="100">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div v-if="errorName" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Code </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     type="text"
                     autocomplete="new-password"
                     class="form-control"
                     v-model="promo.code"
                     maxlength="50">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-              <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Loại </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="typeOptions"
-                    id="status"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.type"></b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorType">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select
+                      id="status"
+                      class="form-control"
+                      v-model="promo.type">
+                      <option v-for="option in typeOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+                    </select>
+                    <div v-if="errorType" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập loại
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount' || promo.type == 'discount_with_max_value'
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'discount' || promo.type == 'discount_with_max_value'
                 || promo.type == 'discount_on_item' || promo.type == 'discount_on_group_item'">
-                  <b-col md="3" class="mt-2">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Phần trăm giảm giá (%) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="discount_percent"
                     type="text"
@@ -92,17 +91,17 @@
                     v-model="promo.discount_percent"
                     maxlength="3"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorPercentDiscount">
+                    <div v-if="errorPercentDiscount" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập phần trăm giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'discount_with_max_value'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Giảm giá tối đa </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="max_discount"
                     type="text"
@@ -111,17 +110,17 @@
                     v-model="promo.max_discount"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMaxDiscount">
+                    <div v-if="errorMaxDiscount" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập giảm giá tối đa
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_with_max_value'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'discount_with_max_value'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Trên tổng giá </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="discount_on_amount"
                     type="text"
@@ -130,17 +129,17 @@
                     v-model="promo.discount_on_amount"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDiscountOnAmount">
+                    <div v-if="errorDiscountOnAmount" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập trên tổng giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'voucher'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'voucher'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Giá trị voucher </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="value_of_voucher"
                     type="text"
@@ -149,70 +148,68 @@
                     v-model="promo.value_of_voucher"
                     maxlength="20"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorValueOfVoucher">
+                    <div v-if="errorValueOfVoucher" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập giá trị voucher
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'free_item'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'free_item'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Item free </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-select
-                    :options="itemFreeOptions"
-                    id="item_free"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="promo.item_free">
-                    </b-form-select>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFreeItem">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select
+                      id="item_free"
+                      class="form-control"
+                      v-model="promo.item_free">
+                      <option v-for="option in itemFreeOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+                    </select>
+                    <div v-if="errorFreeItem" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập item free
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_on_item'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'discount_on_item'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Giảm giá trên dv </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-row>
-                      <b-col md="6" v-for="item in itemService" :key="item.value">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <div>
+                      <div class="w-full md:w-1/2 px-2" v-for="item in itemService" :key="item.value">
                         <input :id="item.value" type="checkbox" v-model="promo.on_items" name="discountOnItem" :value="item.value">
                         <label :for="item.value">{{ item.text }}</label>
-                      </b-col>
-                    </b-row>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDiscountOnItem">
+                      </div>
+                    </div>
+                    <div v-if="errorDiscountOnItem" class="text-red-600 text-sm mt-1">
                       Vui lòng chọn dv muốn giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-if="promo.type == 'discount_on_group_item'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-if="promo.type == 'discount_on_group_item'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Giảm giá trên nhóm dv </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
-                    <b-row>
-                      <b-col md="6" v-for="item in itemGroupService" :key="item.id">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <div>
+                      <div class="w-full md:w-1/2 px-2" v-for="item in itemGroupService" :key="item.id">
                         <input :id="item.id" type="checkbox" v-model="promo.on_group_items" name="discountOnGroupItem" :value="item.id">
                         <label :for="item.id">{{ item.name }}</label>
-                      </b-col>
-                    </b-row>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorDiscountOnGroupItem">
+                      </div>
+                    </div>
+                    <div v-if="errorDiscountOnGroupItem" class="text-red-600 text-sm mt-1">
                       Vui lòng chọn nhóm dv muốn giảm giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="promo.method == 'trade_point'">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" v-show="promo.method == 'trade_point'">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Giá mua(điểm) </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="price"
                     type="text"
@@ -221,17 +218,17 @@
                     class="form-control"
                     v-model="promo.cost"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback class="invalid-feedback" :state="!errorCost">
+                    <div v-if="errorCost" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập giá
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" horizontal>
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Hiệu lực từ </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <div class="input-group">
                     <input
                     id="expiredDateFrom"
@@ -242,17 +239,17 @@
                     maxlength="10"
                     @keyup="inputDateOnly($event.target)">
                     </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateFrom">
+                    <div v-if="errorExpiredDateFrom" class="text-red-600 text-sm mt-1">
                       Ngày bắt đầu hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row" horizontal>
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row" horizontal>
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Hiệu lực đến </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <div class="input-group">
                     <input
                     id="expiredDateTo"
@@ -263,17 +260,17 @@
                     maxlength="10"
                     @keyup="inputDateOnly($event.target)">
                     </div>
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorExpiredDateTo">
+                    <div v-if="errorExpiredDateTo" class="text-red-600 text-sm mt-1">
                       Ngày hết hiệu lực không đúng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Số Lượng </label><span class="error-sybol"></span>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <input
                     id="number"
                     type="text"
@@ -282,31 +279,31 @@
                     maxlength="100"
                     v-model="promo.quantity"
                     @keyup="integerOnly($event.target)">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
+                    <div v-if="errorQuantity" class="text-red-600 text-sm mt-1">
                       Vui lòng nhập số lượng
-                    </b-form-invalid-feedback>
-                  </b-col>
-                </b-row>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row v-show="promo.method == 'other'">
-                  <b-col>
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                <div v-show="promo.method == 'other'">
+                  <div class="w-full px-2">
+                    <div class="flex flex-wrap -mx-2 form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Khung giờ tự động áp dụng </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input type="radio" id="auto_apply_yes" value="true" v-model="promo.auto_apply">
                         <label for="auto_apply_yes">Có</label>
                         <input type="radio" id="auto_apply_no" value="false" v-model="promo.auto_apply">
                         <label for="auto_apply_no">Không</label>
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
+                    <div class="flex flex-wrap -mx-2 form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Các ngày trong tuần </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input type="checkbox" id="t2" value="1" v-model="promo.day_of_week">
                         <label for="t2">Thứ 2</label>
                         <input type="checkbox" id="t3" value="2" v-model="promo.day_of_week">
@@ -321,14 +318,14 @@
                         <label for="t7">Thứ 7</label>
                         <input type="checkbox" id="cn" value="7" v-model="promo.day_of_week">
                         <label for="cn">Chủ nhật</label>
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
-                      <b-col md="3" class="mt-2">
+                    <div class="flex flex-wrap -mx-2 form-row" v-show="promo.auto_apply == true || promo.auto_apply == 'true'">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Khung giờ </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <div class="form-inline">
                           <input
                             id="start_time"
@@ -349,41 +346,43 @@
                             maxlength="5"
                             >
                         </div>
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label> Mô tả </label>
-                  </b-col>
-                  <b-col md="9">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
                     <div class="form-inline">
-                      <b-form-textarea
+                      <textarea
                         id="description"
+                        class="form-control"
                         style="width:100%;"
                         rows="3"
                         v-model="promo.description"
-                      ></b-form-textarea>
+                      ></textarea>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Hình ảnh </label>
-                </b-col>
-                <b-col md="9">
-                  <b-input-group @click="$refs.file.click()" append="Browse" class="pointer">
-                    <b-input v-model="promo.image"></b-input>
-                  </b-input-group>
-                  <input class="d-none" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
-                </b-col>
-              </b-row>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <div class="flex">
+                    <input type="text" v-model="promo.image" class="form-control flex-1" readonly>
+                    <button type="button" @click="$refs.file.click()" class="btn btn-secondary">Browse</button>
+                  </div>
+                  <input class="hidden" type="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload"/>
+                </div>
+              </div>
 
-              <b-row class="form-row">
+              <div class="flex flex-wrap -mx-2 form-row">
                 <div v-if="promo.image_preview" class="preview-box text-center"  :style="{height: computedWidth, width: '100%'}">
                     <vue-cropper
                       ref="cropper"
@@ -403,12 +402,12 @@
                     >
                     </vue-cropper>
                 </div>
-              </b-row>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -418,11 +417,19 @@ import promotionApi from '@/api/promotion'
 import commonFunc from '@/common/commonFunc'
 import VueCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
   components: {
     VueCropper
+  },
+  setup() {
+    const toast = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
   },
   data () {
     return {
@@ -564,24 +571,16 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      const mappedVariant = variant === 'danger' ? 'error' : variant
+      this.toast(content, mappedVariant)
     },
 
     /**
      * Make toast with title
      */
     makeToast(variant = null, title="Success!!!", content="Thao tác thành công!!!") {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
+      const mappedVariant = variant === 'danger' ? 'error' : variant
+      this.toast(`${title}: ${content}`, mappedVariant)
     },
 
     /**
@@ -685,7 +684,7 @@ export default {
      * Get detail
      */
     getPromoDetail() {
-      let promoId = this.$route.params.id
+      let promoId = this.route.params.id
       if(promoId){
         this.loading = true
 
@@ -912,7 +911,7 @@ export default {
         this.saving = false
         if(res != null && res.data != null){
           if (res.data.status == 200) {
-            this.$router.push("/promotion")
+            this.router.push("/promotion")
           }
         }
       }).catch(err => {
@@ -946,7 +945,7 @@ export default {
       dataPost.expired_date_from = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_from)
       dataPost.expired_date_to = commonFunc.convertDDMMYYYYToYYYYMMDD(this.promo.expired_date_to)
 
-      let promoId = this.$route.params.id
+      let promoId = this.route.params.id
       if(promoId){
         // Edit
         dataPost.id = promoId
@@ -997,7 +996,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/promotion")
+      this.router.push("/promotion")
     },
 
     /**

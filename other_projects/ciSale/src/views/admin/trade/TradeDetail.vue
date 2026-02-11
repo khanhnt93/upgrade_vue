@@ -1,84 +1,84 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-                <b-button variant="outline-primary" class="pull-right btn-width-120" @click="printInvoice">
+                </button>
+                <button class="btn btn-outline-primary pull-right btn-width-120" @click="printInvoice">
                   In hóa đơn
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="form-row">
+              <div md='12'>
                 <h4 class="mt-1 text-center text-header">Chi Tiết Đơn Hàng</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row>
-              <b-col md="12" class="bg-gray text-white title-partner">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 bg-gray text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin
                     <span v-show="trade.from_type == 1">nhà cung cấp</span>
                     <span v-show="trade.from_type == 0">khách hàng</span>
                   </span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2">
                     <label>
                       <span v-show="trade.from_type == 1">Tên nhà cung cấp: {{trade.supplier_name}}</span>
                       <span v-show="trade.from_type == 0">Tên khách hàng: {{trade.customer_name}}</span>
                     </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2">
                     <label>
-                      <span v-show="trade.from_type == 1">SĐT nhà cung cấp: {{trade.supplier_phone}}</span>
-                      <span v-show="trade.from_type == 0">SĐT khách hàng: {{trade.customer_phone}}</span>
+                      <span v-show="trade.from_type == 1">ĐT nhà cung cấp: {{trade.supplier_phone}}</span>
+                      <span v-show="trade.from_type == 0">ĐT khách hàng: {{trade.customer_phone}}</span>
                     </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label>
                       <span v-show="trade.from_type == 1">Địa chỉ nhà cung cấp: {{trade.supplier_address}}</span>
                       <span v-show="trade.from_type == 0">Địa chỉ khách hàng: {{trade.customer_address}}</span>
                     </label>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-info bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
                 <h5>
                   <span class="pull-left">Danh sách sản phẩm</span>
                 </h5>
 
-              </b-col>
-            </b-row>
-            <b-row class="mt-2" v-show="trade.products.length > 0">
-                  <b-col md="12">
+              </div>
+            </div>
+            <div class="mt-2" v-show="trade.products.length > 0">
+                  <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                     <tr>
@@ -105,39 +105,39 @@
                     </tr>
                     </tbody>
                   </table>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-success bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+            <div class="mt-2">
+              <div class="w-full px-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Tổng tiền sản phẩm: {{currencyFormat(trade.sub_total)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Chi phí thêm: {{currencyFormat(trade.extra_fee)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Số tiền giảm: {{currencyFormat(trade.fixed_discount)}}  </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Khuyến mãi: {{currencyFormat(trade.discount_amount)}}</label>
                     <div v-show="trade.promotions.length > 0">
                       <p class="ml-3">Danh sách khuyến mãi đang áp dụng</p>
@@ -145,60 +145,60 @@
                         {{" - " + pmt.quantity_apply + " x " + pmt.name}}
                       </p>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Thuế VAT<span v-show="trade.vat_value > 0">({{trade.vat_percent}}%)</span>: {{currencyFormat(trade.vat_value)}} </label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Thành tiền: {{currencyFormat(trade.total)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Số tiền thanh toán: {{currencyFormat(trade.total_paid)}}</label>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Loại tiền thanh toán </label>
                     <p class="ml-3">- Tiền mặt: {{currencyFormat(trade.cash)}}</p>
                     <p class="ml-3">- Chuyển khoản: {{currencyFormat(trade.credit)}}</p>
                     <p class="ml-3">- Tiền điện tử: {{currencyFormat(trade.e_money)}}</p>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="12" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full px-2 mt-2" >
                     <label> Ghi chú: {{trade.description}}</label>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--    Print-->
-    <b-row hidden id="invoiceBuy">
-      <b-col>
+    <div hidden id="invoiceBuy">
+      <div class="w-full px-2">
 
         <div>
           <div class="print-text-left print-width-50-left">
             <h4>TÊN CỤC THUẾ................</h4>
           </div>
-          <b-col class="print-text-right print-width-50-right">
+          <div class="print-text-right print-width-50-right">
             <h4>Mẫu số: 02GTTT3/001</h4>
-          </b-col>
+          </div>
         </div>
 
         <h2 class="print-text-center">HOÁ ĐƠN MUA HÀNG</h2>
@@ -207,6 +207,8 @@
         <br>
         <div class="print-border print-pl-2">
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Đơn vị bán hàng: <b>
               <span v-show="trade.from_type == 1">{{trade.supplier_name}}</span>
               <span v-show="trade.from_type == 0">{{trade.customer_name}}</span>
@@ -223,13 +225,19 @@
               <span v-show="trade.from_type == 1">{{trade.supplier_phone}}</span>
               <span v-show="trade.from_type == 0">{{trade.customer_phone}}</span>
             </td></tr>
+
+            </tbody>
           </table>
 
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Họ tên người mua hàng: <b>{{store_name}}</b></td></tr>
             <tr><td class="print-no-border">Mã số thuế: {{store_tax_code}}</td></tr>
             <tr><td class="print-no-border">Địa chỉ: {{store_address}}</td></tr>
             <tr><td class="print-no-border">Điện thoại: {{store_phone_number}}</td></tr>
+
+            </tbody>
           </table>
           <hr>
         </div>
@@ -237,6 +245,8 @@
         <br>
         <div id="print-table-border">
           <table style="width:100%">
+
+            <tbody>
             <tr class="print-text-center">
               <th>STT</th>
               <th>Tên hàng hóa, dịch vụ</th>
@@ -282,10 +292,14 @@
               <td colspan="6">Số tiền viết bằng chữ: {{convertNumberToText(trade.total)}}</td>
             </tr>
 
+            </tbody>
+
           </table>
           <br>
           <div>
             <table style="width:100%">
+
+              <tbody>
               <tr>
                 <td colspan="3" class="print-text-center print-no-border">Người mua hàng</td>
                 <td colspan="3" class="print-text-center print-no-border">Người bán hàng</td>
@@ -294,39 +308,47 @@
                 <td colspan="3" class="print-text-center print-no-border">(Ký, ghi rõ họ tên)</td>
                 <td colspan="3" class="print-text-center print-no-border">(Ký, đóng dấu, ghi rõ họ tên)</td>
               </tr>
+
+              </tbody>
             </table>
           </div>
         </div>
-      </b-col>
+      </div>
 
-    </b-row>
+    </div>
 
-    <b-row hidden id="invoiceSell">
-      <b-col>
+    <div hidden id="invoiceSell">
+      <div class="w-full px-2">
 
         <div>
           <div class="print-text-left print-width-50-left">
             <h4>TÊN CỤC THUẾ................</h4>
           </div>
-          <b-col class="print-text-right print-width-50-right">
+          <div class="print-text-right print-width-50-right">
             <h4>Mẫu số: 02GTTT3/001</h4>
-          </b-col>
+          </div>
         </div>
 
         <h2 class="print-text-center">HOÁ ĐƠN BÁN HÀNG</h2>
 <!--        <p class="print-text-center">Ngày {{today_day}} tháng {{today_month}} năm {{today_year}}</p>-->
-        <p class="print-text-center"><p>Ngày: {{trade.updated_at}}</p>
+        <p class="print-text-center">Ngày: {{trade.updated_at}}</p>
         <p class="print-text-center">Số hoá đơn: {{trade.bill_number}}</p>
         <br>
         <div class="print-border print-pl-2">
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Đơn vị bán hàng: <b>{{store_name}}</b></td></tr>
             <tr><td class="print-no-border">Mã số thuế: {{store_tax_code}}</td></tr>
             <tr><td class="print-no-border">Địa chỉ: {{store_address}}</td></tr>
             <tr><td class="print-no-border">Điện thoại: {{store_phone_number}}</td></tr>
+
+            </tbody>
           </table>
           <hr>
           <table style="width:100%">
+
+            <tbody>
             <tr><td class="print-no-border">Họ tên người mua hàng: <b>
               <span>{{trade.customer_name}}</span>
             </b></td></tr>
@@ -337,11 +359,15 @@
             <tr><td class="print-no-border">Điện thoại:
               <span>{{trade.customer_phone}}</span>
             </td></tr>
+
+            </tbody>
           </table>
         </div>
         <br>
         <div id="print-table-border">
           <table style="width:100%">
+
+            <tbody>
             <tr class="print-text-center">
               <th>STT</th>
               <th>Tên hàng hóa, dịch vụ</th>
@@ -386,10 +412,14 @@
               <td colspan="6">Số tiền viết bằng chữ: {{convertNumberToText(trade.total)}}</td>
             </tr>
 
+            </tbody>
+
           </table>
           <br>
           <div>
             <table style="width:100%">
+
+              <tbody>
               <tr>
                 <td colspan="3" class="print-text-center print-no-border">Người mua hàng</td>
                 <td colspan="3" class="print-text-center print-no-border">Người bán hàng</td>
@@ -398,16 +428,18 @@
                 <td colspan="3" class="print-text-center print-no-border">(Ký, ghi rõ họ tên)</td>
                 <td colspan="3" class="print-text-center print-no-border">(Ký, đóng dấu, ghi rõ họ tên)</td>
               </tr>
+
+              </tbody>
             </table>
           </div>
         </div>
-      </b-col>
+      </div>
 
-    </b-row>
+    </div>
 
     <!--Mẫu in hoá đơn 2-->
-    <b-row hidden id="compactInvoice">
-      <b-col>
+    <div hidden id="compactInvoice">
+      <div class="w-full px-2">
         <div>
           <h2 class="print-text-center">{{store_name}}</h2>
           <p class="print-text-center">{{store_address}}</p>
@@ -509,8 +541,8 @@
           </div>
         </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
 
   </div>
@@ -521,9 +553,16 @@
 import tradeApi from '@/api/trade'
 import superAdminAPI from '@/api/superAdmin'
 import commonFunc from '@/common/commonFunc'
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore
+    }
+  },
   data () {
     return {
       trade: {
@@ -620,7 +659,7 @@ export default {
      * Get detail
      */
     getStoreDetail() {
-      let storeId = this.$store.state.user.storeId
+      let storeId = this.authStore.user.storeId
       if(storeId){
         superAdminAPI.getStoreDetail(storeId).then(res => {
           if(res != null && res.data != null && res.data.data != null) {
@@ -647,7 +686,7 @@ export default {
           this.popToast('danger', errorMess)
         })
       } else {
-        this.$store.commit('removeToken')
+        this.authStore.removeToken()
         this.$router.push('/staff-login')
       }
     },

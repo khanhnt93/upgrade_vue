@@ -1,12 +1,12 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
             <h4 class="text-center text-header">BÁO CÁO SỬA BILL CŨ</h4>
-            <b-row>
-              <b-col md="4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <input
                   id="fromDate"
@@ -16,11 +16,11 @@
                   v-model="inputs.fromDate"
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">
+                <div v-if="errorFromDate" class="text-red-600 text-sm mt-1">
                   Mục từ ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
-              <b-col md="4">
+                </div>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <input
                   id="toDate"
@@ -30,31 +30,31 @@
                   v-model="inputs.toDate"
                   maxlength="10"
                   @keyup="inputDateOnly($event.target)">
-                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">
+                <div v-if="errorToDate" class="text-red-600 text-sm mt-1">
                   Mục đến ngày không đúng
-                </b-form-invalid-feedback>
-              </b-col>
+                </div>
+              </div>
 
-              <b-col md="4">
+              <div class="w-full md:w-1/3 px-2">
                 <label class="label-width text-white">
                  Xem
                 </label>
 
-                <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+                <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
-                </b-button>
-              </b-col>
+                </button>
+              </div>
 
-            </b-row>
+            </div>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row v-show="items.length > 0">
-              <b-col md="4">
+            <div class="flex flex-wrap -mx-2" v-show="items.length > 0">
+              <div class="w-full md:w-1/3 px-2">
                 Số kết quả: {{items.length}}
-              </b-col>
-              <b-col md="8" class="text-right">
+              </div>
+              <div class="w-full md:w-2/3 px-2 text-right">
                 <download-excel
                   class   = "btn btn-default text-header"
                   :data   = "items"
@@ -63,30 +63,42 @@
                   name    = "bao_cao_sua_bill_cu.xls">
                   <b>Xuất Excel</b>
                 </download-excel>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2 mb-2" v-show="click == true">
-              <b-col md="12">
-                <b-table
-                  hover
-                  bordered
-                  stacked="md"
-                  :fields="fields"
-                  :items="items"
-                  v-show="items.length > 0">
-                  <template v-slot:cell(old_total)="dataOldTotal">{{ currencyFormat(dataOldTotal.item.old_total) }}</template>
-                  <template v-slot:cell(new_total)="dataNewTotal">{{ currencyFormat(dataNewTotal.item.new_total) }}</template>
-                </b-table>
+            <div class="flex flex-wrap -mx-2 mt-2 mb-2" v-show="click == true">
+              <div class="w-full px-2">
+                <table class="table table-bordered table-striped" v-show="items.length > 0">
+                  <thead>
+                    <tr>
+                      <th class="text-center">STT</th>
+                      <th class="text-center">Số bill</th>
+                      <th class="text-center">Thành tiền bill gốc</th>
+                      <th class="text-center">Thành tiền bill sửa</th>
+                      <th class="text-center">Ngày sửa</th>
+                      <th class="text-center">Người sửa</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in items" :key="item.stt">
+                      <td class="text-center">{{ item.stt }}</td>
+                      <td class="text-center">{{ item.bill_number }}</td>
+                      <td class="text-right">{{ currencyFormat(item.old_total) }}</td>
+                      <td class="text-right">{{ currencyFormat(item.new_total) }}</td>
+                      <td class="text-center">{{ item.created_at }}</td>
+                      <td class="text-center">{{ item.staff_name }}</td>
+                    </tr>
+                  </tbody>
+                </table>
 
                 <p v-show="firstSearch == false && items.length <= 0" class="text-center">Không có kết quả nào</p>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </div>
@@ -96,13 +108,13 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-
-Vue.component('downloadExcel', JsonExcel)
-
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   data () {
     return {
       inputs: {
@@ -189,17 +201,7 @@ export default {
       return !(this.errorFromDate || this.errorToDate)
     },
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Only input date
@@ -228,14 +230,14 @@ export default {
       let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(this.inputs.toDate))
 
       if(fromDate > toDate) {
-        this.popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+        this.toast("Từ ngày không thể lớn hớn đến ngày", 'error')
         return false
       }
 
       fromDate.setDate(fromDate.getDate() + 62)
 
       if(fromDate < toDate) {
-        this.popToast('danger', "Thời gian không quá 62 ngày")
+        this.toast("Thời gian không quá 62 ngày", 'error')
         return false
       }
 
@@ -278,7 +280,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
 
         this.firstSearch = false
         this.onSearch = false

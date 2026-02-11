@@ -1,70 +1,72 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="text-center text-header">Báo Cáo Hóa Đơn</h4>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="4">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/3 px-2">
               <label>
                 Từ ngày:
               </label>
               <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="4">
+            <div class="w-full md:w-1/3 px-2">
               <label>
                 Đến ngày:
               </label>
               <datepicker v-model="inputs.toDate" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-            </b-col>
+            </div>
 
-            <b-col md="4">
+            <div class="w-full md:w-1/3 px-2">
               <label>
                 Loại hoá đơn:
               </label>
-              <b-form-select
-                :options="typeOption"
+              <select
                 id="type"
                 type="text"
                 autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.type">
-              </b-form-select>
-            </b-col>
-          </b-row>
+                <option v-for="option in typeOption" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="12">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <label class="label-width text-white">
                  Xem
               </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                 Xem
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row >
-      <b-col>
+          <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
 
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <b-row v-show="firstSearch == false && bills.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4">
+          <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length > 0">
+            <div class="w-full px-2">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-1/3 px-2">
                   Số kết quả: {{bills.length}}
-                </b-col>
-                <b-col md="8" class="text-right">
+                </div>
+                <div class="w-full md:w-2/3 px-2 text-right">
                   <download-excel
                     class   = "btn btn-default text-header"
                     :data   = "bills"
@@ -73,10 +75,10 @@
                     name    = "bao_cao_theo_bill.xls">
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                       <tr>
@@ -133,38 +135,40 @@
                     </tbody>
                   </table>
 
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-row v-show="firstSearch == false && bills.length == 0">
-            <b-col class="text-center">
+          <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length == 0">
+            <div class="w-full px-2 text-center">
               Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
 
-      </b-col>
-    </b-row>
-        </b-card>
+      </div>
+    </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
 <script>
 import reportAPI from '@/api/report'
 import commonFunc from '@/common/commonFunc'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-import Datepicker from 'vuejs-datepicker'
 
-Vue.component('downloadExcel', JsonExcel)
-
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   components: {
     Datepicker
   },
@@ -218,17 +222,7 @@ export default {
     this.search()
   },
   methods: {
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Search
@@ -281,7 +275,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
 
         this.firstSearch = false
         this.onSearch = false

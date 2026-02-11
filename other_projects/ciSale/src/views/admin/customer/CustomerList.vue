@@ -1,29 +1,30 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col>
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="goToAdd">
                   Thêm
-                </b-button>
+                </button>
 
-                <b-button variant="outline-primary" class="pull-right btn-width-120 mr-2" @click="openModalImportFile">
+                <button class="btn btn-outline-primary float-right btn-width-120 mr-2" @click="openModalImportFile">
                   Upload
-                </b-button>
-            </b-col>
-          </b-row>
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Danh Sách Khách Hàng</h4>
-            </b-col>
-          </b-row>
-          <hr>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Danh Sách Khách Hàng</h4>
+              </div>
+            </div>
+            <hr>
 
-          <b-row>
-            <b-col md="6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2 mb-3">
               <label> Tên </label>
               <input
               id="name"
@@ -32,8 +33,8 @@
               class="form-control"
               v-model="inputs.name"
               maxlength="75">
-            </b-col>
-            <b-col md="6">
+              </div>
+              <div class="w-full md:w-1/2 px-2 mb-3">
               <label> Số điện thoại </label>
               <input
               id="price"
@@ -43,145 +44,165 @@
               v-model="inputs.phone"
               maxlength="11"
               @keyup="integerOnly($event.target)">
-            </b-col>
-          </b-row>
+              </div>
+            </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+            <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch"
                         @click.prevent="prepareToSearch">
-                Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
-
-          <b-row>
-            <b-col>
-              Số kết quả: {{totalRow}}
-            </b-col>
-          </b-row>
-
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="fields"
-          :items="items">
-            <template v-slot:cell(gender)="data">{{ handleGender(data.item.gender) }}</template>
-            <template v-slot:cell(action)="dataId">
-              <b-list-group horizontal>
-                <b-list-group-item v-b-tooltip.hover title="Edit" @click="edit(dataId.item.id)">
-                  <i class="fa fa-edit" />
-                </b-list-group-item>
-              </b-list-group>
-            </template>
-          </b-table>
-
-          <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
-          <span class="loading-more" v-if="hasNext === false">--Hết--</span>
-          <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
-        </b-card>
-
-      </b-col>
-    </b-row>
-
-    <b-modal centered hide-footer hide-header id="modal-import-customer">
-      <b-row>
-        <b-col class="text-center">
-          <form method="post" id="formImport" enctype="multipart/form-data">
-              <div class="modal-header">
-                  <h4 class="modal-title">Upload khách hàng từ file excel</h4>
+                  Tìm Kiếm
+                </button>
               </div>
-              <div class="modal-body">
-                  <div class="custom-file">
-                    <label>Chọn file excel bạn muốn upload
-                      <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
-                    </label>
-                    <!--<input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx" :placeholder="[[ fileName ]]">-->
-                    <!--<label id="custom-file-label" class="custom-file-label" for="file">Chọn file excel bạn muốn upload</label>-->
+            </div>
 
-                  </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 mb-3">
+                Số kết quả: {{totalRow}}
               </div>
-          </form>
-        </b-col>
-      </b-row>
+            </div>
 
-      <b-row>
-        <b-col class="text-right mt-3">
-          <!-- Loading -->
-          <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
-          <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
-            Upload
-          </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <table class="min-w-full divide-y divide-gray-200 border">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">STT</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loại</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số điện thoại</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giới tính</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ngày sinh</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mã số thuế</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tỉnh/TP</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quận/Huyện</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Địa chỉ</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.stt }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.type }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.phone_number }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ handleGender(item.gender) }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.birthday }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.tax_code }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.city_name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.district_name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.address }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <div class="flex gap-2">
+                          <button @click="edit(item.id)" class="text-blue-600 hover:text-blue-900" title="Edit">
+                            <i class="fa fa-edit" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- Loading -->
+                <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+                <span class="loading-more" v-if="hasNext === false">--Hết--</span>
+                <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal Import Customer -->
+    <TransitionRoot appear :show="modalImportCustomer" as="template">
+      <Dialog as="div" @close="modalImportCustomer = false" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+                <div class="text-center">
+                  <form method="post" id="formImport" enctype="multipart/form-data">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Upload khách hàng từ file excel</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="custom-file">
+                        <label>Chọn file excel bạn muốn upload
+                          <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="text-right mt-3">
+                  <!-- Loading -->
+                  <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
+                  <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
+                    Upload
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
 
 
 <script>
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import customerApi from '@/api/customer'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  components: {
+    Dialog,
+    DialogPanel,
+    TransitionRoot,
+    TransitionChild
+  },
+  setup() {
+    const { popToast } = useToast()
+    const router = useRouter()
+    return { popToast, router }
+  },
   data () {
     return {
       inputs: {
         name: null,
         phone: null
       },
-      fields: [
-        {
-          key: 'stt',
-          label: 'STT'
-        },
-        {
-          key: 'type',
-          label: 'Loại'
-        },
-        {
-          key: 'name',
-          label: 'Tên'
-        },
-        {
-          key: 'phone_number',
-          label: 'Số điện thoại'
-        },
-        {
-          key: 'gender',
-          label: 'Giới tính'
-        },
-        {
-          key: 'birthday',
-          label: 'Ngày sinh'
-        },
-        {
-          key: 'tax_code',
-          label: 'Mã số thuế'
-        },
-        {
-          key: 'city_name',
-          label: 'Tỉnh/TP'
-        },
-        {
-          key: 'district_name',
-          label: 'Quận/Huyện'
-        },
-        {
-          key: 'address',
-          label: 'Địa chỉ'
-        },
-        {
-          key: 'action',
-          label: '',
-          class: 'actions-cell'
-        }
-      ],
+      modalImportCustomer: false,
       items: [],
       pageLimit: Constant.PAGE_LIMIT,
       offset: 0,
@@ -206,18 +227,7 @@ export default {
   methods: {
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
-    /**
      *  Processing on scroll: use for paging
      */
     onScroll (event) {
@@ -292,7 +302,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearch = false
         this.loading = false
@@ -336,21 +346,21 @@ export default {
      * Go to page edit
      */
     edit (id) {
-      this.$router.push('/customer/edit/' + id)
+      this.router.push('/customer/edit/' + id)
     },
 
     /**
      * Go to page add
      */
     goToAdd () {
-      this.$router.push('/customer/add')
+      this.router.push('/customer/add')
     },
 
     /**
      * Show modal import from file
      */
     openModalImportFile () {
-      this.$bvModal.show('modal-import-customer')
+      this.modalImportCustomer = true
     },
 
     /**
@@ -365,12 +375,12 @@ export default {
           // Load list when load page
           this.search()
         }
-        this.$bvModal.hide('modal-import-customer')
+        this.modalImportCustomer = false
         this.uploading = false
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.uploading = false
       })

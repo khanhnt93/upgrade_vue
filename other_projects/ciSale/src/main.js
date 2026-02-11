@@ -1,43 +1,56 @@
-import Vue from 'vue'
-import App from './App'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import App from './App.vue'
 import router from './router'
-import store from './store'
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
-Vue.config.productionTip = false
+// Import Tailwind CSS
+import './assets/scss/style.scss'
 
-// Import VueBoostrap
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue)
-
-
-// Import Global Filters
-import '@/filters'
-
-// svg: loading
-import * as svgicon from 'vue-svgicon'
-import './icons.js'
-
-Vue.use(svgicon, {
-  tagName: 'icon'
-})
-
-// Some middleware to help us ensure the user is authenticated.
-router.beforeEach((to, from, next) => {
-    next()
-});
+// Import Font Awesome
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 // Init chart
 import VueGoogleCharts from 'vue-google-charts'
-Vue.use(VueGoogleCharts)
 
+// Create Vue app
+const app = createApp(App)
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-});
+// Create and configure Pinia
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+// Use plugins
+app.use(pinia)
+app.use(router)
+app.use(VueGoogleCharts)
+
+// Configure Toast
+app.use(Toast, {
+  transition: 'Vue-Toastification__bounce',
+  maxToasts: 3,
+  newestOnTop: true,
+  position: 'top-right',
+  timeout: 3000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: 'button',
+  icon: true,
+  rtl: false
+})
+
+// Router navigation guard
+router.beforeEach((to, from, next) => {
+  next()
+})
+
+// Mount app
+app.mount('#app')

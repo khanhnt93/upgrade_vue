@@ -1,56 +1,59 @@
 <template>
   <div class="app flex-row align-items-center is-fixed-page">
     <div class="container-fluid">
-      <b-row class="row justify-content-center">
-        <b-col md="6">
-          <b-card-group>
-            <b-card
-              no-body>
-              <b-card-body>
-                <b-form @submit.prevent="logIn">
-                  <h1 class="text-center">
+      <div class="flex flex-wrap justify-content-center">
+        <div class="w-full md:w-1/2 px-2">
+          <div class="card">
+            <div class="p-4">
+              <form @submit.prevent="logIn">
+                <h1 class="text-center">
                   Kích Hoạt Mật khẩu mới
-                  </h1>
-                  <div class="form-group">
-                    <label>Code</label><span class="error-sybol"></span>
-                    <input
-                      id="code"
-                      type="text"
-                      autocomplete="new-password"
-                      class="form-control"
-                      placeholder="Nhập số code"
-                      v-model="inputs.code"
-                      @keyup="integerOnly($event.target)"
-                      maxlength="6">
-                    <b-form-invalid-feedback  class="invalid-feedback" :state="!errorCode">
-                      Vui lòng nhập code
-                    </b-form-invalid-feedback>
+                </h1>
+                <div class="form-group">
+                  <label>Code</label><span class="error-sybol"></span>
+                  <input
+                    id="code"
+                    type="text"
+                    autocomplete="new-password"
+                    :class="['form-control', { 'is-invalid': errorCode }]"
+                    placeholder="Nhập số code"
+                    v-model="inputs.code"
+                    @keyup="integerOnly($event.target)"
+                    maxlength="6">
+                  <div v-if="errorCode" class="invalid-feedback" style="display: block;">
+                    Vui lòng nhập code
                   </div>
-                  <b-button
-                    @click="confirm"
-                    :variant="onConfirm ? '' : 'primary'"
-                    class="pull-right default-btn-bg"
-                    :disabled="onConfirm">
-                    {{ onConfirm ? "Xác nhận..." : "Xác nhận" }}
-                  </b-button>
-                </b-form>
-              </b-card-body>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+                </div>
+                <button
+                  type="button"
+                  @click="confirm"
+                  class="btn btn-primary pull-right default-btn-bg"
+                  :disabled="onConfirm">
+                  {{ onConfirm ? "Xác nhận..." : "Xác nhận" }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 import AuthenticationAPI from '@/api/authentication'
 import commonFunc from '@/common/commonFunc'
 import Cookies from 'js-cookie'
 
-
 export default {
   name: 'ActiveAccount',
+  setup() {
+    const { popToast } = useToast()
+    const router = useRouter()
+    return { popToast, router }
+  },
   data () {
     return {
       inputs: {
@@ -85,38 +88,27 @@ export default {
 
         AuthenticationAPI.staffActivePass(this.inputs).then(res => {
           if(res && res.data) {
-            let message = ""
             if (res.data.status == 200) {
               Cookies.remove("staffPhoneNumber")
 
               // show popup success
-              message = "Tài khoản của bạn đã được kích hoạt"
-              this.$bvModal.msgBoxOk(message, {
-                title: "Kích hoạt tài khoản thành công",
-                centered: true,
-                size: 'sm',
-                headerClass: 'bg-success',
-              }).then(res => {
-                if(res) {
-                  this.$router.push('/staff-login')
-                }
-              })
+              this.popToast('success', 'Tài khoản của bạn đã được kích hoạt')
+
+              // Navigate to login after short delay
+              setTimeout(() => {
+                this.router.push('/staff-login')
+              }, 1500)
             }
           }
         }).catch(err => {
           console.log(err)
           let message = ""
-          if(err.response.data.status == 422) {
+          if(err.response && err.response.data && err.response.data.status == 422) {
             message = err.response.data.mess
           } else {
             message = "Lỗi hệ thống"
           }
-          this.$bvModal.msgBoxOk(message, {
-            title: "Update failed!",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
+          this.popToast('error', message)
         })
         this.onConfirm = false
 

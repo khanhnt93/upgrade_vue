@@ -1,70 +1,65 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
           <h2 class="text-center text-header">BÁO CÁO THEO NGÀY</h2>
-          <b-card-body class="p-4">
+          <div class="card-body p-4">
             <div>
-              <b-card-group deck>
-                <b-card
-                  bg-variant="light"
-                  header="Số lượng hoá đơn"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ billNumber | format_currency }}</h3></b-card-text>
-                </b-card>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-1/5 px-2">
+                  <div class="card text-center" style="background-color: rgb(247, 247, 247);">
+                    <div class="card-header">Số lượng hoá đơn</div>
+                    <div class="card-body"><h3>{{ billNumber | format_currency }}</h3></div>
+                  </div>
+                </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng doanh thu"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ revenue | format_currency }}</h3></b-card-text>
-                </b-card>
+                <div class="w-full md:w-1/5 px-2">
+                  <div class="card text-center" style="background-color: rgb(247, 247, 247);">
+                    <div class="card-header">Tổng doanh thu</div>
+                    <div class="card-body"><h3>{{ revenue | format_currency }}</h3></div>
+                  </div>
+                </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng chi phí"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ fee | format_currency }}</h3></b-card-text>
-                </b-card>
+                <div class="w-full md:w-1/5 px-2">
+                  <div class="card text-center" style="background-color: rgb(247, 247, 247);">
+                    <div class="card-header">Tổng chi phí</div>
+                    <div class="card-body"><h3>{{ fee | format_currency }}</h3></div>
+                  </div>
+                </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tổng lợi nhuận"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ profit | format_currency }}</h3></b-card-text>
-                </b-card>
+                <div class="w-full md:w-1/5 px-2">
+                  <div class="card text-center" style="background-color: rgb(247, 247, 247);">
+                    <div class="card-header">Tổng lợi nhuận</div>
+                    <div class="card-body"><h3>{{ profit | format_currency }}</h3></div>
+                  </div>
+                </div>
 
-                <b-card
-                  bg-variant="light"
-                  header="Tiền vốn đầu ngày"
-                  class="text-center"
-                >
-                  <b-card-text><h3>{{ fund | format_currency }}</h3></b-card-text>
-                </b-card>
-              </b-card-group>
+                <div class="w-full md:w-1/5 px-2">
+                  <div class="card text-center" style="background-color: rgb(247, 247, 247);">
+                    <div class="card-header">Tiền vốn đầu ngày</div>
+                    <div class="card-body"><h3>{{ fund | format_currency }}</h3></div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <b-row class="mt-10">
-      <b-col>
-        <b-card>
+    <div class="flex flex-wrap -mx-2 mt-10">
+      <div class="w-full px-2">
+        <div class="card">
           <span class="loading-more" v-show="loading"
             ><icon name="loading" width="60"
           /></span>
 
-          <b-row v-show="bills.length > 0">
-            <b-col>
-              <b-row>
-                <b-col md="4"> Số kết quả: {{ bills.length }} </b-col>
-                <b-col md="8" class="text-right">
+          <div class="flex flex-wrap -mx-2" v-show="bills.length > 0">
+            <div class="w-full px-2">
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full md:w-1/3 px-2"> Số kết quả: {{ bills.length }} </div>
+                <div class="w-full md:w-2/3 px-2 text-right">
                   <download-excel
                     class="btn btn-default text-header"
                     :data="bills"
@@ -74,10 +69,10 @@
                   >
                     <b>Xuất Excel</b>
                   </download-excel>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <table
                     class="table table-bordered table-striped fixed_header"
                   >
@@ -166,19 +161,19 @@
                       </tr>
                     </tbody>
                   </table>
-                </b-col>
-              </b-row>
-            </b-col>
-          </b-row>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <b-row v-show="bills.length == 0">
-            <b-col class="text-center">
+          <div class="flex flex-wrap -mx-2" v-show="bills.length == 0">
+            <div class="w-full px-2 text-center">
               Không tìm thấy kết quả nào
-            </b-col>
-          </b-row>
-        </b-card>
-      </b-col>
-    </b-row>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -186,8 +181,13 @@
 import adminAPI from "@/api/admin";
 import commonFunc from "@/common/commonFunc";
 import moment from 'moment';
+import { useToast } from '@/composables/useToast'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    return { toast }
+  },
   data() {
     return {
       revenue: 0,
@@ -231,14 +231,7 @@ export default {
     this.getTotalBill();
   },
   methods: {
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
-    },
+
     getReportToday() {
       console.log("getReportToday");
       adminAPI
@@ -255,7 +248,7 @@ export default {
         .catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err);
-          this.popToast("danger", errorMess);
+          this.toast(errorMess, 'error');
         });
     },
     getTotalBill() {
@@ -282,7 +275,7 @@ export default {
         .catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err);
-          this.popToast("danger", errorMess);
+          this.toast(errorMess, 'error');
           this.loading = false;
         });
     }

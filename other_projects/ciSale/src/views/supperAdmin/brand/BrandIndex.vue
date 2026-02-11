@@ -1,37 +1,37 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="secondary" class="pull-left px-4" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div cols="6">
+                <button class="btn btn-secondary pull-left px-4" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
+                </button>
+              </div>
+              <div cols="6">
                 <button class="btn btn-primary pull-right px-4 default-btn-bg" @click="save" :disabled="saving">
                     Lưu
                 </button>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="form-row">
+              <div md='12'>
                 <h4 class="mt-2 text-center">Thương Hiệu</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-9 px-2">
                   <input
                   id="name"
                   type="text"
@@ -39,39 +39,47 @@
                   autocomplete="new-password"
                   v-model="brand.name"
                   maxlength="100">
-                  <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
+                  <div :class="{'invalid-feedback d-block': errorName}">
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div md="3" class="mt-2">
                   <label> Mô tả </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-textarea
+                </div>
+                <div class="w-full md:w-9 px-2">
+                  <textarea
                     id="description"
                     rows="5"
+                    class="form-control"
                     v-model="brand.description"
-                  ></b-form-textarea>
-                </b-col>
-              </b-row>
+                  ></textarea>
+                </div>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 
-
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
+  },
   data () {
     return {
       brand: {
@@ -97,12 +105,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     checkInfo (info) {
@@ -116,7 +120,7 @@ export default {
      *  Get detail
      */
     getBrandDetail() {
-      let brandId = this.$route.params.id
+      let brandId = this.route.params.id
       if(brandId){
         this.loading = true
 
@@ -149,7 +153,7 @@ export default {
 
       this.saving = true
 
-      let brandId = this.$route.params.id
+      let brandId = this.route.params.id
       if(brandId){
         // Edit
         this.brand.id = brandId
@@ -174,7 +178,7 @@ export default {
           if(res != null && res.data != null){
 
             if (res.data.status == 200) {
-              this.$router.push("/brand/list")
+              this.router.push("/brand/list")
             }
           }
         }).catch(err => {
@@ -191,7 +195,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/brand/list")
+      this.router.push("/brand/list")
     }
   }
 }

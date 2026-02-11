@@ -1,29 +1,29 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
 
-      <b-card>
-        <b-row>
-          <b-col>
-            <b-button variant="outline-success" class="pull-right btn-width-120" @click.prevent="goToRepoHis">
+      <div class="bg-white shadow rounded-lg p-4">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
+            <button class="btn btn-outline-success pull-right btn-width-120" @click.prevent="goToRepoHis">
               Lịch sử kho
-            </b-button>
+            </button>
 
-            <b-button variant="outline-primary" class="pull-right btn-width-120 mr-2" @click="openModalImportFile">
+            <button class="btn btn-outline-primary pull-right btn-width-120 mr-2" @click="openModalImportFile">
               Upload
-            </b-button>
-          </b-col>
-        </b-row>
+            </button>
+          </div>
+        </div>
 
-        <b-row>
-          <b-col>
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
             <h3 class="text-header text-center">Sản Phẩm Trong Kho</h3>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
 
-          <b-row>
-            <b-col md="3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/4 px-2">
               <label> Nhóm SP </label>
               <multiselect
                 v-model="productGroupSelect"
@@ -34,9 +34,9 @@
                 track-by="name"
                 @input="changeProductGroup">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label> Loại SP </label>
               <multiselect
                 v-model="productTypeSelect"
@@ -46,9 +46,9 @@
                 label="name"
                 track-by="name">
               </multiselect>
-            </b-col>
+            </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
                 <label> Tên SP</label>
                 <input
                 id="name"
@@ -57,22 +57,22 @@
                 autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.name">
-              </b-col>
+              </div>
 
-            <b-col md="3">
+            <div class="w-full md:w-1/4 px-2">
               <label class="label-width text-white">
                 Xem
               </label>
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch"
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch"
                         @click.prevent="getListProductInRepository">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
+              </button>
+            </div>
 
-          </b-row>
+          </div>
 
-        <b-row>
-            <b-col md="12">
+        <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
 
               <download-excel
@@ -83,134 +83,167 @@
                 name    = "Lịch sử kho">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
 
-          <b-card-body class="p-4">
-            <b-table
-              hover
-              bordered
-              stacked="md"
-              :fields="fields"
-              :items="items">
-              <template v-slot:cell(image_url)="data">
-                <img v-bind:src="data.item.image_url" style="width: 40px; height: 40px"
-                     @click="showModalImage(data.item.product_name, data.item.image_url)"/>
-              </template>
-              <template v-slot:cell(price_buy)="data">
-                <p class="text-right">
-                  <span v-show="!isShowPriceBuy">***</span>
-                  <span v-show="isShowPriceBuy">{{currencyFormat(data.item.price_buy)}}</span>
-                  <i v-show="!isShowPriceBuy" class="fa fa-eye" aria-hidden="true"
-                     @click="isShowPriceBuy = ! isShowPriceBuy" title="Xem giá nhập"></i>
-                  <i v-show="isShowPriceBuy" class="fa fa-eye-slash" aria-hidden="true"
-                     @click="isShowPriceBuy = ! isShowPriceBuy" title="Đóng giá nhập"></i>
-                </p>
-              </template>
-              <template v-slot:cell(price_sell)="data">
-                <p class="text-right">{{currencyFormat(data.item.price_sell)}}</p>
-              </template>
-              <template v-slot:cell(quantity)="data">
-                {{currencyFormat(data.item.quantity)}}
-              </template>
-              <template v-slot:cell(properties)="data">
-                <p v-for="(group, index) in data.item.properties" :key="group">
-                  <span v-for="(item, index) in group" :key="item">
-                    - {{item.name + ": " + item.value}}
-                  </span>
-                </p>
-              </template>
-
-            </b-table>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          <div class="p-4">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr>
+                    <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in items" :key="index">
+                    <td v-for="field in fields" :key="field.key">
+                      <template v-if="field.key === 'stt'">
+                        {{ index + 1 }}
+                      </template>
+                      <template v-else-if="field.key === 'image_url'">
+                        <img v-bind:src="item.image_url" style="width: 40px; height: 40px"
+                             @click="showModalImage(item.product_name, item.image_url)"/>
+                      </template>
+                      <template v-else-if="field.key === 'price_buy'">
+                        <p class="text-right">
+                          <span v-show="!isShowPriceBuy">***</span>
+                          <span v-show="isShowPriceBuy">{{currencyFormat(item.price_buy)}}</span>
+                          <i v-show="!isShowPriceBuy" class="fa fa-eye" aria-hidden="true"
+                             @click="isShowPriceBuy = ! isShowPriceBuy" title="Xem giá nhập"></i>
+                          <i v-show="isShowPriceBuy" class="fa fa-eye-slash" aria-hidden="true"
+                             @click="isShowPriceBuy = ! isShowPriceBuy" title="Đóng giá nhập"></i>
+                        </p>
+                      </template>
+                      <template v-else-if="field.key === 'price_sell'">
+                        <p class="text-right">{{currencyFormat(item.price_sell)}}</p>
+                      </template>
+                      <template v-else-if="field.key === 'quantity'">
+                        {{currencyFormat(item.quantity)}}
+                      </template>
+                      <template v-else-if="field.key === 'properties'">
+                        <p v-for="(group, gindex) in item.properties" :key="gindex">
+                          <span v-for="(propItem, pindex) in group" :key="pindex">
+                            - {{propItem.name + ": " + propItem.value}}
+                          </span>
+                        </p>
+                      </template>
+                      <template v-else>
+                        {{ item[field.key] }}
+                      </template>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--Modal thao tác sau khi xác nhận mua -->
-      <b-modal centered hide-footer hide-header size="lg" id="modal-image-product">
-        <b-row>
-          <b-col md="12">
-            <h4 class="modal-title text-center text-success">{{current_product.product_name}}</h4>
-          </b-col>
-        </b-row>
-        <hr>
+    <Dialog :open="showModalImage" @close="closeModalImage" class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel class="bg-white rounded-lg shadow-xl max-w-3xl w-full">
+          <div class="p-6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="modal-title text-center text-success">{{current_product.product_name}}</h4>
+              </div>
+            </div>
+            <hr>
 
-        <b-row>
-          <b-col>
-            <img v-bind:src="current_product.image_url" style="width: 100%" />
-          </b-col>
-        </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <img v-bind:src="current_product.image_url" style="width: 100%" />
+              </div>
+            </div>
 
-        <b-row>
-          <b-col md="12" class="mt-2 text-center">
-            <b-button variant="outline-secondary" class="text-center btn-width-120" @click="closeModalImage">
-              Đóng
-            </b-button>
-          </b-col>
-        </b-row>
-
-      </b-modal>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 mt-2 text-center">
+                <button class="btn btn-outline-secondary text-center btn-width-120" @click="closeModalImage">
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
 
     <!--Modal upload nhập hàng hàng loạt-->
-    <b-modal centered hide-footer hide-header id="modal-import-repository" @hide="uploadErrorList = []">
-      <b-row>
-        <b-col class="text-center">
-          <form method="post" id="formImport" enctype="multipart/form-data">
+    <Dialog :open="showModalImport" @close="() => { showModalImport = false; uploadErrorList = [] }" class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel class="bg-white rounded-lg shadow-xl max-w-3xl w-full">
+          <div class="p-6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
+                <form method="post" id="formImport" enctype="multipart/form-data">
 
-              <b-row>
-                <b-col>
-                  <h4 class="modal-title">Nhập sản phẩm từ file excel</h4>
-                </b-col>
-              </b-row>
-              <b-row class="text-left">
-                <b-col>
-                  <p>
-                    Tải xuống file mẫu:
-                    <a target="_blank" href="https://api.cisale.vn/files/upload_excel_template/ciSale_upload_repository_product_template.xlsx">Tải xuống</a>
-                  </p>
-                </b-col>
-              </b-row>
-              <hr>
+                    <div class="flex flex-wrap -mx-2">
+                      <div class="w-full px-2">
+                        <h4 class="modal-title">Nhập sản phẩm từ file excel</h4>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-2 text-left">
+                      <div class="w-full px-2">
+                        <p>
+                          Tải xuống file mẫu:
+                          <a target="_blank" href="https://api.cisale.vn/files/upload_excel_template/ciSale_upload_repository_product_template.xlsx">Tải xuống</a>
+                        </p>
+                      </div>
+                    </div>
+                    <hr>
 
 
-              <div class="modal-body">
-                  <div class="custom-file">
-                    <label>Chọn file excel bạn muốn upload
-                      <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
-                    </label>
-                  </div>
+                    <div class="modal-body">
+                        <div class="custom-file">
+                          <label>Chọn file excel bạn muốn upload
+                            <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".xlsx"/>
+                          </label>
+                        </div>
+                    </div>
+
+                </form>
               </div>
+            </div>
 
-          </form>
-        </b-col>
-      </b-row>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-right mt-3">
+                <!-- Loading -->
+                <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
+                <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importProductFromExcelFile()" :disabled="!fileUpload || uploading">
+                  Upload
+                </button>
+              </div>
+            </div>
 
-      <b-row>
-        <b-col class="text-right mt-3">
-          <!-- Loading -->
-          <span class="loading-more" v-show="uploading"><icon name="loading" width="60" /></span>
-          <button class="btn btn-primary px-4 default-btn-bg" v-show="!uploading" @click="importProductFromExcelFile()" :disabled="!fileUpload || uploading">
-            Upload
-          </button>
-        </b-col>
-      </b-row>
-
-      <b-row v-show="uploadErrorList.length > 0" class="mt-2">
-        <b-col>
-          <b-table
-          hover
-          bordered
-          stacked="md"
-          :fields="uploadErrorField"
-          :items="uploadErrorList">
-          </b-table>
-        </b-col>
-      </b-row>
-    </b-modal>
+            <div class="flex flex-wrap -mx-2 mt-2" v-show="uploadErrorList.length > 0">
+              <div class="w-full px-2">
+                <div class="table-responsive">
+                  <table class="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th v-for="field in uploadErrorField" :key="field.key">{{ field.label }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(error, index) in uploadErrorList" :key="index">
+                        <td v-for="field in uploadErrorField" :key="field.key">{{ error[field.key] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
 
   </div>
 </template>
@@ -219,20 +252,32 @@
 import repositoryAPI from "@/api/repository";
 import tradeApi from '@/api/trade'
 import commonFunc from "@/common/commonFunc";
-import Datepicker from 'vuejs-datepicker'
-import Vue from 'vue'
-import JsonExcel from 'vue-json-excel'
-Vue.component('downloadExcel', JsonExcel)
+import Datepicker from 'vue3-datepicker'
+import { Dialog, DialogPanel } from '@headlessui/vue'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+
 import Multiselect from 'vue-multiselect'
 
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
+  },
   components: {
     Datepicker,
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel
   },
   data() {
     return {
+      showModalImage: false,
+      showModalImport: false,
       group_product_reports: [],
       loading: false,
       inputs: {
@@ -345,12 +390,7 @@ export default {
       return !(this.errorFromDate || this.errorToDate)
     },
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: "my-toast",
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      });
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -452,14 +492,14 @@ export default {
     },
 
       goToRepoHis() {
-        this.$router.push("/repo-history")
+        this.router.push("/repo-history")
       },
 
     /**
      * Show modal import from file
      */
     openModalImportFile () {
-      this.$bvModal.show('modal-import-repository')
+      this.showModalImport = true
     },
 
     handleFileUpload() {
@@ -478,7 +518,7 @@ export default {
         if(res != null && res.data != null){
             if(res.data.status == 200) {
               // Load list when load page
-              this.$bvModal.hide('modal-import-repository')
+              this.showModalImport = false
             } else {
               this.uploadErrorList = res.data.data
             }
@@ -509,11 +549,11 @@ export default {
       showModalImage(product_name, image_url) {
         this.current_product.product_name = product_name
           this.current_product.image_url = image_url
-        this.$bvModal.show('modal-image-product')
+        this.showModalImage = true
       },
 
       closeModalImage() {
-        this.$bvModal.hide('modal-image-product')
+        this.showModalImage = false
       },
 
   }

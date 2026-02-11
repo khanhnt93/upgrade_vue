@@ -1,8 +1,8 @@
 <template>
   <div class="app flex-row align-items-center">
     <div class="container-fluid">
-      <b-row class="justify-content-center">
-        <b-col md="6">
+      <div class="flex flex-wrap justify-content-center">
+        <div class="w-full md:w-1/2 px-2">
           <div class="clearfix">
             <h1 class="float-left display-3 mr-4">
               404
@@ -14,12 +14,12 @@
               The page you are looking for was not found.
             </p>
           </div>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-input-group-text>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
                 <i class="fa fa-search" />
-              </b-input-group-text>
-            </b-input-group-prepend>
+              </span>
+            </div>
             <input
               id="prependedInput"
               class="form-control"
@@ -28,14 +28,14 @@
               autocomplete="new-password"
               placeholder="What are you looking for?"
             >
-            <b-input-group-append>
-              <b-button variant="info">
+            <div class="input-group-append">
+              <button class="btn btn-info">
                 Search
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-col>
-      </b-row>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

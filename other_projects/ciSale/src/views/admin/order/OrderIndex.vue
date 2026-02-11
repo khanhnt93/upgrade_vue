@@ -1,48 +1,48 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-1/2 px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-1 text-center text-header">Đặt Hàng</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
 
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-            <b-row>
-              <b-col md="12" class="bg-gray text-white title-partner">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 bg-gray text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin người mua</span>
                   <span class="pull-right" v-show="showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row v-show="showPartnerInfo">
-              <b-col>
+            <div v-show="showPartnerInfo">
+              <div class="w-full px-2">
 
-                <b-row class="form-row mt-2">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row mt-2">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>Khách hàng</span>
                     </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group">
                       <multiselect
                         v-model="customerSelect"
@@ -54,24 +54,24 @@
                         @input="changeCustomer">
                       </multiselect>
 
-                      <b-button variant="outline-primary" class="pull-right ml-2" @click="showModalSearchCustomer" >
+                      <button class="btn btn-outline-primary pull-right ml-2" @click="showModalSearchCustomer" >
                         <i class="fa fa-search"></i>
-                      </b-button>
+                      </button>
 
-                      <b-button variant="outline-success" class="pull-right ml-2" @click="showModalAddCustomer" >
+                      <button class="btn btn-outline-success pull-right ml-2" @click="showModalAddCustomer" >
                         <i class="fa fa-plus"></i>
-                      </b-button>
+                      </button>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>Tên khách hàng<span class="error-sybol"></span></span>
                     </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="customer_name"
                       type="text"
@@ -80,16 +80,16 @@
                       class="form-control"
                       v-model="trade.customer_name"
                       :disabled="saving">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>SĐT khách hàng<span class="error-sybol"></span></span>
                     </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="customer_phone"
                       type="text"
@@ -99,16 +99,16 @@
                       v-model="trade.customer_phone"
                       :disabled="saving"
                       @keyup="integerOnly($event.target)">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>Địa chỉ khách hàng</span>
                     </label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="address"
                       type="text"
@@ -117,29 +117,29 @@
                       class="form-control"
                       v-model="trade.customer_address"
                       :disabled="saving">
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-info bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-info bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin sản phẩm</span>
                   <span class="pull-right" v-show="showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row v-show="showProductInfo" class="mt-2">
-              <b-col md="12">
+            <div v-show="showProductInfo" class="mt-2">
+              <div class="w-full px-2">
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Sản phẩm<span class="error-sybol"></span></label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group">
                       <multiselect
                         v-model="productSelect"
@@ -151,18 +151,18 @@
                         @input="changeProduct">
                       </multiselect>
 
-                      <b-button variant="outline-primary" class="pull-right ml-2" @click="showModalSearchProduct" >
+                      <button class="btn btn-outline-primary pull-right ml-2" @click="showModalSearchProduct" >
                         <i class="fa fa-search"></i>
-                      </b-button>
+                      </button>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="currentProperties.length > 0">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="currentProperties.length > 0">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Thuộc tính</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <p v-for="(item) in currentProperties" :key="item.name">
                       <label :for="item.name">{{ item.name }}:
                         <span v-for="(value, index) in item.value" :key="value">
@@ -172,14 +172,14 @@
                         </span>
                       </label>
                     </p>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Đơn giá nhập</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group">
                       <!--v-show="isShowPriceBuy"-->
                       <input
@@ -200,19 +200,19 @@
 <!--                        class="form-control"-->
 <!--                        value="****"-->
 <!--                        readonly>-->
-<!--                      <b-button variant="outline-primary" class="pull-right ml-2" @click="isShowPriceBuy = !isShowPriceBuy" >-->
+<!--                      <button class="btn btn-outline-primary pull-right ml-2"  @click="isShowPriceBuy = !isShowPriceBuy" >-->
 <!--                        <i v-show="!isShowPriceBuy" class="fa fa-eye" aria-hidden="true" title="Xem giá nhập"></i>-->
 <!--                        <i v-show="isShowPriceBuy" class="fa fa-eye-slash" aria-hidden="true" title="Đóng giá nhập"></i>-->
-<!--                      </b-button>-->
+<!--                      </button>-->
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Đơn giá bán<span class="error-sybol"></span></label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                       <input
                         id="price_sell"
                         type="text"
@@ -222,14 +222,14 @@
                         v-model="currentProduct.price_sell"
                         @keyup="integerOnly($event.target)"
                       @change="changePriceSell">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Số lượng trong kho {{unit_name}}</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="quantity_repo"
                       type="text"
@@ -239,14 +239,14 @@
                       v-model="currentProduct.quantity_repo"
                       readonly
                     >
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Số lượng đặt {{unit_name}}<span class="error-sybol"></span></label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="quantity"
                       type="text"
@@ -256,24 +256,24 @@
                       v-model="currentProduct.quantity"
                       @keyup="integerOnly($event.target)"
                     @change="changeQuantity">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="mt-2">
-                  <b-col md="12" class="text-center">
-                    <b-button variant="outline-primary" class="text-center btn-width-120" @click="confirmBuyProduct">
+                <div class="mt-2">
+                  <div class="w-full px-2 text-center">
+                    <button class="btn btn-outline-primary text-center btn-width-120" @click="confirmBuyProduct">
                       Xác nhận
-                    </b-button>
-                  </b-col>
-                </b-row>
+                    </button>
+                  </div>
+                </div>
 
-                <b-row v-show="trade.products.length > 0" class="mt-2">
-                  <b-col md="12">
+                <div v-show="trade.products.length > 0" class="mt-2">
+                  <div class="w-full px-2">
                     <h5>Danh sách sản phẩm đặt hàng</h5>
-                  </b-col>
-                </b-row>
-                <b-row class="mt-2" v-show="trade.products.length > 0" >
-                  <b-col md="12">
+                  </div>
+                </div>
+                <div class="mt-2" v-show="trade.products.length > 0" >
+                  <div class="w-full px-2">
                   <table class="table table-bordered table-striped fixed_header">
                     <thead>
                     <tr>
@@ -295,36 +295,36 @@
                           + {{pro.name}}: {{pro.value}}
                         </p>
                       </td>
-                      <td class="text-right">{{currencyFormat(item.price_sell)}}</td>
-                      <td class="text-right">{{currencyFormat(item.quantity)}}</td>
-                      <td class="text-right">{{currencyFormat(item.amount_sell)}}</td>
+                      <td class="text-right">{{formatCurrency(item.price_sell)}}</td>
+                      <td class="text-right">{{formatCurrency(item.quantity)}}</td>
+                      <td class="text-right">{{formatCurrency(item.amount_sell)}}</td>
                       <td><i class="fa fa-trash" @click="deleteProduct(item.index, item.product_id, item.quantity, item.properties)" /></td>
                     </tr>
                     </tbody>
                   </table>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-3">
-              <b-col md="12" class="bg-success bg-gradient text-white title-partner">
+            <div class="mt-3">
+              <div class="w-full px-2 bg-success bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                   <span class="pull-right" v-show="showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-up" /></span>
                   <span class="pull-right" v-show="!showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="mt-2" v-show="showPaymentInfo">
-              <b-col>
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+            <div class="mt-2" v-show="showPaymentInfo">
+              <div class="w-full px-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Tổng tiền sản phẩm</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="sub_total"
                       type="text"
@@ -333,14 +333,14 @@
                       class="form-control"
                       v-model="trade.sub_total"
                       readonly>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Chi phí thêm</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="extra_fee"
                       type="text"
@@ -349,14 +349,14 @@
                       class="form-control"
                       v-model="trade.extra_fee"
                       @change="calculateAmount">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Số tiền giảm</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="fixed_discount"
                       type="text"
@@ -365,14 +365,14 @@
                       class="form-control"
                       v-model="trade.fixed_discount"
                       @change="calculateAmount">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Khuyến mãi</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group">
                       <input
                         id="pmt"
@@ -383,9 +383,9 @@
                         v-model="trade.discount_amount"
                         readonly disabled
                       >
-                      <b-button variant="outline-success" class="pull-right ml-2" @click="showModalApplyPmt" >
+                      <button class="btn btn-outline-success pull-right ml-2" @click="showModalApplyPmt" >
                         <i class="fa fa-plus"></i>
-                      </b-button>
+                      </button>
                     </div>
 
                     <div class="input-group" v-show="trade.promotions.length > 0">
@@ -395,14 +395,14 @@
                         <i v-show="pmt.method != 'auto'" class="fa fa-trash" @click="deletePromotion(pmt.id)"/>
                       </p>
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Thuế VAT</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <div class="input-group">
                       <input type="checkbox" id="have_vat" v-model="trade.have_vat" class="mr-2" @change="calculateAmount">
                       <input
@@ -423,14 +423,14 @@
                         v-model="trade.vat_value"
                         @change="calculateAmount">
                     </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Thành tiền<span class="error-sybol"></span></label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="amount"
                       type="text"
@@ -439,14 +439,14 @@
                       class="form-control"
                       v-model="trade.total"
                       readonly>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Số tiền đã thanh toán</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <input
                       id="total_paid"
                       type="text"
@@ -455,30 +455,30 @@
                       class="form-control"
                       v-model="trade.total_paid"
                       @change="changeTotalPaid">
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Ngày hẹn lấy hàng</label>
-                  </b-col>
-                  <b-col md="9" class="mt-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 mt-2">
                     <datepicker v-model="trade.appointment_date" format="yyyy-MM-dd" :typeable="true"
                                 placeholder="2022-12-31" input-class="datepicker-cus" ></datepicker>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
 
-                <b-row class="form-row" v-show="parseInt(trade.total_paid) > 0">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row" v-show="parseInt(trade.total_paid) > 0">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Loại tiền thanh toán</label>
-                  </b-col>
-                  <b-col md="9" class="pl-2">
+                  </div>
+                  <div class="w-full md:w-3/4 px-2 pl-2">
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Tiền mặt </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="cash_input"
                           type="text"
@@ -487,14 +487,14 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeCash">
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Chuyển khoản </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="credit_input"
                           type="text"
@@ -503,14 +503,14 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeCredit">
-                      </b-col>
-                    </b-row>
+                      </div>
+                    </div>
 
-                    <b-row class="form-row">
-                      <b-col md="3" class="mt-2">
+                    <div class="form-row">
+                      <div class="w-full md:w-1/4 px-2 mt-2">
                         <label> Tiền điện tử </label>
-                      </b-col>
-                      <b-col md="9">
+                      </div>
+                      <div class="w-full md:w-3/4 px-2">
                         <input
                           id="e_money_input"
                           type="text"
@@ -519,413 +519,553 @@
                           autocomplete="new-password"
                           maxlength="14"
                           @change="changeEMoney">
-                      </b-col>
-                    </b-row>
-                  </b-col>
-                </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <b-row class="form-row">
-                  <b-col md="3" class="mt-2">
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>Ghi chú </label>
-                  </b-col>
-                  <b-col md="9">
-                    <b-form-textarea
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <textarea class="form-control"
                       id="description"
                       style="width:100%;"
                       rows="3"
                       v-model="trade.description"
-                    ></b-form-textarea>
-                  </b-col>
-                </b-row>
-              </b-col>
-            </b-row>
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="mt-2">
-              <b-col md="12" class="text-center">
-                <b-button v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="save"
+            <div class="mt-2">
+              <div class="w-full px-2 text-center">
+                <button v-show="!saving" class="btn btn-outline-success" style="height: 50px; width: 240px" @click="save"
                           :disabled="saving || !this.trade.id">
                   <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
                   Xác Nhận Đặt Hàng
-                </b-button>
+                </button>
                 <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--Modal tìm kiếm sản phẩm -->
-      <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
-        <b-row>
-          <b-col md="12">
-            <h4 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h4>
-          </b-col>
-        </b-row>
-        <hr>
+      <!-- Modal Search Product -->
+      <TransitionRoot :show="showModalSearchProduct" as="template">
+        <Dialog @close="showModalSearchProduct = false" class="relative z-50">
+          <!-- Backdrop -->
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <div class="fixed inset-0 bg-black/30" />
+          </TransitionChild>
 
-        <b-row class="form-row">
-          <b-col md="3" class="mt-2">
-            <label> Nhóm sản phẩm </label>
-            <multiselect
-              v-model="productGroupSearchSelect"
-              :options="productGroupOptions"
-              :loading="loadingGetOptions"
-              placeholder="--Chọn nhóm sản phẩm--"
-              label="name"
-              track-by="name"
-              @input="changeProductGroupSearch">
-            </multiselect>
-          </b-col>
+          <!-- Modal Panel -->
+          <div class="fixed inset-0 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4">
+              <TransitionChild
+                as="template"
+                enter="ease-out duration-300"
+                enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leave-from="opacity-100 scale-100"
+                leave-to="opacity-0 scale-95"
+              >
+                <DialogPanel class="w-full max-w-6xl bg-white rounded-lg shadow-xl p-6">
+                  <DialogTitle class="text-center text-success text-xl font-semibold mb-4">
+                    Tìm kiếm sản phẩm
+                  </DialogTitle>
+                  <hr>
 
-          <b-col md="3" class="mt-2">
-            <label> Loại sản phẩm </label>
-            <multiselect
-              v-model="productTypeSearchSelect"
-              :options="productTypeSearchOptions"
-              :loading="loadingGetOptions"
-              placeholder="--Chọn loại sản phẩm--"
-              label="name"
-              track-by="name"
-              @input="changeProductTypeSearch">
-            </multiselect>
-          </b-col>
+                  <div class="form-row">
+                    <div class="w-full md:w-1/4 px-2 mt-2">
+                      <label> Nhóm sản phẩm </label>
+                      <multiselect
+                        v-model="productGroupSearchSelect"
+                        :options="productGroupOptions"
+                        :loading="loadingGetOptions"
+                        placeholder="--Chọn nhóm sản phẩm--"
+                        label="name"
+                        track-by="name"
+                        @input="changeProductGroupSearch">
+                      </multiselect>
+                    </div>
 
-          <b-col md="3" class="mt-2">
-            <label> Mã sản phẩm </label>
-            <input
-              id="codeProductCus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="productSearch.code"
-              maxlength="255">
-          </b-col>
+                    <div class="w-full md:w-1/4 px-2 mt-2">
+                      <label> Loại sản phẩm </label>
+                      <multiselect
+                        v-model="productTypeSearchSelect"
+                        :options="productTypeSearchOptions"
+                        :loading="loadingGetOptions"
+                        placeholder="--Chọn loại sản phẩm--"
+                        label="name"
+                        track-by="name"
+                        @input="changeProductTypeSearch">
+                      </multiselect>
+                    </div>
 
-          <b-col md="3" class="mt-2">
-            <label> Tên sản phẩm </label>
-            <input
-              id="nameProductCus"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="productSearch.name"
-              maxlength="255">
-          </b-col>
-        </b-row>
+                    <div class="w-full md:w-1/4 px-2 mt-2">
+                      <label> Mã sản phẩm </label>
+                      <input
+                        id="codeProductCus"
+                        type="text"
+                        autocomplete="new-password"
+                        class="form-control"
+                        v-model="productSearch.code"
+                        maxlength="255">
+                    </div>
 
-        <b-row class="mt-2">
-          <b-col cols="12">
-            <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="hideModalSearchProduct">
-              Quay lại
-            </b-button>
+                    <div class="w-full md:w-1/4 px-2 mt-2">
+                      <label> Tên sản phẩm </label>
+                      <input
+                        id="nameProductCus"
+                        type="text"
+                        autocomplete="new-password"
+                        class="form-control"
+                        v-model="productSearch.name"
+                        maxlength="255">
+                    </div>
+                  </div>
 
-            <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchProduct"
-                      @click.prevent="searchProduct">
-              Tìm Kiếm
-            </b-button>
-          </b-col>
-        </b-row>
+                  <div class="mt-2">
+                    <div class="w-full px-2">
+                      <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchProduct">
+                        Quay lại
+                      </button>
 
-        <b-row class="mt-2">
-          <b-col>
-            <b-table
-              hover
-              bordered
-              stacked="md"
-              :fields="productSearchFields"
-              :items="productSearchItems">
-              <template v-slot:cell(actions)="data">
-                <b-button variant="outline-success" class="pull-right btn-width-120"
-                  @click.prevent="chooseProduct(data.item.product_group_id, data.item.product_group_name,
-                  data.item.product_type_id, data.item.product_type_name, data.item.product_id, data.item.product_name)">
-                  Chọn
-                </b-button>
-              </template>
-            </b-table>
-          </b-col>
-        </b-row>
+                      <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchProduct"
+                                @click.prevent="searchProduct">
+                        Tìm Kiếm
+                      </button>
+                    </div>
+                  </div>
 
-        <b-row class="mt-3">
-          <b-col>
-            <span>--Hết--</span>
-          </b-col>
-        </b-row>
+                  <div class="mt-2">
+                    <div class="w-full px-2">
+                      <div class="overflow-x-auto">
+                        <table class="table table-bordered table-hover w-full">
+                          <thead>
+                            <tr>
+                              <th v-for="field in productSearchFields" :key="field.key">{{ field.label }}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="item in productSearchItems" :key="item.product_id">
+                              <td v-for="field in productSearchFields" :key="field.key">
+                                <template v-if="field.key === 'actions'">
+                                  <button class="btn btn-outline-success pull-right btn-width-120"
+                                    @click.prevent="chooseProduct(item.product_group_id, item.product_group_name,
+                                    item.product_type_id, item.product_type_name, item.product_id, item.product_name)">
+                                    Chọn
+                                  </button>
+                                </template>
+                                <template v-else>
+                                  {{ item[field.key] }}
+                                </template>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
 
-      </b-modal>
+                  <div class="mt-3">
+                    <div class="w-full px-2">
+                      <span>--Hết--</span>
+                    </div>
+                  </div>
+
+                </DialogPanel>
+              </TransitionChild>
+            </div>
+          </div>
+        </Dialog>
+      </TransitionRoot>
 
     <!--Modal tìm kiếm khách hàng -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-customer">
-      <b-row>
-        <b-col md="12">
-          <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </b-col>
-      </b-row>
-      <hr>
+    <TransitionRoot :show="showModalSearchCustomer" as="template">
+      <Dialog @close="showModalSearchCustomer = false" class="relative z-50">
+        <!-- Backdrop -->
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/30" />
+        </TransitionChild>
 
-      <b-row>
-        <b-col md="6">
-          <label> Tên </label>
-          <input
-            id="nameCusSearch"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.name"
-            maxlength="75">
-        </b-col>
-        <b-col md="6">
-          <label> Số điện thoại </label>
-          <input
-            id="phoneNumberCus"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.phone"
-            maxlength="11"
-            @keyup="integerOnly($event.target)">
-        </b-col>
-      </b-row>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-6xl bg-white rounded-lg shadow-xl p-6">
+                <DialogTitle class="text-center text-success text-xl font-semibold mb-4">
+                  Tìm kiếm khách hàng
+                </DialogTitle>
+                <hr>
 
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
-            Quay lại
-          </b-button>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Tên </label>
+                    <input
+                      id="nameCusSearch"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.name"
+                      maxlength="75">
+                  </div>
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Số điện thoại </label>
+                    <input
+                      id="phoneNumberCus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.phone"
+                      maxlength="11"
+                      @keyup="integerOnly($event.target)">
+                  </div>
+                </div>
 
-          <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
-            Tìm Kiếm
-          </b-button>
-        </b-col>
-      </b-row>
+                <div class="mt-2">
+                  <div class="w-full px-2">
+                    <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
+                      Quay lại
+                    </button>
 
-      <b-row class="mt-2">
-        <b-col>
-          <b-table
-            hover
-            bordered
-            stacked="md"
-            :fields="customerSearchFields"
-            :items="customerSearchItems">
-            <template v-slot:cell(action)="data">
-              <b-button variant="outline-success" class="pull-right btn-width-120"
-                        @click.prevent="chooseCustomer(data.item.id, data.item.name, data.item.phone_number, data.item.address, data.item.tax_code)">
-                Chọn
-              </b-button>
-            </template>
-          </b-table>
-        </b-col>
-      </b-row>
+                    <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+                      Tìm Kiếm
+                    </button>
+                  </div>
+                </div>
 
-      <b-row class="mt-3">
-        <b-col>
-          <span>--Hết--</span>
-        </b-col>
-      </b-row>
+                <div class="mt-2">
+                  <div class="w-full px-2">
+                    <div class="overflow-x-auto">
+                      <table class="table table-bordered table-hover w-full">
+                        <thead>
+                          <tr>
+                            <th v-for="field in customerSearchFields" :key="field.key">{{ field.label }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="item in customerSearchItems" :key="item.id">
+                            <td v-for="field in customerSearchFields" :key="field.key">
+                              <template v-if="field.key === 'action'">
+                                <button class="btn btn-outline-success pull-right btn-width-120"
+                                          @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
+                                  Chọn
+                                </button>
+                              </template>
+                              <template v-else>
+                                {{ item[field.key] }}
+                              </template>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
 
-    </b-modal>
+                <div class="mt-3">
+                  <div class="w-full px-2">
+                    <span>--Hết--</span>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!--Modal thêm khách hàng -->
-    <b-modal centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-customer">
-      <b-row>
-        <b-col md="12">
-          <h4 class="modal-title text-center text-success">Thêm khách hàng</h4>
-        </b-col>
-      </b-row>
-      <hr>
+    <TransitionRoot :show="showModalAddCustomer" as="template">
+      <Dialog @close="showModalAddCustomer = false" class="relative z-50">
+        <!-- Backdrop -->
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/30" />
+        </TransitionChild>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Loại khách hàng </label>
-        </b-col>
-        <b-col md="9">
-          <div class="input-group">
-            <input type="radio" v-model="customer.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
-            <input type="radio" v-model="customer.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-3xl bg-white rounded-lg shadow-xl p-6">
+                <DialogTitle class="text-center text-success text-xl font-semibold mb-4">
+                  Thêm khách hàng
+                </DialogTitle>
+                <hr>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Loại khách hàng </label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <div class="input-group">
+                      <input type="radio" v-model="customer.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
+                      <input type="radio" v-model="customer.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Tên<span class="error-sybol"></span> </label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <input
+                      id="nameCus"
+                      type="text"
+                      class="form-control"
+                      v-model="customer.name"
+                      autocomplete="new-password"
+                      maxlength="75">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Số Điện Thoại<span class="error-sybol"></span> </label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <input
+                      id="phoneCuss"
+                      type="text"
+                      class="form-control"
+                      v-model="customer.phone_number"
+                      @keyup="integerOnly($event.target)"
+                      autocomplete="new-password"
+                      maxlength="20"
+                      v-on:change="checkPhoneNumberFormat($event.target.value)">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Giới Tính</label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select class="form-select" :options="optionsGender" v-model="customer.gender"></select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Ngày Tháng Năm Sinh</label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
+                                  placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Tỉnh/ Thành Phố</label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select class="form-select form-control"
+                      id="city_id"
+                      :options="optionsCity"
+                      v-model="customer.city_id"
+                      type="text"
+                      v-on:change="changeCity($event.target)"
+                    ></select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Quận/ Huyện</label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <select class="form-select form-control"
+                      id="district_id"
+                      :options="optionsDistrict"
+                      v-model="customer.district_id"
+                      type="text"
+                      :disabled="!customer.city_id"
+                    ></select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Địa chỉ </label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <input
+                      id="addressCus"
+                      type="text"
+                      class="form-control"
+                      v-model="customer.address"
+                      autocomplete="new-password"
+                      maxlength="255">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Mã số thuế </label>
+                  </div>
+                  <div class="w-full md:w-3/4 px-2">
+                    <input
+                      id="tax_code"
+                      type="text"
+                      class="form-control"
+                      v-model="customer.tax_code"
+                      @keyup="integerOnly($event.target)"
+                      autocomplete="new-password"
+                      maxlength="20">
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <div class="w-full px-2">
+                    <button class="btn btn-outline-secondary pull-left btn-width-120" @click="backCustomer">
+                      Hủy bỏ
+                    </button>
+                    <button v-show="!savingCustomer" class="btn btn-outline-success pull-right btn-width-120" @click="saveCustomer"
+                              :disabled="savingCustomer">
+                      Lưu
+                    </button>
+                    <span class="loading-more" v-show="savingCustomer"><icon name="loading" width="60" /></span>
+
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
           </div>
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Tên<span class="error-sybol"></span> </label>
-        </b-col>
-        <b-col md="9">
-          <input
-            id="nameCus"
-            type="text"
-            class="form-control"
-            v-model="customer.name"
-            autocomplete="new-password"
-            maxlength="75">
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Số Điện Thoại<span class="error-sybol"></span> </label>
-        </b-col>
-        <b-col md="9">
-          <input
-            id="phoneCuss"
-            type="text"
-            class="form-control"
-            v-model="customer.phone_number"
-            @keyup="integerOnly($event.target)"
-            autocomplete="new-password"
-            maxlength="20"
-            v-on:change="checkPhoneNumberFormat($event.target.value)">
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label>Giới Tính</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select :options="optionsGender" v-model="customer.gender"></b-form-select>
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label>Ngày Tháng Năm Sinh</label>
-        </b-col>
-        <b-col md="9">
-          <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
-                                placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label>Tỉnh/ Thành Phố</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select
-            id="city_id"
-            :options="optionsCity"
-            v-model="customer.city_id"
-            type="text"
-            class="form-control"
-            v-on:change="changeCity($event.target)"
-          ></b-form-select>
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label>Quận/ Huyện</label>
-        </b-col>
-        <b-col md="9">
-          <b-form-select
-            id="district_id"
-            :options="optionsDistrict"
-            v-model="customer.district_id"
-            type="text"
-            class="form-control"
-            :disabled="!customer.city_id"
-          ></b-form-select>
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Địa chỉ </label>
-        </b-col>
-        <b-col md="9">
-          <input
-            id="addressCus"
-            type="text"
-            class="form-control"
-            v-model="customer.address"
-            autocomplete="new-password"
-            maxlength="255">
-        </b-col>
-      </b-row>
-
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Mã số thuế </label>
-        </b-col>
-        <b-col md="9">
-          <input
-            id="tax_code"
-            type="text"
-            class="form-control"
-            v-model="customer.tax_code"
-            @keyup="integerOnly($event.target)"
-            autocomplete="new-password"
-            maxlength="20">
-        </b-col>
-      </b-row>
-
-      <b-row class="mt-2">
-        <b-col cols="12">
-          <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="backCustomer">
-            Hủy bỏ
-          </b-button>
-          <b-button v-show="!savingCustomer" variant="outline-success"
-                    class="pull-right btn-width-120" @click="saveCustomer"
-                    :disabled="savingCustomer">
-            Lưu
-          </b-button>
-          <span class="loading-more" v-show="savingCustomer"><icon name="loading" width="60" /></span>
-
-        </b-col>
-      </b-row>
-
-    </b-modal>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!-- Modal apply pmt -->
-    <b-modal title="Áp dụng khuyến mãi" centered hide-header hide-footer no-close-on-backdrop id="modal-apply-pmt" size="xl">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Áp dụng khuyến mãi</h5>
-        </b-col>
-      </b-row>
-      <hr>
+    <TransitionRoot :show="showModalApplyPmt" as="template">
+      <Dialog @close="showModalApplyPmt = false" class="relative z-50">
+        <!-- Backdrop -->
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/30" />
+        </TransitionChild>
 
-      <b-row>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel class="w-full max-w-6xl bg-white rounded-lg shadow-xl p-6">
+                <DialogTitle class="text-center text-xl font-semibold mb-4">
+                  Áp dụng khuyến mãi
+                </DialogTitle>
+                <hr>
 
-        <b-col>
-          <p class="col-12" v-for="pmt in this.pmtOfStore" :key="pmt.id">
-            <b>- </b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span>
-            <b-list-group horizontal>
-              <b-list-group-item @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)">
-                <i class="fa fa-plus"/>
-              </b-list-group-item>
-              <b-list-group-item>
-                <span :id="'pmtStore' + pmt.id">0</span>
-              </b-list-group-item>
-              <b-list-group-item @click="minusQuantityPmt(pmt.id, pmt)">
-                <i class="fa fa-minus"/>
-              </b-list-group-item>
-            </b-list-group>
-          </p>
-        </b-col>
+                <div class="flex flex-wrap -mx-2">
 
-      </b-row>
+                  <div class="w-full px-2">
+                    <div class="col-12" v-for="pmt in this.pmtOfStore" :key="pmt.id">
+                      <p><b>- </b> {{pmt.name}}<span v-if="pmt.code">({{pmt.code}})</span></p>
+                      <div class="flex items-center gap-2 mt-2">
+                        <button class="btn btn-sm btn-outline-primary px-2 py-1" @click="plusQuantityPmt(pmt.id, pmt.type, pmt.remaining, pmt)">
+                          <i class="fa fa-plus"/>
+                        </button>
+                        <div class="px-3 py-1 border rounded">
+                          <span :id="'pmtStore' + pmt.id">0</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary px-2 py-1" @click="minusQuantityPmt(pmt.id, pmt)">
+                          <i class="fa fa-minus"/>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
-      <b-row class="mt-2">
-        <b-col cols="6">
-          <b-button variant="secondary" class="pull-left px-4" @click="cancelApplyPmt()">
-            Hủy
-          </b-button>
-        </b-col>
-        <b-col cols="6">
-          <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmPmt"><icon name="loading" width="60" /></span>
+                </div>
 
-          <button v-show="!loadingConfirmPmt" class="btn btn-primary pull-right px-4 default-btn-bg"
-                  @click="confirmApplyPmt()">
-            Xác nhận &nbsp;
-          </button>
-        </b-col>
-      </b-row>
+                <div class="mt-2">
+                  <div class="w-1/2 px-2">
+                    <button class="btn btn-secondary pull-left px-4" @click="cancelApplyPmt()">
+                      Hủy
+                    </button>
+                  </div>
+                  <div class="w-1/2 px-2">
+                    <!-- Loading -->
+                    <span class="loading-more" v-show="loadingConfirmPmt"><icon name="loading" width="60" /></span>
 
-    </b-modal>
+                    <button v-show="!loadingConfirmPmt" class="btn btn-primary pull-right px-4 default-btn-bg"
+                            @click="confirmApplyPmt()">
+                      Xác nhận &nbsp;
+                    </button>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
@@ -938,14 +1078,35 @@ import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import productApi from '@/api/product'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
-
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
   components: {
     Datepicker,
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    const { formatCurrency } = useFormatters()
+
+    return {
+      toast,
+      router,
+      route,
+      formatCurrency
+    }
   },
   data () {
     return {
@@ -1130,6 +1291,12 @@ export default {
       pmtApplying: [],
       pmtOfStore: [],
       loadingConfirmPmt: false,
+      // Modal states for HeadlessUI
+      showModalSearchProduct: false,
+      showModalSearchCustomer: false,
+      showModalAddCustomer: false,
+      showModalAddProduct: false,
+      showModalApplyPmt: false,
 
     }
   },
@@ -1157,13 +1324,8 @@ export default {
     /**
      * Make toast without title
      */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    popToast(content, variant) {
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -1182,11 +1344,11 @@ export default {
     },
 
     showModalSearchProduct() {
-      this.$bvModal.show('modal-search-product')
+      this.showModalSearchProduct = true
     },
 
     hideModalSearchProduct() {
-      this.$bvModal.hide('modal-search-product')
+      this.showModalSearchProduct = false
     },
 
     backProduct() {
@@ -1198,7 +1360,7 @@ export default {
           "unit_id": null,
           "description": null
       }
-      this.$bvModal.hide('modal-add-product')
+      this.showModalAddProduct = false
     },
 
     getPmtOfStore() {
@@ -1212,7 +1374,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
     },
 
@@ -1261,7 +1423,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearchProduct = false
       })
@@ -1298,15 +1460,15 @@ export default {
         this.getProductSelectedById(product_id)
         this.changeProduct()
 
-      this.$bvModal.hide('modal-search-product')
+      this.showModalSearchProduct = false
     },
 
     showModalAddCustomer() {
-      this.$bvModal.show('modal-add-customer')
+      this.showModalAddCustomer = true
     },
 
     showModalSearchCustomer() {
-      this.$bvModal.show('modal-search-customer')
+      this.showModalSearchCustomer = true
     },
 
     backCustomer() {
@@ -1321,25 +1483,25 @@ export default {
           "address": null,
           "tax_code": null,
       }
-      this.$bvModal.hide('modal-add-customer')
+      this.showModalAddCustomer = false
     },
 
     hideModalSearchCustomer() {
-      this.$bvModal.hide('modal-add-customer')
+      this.showModalSearchCustomer = false
     },
 
     saveCustomer() {
       // Check validate
       if(!this.customer.type) {
-        this.popToast('danger', "Vui lòng chọn loại khách hàng")
+        this.popToast('error', "Vui lòng chọn loại khách hàng")
         return
       }
       if(!this.customer.name) {
-        this.popToast('danger', "Vui lòng nhập tên khách hàng")
+        this.popToast('error', "Vui lòng nhập tên khách hàng")
         return
       }
       if(!this.customer.phone_number) {
-        this.popToast('danger', "Vui lòng nhập số điện thoại khách hàng")
+        this.popToast('error', "Vui lòng nhập số điện thoại khách hàng")
         return
       }
 
@@ -1367,7 +1529,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -1397,7 +1559,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearchCustomer = false
       })
@@ -1412,14 +1574,14 @@ export default {
 
       this.getCustomerItemById(this.trade.customer_id)
 
-      this.$bvModal.hide('modal-search-customer')
+      this.showModalSearchCustomer = false
     },
 
       /**
      *  Get detail
      */
     getTradeDetail() {
-      let orderId = this.$route.params.id
+      let orderId = this.route.params.id
       if(orderId){
         this.loading = true
 
@@ -1435,7 +1597,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       }
     },
@@ -1537,7 +1699,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -1689,9 +1851,9 @@ export default {
         this.currentProduct.product_name = this.productSelect.name
         this.currentProduct.product_code = this.productSelect.code
 
-        this.currentProduct.price_buy = this.currencyFormat(this.productSelect.price_buy)
-        this.currentProduct.price_sell = this.currencyFormat(this.productSelect.price_sell)
-        this.currentProduct.quantity_repo = this.currencyFormat(this.productSelect.quantity)
+        this.currentProduct.price_buy = this.formatCurrency(this.productSelect.price_buy)
+        this.currentProduct.price_sell = this.formatCurrency(this.productSelect.price_sell)
+        this.currentProduct.quantity_repo = this.formatCurrency(this.productSelect.quantity)
         this.currentProduct.properties = this.productSelect.properties
 
         // this.calQuantityRepo()
@@ -1790,7 +1952,7 @@ export default {
      */
     changeTotalPaid() {
       let total_paid = (this.trade.total_paid + "").replaceAll(",", "")
-      this.trade.total_paid = this.currencyFormat(total_paid)
+      this.trade.total_paid = this.formatCurrency(total_paid)
 
       this.trade.cash = this.trade.total_paid
       this.trade.credit = 0
@@ -1799,17 +1961,17 @@ export default {
 
       changeCash() {
           let cash = (this.trade.cash + '').replaceAll(",", "")
-          this.trade.cash = this.currencyFormat(cash)
+          this.trade.cash = this.formatCurrency(cash)
       },
 
       changeCredit() {
           let credit = (this.trade.credit + '').replaceAll(",", "")
-          this.trade.credit = this.currencyFormat(credit)
+          this.trade.credit = this.formatCurrency(credit)
       },
 
       changeEMoney() {
           let e_money = (this.trade.e_money + '').replaceAll(",", "")
-          this.trade.e_money = this.currencyFormat(e_money)
+          this.trade.e_money = this.formatCurrency(e_money)
       },
 
     /**
@@ -1820,18 +1982,18 @@ export default {
       for (let i in this.trade.products) {
         amount += parseInt((this.trade.products[i].price_sell + '').replaceAll(",", "") * (this.trade.products[i].quantity + '').replaceAll(",", ""))
       }
-      this.trade.sub_total = this.currencyFormat(amount)
+      this.trade.sub_total = this.formatCurrency(amount)
 
       let extra_fee = 0
       if(this.trade.extra_fee) {
           extra_fee = (this.trade.extra_fee + '').replaceAll(",", "")
-          this.trade.extra_fee = this.currencyFormat(extra_fee)
+          this.trade.extra_fee = this.formatCurrency(extra_fee)
       }
 
       let fixed_discount = 0
       if(this.trade.fixed_discount) {
           fixed_discount = (this.trade.fixed_discount + '').replaceAll(",", "")
-          this.trade.fixed_discount = this.currencyFormat(fixed_discount)
+          this.trade.fixed_discount = this.formatCurrency(fixed_discount)
       }
 
       // Calculate vat value
@@ -1844,11 +2006,11 @@ export default {
       } else {
         this.trade.vat_value = 0
       }
-      this.trade.vat_value = this.currencyFormat(vat_value)
+      this.trade.vat_value = this.formatCurrency(vat_value)
 
         let total = amount + parseInt(extra_fee) - parseInt(fixed_discount) + vat_value
 
-      this.trade.total = this.currencyFormat(total)
+      this.trade.total = this.formatCurrency(total)
 
         if(this.trade.total_paid) {
             let total_paid = (this.trade.total_paid + '').replaceAll(",", "")
@@ -1879,31 +2041,31 @@ export default {
     confirmBuyProduct() {
       // Check product group
       if (!this.currentProduct.product_group_id) {
-        this.popToast('danger', "Vui lòng chọn nhóm sản phẩm")
+        this.popToast('error', "Vui lòng chọn nhóm sản phẩm")
         return
       }
 
       // Check product type
       if (!this.currentProduct.product_type_id) {
-        this.popToast('danger', "Vui lòng chọn loại sản phẩm")
+        this.popToast('error', "Vui lòng chọn loại sản phẩm")
         return
       }
 
       // Check product
       if (!this.currentProduct.product_id) {
-        this.popToast('danger', "Vui lòng chọn sản phẩm")
+        this.popToast('error', "Vui lòng chọn sản phẩm")
         return
       }
 
       // Check price sell
       if (this.currentProduct.price_sell == null || this.currentProduct.price_sell == '') {
-        this.popToast('danger', "Vui lòng nhập [đơn giá bán] sản phẩm")
+        this.popToast('error', "Vui lòng nhập [đơn giá bán] sản phẩm")
         return
       }
 
       // Check quantity
       if (this.currentProduct.quantity == null || this.currentProduct.quantity == '') {
-        this.popToast('danger', "Vui lòng nhập số lượng sản phẩm bán")
+        this.popToast('error', "Vui lòng nhập số lượng sản phẩm bán")
         return
       }
 
@@ -1962,16 +2124,16 @@ export default {
       this.trade = data
 
       // Format
-      this.trade.sub_total = this.currencyFormat((this.trade.sub_total + '').replaceAll(",", ""))
-      this.trade.total = this.currencyFormat((this.trade.total + '').replaceAll(",", ""))
-      this.trade.extra_fee = this.currencyFormat((this.trade.extra_fee + '').replaceAll(",", ""))
-      this.trade.fixed_discount = this.currencyFormat((this.trade.fixed_discount + '').replaceAll(",", ""))
-      this.trade.total_paid = this.currencyFormat((this.trade.total_paid + '').replaceAll(",", ""))
-      this.trade.cash = this.currencyFormat((this.trade.cash + '').replaceAll(",", ""))
-      this.trade.credit = this.currencyFormat((this.trade.credit + '').replaceAll(",", ""))
-      this.trade.e_money = this.currencyFormat((this.trade.e_money + '').replaceAll(",", ""))
-      this.trade.discount_amount = this.currencyFormat((this.trade.discount_amount + '').replaceAll(",", ""))
-      this.trade.vat_value = this.currencyFormat((this.trade.vat_value + '').replaceAll(",", ""))
+      this.trade.sub_total = this.formatCurrency((this.trade.sub_total + '').replaceAll(",", ""))
+      this.trade.total = this.formatCurrency((this.trade.total + '').replaceAll(",", ""))
+      this.trade.extra_fee = this.formatCurrency((this.trade.extra_fee + '').replaceAll(",", ""))
+      this.trade.fixed_discount = this.formatCurrency((this.trade.fixed_discount + '').replaceAll(",", ""))
+      this.trade.total_paid = this.formatCurrency((this.trade.total_paid + '').replaceAll(",", ""))
+      this.trade.cash = this.formatCurrency((this.trade.cash + '').replaceAll(",", ""))
+      this.trade.credit = this.formatCurrency((this.trade.credit + '').replaceAll(",", ""))
+      this.trade.e_money = this.formatCurrency((this.trade.e_money + '').replaceAll(",", ""))
+      this.trade.discount_amount = this.formatCurrency((this.trade.discount_amount + '').replaceAll(",", ""))
+      this.trade.vat_value = this.formatCurrency((this.trade.vat_value + '').replaceAll(",", ""))
 
       if(!this.trade.appointment_date) {
         let dateNow = new Date()
@@ -2020,13 +2182,13 @@ export default {
 
       // Check products
       if(data.products.length == 0) {
-          this.popToast('danger', "Chưa có sản phẩm nào được chọn")
+          this.popToast('error', "Chưa có sản phẩm nào được chọn")
         return
       }
 
       // Check loại tiền
       if(parseInt(data.total_paid) != parseInt(data.cash) + parseInt(data.credit) + parseInt(data.e_money)) {
-          this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+          this.popToast('error', "Tổng loại tiền phải bằng số tiền thanh toán")
         return
       }
       this.loadingConfirmPmt = true
@@ -2046,7 +2208,7 @@ export default {
       }).catch(err => {
         this.loadingConfirmPmt = false
 
-        this.popToast('danger', "Lưu nháp thất bại!")
+        this.popToast('error', "Lưu nháp thất bại!")
       })
     },
 
@@ -2083,13 +2245,13 @@ export default {
 
       // Check products
       if(data.products.length == 0) {
-        this.popToast('danger', "Chưa có sản phẩm nào được chọn")
+        this.popToast('error', "Chưa có sản phẩm nào được chọn")
         return
       }
 
       // Check loại tiền
       if(parseInt(data.total_paid) != parseInt(data.cash) + parseInt(data.credit) + parseInt(data.e_money)) {
-        this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+        this.popToast('error', "Tổng loại tiền phải bằng số tiền thanh toán")
         return
       }
 
@@ -2110,7 +2272,7 @@ export default {
       }).catch(err => {
         this.loadingConfirmPmt = false
 
-          this.popToast('danger', "Lưu nháp thất bại!")
+          this.popToast('error', "Lưu nháp thất bại!")
       })
     },
 
@@ -2133,23 +2295,23 @@ export default {
 
         // Check customer
         if(!data.customer_name) {
-            this.popToast('danger', "Vui lòng nhập tên khách hàng")
+            this.popToast('error', "Vui lòng nhập tên khách hàng")
             return
         }
         if(!data.customer_phone) {
-            this.popToast('danger', "Vui lòng nhập sđt khách hàng")
+            this.popToast('error', "Vui lòng nhập sđt khách hàng")
             return
         }
 
         // Check products
         if(data.products.length == 0) {
-            this.popToast('danger', "Chưa có sản phẩm nào được chọn")
+            this.popToast('error', "Chưa có sản phẩm nào được chọn")
           return
         }
 
         // Check loại tiền
         if(parseInt(data.total_paid) != parseInt(data.cash) + parseInt(data.credit) + parseInt(data.e_money)) {
-          this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+          this.popToast('error', "Tổng loại tiền phải bằng số tiền thanh toán")
           return
         }
 
@@ -2189,10 +2351,10 @@ export default {
           if(res != null && res.data != null){
 
             if (res.data.status == 200) {
-              let tradeId = this.$route.params.id
+              let tradeId = this.route.params.id
               if(!tradeId){
                 this.popToast('success', 'Đặt sản phẩm thành công!!! ')
-                this.$router.push("/order-list")
+                this.router.push("/order-list")
               } else {
                 this.popToast('success', 'Cập nhật đặt sản phẩm thành công!!! ')
                 this.saveSuccess = true
@@ -2206,7 +2368,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
     },
 
@@ -2215,7 +2377,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/order-list")
+      this.router.push("/order-list")
     },
 
     /**
@@ -2229,17 +2391,17 @@ export default {
 
       changePriceBuy() {
         let price_buy = this.currentProduct.price_buy.replaceAll(",", "")
-          this.currentProduct.price_buy = this.currencyFormat(price_buy)
+          this.currentProduct.price_buy = this.formatCurrency(price_buy)
       },
 
       changePriceSell() {
         let price_sell = this.currentProduct.price_sell.replaceAll(",", "")
-          this.currentProduct.price_sell = this.currencyFormat(price_sell)
+          this.currentProduct.price_sell = this.formatCurrency(price_sell)
       },
 
       changeQuantity() {
         let quantity = this.currentProduct.quantity.replaceAll(",", "")
-          this.currentProduct.quantity = this.currencyFormat(quantity)
+          this.currentProduct.quantity = this.formatCurrency(quantity)
       },
 
       deleteProduct(ind, product_id, quantity, properties) {
@@ -2288,7 +2450,7 @@ export default {
         valueInput = valueInput.replaceAll(",", "")
       let result = commonFunc.integerAndCommaOnly(valueInput)
 
-        result = this.currencyFormat(result)
+        result = this.formatCurrency(result)
       item.value = result
     },
 
@@ -2300,14 +2462,14 @@ export default {
         valueInput = valueInput.replaceAll(",", "")
       let result = commonFunc.integerPointAndCommaOnly(valueInput)
 
-        result = this.currencyFormat(result)
+        result = this.formatCurrency(result)
       item.value = result
     },
 
     /**
    * Currency format
    */
-    currencyFormat(num) {
+    formatCurrency(num) {
       let result = ""
         if(num === 0) {
             return "0"
@@ -2370,7 +2532,7 @@ export default {
     showModalApplyPmt() {
       this.pmtTemp = JSON.parse(JSON.stringify(this.trade.promotions))
 
-      this.$bvModal.show('modal-apply-pmt')
+      this.showModalApplyPmt = true
 
 
       setTimeout(this.updatePmtAllyToModal, 1000)
@@ -2389,7 +2551,7 @@ export default {
       },
 
     hideModalApplyPmt() {
-      this.$bvModal.hide('modal-apply-pmt')
+      this.showModalApplyPmt = false
     },
 
     /**
@@ -2446,7 +2608,7 @@ export default {
 
       // Check remaining of pmt
       if(currentQuantity == parseInt(remaining)) {
-        this.popToast('danger', 'Vượt quá số lượng còn lại của khuyến mãi')
+        this.popToast('error', 'Vượt quá số lượng còn lại của khuyến mãi')
         return
       }
 
@@ -2487,7 +2649,7 @@ export default {
     cancelApplyPmt () {
       this.pmtTemp = []
 
-      this.$bvModal.hide('modal-apply-pmt')
+      this.showModalApplyPmt = false
     },
 
 

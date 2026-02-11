@@ -1,24 +1,24 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="goToAdd">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-success pull-right btn-width-120" @click="goToAdd">
                 Thêm
-              </b-button>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col md='12'>
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <h4 class="mt-2 text-center text-header">Danh Sách Nợ Công</h4>
               <p class="text-center">(Nợ phải trả)</p>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="3">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/4 px-2">
               <label> Khách hàng </label>
               <multiselect
                 v-model="customerSelect"
@@ -29,8 +29,8 @@
                 track-by="name"
                 @input="changeCustomer">
               </multiselect>
-            </b-col>
-            <b-col md="3">
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Tên </label>
               <input
                 id="name"
@@ -40,8 +40,8 @@
                 v-model="inputs.customer_name"
                 maxlength="75"
                 :disabled="customerSelect.id">
-            </b-col>
-            <b-col md="3">
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label> Số điện thoại </label>
               <input
                 id="price"
@@ -51,32 +51,32 @@
                 v-model="inputs.customer_phone_number"
                 maxlength="11"
                 :disabled="customerSelect.id">
-            </b-col>
-            <b-col md="3">
+            </div>
+            <div class="w-full md:w-1/4 px-2">
               <label>
                 Trạng thái
               </label>
-              <b-form-select
-                :options="status"
+              <select
                 id="status"
-                type="text"
-                autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.status">
-              </b-form-select>
-            </b-col>
-          </b-row>
+                <option v-for="option in status" :key="option.value" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-          <b-row class="mt-2 mb-2">
-            <b-col md="12">
-              <b-button variant="outline-primary" class="pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+          <div class="flex flex-wrap -mx-2 mt-2 mb-2">
+            <div class="w-full px-2">
+              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
                 Tìm Kiếm
-              </b-button>
-            </b-col>
-          </b-row>
+              </button>
+            </div>
+          </div>
 
-          <b-row>
-            <b-col md="12">
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả:
                 <span class="text-header"><b>{{totalRow}}</b></span>
               </div>
@@ -89,13 +89,13 @@
                 name    = "Danh sách nợ phải trả">
                 <b>Xuất Excel</b>
               </download-excel>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
           <hr>
 
-          <b-row>
-            <b-col>
+          <div class="flex flex-wrap -mx-2">
+            <div class="w-full px-2">
               <table class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -145,42 +145,42 @@
                     <td class="text-right">{{item.amount | format_currency}}</td>
 
                     <td>
-                      <b-list-group horizontal v-if="item.status === 0">
-                        <b-list-group-item v-b-tooltip.hover title="Thanh toán" @click="openPayModal(item)">
+                      <div class="flex gap-2" v-if="item.status === 0">
+                        <button class="btn btn-sm btn-outline-primary" title="Thanh toán" @click="openPayModal(item)">
                           <i class="fa fa-check-square-o text-danger" />
-                        </b-list-group-item>
-                        <b-list-group-item v-b-tooltip.hover title="Sửa" @click="edit(item.id)">
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
-                        </b-list-group-item>
-                        <b-list-group-item v-b-tooltip.hover title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
                           <i class="fa fa-trash" />
-                        </b-list-group-item>
-                      </b-list-group>
+                        </button>
+                      </div>
                     </td>
                   </tr>
 
                 </tbody>
               </table>
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
           <span class="loading-more">--Hết--</span>
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
 
 
     <!--<b-modal centered hide-footer hide-header id="modal-pay">-->
-      <!--<b-row>-->
-        <!--<b-col>-->
+      <!--<div class="flex flex-wrap -mx-2">-->
+        <!--<div class="w-full px-2">-->
           <!--<h5 class="text-center">Thanh toán</h5>-->
           <!--<hr>-->
-        <!--</b-col>-->
-      <!--</b-row>-->
-      <!--<b-row>-->
-          <!--<b-col md="12">-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="flex flex-wrap -mx-2">-->
+          <!--<div class="w-full px-2">-->
             <!--<label>-->
               <!--Số tiền còn lại-->
             <!--</label>-->
@@ -191,11 +191,11 @@
               <!--disabled-->
               <!--v-model="payData.remaining"-->
               <!--maxlength="14">-->
-          <!--</b-col>-->
-      <!--</b-row>-->
+          <!--</div>-->
+      <!--</div>-->
 
-        <!--<b-row>-->
-          <!--<b-col md="12">-->
+        <!--<div class="flex flex-wrap -mx-2">-->
+          <!--<div class="w-full px-2">-->
             <!--<label>-->
               <!--Số tiền trả-->
             <!--</label>-->
@@ -207,13 +207,13 @@
               <!--@change="changeAmount()"-->
               <!--@keyup="integerOnly($event.target)"-->
               <!--maxlength="14">-->
-          <!--</b-col>-->
-      <!--</b-row>-->
+          <!--</div>-->
+      <!--</div>-->
 
       <!--<b-row class="form-row">-->
         <!--<b-col md="3" class="mt-2">-->
           <!--<label> Tiền mặt </label>-->
-        <!--</b-col>-->
+        <!--</div>-->
         <!--<b-col md="9">-->
           <!--<input-->
           <!--id="cash_input"-->
@@ -224,13 +224,13 @@
           <!--@keyup="integerOnly($event.target)"-->
           <!--@change="changeCash()"-->
           <!--maxlength="14">-->
-        <!--</b-col>-->
-      <!--</b-row>-->
+        <!--</div>-->
+      <!--</div>-->
 
       <!--<b-row class="form-row">-->
         <!--<b-col md="3" class="mt-2">-->
           <!--<label> Chuyển khoản </label>-->
-        <!--</b-col>-->
+        <!--</div>-->
         <!--<b-col md="9">-->
           <!--<input-->
           <!--id="credit_input"-->
@@ -241,13 +241,13 @@
           <!--@change="changeCredit()"-->
           <!--@keyup="integerOnly($event.target)"-->
           <!--maxlength="14">-->
-        <!--</b-col>-->
-      <!--</b-row>-->
+        <!--</div>-->
+      <!--</div>-->
 
       <!--<b-row class="form-row">-->
         <!--<b-col md="3" class="mt-2">-->
           <!--<label> Tiền điện tử </label>-->
-        <!--</b-col>-->
+        <!--</div>-->
         <!--<b-col md="9">-->
           <!--<input-->
           <!--id="e_money_input"-->
@@ -258,143 +258,152 @@
           <!--@change="changeEMoney()"-->
           <!--@keyup="integerOnly($event.target)"-->
           <!--maxlength="14">-->
-        <!--</b-col>-->
-      <!--</b-row>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <!--<b-row>-->
+      <!--<div class="flex flex-wrap -mx-2">-->
         <!--<b-col class="text-right mt-3">-->
           <!--<button class="btn btn-primary px-4 default-btn-bg" @click="pay()">-->
             <!--Thanh toán-->
           <!--</button>-->
-        <!--</b-col>-->
-      <!--</b-row>-->
+        <!--</div>-->
+      <!--</div>-->
     <!--</b-modal>-->
 
-    <b-modal centered hide-footer hide-header id="modal-pay">
-      <b-row>
-        <b-col>
-          <h5 class="text-center">Thanh toán</h5>
-          <hr>
-        </b-col>
-      </b-row>
-      <b-row>
-          <b-col md="12">
-            <label>
-              Số tiền còn lại: <b>{{payData.remaining | format_currency}}đ</b>
-            </label>
-          </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Lãi suất: {{payData.interest_rate}}%
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Kỳ hạn: {{payData.interest_period}}
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Thời gian tính lãi: {{payData.interest_period_real}}
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Số tiền lãi: <b>{{payData.interest | format_currency}}đ</b>
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col md="12">
-          <label>
-            Tổng tiền phải trả:
-            <b class="text-header">{{payData.total_amount | format_currency}}đ</b>
-          </label>
-        </b-col>
-      </b-row>
-      <b-row>
-          <b-col md="12">
-            <label>
-              Số tiền trả
-            </label>
-            <input
-              id="amount"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="payData.amount"
-              @keyup="integerOnly($event.target)"
-              @change="changeAmount()"
-              maxlength="14">
-          </b-col>
-      </b-row>
+    <div v-if="showPayModal" class="modal-backdrop">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h5 class="text-center">Thanh toán</h5>
+                <hr>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
+                  <label>
+                    Số tiền còn lại: <b>{{payData.remaining | format_currency}}đ</b>
+                  </label>
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Lãi suất: {{payData.interest_rate}}%
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Kỳ hạn: {{payData.interest_period}}
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Thời gian tính lãi: {{payData.interest_period_real}}
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Số tiền lãi: <b>{{payData.interest | format_currency}}đ</b>
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Tổng tiền phải trả:
+                  <b class="text-header">{{payData.total_amount | format_currency}}đ</b>
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
+                  <label>
+                    Số tiền trả
+                  </label>
+                  <input
+                    id="amount"
+                    autocomplete="new-password"
+                    class="form-control"
+                    v-model="payData.amount"
+                    @keyup="integerOnly($event.target)"
+                    @change="changeAmount()"
+                    maxlength="14">
+                </div>
+            </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Tiền mặt </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="cash_input"
-          type="text"
-          class="form-control"
-          v-model="payData.cash"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeCash()"
-          maxlength="14">
-        </b-col>
-      </b-row>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
+                <label> Tiền mặt </label>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <input
+                id="cash_input"
+                type="text"
+                class="form-control"
+                v-model="payData.cash"
+                autocomplete="new-password"
+                @keyup="integerOnly($event.target)"
+                @change="changeCash()"
+                maxlength="14">
+              </div>
+            </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Chuyển khoản </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="credit_input"
-          type="text"
-          class="form-control"
-          v-model="payData.credit"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeCredit()"
-          maxlength="14">
-        </b-col>
-      </b-row>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
+                <label> Chuyển khoản </label>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <input
+                id="credit_input"
+                type="text"
+                class="form-control"
+                v-model="payData.credit"
+                autocomplete="new-password"
+                @keyup="integerOnly($event.target)"
+                @change="changeCredit()"
+                maxlength="14">
+              </div>
+            </div>
 
-      <b-row class="form-row">
-        <b-col md="3" class="mt-2">
-          <label> Tiền điện tử </label>
-        </b-col>
-        <b-col md="9">
-          <input
-          id="e_money_input"
-          type="text"
-          class="form-control"
-          v-model="payData.e_money"
-          autocomplete="new-password"
-          @keyup="integerOnly($event.target)"
-          @change="changeEMoney()"
-          maxlength="14">
-        </b-col>
-      </b-row>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
+                <label> Tiền điện tử </label>
+              </div>
+              <div class="w-full md:w-3/4 px-2">
+                <input
+                id="e_money_input"
+                type="text"
+                class="form-control"
+                v-model="payData.e_money"
+                autocomplete="new-password"
+                @keyup="integerOnly($event.target)"
+                @change="changeEMoney()"
+                maxlength="14">
+              </div>
+            </div>
 
-      <b-row>
-        <b-col class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
-            Thanh toán
-          </button>
-        </b-col>
-      </b-row>
-    </b-modal>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-right mt-3">
+                <button class="btn btn-secondary px-4 mr-2" @click="closePayModal()">
+                  Đóng
+                </button>
+                <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
+                  Thanh toán
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -403,11 +412,18 @@ import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
+import { useRouter } from 'vue-router'
 
 
 export default {
   components: {
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    return { toast, router }
   },
   data () {
     return {
@@ -467,6 +483,7 @@ export default {
       },
       loading: false,
       onSearch: false,
+      showPayModal: false
     }
   },
   computed: {
@@ -488,29 +505,7 @@ export default {
 
       this.search()
     },
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
-    /**
-     * Make toast with title
-     */
-    makeToast(variant = null, title, content) {
-      this.$bvToast.toast(content, {
-        title: title,
-        variant: variant,
-        solid: true,
-        autoHideDelay: 3000
-      })
-    },
 
     /**
      *  Get tất cả các options liên quan
@@ -536,7 +531,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -558,34 +553,26 @@ export default {
      *  Delete
      */
     deleted (id, name) {
-
-      this.$bvModal.msgBoxConfirm('Xóa nợ [' + name + "]. Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          debitAPI.reliefPublicDebt(id).then(res => {
+      if (confirm('Xoá nợ [' + name + "]. Bạn có chắc không?")) {
+        debitAPI.reliefPublicDebt(id).then(res => {
             if(res != null && res.data != null) {
               this.prepareToSearch()
-              this.popToast('success', 'Xóa nợ thành công!!!')
+              this.toast('Xóa nợ thành công!!!', 'success')
             }
 
           }).catch(err => {
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.toast(errorMess, 'error')
           })
-        }
-      })
+      }
     },
 
     /**
      *  Go to edit
      */
     edit (id) {
-      this.$router.push('/public-debt/edit/' + id)
+      this.router.push('/public-debt/edit/' + id)
     },
 
     openPayModal(pay) {
@@ -604,7 +591,11 @@ export default {
       this.payData.amount = JSON.parse(JSON.stringify(this.currencyFormat(pay.amount)))
       this.payData.cash = JSON.parse(JSON.stringify(this.currencyFormat(pay.amount)))
 
-      this.$bvModal.show('modal-pay')
+      this.showPayModal = true
+    },
+
+    closePayModal() {
+      this.showPayModal = false
     },
 
     /**
@@ -612,7 +603,7 @@ export default {
      */
     pay() {
       if (this.payData.amount <= 0) {
-        this.popToast('danger', 'Số tiền trả phải lớn hơn 0')
+        this.toast('Số tiền trả phải lớn hơn 0', 'error')
         return;
       }
 
@@ -621,11 +612,11 @@ export default {
             != parseInt((this.payData.cash + '').replaceAll(",", ""))
             + parseInt((this.payData.credit + '').replaceAll(",", ""))
             + parseInt((this.payData.e_money + '').replaceAll(",", ""))) {
-          this.popToast('danger', "Tổng loại tiền phải bằng số tiền thanh toán")
+          this.toast("Tổng loại tiền phải bằng số tiền thanh toán", 'error')
           return
         }
       } catch(err) {
-        this.popToast('danger', 'Vui lòng nhập loại tiền')
+        this.toast('Vui lòng nhập loại tiền', 'error')
       }
 
       this.payData.remaining = (this.payData.remaining + '').replaceAll(",", "")
@@ -649,12 +640,12 @@ export default {
         this.payData.credit = 0
         this.payData.cash = 0
         this.payData.e_money = 0
-        this.$bvModal.hide('modal-pay')
-        this.popToast('success', 'Đã thanh toán thành công!!')
+        this.showPayModal = false
+        this.toast('Đã thanh toán thành công!!', 'success')
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -672,7 +663,7 @@ export default {
      *  Go to add
      */
     goToAdd () {
-      this.$router.push('/public-debt/add')
+      this.router.push('/public-debt/add')
     },
 
     /**
@@ -703,7 +694,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 

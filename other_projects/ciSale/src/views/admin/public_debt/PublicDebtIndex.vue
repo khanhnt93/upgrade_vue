@@ -1,36 +1,36 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="12">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
+                </button>
 
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
+                <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
                   Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md='12'>
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full px-2">
                 <h4 class="mt-2 text-center text-header">{{prefix_title}}Nợ Công</h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
             <hr/>
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Khách hàng </label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <multiselect
                   v-model="customerSelect"
                   :options="customerOptions"
@@ -40,14 +40,14 @@
                   track-by="name"
                   @input="changeCustomer">
                 </multiselect>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Tên khách hàng </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="customer_name"
                   type="text"
@@ -55,17 +55,17 @@
                   v-model="debt.customer_name"
                   autocomplete="new-password"
                   maxlength="50">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorName">
+                <div v-if="errorName" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập tên khách hàng
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label> Số điện thoại </label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="customer_phone_number"
                   type="text"
@@ -74,17 +74,17 @@
                   autocomplete="new-password"
                   @keyup="integerOnly($event.target)"
                   maxlength="100">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorPhone">
+                <div v-if="errorPhone" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập số điện thoại
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Địa chỉ</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="customer_address"
                   type="text"
@@ -92,14 +92,14 @@
                   v-model="debt.customer_address"
                   autocomplete="new-password"
                   maxlength="100">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Mô tả</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="description"
                   type="text"
@@ -107,14 +107,14 @@
                   v-model="debt.description"
                   autocomplete="new-password"
                   maxlength="100">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số tiền</label><span class="error-sybol"></span>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="amount"
                   type="text"
@@ -124,17 +124,17 @@
                   maxlength="14"
                   @keyup="integerOnly($event.target)"
                   @change="changeTotal()">
-                <b-form-invalid-feedback class="invalid-feedback" :state="!errorTotal">
+                <div v-if="errorTotal" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập số tiền
-                </b-form-invalid-feedback>
-              </b-col>
-            </b-row>
+                </div>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Lãi suất</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="interest_rate"
                   type="text"
@@ -143,49 +143,49 @@
                   autocomplete="new-password"
                   maxlength="5"
                   @keyup="integerAndPointOnly($event.target)">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Kỳ hạn tính lãi</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
-                <b-form-select
-                  :options="periodOptions"
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
+                <select
                   id="interest_period"
-                  type="text"
-                  autocomplete="new-password"
                   class="form-control"
                   v-model="debt.interest_period">
-                </b-form-select>
-              </b-col>
-            </b-row>
+                  <option v-for="option in periodOptions" :key="option.value" :value="option.value">
+                    {{ option.text }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Ngày mượn</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <datepicker v-model="debt.created_at" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Ngày hẹn trả</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <datepicker v-model="debt.appointment_date" format="yyyy-MM-dd" :typeable="true"
                             placeholder="yyyy-mm-dd" input-class="datepicker-cus" ></datepicker>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row class="form-row">
-              <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+              <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số ngày nhắc trước khi đến hạn</label>
-              </b-col>
-              <b-col md="9" class="mt-2">
+              </div>
+              <div class="w-full md:w-3/4 px-2 mt-2">
                 <input
                   id="forewarning"
                   type="text"
@@ -194,13 +194,13 @@
                   autocomplete="new-password"
                   maxlength="10"
                   @keyup="integerOnly($event.target)">
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -209,14 +209,22 @@
 import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
   components: {
     Datepicker,
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
   },
   data() {
     return {
@@ -274,17 +282,7 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     checkInfo(info) {
       return (this.click && (info == null || info.length <= 0))
@@ -317,7 +315,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.toast(errorMess, 'error')
       })
     },
 
@@ -342,7 +340,7 @@ export default {
      *  Get detail
      */
     getDeptDetail() {
-      let id = this.$route.params.id
+      let id = this.route.params.id
       if (id) {
         this.prefix_title = "Cập Nhật "
 
@@ -361,7 +359,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast(errorMess, 'error')
         })
       } else {
         this.prefix_title = "Tạo Mới "
@@ -382,7 +380,7 @@ export default {
       this.saving = true
       this.debt.total = this.debt.total.replaceAll(",", "")
 
-      let id = this.$route.params.id
+      let id = this.route.params.id
       if (id) {
         // Edit
         this.debt.id = id
@@ -391,14 +389,14 @@ export default {
           if (res != null && res.data != null) {
             if (res.data.status == 200) {
               // show popup success
-              this.popToast('success', 'Cập nhật thành công!!! ')
+              this.toast('Cập nhật thành công!!! ', 'success')
             }
           }
         }).catch(err => {
           this.saving = false
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast(errorMess, 'error')
         })
       } else {
         // Add
@@ -407,14 +405,14 @@ export default {
           if (res != null && res.data != null) {
 
             if (res.data.status == 200) {
-              this.$router.push("/public-debt")
+              this.router.push("/public-debt")
             }
           }
         }).catch(err => {
           this.saving = false
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.toast(errorMess, 'error')
         })
       }
     },
@@ -472,7 +470,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/public-debt")
+      this.router.push("/public-debt")
     }
   }
 }

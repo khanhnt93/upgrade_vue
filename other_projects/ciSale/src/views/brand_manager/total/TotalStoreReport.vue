@@ -1,19 +1,19 @@
 <template>
   <div class="container-fluid">
 
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg p-4 mb-4">
+          <div class="p-4">
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <h4 class="text-center text-header"><b>Tổng chuỗi</b></h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <div class="content-circle">
                   <p><b>Doanh thu</b></p>
                 </div>
@@ -23,15 +23,15 @@
                 <div class="content-circle">
                   <p><b>Lợi nhuận</b></p>
                 </div>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(totalProfit)}}</b>
+                      <b>{{formatCurrency(totalProfit)}}</b>
                     </div>
                   </div>
                 </div>
@@ -39,7 +39,7 @@
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(totalFee)}}</b>
+                      <b>{{formatCurrency(totalFee)}}</b>
                     </div>
                   </div>
                 </div>
@@ -47,26 +47,26 @@
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(totalRevenue)}}</b>
+                      <b>{{formatCurrency(totalRevenue)}}</b>
                     </div>
                   </div>
                 </div>
 
-              </b-col>
-            </b-row>
-          </b-card-body>
-        </b-card>
-        <b-card v-for="item in data" :key="item.store_id">
-          <b-card-body class="p-4">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4 mb-4" v-for="item in data" :key="item.store_id">
+          <div class="p-4">
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <h4 class="text-center"><b>{{item.store_name}}</b></h4>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <div class="content-circle">
                   <p><b>Doanh thu</b></p>
                 </div>
@@ -76,15 +76,15 @@
                 <div class="content-circle">
                   <p><b>Lợi nhuận</b></p>
                 </div>
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-            <b-row>
-              <b-col>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(item.revenue)}}</b>
+                      <b>{{formatCurrency(item.revenue)}}</b>
                     </div>
                   </div>
                 </div>
@@ -92,7 +92,7 @@
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(item.fee)}}</b>
+                      <b>{{formatCurrency(item.fee)}}</b>
                     </div>
                   </div>
                 </div>
@@ -100,19 +100,19 @@
                 <div class="content-circle">
                   <div class="circle-without-text">
                     <div class="text-inside-circle">
-                      <b>{{currencyFormat(item.profit)}}</b>
+                      <b>{{formatCurrency(item.profit)}}</b>
                     </div>
                   </div>
                 </div>
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
+          </div>
+        </div>
 
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -121,9 +121,15 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const { formatCurrency } = useFormatters()
+    return { toast, formatCurrency }
+  },
   data () {
     return {
       data: [],
@@ -140,13 +146,8 @@ export default {
     /**
    * Make toast without title
    */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    popToast(content, variant) {
+      this.toast(content, variant)
     },
 
     /**
@@ -179,23 +180,8 @@ export default {
         console.log(err)
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast(errorMess, 'error')
       })
-    },
-
-    /**
-   * Currency format
-   */
-    currencyFormat(num) {
-      let result = null
-      if(num) {
-        result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      } else {
-        if(num == 0) {
-          return 0
-        }
-      }
-      return result
     },
 
   }

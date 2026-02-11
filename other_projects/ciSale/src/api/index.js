@@ -1,1 +1,1 @@
-export const RootAPI = process.env.ROOT_API
+export const RootAPI = import.meta.env.VITE_ROOT_API

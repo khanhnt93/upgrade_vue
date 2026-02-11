@@ -1,37 +1,37 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="card-body p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
+                </button>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
                   Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-              <b-row class="form-row">
-                <b-col md='12'>
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full px-2">
                   <h4 class="mt-1 text-center text-header">{{prefix_text}}SẢN PHẨM</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
               <!-- Loading -->
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Nhóm sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <multiselect
                     v-model="productGroupSelect"
                     :options="productGroupOptions"
@@ -41,17 +41,17 @@
                     track-by="name"
                     @input="changeProductGroup">
                   </multiselect>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProductGroup">
+                  <div v-if="errorProductGroup" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập nhóm sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Loại sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <multiselect
                     v-model="productTypeSelect"
                     :options="productTypeOptions"
@@ -61,32 +61,32 @@
                     track-by="name"
                     @input="changeProductType">
                   </multiselect>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorProductType">
+                  <div v-if="errorProductType" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập loại sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-            <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+            <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Hãng sản phẩm </label>
-                </b-col>
-                <b-col md="9" class="mt-2">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
+                  <select
                     :options="productBrandOptions"
                     id="product_brand"
                     type="text"
                     autocomplete="new-password"
                     class="form-control"
-                    v-model="product.product_brand_id"></b-form-select>
-                </b-col>
-              </b-row>
+                    v-model="product.product_brand_id"></select>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Mã sản phẩm </label>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <input
                   id="code"
                   type="text"
@@ -94,14 +94,14 @@
                   class="form-control"
                   v-model="product.code"
                   maxlength="30">
-                </b-col>
-              </b-row>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên sản phẩm </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
                   <input
                   id="name"
                   type="text"
@@ -109,48 +109,49 @@
                   class="form-control"
                   v-model="product.name"
                   maxlength="255">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div v-if="errorName" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập tên sản phẩm
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Đơn vị </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9" class="mt-2">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
+                  <select
                   :options="unitOptions"
                   id="unit"
                   type="text"
                   autocomplete="new-password"
                   class="form-control"
-                  v-model="product.unit_id"></b-form-select>
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorUnit">
+                  v-model="product.unit_id"></select>
+                  <div v-if="errorUnit" class="text-red-600 text-sm mt-1">
                     Vui lòng nhập đơn vị
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Mô tả </label>
-                </b-col>
-                <b-col md="9" class="mt-2">
-                  <b-form-textarea
+                </div>
+                <div class="w-full md:w-3/4 px-2 mt-2">
+                  <textarea
                     id="description"
                     style="width:100%;"
                     rows="3"
                     v-model="product.description"
-                  ></b-form-textarea>
-                </b-col>
-              </b-row>
+                    class="form-control"
+                  ></textarea>
+                </div>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -160,11 +161,19 @@ import productApi from '@/api/product'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 
 export default {
   components: {
     Multiselect
+  },
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+    return { toast, router, route }
   },
   data () {
     return {
@@ -193,7 +202,7 @@ export default {
   },
   mounted() {
     // Check prefix
-    if(this.$route.params.id) {
+    if(this.route.params.id) {
       this.prefix_text = "CẬP NHẬT "
     } else {
       this.prefix_text = "THÊM MỚI "
@@ -222,12 +231,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant)
     },
 
     checkInfo (info) {
@@ -310,7 +314,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -372,7 +376,7 @@ export default {
      *  Get detail
      */
     getProductDetail() {
-      let productId = this.$route.params.id
+      let productId = this.route.params.id
       if(productId){
         this.loading = true
 
@@ -396,7 +400,7 @@ export default {
 
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
+          this.popToast('error', errorMess)
         })
       }
     },
@@ -411,7 +415,7 @@ export default {
       if(result) {
         this.saving = true
 
-        let productId = this.$route.params.id
+        let productId = this.route.params.id
         if(productId){
           // Edit
           this.product.id = productId
@@ -429,7 +433,7 @@ export default {
 
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.popToast('error', errorMess)
           })
         } else {
           // Add
@@ -439,7 +443,7 @@ export default {
 
               let message = ""
               if (res.data.status == 200) {
-                this.$router.push("/product")
+                this.router.push("/product")
               }
             }
           }).catch(err => {
@@ -447,7 +451,7 @@ export default {
 
             // Handle error
             let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
+            this.popToast('error', errorMess)
           })
         }
       }
@@ -459,7 +463,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/product")
+      this.router.push("/product")
     }
   }
 }

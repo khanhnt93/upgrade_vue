@@ -1,12 +1,12 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
 
-            <b-row>
-              <b-col md="6">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-6 px-2">
                 <h4 class="text-center text-header">Bảng giá</h4>
                 Chỉ với ~3k/ngày, sở hữu ngay phần mềm quản lý nhà hàng, quán ăn, quán nhậu, cafe, trà sữa chuyên nghiệp
                 <br>
@@ -25,8 +25,8 @@
                 <h5>
                   - Gói 5 năm: 4.800.000 (80.000/tháng)
                 </h5>
-              </b-col>
-              <b-col md="6">
+              </div>
+              <div class="w-full md:w-6 px-2">
                 <h4 class="text-center text-header">Tuyển dụng</h4>
                 CiInTech luôn tuyển sales, CTV trên toàn quốc với mức hoa hồng cực hấp dẫn, môi trường làm việc
                 thoải mái, không KPI, không áp lực.
@@ -36,13 +36,13 @@
                 <br>
                 Click menu "Liên hệ", liên hệ với chúng tôi để được tư vấn.
 
-              </b-col>
-            </b-row>
+              </div>
+            </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

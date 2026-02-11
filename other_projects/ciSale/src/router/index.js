@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // Bán hàng
 import BillCreate from '@/views/admin/bill/BillCreate'
@@ -147,11 +146,9 @@ import PriceList from '@/views/common/PriceList'
 import Tutorial from '@/views/common/tutorial'
 import Home from '@/views/common/Home'
 
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
-  scrollBehavior: () => ({ y: 0 }),
+const router = createRouter({
+  history: createWebHistory(),
+  scrollBehavior: () => ({ top: 0 }),
   routes: [
     {
       path: '/',
@@ -198,7 +195,7 @@ export default new Router({
       name: 'BillHistory',
       component: BillHistory
     },
-    
+
     {
       path: '/overview',
       name: 'OverView',
@@ -716,3 +713,4 @@ export default new Router({
   ]
 })
 
+export default router

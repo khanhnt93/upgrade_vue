@@ -1,110 +1,117 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-row>
-            <b-col md='12'>
-              <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
-                Lưu
-              </b-button>
-            </b-col>
-          </b-row>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="card">
+          <div class="p-4">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
+                  Lưu
+                </button>
+              </div>
+            </div>
 
-          <b-row>
-            <b-col md='12'>
-              <h4 class="mt-2 text-center text-header">Thiết Lập Ưu Đãi</h4>
-            </b-col>
-          </b-row>
-          <hr>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h4 class="mt-2 text-center text-header">Thiết Lập Ưu Đãi</h4>
+              </div>
+            </div>
+            <hr>
           <!-- Loading -->
           <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-          <div class="form-group">
-            <label>Số điểm của khách hàng sẽ hết hạn sau<span class="error-sybol"></span></label>
-            <div class="input-group">
-              <input
-              id="pasword"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="setting.pmtExpire.value"
-              @keyup="integerOnly($event.target)"
-              maxlength="11"><span class="input-group-addon">&nbsp;&nbsp;Ngày</span>
+            <div class="form-group">
+              <label>Số điểm của khách hàng sẽ hết hạn sau<span class="error-sybol"></span></label>
+              <div class="input-group">
+                <input
+                id="pasword"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="setting.pmtExpire.value"
+                @keyup="integerOnly($event.target)"
+                maxlength="11"><span class="input-group-addon">&nbsp;&nbsp;Ngày</span>
+              </div>
+              <div :class="['invalid-feedback', { 'd-block': errorExpireDay }]">
+                Vui lòng nhập số ngày
+              </div>
             </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorExpireDay">
-              Vui lòng nhập số ngày
-            </b-form-invalid-feedback>
-          </div>
 
-          <div class="form-group">
-            <label>Áp dụng khuyến mãi theo số tiền tích lũy<span class="error-sybol"></span></label>
-            <div class="input-group">
-              <input type="radio" v-model="setting.discountByMoney.value" name="discountByMoney" :value="'true'" class="mt-2" @change="changeDiscountByMoney"><label class="ml-4 mt-1">Có</label>
-              <input type="radio" v-model="setting.discountByMoney.value" name="discountByMoney" :value="'false'" class="ml-5 mt-2" @change="changeDiscountByMoney"><label class="ml-4 mt-1">Không</label>
+            <div class="form-group">
+              <label>Áp dụng khuyến mãi theo số tiền tích lũy<span class="error-sybol"></span></label>
+              <div class="input-group">
+                <input type="radio" v-model="setting.discountByMoney.value" name="discountByMoney" :value="'true'" class="mt-2" @change="changeDiscountByMoney"><label class="ml-4 mt-1">Có</label>
+                <input type="radio" v-model="setting.discountByMoney.value" name="discountByMoney" :value="'false'" class="ml-5 mt-2" @change="changeDiscountByMoney"><label class="ml-4 mt-1">Không</label>
+              </div>
+              <div :class="['invalid-feedback', { 'd-block': errorDiscountByMoney }]">
+                Vui lòng chọn một tùy chọn
+              </div>
             </div>
-            <b-form-invalid-feedback class="invalid-feedback" :state="!errorDiscountByMoney">
-              Vui lòng chọn một tùy chọn
-            </b-form-invalid-feedback>
+
+            <div class="flex flex-wrap -mx-2" v-show="setting.discountByMoney.value == 'true'">
+              <div class="w-full md:w-1/2 px-2">
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>Số tiền tích lũy<span class="error-sybol"></span></label>
+                    <input
+                      id="money"
+                      v-model="inputs.money"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      maxlength="11"
+                      @keyup="integerOnly($event.target)">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full px-2">
+                    <label>Phần trăm giảm giá<span class="error-sybol"></span></label>
+                    <input
+                      id="discount_percent"
+                      v-model="inputs.discountPercent"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      maxlength="3"
+                      @keyup="integerOnly($event.target)">
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-2 text-center mt-2">
+                  <div class="w-full px-2">
+                    <button class="btn btn-outline-primary text-center btn-width-120" :disabled="saving" @click="addListDiscount">
+                      Thêm
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full md:w-1/2 px-2">
+                <p v-for="item in setting.listDiscount" :key="item.code">
+                  {{'Tích lũy: '}} <b>{{currencyFormat(item.code)}}</b> {{'vnđ, Giảm giá: '}}  <b>{{item.value}}</b> {{'%'}}
+                </p>
+              </div>
+            </div>
+
           </div>
-
-          <b-row v-show="setting.discountByMoney.value == 'true'">
-            <b-col md="6">
-              <b-row>
-                <b-col>
-                  <label>Số tiền tích lũy<span class="error-sybol"></span></label>
-                  <input
-                    id="money"
-                    v-model="inputs.money"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    maxlength="11"
-                    @keyup="integerOnly($event.target)">
-                </b-col>
-              </b-row>
-
-              <b-row>
-                <b-col>
-                  <label>Phần trăm giảm giá<span class="error-sybol"></span></label>
-                  <input
-                    id="discount_percent"
-                    v-model="inputs.discountPercent"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    maxlength="3"
-                    @keyup="integerOnly($event.target)">
-                </b-col>
-              </b-row>
-
-              <b-row class="text-center mt-2">
-                <b-col>
-                  <b-button variant="outline-primary" class="text-center btn-width-120" :disabled="saving" @click="addListDiscount">
-                    Thêm
-                  </b-button>
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col md="6">
-              <p v-for="item in setting.listDiscount" :key="item.code">
-                {{'Tích lũy: '}} <b>{{currencyFormat(item.code)}}</b> {{'vnđ, Giảm giá: '}}  <b>{{item.value}}</b> {{'%'}}
-              </p>
-            </b-col>
-          </b-row>
-
-        </b-card>
-      </b-col>
-    </b-row>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import { useToast } from '@/composables/useToast'
 import customerApi from '@/api/customer'
 import Mapper from '@/mapper/setting'
 import commonFunc from '@/common/commonFunc'
 
 
 export default {
+  setup() {
+    const { popToast } = useToast()
+    return { popToast }
+  },
   data () {
     return {
       setting: {
@@ -158,18 +165,6 @@ export default {
     },
 
     /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
-
-    /**
      * Save
      */
     save () {
@@ -188,12 +183,7 @@ export default {
         }).catch(err => {
           this.saving = false
           let message = "Lỗi hệ thống"
-          this.$bvModal.msgBoxOk(message, {
-            title: "Cập Nhật Cài Đặt",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-danger',
-          })
+          this.popToast('error', message)
         })
       } else {
         this.saving = false
@@ -220,7 +210,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.popToast('danger', errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -239,7 +229,7 @@ export default {
         this.inputs.money = null
         this.inputs.discountPercent = null
       } else {
-        this.popToast('danger', "Vui lòng nhập đủ thông tin")
+        this.popToast('error', "Vui lòng nhập đủ thông tin")
       }
     },
 

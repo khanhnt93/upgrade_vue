@@ -1,37 +1,37 @@
 <template>
   <div class="container-fluid">
-    <b-row>
-      <b-col>
-        <b-card>
-          <b-card-body class="p-4">
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+        <div class="bg-white shadow rounded-lg">
+          <div class="p-4">
 
-            <b-row>
-              <b-col cols="6">
-                <b-button variant="outline-secondary" class="pull-left btn-width-120" @click="back">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-1/2 px-2">
+                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
                   Quay lại
-                </b-button>
-              </b-col>
-              <b-col cols="6">
-                <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
+                </button>
+              </div>
+              <div class="w-1/2 px-2">
+                <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
                     Lưu
-                </b-button>
-              </b-col>
-            </b-row>
+                </button>
+              </div>
+            </div>
 
-              <b-row>
-                <b-col md='12'>
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
                   <h4 class="mt-2 text-center">Nguyên liệu - Mặt hàng</h4>
-                </b-col>
-              </b-row>
+                </div>
+              </div>
               <hr/>
               <!-- Loading -->
               <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Tên </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
                   id="name"
                   type="text"
@@ -39,33 +39,33 @@
                   autocomplete="new-password"
                   class="form-control"
                   v-model="resource.name">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorName">
+                  <div class="invalid-feedback {'d-block': errorName}" >
                     Vui lòng nhập tên
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Đơn vị </label>
-                </b-col>
-                <b-col md="9">
-                  <b-form-select
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <select
                   :options="units"
                   id="status"
                   type="text"
                   autocomplete="new-password"
-                  class="form-control"
+                  class="form-select"
                   v-model="resource.unit">
-                  </b-form-select>
-                </b-col>
-              </b-row>
+                  </select>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Số lượng </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
                   id="quantity"
                   type="text"
@@ -73,19 +73,19 @@
                   autocomplete="new-password"
                   class="form-control"
                   v-model="resource.quantity"
-                  :disabled="this.$route.params.id"
+                  :disabled="route.params.id"
                   @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorQuantity">
+                  <div class="invalid-feedback {'d-block': errorQuantity}" >
                     Vui lòng nhập số lượng
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-              <b-row class="form-row">
-                <b-col md="3" class="mt-2">
+              <div class="form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
                   <label> Số lượng tối thiểu </label><span class="error-sybol"></span>
-                </b-col>
-                <b-col md="9">
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
                   id="min_quantity"
                   type="text"
@@ -94,25 +94,37 @@
                   class="form-control"
                   v-model="resource.min_quantity"
                   @keyup="integerAndPointOnly($event.target)">
-                  <b-form-invalid-feedback  class="invalid-feedback" :state="!errorMinQuantity">
+                  <div class="invalid-feedback {'d-block': errorMinQuantity}" >
                     Vui lòng nhập số lượng tối thiểu
-                  </b-form-invalid-feedback>
-                </b-col>
-              </b-row>
+                  </div>
+                </div>
+              </div>
 
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import adminAPI from '@/api/admin'
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
-
+import { useToast } from '@/composables/useToast'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
+  setup() {
+    const { toast } = useToast()
+    const router = useRouter()
+    const route = useRoute()
+
+    return {
+      toast,
+      router,
+      route
+    }
+  },
   data () {
     return {
       resource: {
@@ -156,12 +168,7 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+      this.toast(content, variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -186,7 +193,7 @@ export default {
      * Get detail
      */
     getUnitDetail() {
-      let Id = this.$route.params.id
+      let Id = this.route.params.id
       if(Id){
         this.loading = true
 
@@ -211,7 +218,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push('/resource/list')
+      this.router.push('/resource/list')
     },
 
     /**
@@ -222,7 +229,7 @@ export default {
       this.saving = true
       let result = this.checkValidate()
       if(result) {
-        let id = this.$route.params.id
+        let id = this.route.params.id
         if(id){
           // Edit
           let resource = this.resource
@@ -248,7 +255,7 @@ export default {
             this.saving = false
             if(res != null && res.data != null){
               if (res.data.status == 200) {
-                this.$router.push("/resource/list")
+                this.router.push("/resource/list")
               }
             }
           }).catch(err => {
