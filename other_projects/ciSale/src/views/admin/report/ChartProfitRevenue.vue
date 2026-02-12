@@ -63,7 +63,8 @@
               type="ColumnChart"
               :data="chartData"
               :options="chartOptions"
-              v-show="click && chartData.length > 0"
+              class="w-full"
+              v-if="click && chartData.length > 0"
             />
             <p v-show="click && firstSearch == false && chartData.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>
           </div>
@@ -101,17 +102,18 @@ export default {
         "chartBy": "Day"
       },
       chartByOption: [
-        {value: 'Day', text: ''},
         {value: 'Day', text: 'Ngày'},
         {value: 'Week', text: 'Tuần'},
         {value: 'Month', text: 'Tháng'},
       ],
       chartData: [],
       chartOptions: {
-        chart: {
-          title: 'Biểu đồ doanh thu và lợi nhuận',
-          subtitle: 'Biểu đồ doanh thu và lợi nhuận',
-        }
+        title: 'Biểu đồ doanh thu và lợi nhuận',
+        subtitle: 'Biểu đồ doanh thu và lợi nhuận',
+        height: 500,
+        legend: { position: 'top' },
+        colors: ['#3b82f6', '#10b981'], // blue, green
+        chartArea: { width: '85%', height: '75%' }
       },
       onSearch: false,
       click: false,
@@ -122,11 +124,11 @@ export default {
   mounted() {
     // Get default date
     let dateNow = new Date()
-    this.inputs.toDate = dateNow.toJSON().slice(0,10)
+    this.inputs.toDate = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-    this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+    this.inputs.fromDate = fromDate
 
-      this.search()
+    this.search()
   },
   // computed: {
   //   // errorFromDate: function () {
@@ -163,16 +165,16 @@ export default {
 
       if(this.inputs.chartBy == "Day") {
         // Get default date
-        this.inputs.toDate = dateNow.toJSON().slice(0,10)
+        this.inputs.toDate = dateNow
         let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-        this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+        this.inputs.fromDate = fromDate
       }
 
       if(this.inputs.chartBy == "Week") {
         // Get default week
-        this.inputs.toDate = dateNow.toJSON().slice(0,10)
+        this.inputs.toDate = dateNow
         let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
-        this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+        this.inputs.fromDate = fromDate
       }
 
       if(this.inputs.chartBy == "Month") {
@@ -347,8 +349,8 @@ export default {
       this.onSearch = true
 
       let params = {
-        "fromDate": this.inputs.fromDate,
-        "toDate": this.inputs.toDate,
+        "fromDate": this.inputs.fromDate ? new Date(this.inputs.fromDate).toISOString().slice(0,10) : null,
+        "toDate": this.inputs.toDate ? new Date(this.inputs.toDate).toISOString().slice(0,10) : null,
         "chartBy": this.inputs.chartBy,
           "fromMonth": this.inputs.fromMonth,
         "toMonth": this.inputs.toMonth,

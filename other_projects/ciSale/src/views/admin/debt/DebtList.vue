@@ -94,7 +94,8 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-              <table class="table table-bordered table-striped">
+              <div class="overflow-x-auto">
+                <table class="table table-bordered table-striped w-full min-w-full">
                 <thead>
                   <tr>
                     <th class="text-center">STT</th>
@@ -143,7 +144,7 @@
                     <td class="text-right">{{formatCurrency(item.amount)}}</td>
 
                     <td>
-                      <div class="flex gap-1" v-if="item.status === 0">
+                      <div class="flex gap-2" v-if="item.status === 0">
                         <button class="btn btn-sm btn-outline-danger" title="Thanh toán" @click="openPayModal(item)">
                           <i class="fa fa-check-square-o"/>
                         </button>
@@ -159,6 +160,7 @@
 
                 </tbody>
               </table>
+              </div>
               </div>
             </div>
 
@@ -742,17 +744,14 @@ export default {
 
 
   table {
-   margin: auto;
+    margin: auto;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
 
   td, th {
-    border: solid rgb(200, 200, 200) 1px;
     padding: .5rem;
   }
 
@@ -762,7 +761,6 @@ export default {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
     border-top: none;
   }
 

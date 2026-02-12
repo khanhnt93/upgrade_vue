@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="card p-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
               <button class="btn btn-outline-success float-right btn-width-120" @click="goToAdd">
@@ -94,7 +94,8 @@
 
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
-              <table class="table table-bordered table-striped">
+              <div class="overflow-x-auto">
+                <table class="table table-bordered table-striped w-full min-w-full">
                 <thead>
                   <tr>
                     <th class="text-center">STT</th>
@@ -159,6 +160,7 @@
 
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
 
@@ -784,15 +786,12 @@ export default {
     table {
       margin: auto;
       border-collapse: collapse;
-      overflow-x: auto;
-      display: block;
-      width: fit-content;
+      width: 100%;
       max-width: 100%;
       box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
     }
 
     td, th {
-      border: solid rgb(200, 200, 200) 1px;
       padding: .5rem;
     }
 
@@ -802,7 +801,6 @@ export default {
       text-transform: uppercase;
       padding-top: 1rem;
       padding-bottom: 1rem;
-      border-bottom: rgb(50, 50, 100) solid 2px;
       border-top: none;
     }
 
