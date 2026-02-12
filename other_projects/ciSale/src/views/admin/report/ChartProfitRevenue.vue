@@ -43,8 +43,11 @@
                             placeholder="yyyy-MM" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
-              <div class="w-full md:w-1/4 px-2 flex flex-col items-end">
-                <button class="mt-6 !ml-0 md:!mr-0 w-1/2 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white h-10 px-4 rounded" :disabled="onSearch" @click.prevent="search">
+              <div class="w-full md:w-1/4 px-2">
+                <label class="label-width text-white">
+                   Xem
+                </label>
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
               </div>

@@ -83,7 +83,7 @@
 
               <button
                 class="btn btn-default text-header btn-width-120 float-right"
-                @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
+                @click="exportToExcel"
                 title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
@@ -732,6 +732,11 @@ export default {
         }
         return "Tháng"
       },
+
+    exportToExcel() {
+      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
+    }
+
   }
 }
 </script>

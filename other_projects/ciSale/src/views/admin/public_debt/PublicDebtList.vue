@@ -82,9 +82,9 @@
               </div>
 
               <button
-                  class="btn btn-default text-header btn-width-120 float-right"
-                  @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
-                  title="Xuất Excel">
+                class="btn btn-default text-header btn-width-120 float-right"
+                @click="exportToExcel"
+                title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
             </div>
@@ -272,19 +272,74 @@
       <!--</div>-->
     <!--</b-modal>-->
 
-    <!-- Payment Modal -->
-    <TransitionRoot appear :show="showPayModal" as="template">
-      <Dialog as="div" @close="closePayModal" class="relative z-50">
-        <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100"
-          leave-to="opacity-0">
-          <div class="fixed inset-0 bg-black/25" />
-        </TransitionChild>
+    <div v-if="showPayModal" class="modal-backdrop">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <h5 class="text-center">Thanh toán</h5>
+                <hr>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
+                  <label>
+                    Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
+                  </label>
+                </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Lãi suất: {{payData.interest_rate}}%
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Kỳ hạn: {{payData.interest_period}}
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Thời gian tính lãi: {{payData.interest_period_real}}
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <label>
+                  Tổng tiền phải trả:
+                  <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
+                </label>
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-2">
+                <div class="w-full px-2">
+                  <label>
+                    Số tiền trả
+                  </label>
+                  <input
+                    id="amount"
+                    autocomplete="new-password"
+                    class="form-control"
+                    v-model="payData.amount"
+                    @keyup="integerOnly($event.target)"
+                    @change="changeAmount()"
+                    maxlength="14">
+                </div>
+            </div>
 
         <div class="fixed inset-0 overflow-y-auto">
           <div class="flex min-h-full items-center justify-center p-4 text-center">
@@ -434,8 +489,6 @@ import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
-import ConfirmModal from '@/components/common/ConfirmModal.vue'
-import { useExcelExport } from '@/composables/useExcelExport'
 
 
 export default {
@@ -452,9 +505,7 @@ export default {
     const { toast } = useToast()
     const router = useRouter()
     const { formatCurrency } = useFormatters()
-    const { exportToExcel } = useExcelExport()
-
-    return { toast, router, formatCurrency, exportToExcel }
+    return { toast, router, formatCurrency }
   },
   data () {
     return {
@@ -801,6 +852,11 @@ export default {
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
     },
+
+    exportToExcel() {
+      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
+    },
+
   }
 }
 </script>
