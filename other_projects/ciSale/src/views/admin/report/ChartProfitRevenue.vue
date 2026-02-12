@@ -96,7 +96,7 @@
                 <label class="label-width text-white">
                    Xem
                 </label>
-                <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
               </div>
@@ -104,7 +104,9 @@
             </div>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading">
+              <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+            </span>
 
             <GChart
               type="ColumnChart"

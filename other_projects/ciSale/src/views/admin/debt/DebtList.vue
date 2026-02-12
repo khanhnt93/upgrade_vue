@@ -80,16 +80,14 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-              <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
+              <div class="btn-width-120 float-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
 
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Danh sách nợ thu hồi"
-                name    = "Danh sách nợ thu hồi">
+              <button
+                class="btn btn-default text-header btn-width-120 float-right"
+                @click="exportToExcel"
+                title="Xuất Excel">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
               </div>
             </div>
 
@@ -166,7 +164,9 @@
             </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+          </span>
           <span class="loading-more">--Hết--</span>
           </div>
         </div>
@@ -728,6 +728,9 @@ export default {
         return "Tháng"
       },
 
+    exportToExcel() {
+      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
+    }
 
   }
 }

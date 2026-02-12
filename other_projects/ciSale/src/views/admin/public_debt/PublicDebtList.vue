@@ -5,7 +5,7 @@
         <div class="card">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
-              <button class="btn btn-outline-success pull-right btn-width-120" @click="goToAdd">
+              <button class="btn btn-outline-success float-right btn-width-120" @click="goToAdd">
                 Thêm
               </button>
             </div>
@@ -69,7 +69,7 @@
 
           <div class="flex flex-wrap -mx-2 mt-2 mb-2">
             <div class="w-full px-2">
-              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+              <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="prepareToSearch">
                 Tìm Kiếm
               </button>
             </div>
@@ -77,18 +77,16 @@
 
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
-              <div class="btn-width-120 pull-left">Số kết quả:
+              <div class="btn-width-120 float-left">Số kết quả:
                 <span class="text-header"><b>{{totalRow}}</b></span>
               </div>
 
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Danh sách nợ phải trả"
-                name    = "Danh sách nợ phải trả">
+              <button
+                class="btn btn-default text-header btn-width-120 float-right"
+                @click="exportToExcel"
+                title="Xuất Excel">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -119,13 +117,13 @@
                 <tbody>
                   <tr>
                     <td class="total text-center font-weight-bold text-header" :colspan="7">Tổng</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_total | format_currency}}đ</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_remaining | format_currency}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_total)}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_remaining)}}đ</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_interest | format_currency}}</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_amount | format_currency}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_interest)}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_amount)}}</td>
                     <td></td>
                   </tr>
                   <tr v-for="(item) in items">
@@ -136,13 +134,13 @@
                     <td>{{item.status_str}}</td>
                     <td>{{item.created_at}}</td>
                     <td>{{item.appointment_date}}</td>
-                    <td class="text-right">{{item.total | format_currency}}</td>
-                    <td class="text-right">{{item.remaining | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.total)}}</td>
+                    <td class="text-right">{{formatCurrency(item.remaining)}}</td>
                     <td>{{item.interest_rate}}%</td>
                     <td>{{convertPeriodCodeToName(item.interest_period)}}</td>
                     <td>{{item.interest_period_real}}</td>
-                    <td class="text-right">{{item.interest | format_currency}}</td>
-                    <td class="text-right">{{item.amount | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.interest)}}</td>
+                    <td class="text-right">{{formatCurrency(item.amount)}}</td>
 
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
@@ -165,7 +163,9 @@
           </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+          </span>
           <span class="loading-more">--Hết--</span>
         </div>
       </div>
@@ -283,7 +283,7 @@
             <div class="flex flex-wrap -mx-2">
                 <div class="w-full px-2">
                   <label>
-                    Số tiền còn lại: <b>{{payData.remaining | format_currency}}đ</b>
+                    Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
                   </label>
                 </div>
             </div>
@@ -311,7 +311,7 @@
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
                 <label>
-                  Số tiền lãi: <b>{{payData.interest | format_currency}}đ</b>
+                  Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
                 </label>
               </div>
             </div>
@@ -319,7 +319,7 @@
               <div class="w-full px-2">
                 <label>
                   Tổng tiền phải trả:
-                  <b class="text-header">{{payData.total_amount | format_currency}}đ</b>
+                  <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
                 </label>
               </div>
             </div>
@@ -414,6 +414,7 @@ import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
+import { useFormatters } from '@/composables/useFormatters'
 
 
 export default {
@@ -423,7 +424,8 @@ export default {
   setup() {
     const { toast } = useToast()
     const router = useRouter()
-    return { toast, router }
+    const { formatCurrency } = useFormatters()
+    return { toast, router, formatCurrency }
   },
   data () {
     return {
@@ -763,6 +765,10 @@ export default {
       let valueInput = item.value
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
+    },
+
+    exportToExcel() {
+      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
     },
 
   }
