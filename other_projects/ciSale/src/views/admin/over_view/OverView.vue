@@ -122,7 +122,7 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2 text-center">
-                <a href="/repo-report">Xem nhiều hơn</a>
+                <a href="/chart-revenue">Xem nhiều hơn</a>
               </div>
             </div>
         </div>
