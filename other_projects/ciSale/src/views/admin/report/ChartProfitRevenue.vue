@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full p-4">
 
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
-          <div class="card-body p-4">
+        <div class="bg-white shadow rounded-lg">
+          <div class="p-6">
             <h4 class="text-center text-header">BIỂU ĐỒ DOANH THU</h4>
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/4 px-2">
@@ -12,7 +12,7 @@
                 <select
                   id="status"
                   autocomplete="new-password"
-                  class="form-control"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                   v-model="inputs.chartBy"
                   @change="changeChartBy"
                   :disabled="onSearch">
@@ -24,78 +24,30 @@
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="fromDate"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.fromDate"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">-->
-<!--                  Mục từ ngày không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM-dd" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="toDate"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.toDate"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">-->
-<!--                  Mục đến ngày không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM-dd" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Từ tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="fromMonth"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.fromMonth"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">-->
-<!--                  Mục từ tháng không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Đến tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="toMonth"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.toMonth"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">-->
-<!--                  Mục đến tháng không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
               <div class="w-full md:w-1/4 px-2">
                 <label class="label-width text-white">
                    Xem
                 </label>
-                <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+                <button class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white py-2 px-4 rounded float-right w-[120px]" :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
               </div>
