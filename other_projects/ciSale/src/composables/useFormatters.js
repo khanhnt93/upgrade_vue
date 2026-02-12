@@ -47,6 +47,7 @@ export function useFormatters() {
 
   return {
     formatCurrency,
+    currencyFormat: formatCurrency,
     formatDate,
     formatDateTime,
     formatNumber,

@@ -441,7 +441,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   &.active {
     background-color: rgba(255, 255, 255, 0.15);
     font-weight: 600;
-    border-left: 4px solid #ed592a;
+    border-left: 4px solid #ff8c42;
 
     .sidebar-icon,
     .sidebar-title {
@@ -558,7 +558,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   height: 20px;
   flex-shrink: 0;
   font-size: 18px;
-  color: #ed592a;
+  color: #ff8c42;
 }
 
 .popover-header-title {
@@ -595,7 +595,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   &.active {
     background-color: rgba(255, 255, 255, 0.2);
     font-weight: 600;
-    border-left: 3px solid #ed592a;
+    border-left: 3px solid #ff8c42;
     padding-left: 17px;
   }
 }
