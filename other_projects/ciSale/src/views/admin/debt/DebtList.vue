@@ -59,7 +59,6 @@
                 </label>
                 <select
                   id="status"
-                  type="text"
                   autocomplete="new-password"
                   class="form-control"
                   v-model="inputs.status">
