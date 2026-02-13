@@ -21,10 +21,10 @@
                   </option>
                 </select>
               </div>
-              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
+              <div class="w-full h-10 md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
+                            placeholder="yyyy-MM-dd" input-class="w-full h-10 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
