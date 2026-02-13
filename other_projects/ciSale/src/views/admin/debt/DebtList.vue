@@ -145,8 +145,8 @@
 
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
-                        <button class="btn btn-sm btn-outline-danger" title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-check-square-o"/>
+                        <button class="btn btn-sm btn-outline-success" title="Thanh toán" @click="openPayModal(item)">
+                          <i class="fa fa-money"/>
                         </button>
                         <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
@@ -340,7 +340,9 @@ import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
 import ConfirmModal from '@/components/common/ConfirmModal.vue'
-import { useExcelExport } from '@/composables/useExcelExport'
+
+
+// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
 
 export default {

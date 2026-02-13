@@ -146,7 +146,7 @@
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
                         <button class="btn btn-sm btn-outline-success" title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-credit-card"/>
+                          <i class="fa fa-money"/>
                         </button>
                         <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
@@ -272,74 +272,19 @@
       <!--</div>-->
     <!--</b-modal>-->
 
-    <div v-if="showPayModal" class="modal-backdrop">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <h5 class="text-center">Thanh toán</h5>
-                <hr>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-                <div class="w-full px-2">
-                  <label>
-                    Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
-                  </label>
-                </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <label>
-                  Lãi suất: {{payData.interest_rate}}%
-                </label>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <label>
-                  Kỳ hạn: {{payData.interest_period}}
-                </label>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <label>
-                  Thời gian tính lãi: {{payData.interest_period_real}}
-                </label>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <label>
-                  Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
-                </label>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <label>
-                  Tổng tiền phải trả:
-                  <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
-                </label>
-              </div>
-            </div>
-            <div class="flex flex-wrap -mx-2">
-                <div class="w-full px-2">
-                  <label>
-                    Số tiền trả
-                  </label>
-                  <input
-                    id="amount"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="payData.amount"
-                    @keyup="integerOnly($event.target)"
-                    @change="changeAmount()"
-                    maxlength="14">
-                </div>
-            </div>
+    <!-- Payment Modal -->
+    <TransitionRoot appear :show="showPayModal" as="template">
+      <Dialog as="div" @close="closePayModal" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
         <div class="fixed inset-0 overflow-y-auto">
           <div class="flex min-h-full items-center justify-center p-4 text-center">
@@ -489,6 +434,7 @@ import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
+import ConfirmModal from '@/components/common/ConfirmModal.vue'
 
 
 export default {
