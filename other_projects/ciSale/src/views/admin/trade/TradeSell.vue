@@ -85,7 +85,7 @@
                         <i class="fa fa-plus"></i>
                       </button>
 
-                      <button class="btn ml-2" v-show="customerSelect && customerSelect.id" variant="outline-success"
+                      <button class="btn pull-right ml-2" v-show="customerSelect && customerSelect.id" variant="outline-success"
                                 @click="updateCustomerInfo" >
                         <i class="fa fa-save"></i>
                       </button>
@@ -1273,8 +1273,136 @@
             </TransitionChild>
           </div>
         </div>
-      </Dialog>
-    </TransitionRoot>
+        <div class="w-full md:w-3/4 px-2">
+          <input
+            id="nameCus"
+            type="text"
+            class="form-control"
+            v-model="customer.name"
+            autocomplete="new-password"
+            maxlength="75">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Số Điện Thoại </label><span class="error-sybol"></span>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <input
+            id="phoneCuss"
+            type="text"
+            class="form-control"
+            v-model="customer.phone_number"
+            @keyup="integerOnly($event.target)"
+            autocomplete="new-password"
+            maxlength="20"
+            v-on:change="checkPhoneNumberFormat($event.target.value)">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Giới Tính</label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control" v-model="customer.gender">
+            <option v-for="option in optionsGender" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Ngày Tháng Năm Sinh</label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
+                                placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Tỉnh/ Thành Phố</label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control form-control"
+            id="city_id"
+            v-model="customer.city_id"
+            v-on:change="changeCity($event.target)">
+            <option v-for="option in optionsCity" :key="option.id" :value="option.id">
+              {{ option.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Quận/ Huyện</label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <select class="form-control form-control"
+            id="district_id"
+            v-model="customer.district_id"
+            :disabled="!customer.city_id">
+            <option v-for="option in optionsDistrict" :key="option.id" :value="option.id">
+              {{ option.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Địa chỉ </label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <input
+            id="addressCus"
+            type="text"
+            class="form-control"
+            v-model="customer.address"
+            autocomplete="new-password"
+            maxlength="255">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="w-full md:w-1/4 px-2 mt-2" >
+          <label>Mã số thuế </label>
+        </div>
+        <div class="w-full md:w-3/4 px-2">
+          <input
+            id="tax_code"
+            type="text"
+            class="form-control"
+            v-model="customer.tax_code"
+            @keyup="integerOnly($event.target)"
+            autocomplete="new-password"
+            maxlength="20">
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <div class="w-full px-2">
+          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backCustomer">
+            Hủy bỏ
+          </button>
+          <button class="btn pull-right btn-width-120" v-show="!savingCustomer" variant="outline-success"
+                     @click="saveCustomer"
+                    :disabled="savingCustomer">
+            Lưu
+          </button>
+          <span class="loading-more" v-show="savingCustomer"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
+
+        </div>
+      </div>
+
+    </div>
 
     <!--Modal thao tác sau khi xác nhận mua -->
     <!--Modal thao tác sau khi xác nhận mua -->

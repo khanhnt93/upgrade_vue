@@ -146,7 +146,7 @@
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
                         <button class="btn btn-sm btn-outline-success" title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-money"/>
+                          <i class="fa fa-credit-card"/>
                         </button>
                         <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
@@ -798,11 +798,6 @@ export default {
       let result = commonFunc.intergerOnly(valueInput)
       item.value = result
     },
-
-    exportToExcel() {
-      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
-    },
-
   }
 }
 </script>
