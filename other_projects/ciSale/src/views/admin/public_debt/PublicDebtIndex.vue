@@ -7,11 +7,11 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+                <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
                   Quay lại
                 </button>
 
-                <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
+                <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
                   Lưu
                 </button>
               </div>

@@ -12,7 +12,7 @@
                 <select
                   id="status"
                   autocomplete="new-password"
-                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                  class="w-full h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500"
                   v-model="inputs.chartBy"
                   @change="changeChartBy"
                   :disabled="onSearch">
@@ -21,33 +21,30 @@
                   </option>
                 </select>
               </div>
-              <div class="w-full h-10 md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
+              <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="w-full h-10 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
+                            placeholder="yyyy-MM-dd" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
+                            placeholder="yyyy-MM-dd" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Từ tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
+                            placeholder="yyyy-MM" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Đến tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" ></datepicker>
+                            placeholder="yyyy-MM" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
-              <div class="w-full md:w-1/4 px-2">
-                <label class="label-width text-white">
-                   Xem
-                </label>
-                <button class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white py-2 px-4 rounded float-right w-[120px]" :disabled="onSearch" @click.prevent="search">
+              <div class="w-full md:w-1/4 px-2 flex flex-col items-end">
+                <button class="mt-6 !ml-0 md:!mr-0 w-1/2 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white h-10 px-4 rounded" :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
               </div>
@@ -390,3 +387,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+:deep(.v3dp__input) {
+  height: 40px; /* Force height to match other inputs (h-10) */
+}
+</style>

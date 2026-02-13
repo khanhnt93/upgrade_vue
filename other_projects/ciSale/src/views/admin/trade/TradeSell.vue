@@ -21,7 +21,7 @@
             <hr/>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="form-row mt-2">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -83,7 +83,7 @@
                         <i class="fa fa-plus"></i>
                       </button>
 
-                      <button class="btn pull-right ml-2" v-show="customerSelect.id" variant="outline-success"
+                      <button class="btn pull-right ml-2" v-show="customerSelect && customerSelect.id" variant="outline-success"
                                 @click="updateCustomerInfo" >
                         <i class="fa fa-save"></i>
                       </button>
@@ -520,12 +520,12 @@
                   </div>
                   <div class="w-full md:w-3/4 px-2">
                     <select class="form-control form-control"
-                      :options="periodOptions"
                       id="interest_period"
-                      type="text"
                       autocomplete="new-password"
-
                       v-model="trade.interest_period">
+                      <option v-for="option in periodOptions" :key="option.value" :value="option.value">
+                        {{ option.text }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -643,7 +643,7 @@
                   <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
                   Xác Nhận Bán
                 </button>
-                <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+                <span class="loading-more" v-show="saving"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
               </div>
             </div>
 
@@ -1123,7 +1123,11 @@
           <label>Giới Tính</label>
         </div>
         <div class="w-full md:w-3/4 px-2">
-          <select class="form-control" :options="optionsGender" v-model="customer.gender"></select>
+          <select class="form-control" v-model="customer.gender">
+            <option v-for="option in optionsGender" :key="option.value" :value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -1144,12 +1148,12 @@
         <div class="w-full md:w-3/4 px-2">
           <select class="form-control form-control"
             id="city_id"
-            :options="optionsCity"
             v-model="customer.city_id"
-            type="text"
-
-            v-on:change="changeCity($event.target)"
-          ></select>
+            v-on:change="changeCity($event.target)">
+            <option v-for="option in optionsCity" :key="option.id" :value="option.id">
+              {{ option.name }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -1160,12 +1164,12 @@
         <div class="w-full md:w-3/4 px-2">
           <select class="form-control form-control"
             id="district_id"
-            :options="optionsDistrict"
             v-model="customer.district_id"
-            type="text"
-
-            :disabled="!customer.city_id"
-          ></select>
+            :disabled="!customer.city_id">
+            <option v-for="option in optionsDistrict" :key="option.id" :value="option.id">
+              {{ option.name }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -1210,7 +1214,7 @@
                     :disabled="savingCustomer">
             Lưu
           </button>
-          <span class="loading-more" v-show="savingCustomer"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="savingCustomer"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
 
         </div>
       </div>
@@ -1282,7 +1286,7 @@
         </div>
         <div class="w-full md:w-1/2 px-2">
           <!-- Loading -->
-          <span class="loading-more" v-show="loadingConfirmPmt"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loadingConfirmPmt"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
 
           <button v-show="!loadingConfirmPmt" class="btn btn-primary pull-right px-4 default-btn-bg"
                   @click="confirmApplyPmt()">
@@ -1367,20 +1371,20 @@ export default {
   data () {
     return {
       loadingGetOptions: false,
-      orderSelect: {},
+      orderSelect: null,
       orderOptions: [],
-      customerSelect: {},
+      customerSelect: null,
       customerOptions: [],
       customerOptionStore: [],
-      productGroupSelect: {},
-      productGroupSearchSelect: {},
+      productGroupSelect: null,
+      productGroupSearchSelect: null,
       productGroupOptions:[],
-      productTypeSelect:{},
-      productTypeSearchSelect: {},
+      productTypeSelect: null,
+      productTypeSearchSelect: null,
       productTypeOptions:[],
       productTypeSearchOptions:[],
       productTypeOptionStore: [],
-      productSelect: {},
+      productSelect: null,
       productOptions: [],
       productOptionStore: [],
       unitOptions:[],
@@ -1502,7 +1506,7 @@ export default {
         "name": null,
         "phone_number": null,
         "gender": null,
-        "birthday": null,
+        "birthday": new Date(),
         "city_id": null,
         "district_id": null,
         "address": null,
@@ -1606,8 +1610,9 @@ export default {
     this.today_month = dateNow.getMonth() + 1
     this.today_year = dateNow.getFullYear()
 
-    let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
-    this.trade.appointment_date = toDate.toJSON().slice(0,10)
+    let toDate = new Date()
+    toDate.setDate(dateNow.getDate() + 60)
+    this.trade.appointment_date = toDate
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
@@ -1822,7 +1827,7 @@ export default {
           "name": null,
           "phone_number": null,
           "gender": null,
-          "birthday": null,
+          "birthday": new Date(),
           "city_id": null,
           "district_id": null,
           "address": null,
@@ -1852,7 +1857,13 @@ export default {
 
       // Add
       this.savingCustomer = true
-      customerApi.addCustomerByStore(this.customer).then(res => {
+      let customerData = JSON.parse(JSON.stringify(this.customer))
+      if (customerData.birthday) {
+          try {
+              customerData.birthday = new Date(customerData.birthday).toISOString().slice(0,10)
+          } catch(e) {}
+      }
+      customerApi.addCustomerByStore(customerData).then(res => {
         this.savingCustomer = false
         if(res != null && res.data != null){
           if (res.data.status == 200) {
@@ -2265,13 +2276,17 @@ export default {
 
         // Chọn nhóm sp
         this.getProductGroupSelectedById(this.productSelect.product_group_id)
-        this.currentProduct.product_group_id = this.productGroupSelect.id
-        this.currentProduct.product_group_name = this.productGroupSelect.name
+        if (this.productGroupSelect) {
+            this.currentProduct.product_group_id = this.productGroupSelect.id
+            this.currentProduct.product_group_name = this.productGroupSelect.name
+        }
 
         // Chọn loại sp
         this.getProductTypeSelectedById(this.productSelect.product_type_id)
-          this.currentProduct.product_type_id = this.productTypeSelect.id
-          this.currentProduct.product_type_name = this.productTypeSelect.name
+        if (this.productTypeSelect) {
+            this.currentProduct.product_type_id = this.productTypeSelect.id
+            this.currentProduct.product_type_name = this.productTypeSelect.name
+        }
       }
     },
 
@@ -2660,10 +2675,15 @@ export default {
       this.trade.discount_amount = this.currencyFormat((this.trade.discount_amount + '').replaceAll(",", ""))
       this.trade.vat_value = this.currencyFormat((this.trade.vat_value + '').replaceAll(",", ""))
 
+      if (this.trade.appointment_date) {
+        this.trade.appointment_date = new Date(this.trade.appointment_date)
+      }
+
       if(!this.trade.appointment_date) {
         let dateNow = new Date()
-        let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
-        this.trade.appointment_date = toDate.toJSON().slice(0,10)
+        let toDate = new Date()
+        toDate.setDate(toDate.getDate() + 60)
+        this.trade.appointment_date = toDate
         this.trade.forewarning = 30
       }
 
@@ -2691,6 +2711,13 @@ export default {
       // Reformat data
       let data = JSON.parse(JSON.stringify(this.trade))
       data.sub_total = (data.sub_total + '').replaceAll(",", "")
+      if (data.appointment_date) {
+          try {
+              data.appointment_date = new Date(data.appointment_date).toISOString().slice(0,10)
+          } catch (e) {
+              // ignore
+          }
+      }
 
       let extra_fee = 0
       if(data.extra_fee) {
@@ -2760,7 +2787,14 @@ export default {
 
       // Reformat data
       let data = JSON.parse(JSON.stringify(this.trade))
-      data.sub_total = (data.sub_total + '').replaceAll(",", "")
+      data.sub_total = (data.sub_total + '').replaceAll(",", "") // check line 2763 in view_file 1227
+      if (data.appointment_date) {
+          try {
+              data.appointment_date = new Date(data.appointment_date).toISOString().slice(0,10)
+          } catch (e) {
+              // ignore
+          }
+      }
       let extra_fee = 0
         if(data.extra_fee) {
             extra_fee = (data.extra_fee + '').replaceAll(",", "")
@@ -2852,6 +2886,13 @@ export default {
         // Reformat data
         let data = JSON.parse(JSON.stringify(this.trade))
         data.sub_total = (data.sub_total + '').replaceAll(",", "")
+        if (data.appointment_date) {
+            try {
+                data.appointment_date = new Date(data.appointment_date).toISOString().slice(0,10)
+            } catch (e) {
+               // ignore
+            }
+        }
         let extra_fee = 0
         if(data.extra_fee) {
             extra_fee = (data.extra_fee + '').replaceAll(",", "")

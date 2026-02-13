@@ -103,7 +103,7 @@
           </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
         </div>
@@ -204,9 +204,10 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.to_date = dateNow
+    let fromDate = new Date()
+    fromDate.setDate(dateNow.getDate() - 6)
+    this.inputs.from_date = fromDate
 
     window.addEventListener('scroll', this.onScroll)
 
@@ -377,8 +378,8 @@ export default {
         "product_group_id": this.productGroupSelect && this.productGroupSelect.id ? this.productGroupSelect.id : null,
         "product_type_id": this.productTypeSelect && this.productTypeSelect.id ? this.productTypeSelect.id : null,
         "product_id": null,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? this.inputs.from_date.toISOString().slice(0,10) : null,
+        "to_date": this.inputs.to_date ? this.inputs.to_date.toISOString().slice(0,10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }

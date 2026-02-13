@@ -83,7 +83,7 @@
 
               <button
                 class="btn btn-default text-header btn-width-120 float-right"
-                @click="exportToExcel"
+                @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
                 title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
@@ -146,7 +146,7 @@
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
                         <button class="btn btn-sm btn-outline-success" title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-money"/>
+                          <i class="fa fa-credit-card"/>
                         </button>
                         <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
@@ -340,9 +340,7 @@ import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
 import ConfirmModal from '@/components/common/ConfirmModal.vue'
-
-
-// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 export default {
@@ -360,12 +358,14 @@ export default {
     const { toast } = useToast()
     const router = useRouter()
     const { formatCurrency, currencyFormat } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
       router,
       formatCurrency,
-      currencyFormat
+      currencyFormat,
+      exportToExcel
     }
   },
   data () {
@@ -732,11 +732,6 @@ export default {
         }
         return "Tháng"
       },
-
-    exportToExcel() {
-      this.toast('Chức năng xuất Excel sẽ được cập nhật sau', 'info')
-    }
-
   }
 }
 </script>

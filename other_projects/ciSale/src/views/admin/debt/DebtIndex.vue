@@ -55,7 +55,7 @@
                   v-model="debt.customer_name"
                   autocomplete="new-password"
                   maxlength="50">
-                <div class="invalid-feedback { 'd-block': errorName }" >
+                <div v-if="errorName" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập tên khách hàng
                 </div>
               </div>
@@ -74,7 +74,7 @@
                   autocomplete="new-password"
                   @keyup="integerOnly($event.target)"
                   maxlength="11">
-                <div class="invalid-feedback { 'd-block': errorPhone }" >
+                <div v-if="errorPhone" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập số điện thoại
                 </div>
               </div>
@@ -124,7 +124,7 @@
                   maxlength="14"
                   @keyup="integerOnly($event.target)"
                   @change="changeTotal()">
-                <div class="invalid-feedback { 'd-block': errorTotal }" >
+                <div v-if="errorTotal" class="text-red-600 text-sm mt-1">
                   Vui lòng nhập số tiền
                 </div>
               </div>
