@@ -80,14 +80,9 @@
               <div class="w-full px-2">
                 <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
 
-                <download-excel
-                  class   = "btn btn-default text-header btn-width-120 pull-right"
-                  :data   = "items"
-                  :fields = "excel_fields"
-                  worksheet = "Lịch sử quỹ"
-                  name    = "Lịch sử quỹ">
+                <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Lich_su_quy')">
                   <b>Xuất Excel</b>
-                </download-excel>
+                </button>
               </div>
             </div>
 
@@ -282,6 +277,7 @@ import commonFunc from "@/common/commonFunc";
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
@@ -298,11 +294,13 @@ export default {
   setup() {
     const { toast } = useToast()
     const { formatCurrency, currencyFormat } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
       formatCurrency,
-      currencyFormat
+      currencyFormat,
+      exportToExcel
     }
   },
   data() {

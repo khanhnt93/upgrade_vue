@@ -72,14 +72,9 @@
               Số kết quả: {{items.length}}
             </div>
             <div class="w-full md:w-2/3 px-2 text-right">
-              <download-excel
-                class   = "btn btn-default text-header"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Lịch sử công nợ"
-                name    = "lich_su_cong_no.xls">
+              <button class="btn btn-default text-header" @click="exportToExcel(items, excel_fields, 'lich_su_cong_no.xls')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -133,6 +128,7 @@ import debitApi from '@/api/debt'
 import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Datepicker from 'vue3-datepicker'
@@ -146,7 +142,8 @@ export default {
   },
   setup() {
     const { toast } = useToast()
-    return { toast }
+    const { exportToExcel } = useExcelExport()
+    return { toast, exportToExcel }
   },
   data () {
     return {

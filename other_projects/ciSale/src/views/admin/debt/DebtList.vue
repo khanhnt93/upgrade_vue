@@ -82,14 +82,9 @@
               <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
 
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Danh sách nợ thu hồi"
-                name    = "Danh sách nợ thu hồi">
+              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
               </div>
             </div>
 
@@ -341,6 +336,7 @@ import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
@@ -359,12 +355,14 @@ export default {
     const { toast } = useToast()
     const router = useRouter()
     const { formatCurrency, currencyFormat } = useFormatters()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
       router,
       formatCurrency,
-      currencyFormat
+      currencyFormat,
+      exportToExcel
     }
   },
   data () {

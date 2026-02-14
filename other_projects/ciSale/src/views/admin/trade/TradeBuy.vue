@@ -7,7 +7,7 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/2 px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+                <button class="btn btn-outline-secondary btn-width-120" @click="back">
                   Quay lại
                 </button>
               </div>
@@ -25,11 +25,13 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2 bg-gray text-white title-partner">
-                <h5>
-                  <span class="pull-left">Thông tin nguồn mua</span>
-                  <span class="pull-right" v-show="showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-down" /></span>
-                </h5>
+                <div class="flex justify-between items-center py-2">
+                  <h5 class="mb-0">Thông tin nguồn mua</h5>
+                  <button @click="showPartnerInfo = !showPartnerInfo" class="text-white hover:text-gray-200 cursor-pointer">
+                    <i class="fa fa-angle-double-up" v-show="showPartnerInfo" />
+                    <i class="fa fa-angle-double-down" v-show="!showPartnerInfo" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -63,7 +65,8 @@
                       placeholder="--Chọn nhà cung cấp--"
                       label="name"
                       track-by="name"
-                      @input="changeSupplier">
+                      @input="changeSupplier"
+                      @select="changeSupplier">
                     </multiselect>
 
                     <div class="input-group" v-show="trade.from_type == 0">
@@ -74,14 +77,15 @@
                         placeholder="--Chọn khách hàng--"
                         label="name"
                         track-by="name"
-                        @input="changeCustomer">
+                        @input="changeCustomer"
+                        @select="changeCustomer">
                       </multiselect>
 
-                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchCustomer" >
+                      <button class="btn btn-outline-primary ml-2"  @click="showModalSearchCustomer" >
                         <i class="fa fa-search"></i>
                       </button>
 
-                      <button class="btn btn-outline-success pull-right ml-2"  @click="showModalAddCustomer" >
+                      <button class="btn btn-outline-success ml-2"  @click="showModalAddCustomer" >
                         <i class="fa fa-plus"></i>
                       </button>
                     </div>
@@ -185,11 +189,13 @@
 
             <div class="mt-3">
               <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
-                <h5>
-                  <span class="pull-left">Thông tin sản phẩm</span>
-                  <span class="pull-right" v-show="showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-down" /></span>
-                </h5>
+                <div class="flex justify-between items-center py-2">
+                  <h5 class="mb-0">Thông tin sản phẩm</h5>
+                  <button @click="showProductInfo = !showProductInfo" class="text-white hover:text-gray-200 cursor-pointer">
+                    <i class="fa fa-angle-double-up" v-show="showProductInfo" />
+                    <i class="fa fa-angle-double-down" v-show="!showProductInfo" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -257,14 +263,15 @@
                         placeholder="--Chọn sản phẩm--"
                         label="name_full"
                         track-by="name_full"
-                        @input="changeProduct">
+                        @input="changeProduct"
+                        @select="changeProduct">
                       </multiselect>
 
-                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchProduct" >
+                      <button class="btn btn-outline-primary ml-2"  @click="showModalSearchProduct" >
                         <i class="fa fa-search"></i>
                       </button>
 
-                      <button class="btn btn-outline-success pull-right ml-2"  @click="showModalAddProduct" >
+                      <button class="btn btn-outline-success ml-2"  @click="showModalAddProduct" >
                         <i class="fa fa-plus"></i>
                       </button>
                     </div>
@@ -391,11 +398,13 @@
 
             <div class="mt-3">
               <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
-                <h5>
-                  <span class="pull-left">Thông tin thanh toán</span>
-                  <span class="pull-right" v-show="showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-down" /></span>
-                </h5>
+                <div class="flex justify-between items-center py-2">
+                  <h5 class="mb-0">Thông tin thanh toán</h5>
+                  <button @click="showPaymentInfo = !showPaymentInfo" class="text-white hover:text-gray-200 cursor-pointer">
+                    <i class="fa fa-angle-double-up" v-show="showPaymentInfo" />
+                    <i class="fa fa-angle-double-down" v-show="!showPaymentInfo" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -656,7 +665,7 @@
 
             <div class="mt-2">
               <div class="w-full px-2 text-center" >
-                <button class="btn btn-outline-primary pull-right btn-width-200"  @click="printProvisionalInvoice">
+                <button class="btn btn-outline-primary btn-width-200"  @click="printProvisionalInvoice">
                   In hóa đơn tạm tính
                 </button>
               </div>
@@ -806,13 +815,17 @@
     </div>
 
     <!--Modal thêm nhóm sản phẩm -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-group-product">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Thêm nhóm sản phẩm</h4>
-          </div>
-        </div>
-        <hr>
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.addGroupProduct" class="modal-overlay" @click="backGroupProduct">
+          <div class="modal-container modal-lg" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Thêm nhóm sản phẩm</h4>
+              <button @click="backGroupProduct" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
 
         <div class="form-row">
           <div class="w-full px-2 mt-2" >
@@ -844,29 +857,41 @@
 
         <div class="mt-2">
               <div class="w-full px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backGroupProduct">
+                <button class="btn btn-outline-secondary float-left btn-width-120"  @click="backGroupProduct">
                   Hủy bỏ
                 </button>
-                <button class="btn pull-right btn-width-120" v-show="!savingGroupProduct" variant="outline-success"
+                <button class="btn float-right btn-width-120" v-show="!savingGroupProduct" variant="outline-success"
                            @click="saveGroupProduct"
                           :disabled="savingGroupProduct">
                     Lưu
                 </button>
-                <span class="loading-more" v-show="savingGroupProduct"><icon name="loading" width="60" /></span>
+                <div class="loading-more" v-show="savingGroupProduct">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
 
               </div>
             </div>
 
-      </div>
-
-    <!--Modal thêm loại sản phẩm -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-type-product">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Thêm loại sản phẩm</h4>
+            </div>
           </div>
         </div>
-        <hr>
+      </Transition>
+    </Teleport>
+
+    <!--Modal thêm loại sản phẩm -->
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.addTypeProduct" class="modal-overlay" @click="backTypeProduct">
+          <div class="modal-container modal-lg" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Thêm loại sản phẩm</h4>
+              <button @click="backTypeProduct" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
 
         <div class="form-row">
           <div class="w-full px-2 mt-2" >
@@ -878,7 +903,8 @@
                 placeholder="--Chọn nhóm sản phẩm--"
                 label="name"
                 track-by="name"
-                @input="changeProductGroupWhenAddType">
+                @input="changeProductGroupWhenAddType"
+                @select="changeProductGroupWhenAddType">
               </multiselect>
           </div>
         </div>
@@ -911,29 +937,41 @@
 
         <div class="mt-2">
               <div class="w-full px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backTypeProduct">
+                <button class="btn btn-outline-secondary float-left btn-width-120"  @click="backTypeProduct">
                   Hủy bỏ
                 </button>
-                <button class="btn pull-right btn-width-120" v-show="!savingTypeProduct" variant="outline-success"
+                <button class="btn float-right btn-width-120" v-show="!savingTypeProduct" variant="outline-success"
                            @click="saveTypeProduct"
                           :disabled="savingTypeProduct">
                     Lưu
                 </button>
-                <span class="loading-more" v-show="savingTypeProduct"><icon name="loading" width="60" /></span>
+                <div class="loading-more" v-show="savingTypeProduct">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
 
               </div>
             </div>
 
-      </div>
-
-      <!--Modal thêm sản phẩm -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-product">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Thêm sản phẩm</h4>
+            </div>
           </div>
         </div>
-        <hr>
+      </Transition>
+    </Teleport>
+
+      <!--Modal thêm sản phẩm -->
+      <Teleport to="body">
+        <Transition name="modal" appear>
+          <div v-if="modalStates.addProduct" class="modal-overlay" @click="backProduct">
+            <div class="modal-container modal-lg" @click.stop>
+              <div class="modal-header">
+                <h4 class="modal-title text-success">Thêm sản phẩm</h4>
+                <button @click="backProduct" class="modal-close-button">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+              <div class="modal-body">
 
         <div class="form-row">
           <div class="w-full px-2 mt-2" >
@@ -945,7 +983,8 @@
                 placeholder="--Chọn nhóm sản phẩm--"
                 label="name"
                 track-by="name"
-                @input="changeProductGroupWhenAddProduct">
+                @input="changeProductGroupWhenAddProduct"
+                @select="changeProductGroupWhenAddProduct">
               </multiselect>
           </div>
         </div>
@@ -960,7 +999,8 @@
                 placeholder="--Chọn loại sản phẩm--"
                 label="name"
                 track-by="name"
-                @input="changeProductTypeWhenAddProduct">
+                @input="changeProductTypeWhenAddProduct"
+                @select="changeProductTypeWhenAddProduct">
               </multiselect>
           </div>
         </div>
@@ -1031,29 +1071,41 @@
 
         <div class="mt-2">
           <div class="w-full px-2">
-            <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backProduct">
+            <button class="btn btn-outline-secondary float-left btn-width-120"  @click="backProduct">
               Hủy bỏ
             </button>
-            <button class="btn pull-right btn-width-120" v-show="!savingProduct" variant="outline-success"
+            <button class="btn float-right btn-width-120" v-show="!savingProduct" variant="outline-success"
                        @click="saveProduct"
                       :disabled="savingProduct">
               Lưu
             </button>
-            <span class="loading-more" v-show="savingProduct"><icon name="loading" width="60" /></span>
+            <div class="loading-more" v-show="savingProduct">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
 
           </div>
         </div>
 
-      </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
 
       <!--Modal tìm kiếm sản phẩm -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h4>
-          </div>
-        </div>
-        <hr>
+      <Teleport to="body">
+        <Transition name="modal" appear>
+          <div v-if="modalStates.searchProduct" class="modal-overlay" @click="hideModalSearchProduct">
+            <div class="modal-container modal-xl" @click.stop>
+              <div class="modal-header">
+                <h4 class="modal-title text-success">Tìm kiếm sản phẩm</h4>
+                <button @click="hideModalSearchProduct" class="modal-close-button">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+              <div class="modal-body modal-scroll">
 
         <div class="form-row">
           <div class="w-full md:w-1/4 px-2 mt-2" >
@@ -1065,7 +1117,8 @@
               placeholder="--Chọn nhóm sản phẩm--"
               label="name"
               track-by="name"
-              @input="changeProductGroupSearch">
+              @input="changeProductGroupSearch"
+              @select="changeProductGroupSearch">
             </multiselect>
           </div>
 
@@ -1078,7 +1131,8 @@
               placeholder="--Chọn loại sản phẩm--"
               label="name"
               track-by="name"
-              @input="changeProductTypeSearch">
+              @input="changeProductTypeSearch"
+              @select="changeProductTypeSearch">
             </multiselect>
           </div>
 
@@ -1107,11 +1161,11 @@
 
         <div class="mt-2">
           <div class="w-full px-2">
-            <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchProduct">
+            <button class="btn btn-outline-secondary float-left btn-width-120"  @click.prevent="hideModalSearchProduct">
               Quay lại
             </button>
 
-            <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchProduct"
+            <button class="btn btn-outline-primary float-right btn-width-120"  :disabled="onSearchProduct"
                       @click.prevent="searchProduct">
               Tìm Kiếm
             </button>
@@ -1130,7 +1184,7 @@
                 <tr v-for="(item, index) in productSearchItems" :key="index">
                   <td v-for="field in productSearchFields" :key="field.key">
                     <template v-if="field.key === 'actions'">
-                      <button class="btn btn-outline-success pull-right btn-width-120"
+                      <button class="btn btn-outline-success float-right btn-width-120"
                         @click.prevent="chooseProduct(item.id)">
                         Chọn
                       </button>
@@ -1151,16 +1205,24 @@
           </div>
         </div>
 
-      </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
 
     <!--Modal tìm kiếm khách hàng -->
-    <div centered hide-footer hide-header size="xl" id="modal-search-customer">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </div>
-      </div>
-      <hr>
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.searchCustomer" class="modal-overlay" @click="hideModalSearchCustomer">
+          <div class="modal-container modal-xl" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Tìm kiếm khách hàng</h4>
+              <button @click="hideModalSearchCustomer" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body modal-scroll">
 
       <div class="flex flex-wrap -mx-2">
         <div class="w-full md:w-1/2 px-2">
@@ -1188,11 +1250,11 @@
 
       <div class="mt-2">
         <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchCustomer">
+          <button class="btn btn-outline-secondary float-left btn-width-120"  @click.prevent="hideModalSearchCustomer">
             Quay lại
           </button>
 
-          <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+          <button class="btn btn-outline-primary float-right btn-width-120"  :disabled="onSearchCustomer" @click.prevent="searchCustomer">
             Tìm Kiếm
           </button>
         </div>
@@ -1210,7 +1272,7 @@
               <tr v-for="(item, index) in customerSearchItems" :key="index">
                 <td v-for="field in customerSearchFields" :key="field.key">
                   <template v-if="field.key === 'action'">
-                    <button class="btn btn-outline-success pull-right btn-width-120"
+                    <button class="btn btn-outline-success float-right btn-width-120"
                       @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
                       Chọn
                     </button>
@@ -1231,16 +1293,24 @@
         </div>
       </div>
 
-    </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
 
     <!--Modal thêm khách hàng -->
-    <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-customer">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Thêm khách hàng</h4>
-        </div>
-      </div>
-      <hr>
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.addCustomer" class="modal-overlay" @click="backCustomer">
+          <div class="modal-container modal-lg" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Thêm khách hàng</h4>
+              <button @click="backCustomer" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body modal-scroll">
 
       <div class="form-row">
         <div class="w-full md:w-1/4 px-2 mt-2" >
@@ -1370,10 +1440,10 @@
 
       <div class="mt-2">
         <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backCustomer">
+          <button class="btn btn-outline-secondary float-left btn-width-120"  @click="backCustomer">
             Hủy bỏ
           </button>
-          <button class="btn pull-right btn-width-120" v-show="!savingCustomer" variant="outline-success"
+          <button class="btn float-right btn-width-120" v-show="!savingCustomer" variant="outline-success"
                      @click="saveCustomer"
                     :disabled="savingCustomer">
             Lưu
@@ -1383,44 +1453,59 @@
         </div>
       </div>
 
-    </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
 
     <!--Modal thao tác sau khi xác nhận mua -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-actions">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Mua hàng thành công!</h4>
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.actions" class="modal-overlay" @click="back">
+          <div class="modal-container modal-lg" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Mua hàng thành công!</h4>
+              <button @click="back" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="flex flex-wrap -mx-2">
+                <div md="4" class="mt-2 text-center">
+                  <button class="btn btn-outline-secondary text-center btn-width-120"  @click="back">
+                    Quay lại
+                  </button>
+                </div>
+                <div md="4" class="mt-2 text-center">
+                  <button class="btn btn-outline-success text-center btn-width-120"  @click="buyNext">
+                    Mua tiếp
+                  </button>
+                </div>
+                <div md="4" class="mt-2 text-center">
+                  <button class="btn btn-outline-primary text-center btn-width-120"  @click="printInvoice">
+                    In hóa đơn
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <hr>
-
-        <div class="flex flex-wrap -mx-2">
-          <div md="4" class="mt-2 text-center">
-            <button class="btn btn-outline-secondary text-center btn-width-120"  @click="back">
-              Quay lại
-            </button>
-          </div>
-          <div md="4" class="mt-2 text-center">
-            <button class="btn btn-outline-success text-center btn-width-120"  @click="buyNext">
-              Mua tiếp
-            </button>
-          </div>
-          <div md="4" class="mt-2 text-center">
-            <button class="btn btn-outline-primary text-center btn-width-120"  @click="printInvoice">
-              In hóa đơn
-            </button>
-          </div>
-        </div>
-
-      </div>
+      </Transition>
+    </Teleport>
 
     <!--Modal tính số lượng thực tế dựa trên tạp và độ ẩm -->
-    <div centered hide-footer hide-header size="lg" id="modal-cal-impurities-moisture">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h4 class="modal-title text-center text-header">Tính toán dựa trên độ ẩm và tạp</h4>
-        </div>
-      </div>
+    <Teleport to="body">
+      <Transition name="modal" appear>
+        <div v-if="modalStates.calImpuritiesMoisture" class="modal-overlay" @click="hideModalCafeCalBy">
+          <div class="modal-container modal-lg" @click.stop>
+            <div class="modal-header">
+              <h4 class="modal-title">Tính toán dựa trên độ ẩm và tạp</h4>
+              <button @click="hideModalCafeCalBy" class="modal-close-button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body modal-scroll">
 
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
@@ -1435,11 +1520,11 @@
               v-model="cafe_impurities_and_moisture.moisture_default"
               @keyup="integerAndPointOnly($event.target)"
               :disabled="!edit_moisture_default">
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_moisture_default == false" variant="outline-primary"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_moisture_default == false" variant="outline-primary"
                       @click="edit_moisture_default = true">
               Sửa
             </button>
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_moisture_default == true" variant="outline-success"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_moisture_default == true" variant="outline-success"
                       @click="updateStoreSetting('moisture_default')">
               Lưu
             </button>
@@ -1460,11 +1545,11 @@
               v-model="cafe_impurities_and_moisture.impurities_default"
               @keyup="integerAndPointOnly($event.target)"
               :disabled="!edit_impurities_default">
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_impurities_default == false" variant="outline-primary"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_impurities_default == false" variant="outline-primary"
                       @click="edit_impurities_default = true">
               Sửa
             </button>
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_impurities_default == true" variant="outline-success"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_impurities_default == true" variant="outline-success"
                       @click="updateStoreSetting('impurities_default')">
               Lưu
             </button>
@@ -1485,11 +1570,11 @@
               v-model="cafe_impurities_and_moisture.bad_weight_default"
               @keyup="integerAndPointOnly($event.target)"
               :disabled="!edit_bad_weight_default">
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_bad_weight_default == false" variant="outline-primary"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_bad_weight_default == false" variant="outline-primary"
                       @click="edit_bad_weight_default = true">
               Sửa
             </button>
-            <button class="btn ml-2 pull-right text-center btn-width-80" v-show="edit_bad_weight_default == true" variant="outline-success"
+            <button class="btn ml-2 float-right text-center btn-width-80" v-show="edit_bad_weight_default == true" variant="outline-success"
                       @click="updateStoreSetting('bad_weight_default')">
               Lưu
             </button>
@@ -1564,19 +1649,23 @@
 
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left text-center btn-width-120"  :disabled="loading"
+          <button class="btn btn-outline-secondary float-left text-center btn-width-120"  :disabled="loading"
                     @click="hideModalCafeCalBy">
             Quay lại
           </button>
 
-          <button class="btn btn-outline-primary pull-right text-center btn-width-120"  :disabled="loading"
+          <button class="btn btn-outline-primary float-right text-center btn-width-120"  :disabled="loading"
                     @click="calQuantityByImpuritiesAndMoisture">
             Xác nhận
           </button>
         </div>
       </div>
 
-    </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
 
   </div>
 </template>
@@ -1594,6 +1683,8 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useAuthStore } from '@/stores/auth'
+import { useToastNotification } from '@/composables/useToast'
+import { parseISO, format } from 'date-fns'
 
 export default {
   components: {
@@ -1602,9 +1693,24 @@ export default {
   },
   setup() {
     const authStore = useAuthStore()
+    const { popToast } = useToastNotification()
+
+    // Date formatting functions
+    const parseDate = (dateString) => {
+      if (!dateString) return null
+      return parseISO(dateString)
+    }
+
+    const formatDate = (date) => {
+      if (!date) return null
+      return format(date, 'yyyy-MM-dd')
+    }
 
     return {
-      authStore
+      authStore,
+      popToast,
+      parseDate,
+      formatDate
     }
   },
   data () {
@@ -1857,10 +1963,26 @@ export default {
       ],
       customerSearchItems: [],
 
+      // Modal states
+      modalStates: {
+        addGroupProduct: false,
+        addTypeProduct: false,
+        addProduct: false,
+        searchProduct: false,
+        searchCustomer: false,
+        addCustomer: false,
+        actions: false,
+        calImpuritiesMoisture: false
+      }
+
     }
   },
   created() {
     document.addEventListener('beforeunload', this.checkUpdateDraft())
+    document.addEventListener('keydown', this.handleEscapeKey)
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleEscapeKey)
   },
   mounted() {
     // Get today day, month, year
@@ -1893,15 +2015,15 @@ export default {
   methods: {
 
     /**
-     * Make toast without title
+     * Handle escape key to close modals
      */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
+    handleEscapeKey(event) {
+      if (event.key === 'Escape') {
+        // Close any open modal
+        Object.keys(this.modalStates).forEach(key => {
+          this.modalStates[key] = false
+        })
+      }
     },
 
       /**
@@ -1933,7 +2055,7 @@ export default {
     },
 
     showModalAddGroupProduct() {
-        this.$bvModal.show('modal-add-group-product')
+        this.modalStates.addGroupProduct = true
       },
 
     backGroupProduct() {
@@ -1941,7 +2063,7 @@ export default {
         "code": null,
         "name": null,
       }
-        this.$bvModal.hide('modal-add-group-product')
+        this.modalStates.addGroupProduct = false
     },
 
       /**
@@ -1990,7 +2112,7 @@ export default {
 
       showModalAddTypeProduct() {
         this.productType.productGroupSelect = this.getProductGroupSelectedById(this.currentProduct.product_group_id)
-        this.$bvModal.show('modal-add-type-product')
+        this.modalStates.addTypeProduct = true
       },
 
     backTypeProduct() {
@@ -1999,7 +2121,7 @@ export default {
         "code": null,
         "name": null,
       }
-        this.$bvModal.hide('modal-add-type-product')
+        this.modalStates.addTypeProduct = false
     },
 
       /**
@@ -2056,15 +2178,15 @@ export default {
     showModalAddProduct() {
       this.product.product_group_id = this.currentProduct.product_group_id
       this.product.product_type_id = this.currentProduct.product_type_id
-      this.$bvModal.show('modal-add-product')
+      this.modalStates.addProduct = true
     },
 
     showModalSearchProduct() {
-      this.$bvModal.show('modal-search-product')
+      this.modalStates.searchProduct = true
     },
 
     hideModalSearchProduct() {
-      this.$bvModal.hide('modal-search-product')
+      this.modalStates.searchProduct = false
     },
 
     backProduct() {
@@ -2077,7 +2199,7 @@ export default {
           "unit_id": null,
           "description": null
       }
-      this.$bvModal.hide('modal-add-product')
+      this.modalStates.addProduct = false
     },
 
     /**
@@ -2209,11 +2331,11 @@ export default {
     },
 
     showModalAddCustomer() {
-      this.$bvModal.show('modal-add-customer')
+      this.modalStates.addCustomer = true
     },
 
     showModalSearchCustomer() {
-      this.$bvModal.show('modal-search-customer')
+      this.modalStates.searchCustomer = true
     },
 
     backCustomer() {
@@ -2228,23 +2350,11 @@ export default {
           "address": null,
           "tax_code": null,
       }
-      this.$bvModal.hide('modal-add-customer')
+      this.modalStates.addCustomer = false
     },
 
     hideModalSearchCustomer() {
-      this.$bvModal.hide('modal-search-customer')
-    },
-
-    saveCustomer() {
-      // Check validate
-      if(!this.customer.type) {
-        this.popToast('danger', "Vui lòng chọn loại khách hàng")
-        return
-      }
-      if(!this.customer.name) {
-        this.popToast('danger', "Vui lòng nhập tên khách hàng")
-        return
-      }
+      this.modalStates.searchCustomer = false
       if(!this.customer.phone_number) {
         this.popToast('danger', "Vui lòng nhập số điện thoại khách hàng")
         return
@@ -2319,7 +2429,7 @@ export default {
 
       this.getCustomerItemById(this.trade.customer_id)
 
-      this.$bvModal.hide('modal-search-customer')
+      this.modalStates.searchCustomer = false
     },
 
       /**
@@ -2989,11 +3099,11 @@ export default {
     },
 
     showModalCafeCalBy() {
-      this.$bvModal.show('modal-cal-impurities-moisture')
+      this.modalStates.calImpuritiesMoisture = true
     },
 
     hideModalCafeCalBy() {
-      this.$bvModal.hide('modal-cal-impurities-moisture')
+      this.modalStates.calImpuritiesMoisture = false
     },
 
     /**
@@ -3236,7 +3346,7 @@ export default {
               this.trade = res.data.data
 
               this.suffix_print_title = ""
-              this.$bvModal.show('modal-actions')
+              this.modalStates.actions = true
 
             }
           }
@@ -3403,7 +3513,7 @@ export default {
         this.customerSelect = {}
         this.refreshCurrentProduct()
         this.refreshTradeInfo()
-        this.$bvModal.hide('modal-actions')
+        this.modalStates.actions = false
       },
 
       printInvoice() {

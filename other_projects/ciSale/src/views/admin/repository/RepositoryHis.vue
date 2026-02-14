@@ -77,14 +77,9 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Sản phẩm trong kho"
-                name    = "Sản phẩm trong kho">
+              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'San_pham_trong_kho')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -136,6 +131,7 @@ import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Multiselect from 'vue-multiselect'
@@ -145,7 +141,8 @@ import Multiselect from 'vue-multiselect'
 export default {
   setup() {
     const { toast } = useToast()
-    return { toast }
+    const { exportToExcel } = useExcelExport()
+    return { toast, exportToExcel }
   },
   components: {
     Datepicker,

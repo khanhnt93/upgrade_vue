@@ -82,14 +82,9 @@
                   Số kết quả: {{orders.length}}
                 </div>
                 <div class="w-full md:w-2/3 px-2 text-right">
-                  <download-excel
-                    class   = "btn btn-default text-header"
-                    :data   = "orders"
-                    :fields = "excel_bill_fields"
-                    worksheet = "Báo Cáo Xóa Bill"
-                    name    = "bao_cao_xoa_bill.xls">
+                  <button class="btn btn-default text-header" @click="exportToExcel(orders, excel_bill_fields, 'bao_cao_xoa_bill.xls')">
                     <b>Xuất Excel</b>
-                  </download-excel>
+                  </button>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-2">
@@ -160,7 +155,8 @@ import { useToast } from '@/composables/useToast'
 export default {
   setup() {
     const { toast } = useToast()
-    return { toast }
+    const { exportToExcel } = useExcelExport()
+    return { toast, exportToExcel }
   },
   components: {
   },

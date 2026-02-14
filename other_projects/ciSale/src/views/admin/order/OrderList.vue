@@ -215,14 +215,9 @@
                     </button>
                   </div>
                   <div class="w-full md:w-1/2 px-2 text-right">
-                      <download-excel
-                        class   = "btn btn-default text-header"
-                        :data   = "productImportItems"
-                        :fields = "productImportExcelFields"
-                        worksheet = "Sản phẩm cần nhập hàng"
-                        name    = "san_pham_can_nhap_hang.xls">
+                      <button class="btn btn-default text-header" @click="exportToExcel(productImportItems, productImportExcelFields, 'san_pham_can_nhap_hang.xls')">
                         <b>Xuất Excel</b>
-                      </download-excel>
+                      </button>
                   </div>
                 </div>
 
@@ -244,8 +239,7 @@ import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
-
-// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 
@@ -260,16 +254,17 @@ export default {
   setup() {
     const { toast } = useToast()
     const router = useRouter()
+    const { exportToExcel } = useExcelExport()
 
-    return { toast, router }
+    return { toast, router, exportToExcel }
   },
   data () {
     return {
       inputs: {
         customer_name: null,
         customer_phone: null,
-        from_date: '2000-01-01',
-        to_date: '2000-01-02'
+        from_date: new Date('2000-01-01'),
+        to_date: new Date('2000-01-02')
       },
       modalCheckProductImport: false,
       fields: [
@@ -378,9 +373,9 @@ export default {
     // Get default from date and to date
     let dateNow = new Date()
     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 15))
-    this.inputs.to_date = toDate.toJSON().slice(0,10)
+    this.inputs.to_date = toDate
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 30))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     window.addEventListener('scroll', this.onScroll)
 
@@ -455,8 +450,8 @@ export default {
       let params = {
         "customer_name": this.inputs.customer_name,
         "customer_phone": this.inputs.customer_phone,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date instanceof Date ? this.inputs.from_date.toISOString().slice(0,10) : this.inputs.from_date,
+        "to_date": this.inputs.to_date instanceof Date ? this.inputs.to_date.toISOString().slice(0,10) : this.inputs.to_date,
         "limit": this.pageLimit,
         "offset": this.offset
       }

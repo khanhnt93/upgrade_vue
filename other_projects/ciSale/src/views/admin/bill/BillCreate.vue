@@ -1,24 +1,22 @@
 <template>
-  <div id="bill-create" class="d-flex flex-column" style="height: calc(100vh - 60px);">
-    <div v-if="trade.trade_status == 0" class="d-flex flex-grow-1 overflow-hidden">
+  <div id="bill-create" class="flex flex-col" style="height: calc(100vh - 60px);">
+    <div v-if="trade.trade_status == 0" class="flex flex-grow overflow-hidden">
       <!-- Nửa trái: Giỏ hàng -->
-      <div class="w-50 p-3 d-flex flex-column h-100 border-right">
+      <div class="w-1/2 p-3 flex flex-col h-full border-r border-gray-300">
         <h5>Sản phẩm đang chọn</h5>
 
         <!-- Danh sách giỏ hàng (cuộn) -->
-        <div class="list-group flex-grow-1 overflow-auto">
-          <div v-for="(item, index) in trade.products" :key="index" class="d-flex justify-content-between align-items-center mb-2">
+        <div class="flex-grow overflow-auto">
+          <div v-for="(item, index) in trade.products" :key="index" class="flex justify-between items-center mb-2 p-3 border border-gray-200 rounded bg-white">
             <div>
               <strong class="font-big">{{ item.name }}</strong><br />
 
               <!-- Sửa giá bán -->
-              <div class="input-group input-group-sm mb-1" style="max-width: 150px;">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">₫</span>
-                </div>
+              <div class="flex items-center mb-1" style="max-width: 150px;">
+                <span class="bg-gray-100 border border-r-0 border-gray-300 px-2 py-1 text-sm rounded-l">₫</span>
                 <input
                   type="text"
-                  class="form-control"
+                  class="border border-gray-300 rounded-r px-2 py-1 text-sm flex-grow focus:outline-none focus:border-blue-500"
                   :value="item.price_sell"
                   @input="updatePrice(index, $event)"
                   @blur="formatNumericInput(index, 'price_sell')"
@@ -27,9 +25,9 @@
               </div>
             </div>
 
-            <div class="d-flex align-items-center">
-              <span class="text-muted mr-2">{{ item.unit_name }}</span>
-              <button class="btn btn-sm btn-outline-primary" @click="decreaseQty(index)">−</button>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-600 text-sm">{{ item.unit_name }}</span>
+              <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" @click="decreaseQty(index)">−</button>
 
               <!-- Sửa số lượng -->
               <input
@@ -39,29 +37,27 @@
                 @input="updateQty(index, $event)"
                 @blur="formatNumericInput(index, 'quantity')"
                 @change="calculatePaymentInfo(); handleSaveDraft();"
-                class="form-control mx-2"
-                style="width: 60px;"
+                class="border border-gray-300 rounded px-2 py-1 text-sm w-16 text-center focus:outline-none focus:border-blue-500"
               />
-              <button class="btn btn-sm btn-outline-primary" @click="increaseQty(index)">+</button>
-              <button class="btn btn-sm btn-outline-danger ml-2" @click="removeItem(index)">×</button>
+              <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" @click="increaseQty(index)">+</button>
+              <button class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600" @click="removeItem(index)">×</button>
             </div>
           </div>
         </div>
 
         <!-- Tổng tiền & thông tin phụ -->
         <div class="mt-3">
-          <h5 class="text-right">Tổng tiền thanh toán: <b>{{ currencyFormat(trade.total) }} đ</b></h5>
+          <h5 class="text-right text-xl font-semibold">Tổng tiền thanh toán: <span class="text-green-600">{{ currencyFormat(trade.total) }} đ</span></h5>
 
           <!-- Thông tin bổ sung -->
-          <div class="mt-3 payment-info">
-            <div class="d-flex justify-content-between">
-              <span>Khách hàng:</span>
-              <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" @click="showModal('customer')">{{ selectedCustomer.name || 'Chưa chọn' }}</a>
-                <!-- Icon xoá nếu đã chọn khách -->
+          <div class="mt-3 space-y-3 bg-gray-50 p-4 rounded">
+            <div class="flex justify-between items-center">
+              <span class="font-medium">Khách hàng:</span>
+              <div class="flex items-center">
+                <a href="javascript:void(0)" @click="showModal('customer')" class="text-blue-600 hover:underline">{{ selectedCustomer.name || 'Chưa chọn' }}</a>
                 <button
                   v-if="selectedCustomer.name"
-                  class="btn btn-link p-0 ml-2 text-danger"
+                  class="text-red-500 hover:text-red-700 ml-2 p-1"
                   @click="selectedCustomer = {}; trade.customer_id = null;"
                   title="Bỏ khách hàng đã chọn"
                 >
@@ -69,18 +65,17 @@
                 </button>
               </div>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between">
               <span>Tổng tiền Sản phẩm:</span>
-              <span>{{ currencyFormat(trade.sub_total) || 0 }} đ</span>
+              <span class="font-semibold">{{ currencyFormat(trade.sub_total) || 0 }} đ</span>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between items-center">
               <span>Chi phí thêm / Giảm tiền:</span>
-              <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" @click="showModal('extraFee')">{{ currencyFormat(parseInt(trade.extra_fee) - parseInt(trade.fixed_discount)) }}</a>
-                <!-- Icon xoá nếu đã chọn khách -->
+              <div class="flex items-center">
+                <a href="javascript:void(0)" @click="showModal('extraFee')" class="text-blue-600 hover:underline">{{ currencyFormat(parseInt(trade.extra_fee) - parseInt(trade.fixed_discount)) }}</a>
                 <button
                   v-if="trade.extra_fee || trade.fixed_discount"
-                  class="btn btn-link p-0 ml-2 text-danger"
+                  class="text-red-500 hover:text-red-700 ml-2 p-1"
                   @click="trade.extra_fee = 0; trade.fixed_discount = 0; handleSaveDraft()"
                   title="Bỏ chi phí thêm / Giảm tiền"
                 >
@@ -88,14 +83,13 @@
                 </button>
               </div>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between items-center">
               <span>Khuyến mãi:</span>
-              <div class="d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" @click="showModal('promotion')">{{ currencyFormat(trade.discount_amount) || 'Chưa áp dụng' }}</a>
-                <!-- Icon xoá nếu đã chọn khách -->
+              <div class="flex items-center">
+                <a href="javascript:void(0)" @click="showModal('promotion')" class="text-blue-600 hover:underline">{{ currencyFormat(trade.discount_amount) || 'Chưa áp dụng' }}</a>
                 <button
                   v-if="trade.discount_amount"
-                  class="btn btn-link p-0 ml-2 text-danger"
+                  class="text-red-500 hover:text-red-700 ml-2 p-1"
                   @click="trade.promotions = []; trade.discount_amount = 0; handleSaveDraft()"
                   title="Bỏ phụ thu"
                 >
@@ -104,81 +98,74 @@
               </div>
             </div>
             <!-- VAT -->
-            <div class="d-flex align-items-center">
-              <!-- Label -->
-               <span class="mr-2">Thuế VAT:</span>
-              <!-- <label class="mb-0 mr-2"><small>Thuế VAT:</small></label> -->
-
-              <!-- Checkbox -->
-              <input
-                type="checkbox"
-                v-model="trade.have_vat"
-                class="form-check-input mr-3"
-                @change="onVatEnabledChange"
-              />
-
-              <!-- Input % VAT -->
-              <div class="input-group input-group-sm mr-3" style="max-width: 100px;">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="font-medium">Thuế VAT:</span>
                 <input
-                  type="number"
-                  class="form-control"
-                  v-model.number="trade.vat_percent"
-                  :disabled="!trade.have_vat"
-                  min="0"
-                  max="100"
-                  step="1"
-                  @change="handleSaveDraft"
+                  type="checkbox"
+                  v-model="trade.have_vat"
+                  class="form-checkbox"
+                  @change="onVatEnabledChange"
                 />
-                <div class="input-group-append">
-                  <span class="input-group-text">%</span>
+                <div class="flex items-center" style="max-width: 100px;">
+                  <input
+                    type="number"
+                    class="border border-gray-300 rounded-l px-2 py-1 text-sm w-16 focus:outline-none focus:border-blue-500"
+                    v-model.number="trade.vat_percent"
+                    :disabled="!trade.have_vat"
+                    :class="{ 'bg-gray-100': !trade.have_vat }"
+                    min="0"
+                    max="100"
+                    step="1"
+                    @change="handleSaveDraft"
+                  />
+                  <span class="bg-gray-100 border border-l-0 border-gray-300 px-2 py-1 text-sm rounded-r">%</span>
                 </div>
               </div>
-
               <!-- Tiền VAT -->
-              <span class="ml-auto">{{ currencyFormat(trade.vat_value) || 0 }} đ</span>
+              <span class="font-semibold">{{ currencyFormat(trade.vat_value) || 0 }} đ</span>
             </div>
 
-            <div class="d-flex justify-content-between">
+            <div class="flex justify-between">
               <span>Loại tiền:</span>
-              <a href="javascript:void(0)" @click="showModal('currency')">{{ selectedCurrency || 'Tiền mặt' }}</a>
+              <a href="javascript:void(0)" @click="showModal('currency')" class="text-blue-600 hover:underline">{{ selectedCurrency || 'Tiền mặt' }}</a>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="flex justify-between items-center">
               <span>Loại thanh toán:</span>
-              <div class="btn-group btn-group-sm" role="group">
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="paymentType"
-                  id="paymentTypeFull"
-                  value="full"
-                  v-model="paymentType"
-                  @change="handlePaymentTypeChange"
-                  autocomplete="off"
-                />
-                <label class="btn btn-outline-primary" for="paymentTypeFull">Tất toán</label>
-
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="paymentType"
-                  id="paymentTypeDebt"
-                  value="debt"
-                  v-model="paymentType"
-                  @change="handlePaymentTypeChange"
-                  autocomplete="off"
-                />
-                <label class="btn btn-outline-primary" for="paymentTypeDebt">Ghi nợ</label>
+              <div class="flex space-x-2">
+                <label class="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="paymentType"
+                    value="full"
+                    v-model="paymentType"
+                    @change="handlePaymentTypeChange"
+                    class="form-radio"
+                  />
+                  <span class="text-sm">Tất toán</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="paymentType"
+                    value="debt"
+                    v-model="paymentType"
+                    @change="handlePaymentTypeChange"
+                    class="form-radio"
+                  />
+                  <span class="text-sm">Ghi nợ</span>
+                </label>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Nút hành động cuối cùng -->
-        <div class="mt-auto pt-2 d-flex justify-content-between">
+        <div class="mt-auto pt-2 flex justify-between flex-wrap gap-2">
           <button
             v-if="trade.id"
-            class="btn btn-primary"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             @click="router.push('/bill/history')"
           >
             Danh sách bill
@@ -187,7 +174,7 @@
           <!-- In hóa đơn -->
           <button
             v-if="trade.id && trade.products.length"
-            class="btn btn-outline-warning mr-2"
+            class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
             @click="printReceipt(true)"
           >
             🧾 In hóa đơn tạm tính
@@ -196,7 +183,7 @@
           <!-- Tạo bill mới -->
           <button
             v-if="trade.id"
-            class="btn btn-success"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             @click="showModal('newBill')"
           >
             Tạo bill mới
@@ -205,7 +192,7 @@
           <!-- Lưu nháp -->
           <button
             v-if="trade.trade_status == 0 && trade.products.length"
-            class="btn btn-secondary"
+            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
             @click="saveDraft(true)"
           >
             Lưu nháp
@@ -214,7 +201,7 @@
           <!-- Thanh toán -->
           <button
             v-if="trade.id && trade.trade_status == 0"
-            class="btn btn-danger"
+            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             @click="checkBeforeSell"
           >
             Thanh toán
@@ -224,103 +211,95 @@
       </div>
 
       <!-- Nửa phải: Danh sách sản phẩm -->
-      <div class="w-50 p-3 d-flex flex-column h-100">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="mb-0">Danh sách Sản phẩm</h5>
+      <div class="w-1/2 p-3 flex flex-col h-full">
+        <div class="flex items-center justify-between mb-4">
+          <h5 class="text-xl font-semibold">Danh sách Sản phẩm</h5>
           <input
             v-model="searchProductQuery"
             @input="handleFilterProduct"
             placeholder="Tìm theo tên/mã sản phẩm..."
-            size="sm"
-            class="ml-3"
+            class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
             style="max-width: 250px;"
           />
         </div>
 
-        <!-- <h5>Danh sách Sản phẩm</h5> -->
+        <!-- Product group buttons -->
         <div class="mb-3">
           <button
-            :variant="activeGroupId === null ? 'primary' : 'outline-primary'"
+            :class="['px-3 py-1 rounded mr-2 mt-1', activeGroupId === null ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border border-blue-500']"
             @click="handleSelectGroup(null)"
-            class="mr-1 mt-1"
           >
             Tất cả
           </button>
           <button
             v-for="group in productGroups"
             :key="group.id || 'all'"
-            :variant="activeGroupId === group.id ? 'primary' : 'outline-primary'"
+            :class="['px-3 py-1 rounded mr-2 mt-1', activeGroupId === group.id ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border border-blue-500']"
             @click="handleSelectGroup(group.id)"
-            class="mr-1 mt-1"
           >
             {{ group.name }}
           </button>
         </div>
 
         <!-- Danh sách sản phẩm -->
-        <div class="flex-grow-1 overflow-auto product-list">
-          <div class="card mb-2 cursor-pointer"
+        <div class="flex-grow overflow-auto product-list">
+          <div class="bg-white border rounded mb-2 p-3 cursor-pointer hover:bg-gray-50"
             v-for="product in filteredProducts"
             :key="product.id"
           >
-            <div class="d-flex align-items-center">
+            <div class="flex items-center">
               <img
                 :src="product.image"
                 alt="Ảnh sản phẩm"
-                fluid
-                rounded
                 @click="addToCart(product)"
-                style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;"
+                class="w-12 h-12 object-cover rounded mr-4"
               />
-              <div class="flex-grow-1">
-                <div class="font-weight-bold font-big mt-10" @click="addToCart(product)">{{ product.name_full }}</div>
-                <div class="d-flex small">
-                  <div class="text-muted" style="flex: 1;" @click="addToCart(product)">
+              <div class="flex-grow">
+                <div class="font-semibold text-base cursor-pointer" @click="addToCart(product)">{{ product.name_full }}</div>
+                <div class="flex text-sm text-gray-600">
+                  <div class="flex-1 cursor-pointer" @click="addToCart(product)">
                     <span v-show="product.price_sell">Giá bán: <strong>{{ currencyFormat(product.price_sell) }} đ</strong></span>
                     <span v-show="!product.price_sell">Hàng chưa định giá bán</span>
                   </div>
-                  <div class="text-muted d-flex align-items-center" style="flex: 1;">
+                  <div class="flex items-center flex-1">
                     <span class="mr-2" v-show="product.price_buy != null" title="Xem giá nhập">
                       Giá nhập: <strong>{{ showBuyPrice[product.id] ? currencyFormat(product.price_buy) + ' đ' : '***' }}</strong>
                     </span>
                     <button
                       v-show="product.price_buy != null"
-                      class="btn btn-link btn-sm p-0"
+                      class="text-blue-500 hover:text-blue-700"
                       @click="toggleBuyPrice(product.id)"
-                      style="font-size: 1rem;"
                     >
                       <i v-show="!showBuyPrice[product.id]" class="fa fa-eye" aria-hidden="true" title="Xem giá nhập"></i>
                       <i v-show="showBuyPrice[product.id]" class="fa fa-eye-slash" aria-hidden="true" title="Đóng giá nhập"></i>
                     </button>
                     <span v-show="product.price_buy == null">Hàng chưa nhập kho</span>
                   </div>
-                  <div class="text-muted text-right mr-2" style="flex: 1;">
+                  <div class="text-right flex-1">
                     Đơn vị: {{ product.unit_name }}
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
 
         <!-- Ghi chú -->
-        <div class="mt-3" v-show="trade.id">
-          <form-textarea
+        <div class="mt-4" v-show="trade.id">
+          <textarea
             v-model="trade.note"
             placeholder="Ghi chú cho đơn hàng..."
             rows="2"
-            max-rows="4"
-            class="mb-3"
-          />
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500 mb-3"
+          ></textarea>
         </div>
       </div>
     </div>
 
     <!-- Vùng hiển thị hóa đơn sau thanh toán -->
-    <div v-if="trade.trade_status == 1" class="d-flex flex-grow-1">
+    <div v-if="trade.trade_status == 1" class="flex flex-grow">
       <!-- Nửa trái: Mẫu in hóa đơn -->
-      <div class="w-50 p-3 d-flex flex-column h-100 border-right">
+      <div class="w-1/2 p-3 flex flex-col h-full border-r border-gray-300">
         <div ref="receiptArea" class="receipt-container">
           <div class="receipt-content">
             <!-- Logo -->
@@ -388,27 +367,17 @@
       </div>
 
       <!-- Nửa phải: Các buttons  -->
-      <div class="w-50 p-3 d-flex flex-column h-100">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <button class="btn btn-outline-primary pull-left px-4 btn-width-220" @click="printReceipt(false)">
-              🖨️ In hóa đơn
-            </button>
-          </div>
-        </div>
-        <!-- <div class="mt-4">
-          <div class="w-full px-2">
-            <button class="btn btn-outline-primary pull-left px-4 btn-width-220" @click="printInvoice()">
-              🧾 In hóa đơn GTGT
-            </button>
-          </div>
-        </div> -->
-        <div class="mt-4">
-          <div class="w-full px-2">
-            <button class="btn btn-outline-success pull-left px-4 btn-width-220" @click="resetBill()">
-              🆕 Tạo bill mới
-            </button>
-          </div>
+      <div class="w-1/2 p-3 flex flex-col h-full">
+        <div class="space-y-4">
+          <button class="w-full bg-blue-500 text-white px-4 py-3 rounded hover:bg-blue-600 flex items-center justify-center" @click="printReceipt(false)">
+            🖨️ In hóa đơn
+          </button>
+          <!-- <button class="w-full bg-blue-500 text-white px-4 py-3 rounded hover:bg-blue-600 flex items-center justify-center" @click="printInvoice()">
+            🧾 In hóa đơn GTGT
+          </button> -->
+          <button class="w-full bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600 flex items-center justify-center" @click="resetBill()">
+            🆕 Tạo bill mới
+          </button>
         </div>
       </div>
     </div>
@@ -495,110 +464,106 @@
     <!-- Modal Khách hàng -->
     <div
       v-if="modalCustomer"
-      id="customer-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Khách hàng</h5>
-            <button type="button" class="close" @click="modalCustomer = false">&times;</button>
-          </div>
-          <div class="modal-body">
-      <div class="tabs-container">
-        <!-- Tab 1: Tìm kiếm -->
-        <div class="tab-content">
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-full overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h5 class="text-lg font-semibold">Khách hàng</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-600" @click="modalCustomer = false">
+            <span class="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div class="p-4">
           <!-- Form tìm kiếm -->
-          <div class="my-3 d-flex gap-2 align-items-center">
+          <div class="flex gap-2 items-center mb-4">
             <input
               v-model="customerSearchQuery"
               placeholder="Nhập tên hoặc số điện thoại"
-              class="flex-grow-1"
+              class="border border-gray-300 rounded px-3 py-2 flex-grow focus:outline-none focus:border-blue-500"
             >
-            <button class="btn btn-primary ml-2" @click="searchCustomers" style="white-space: nowrap;">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" @click="searchCustomers">
               Tìm kiếm
             </button>
           </div>
 
           <!-- Kết quả -->
-          <table class="table table-striped table-bordered table-sm">
-            <thead>
-              <tr>
-                <th v-for="f in customerFields" :key="f.key">{{ f.label }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in customerList" :key="item.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.phone_number }}</td>
-                <td>{{ item.birthday }}</td>
-                <td>{{ item.gender_str }}</td>
-                <td>{{ item.mst }}</td>
-                <td>{{ item.address }}</td>
-                <td>{{ item.type_str }}</td>
-                <td>
-                  <button class="btn btn-primary btn-sm" @click="selectCustomer(item)">Chọn</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          <div class="overflow-x-auto">
+            <table class="w-full table-auto border-collapse border border-gray-300">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th v-for="f in customerFields" :key="f.key" class="border border-gray-300 px-2 py-1 text-left">{{ f.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in customerList" :key="item.id" class="hover:bg-gray-50">
+                  <td class="border border-gray-300 px-2 py-1">{{ index + 1 }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.name }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.phone_number }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.birthday }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.gender_str }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.mst }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.address }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.type_str }}</td>
+                  <td class="border border-gray-300 px-2 py-1">
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" @click="selectCustomer(item)">Chọn</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-        <!-- Tab 2: Tạo mới -->
-        <div class="tab-content">
-          <form @submit.prevent="createCustomer">
-            <div class="flex flex-wrap -mx-2">
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Tên khách hàng *"
-                  :state="formCustomerErrors.name ? false : null"
-                  :invalid-feedback="formCustomerErrors.name"
-                >
-                  <input v-model="newCustomer.name" required :state="formCustomerErrors.name ? false : null">
+          <!-- Tạo mới -->
+          <div class="mt-6">
+            <h6 class="text-md font-semibold mb-3">Tạo khách hàng mới:</h6>
+            <form @submit.prevent="createCustomer">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Tên khách hàng *</label>
+                  <input
+                    v-model="newCustomer.name"
+                    required
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    :class="formCustomerErrors.name ? 'border-red-500' : ''"
+                  >
+                  <span v-if="formCustomerErrors.name" class="text-red-500 text-sm">{{ formCustomerErrors.name }}</span>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Loại khách hàng</label>
+                  <select v-model="newCustomer.type" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                    <option v-for="option in optionsCustomerType" :key="option.value" :value="option.value">{{ option.text }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại *</label>
+                  <input
+                    v-model="newCustomer.phone_number"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    :class="formCustomerErrors.phone_number ? 'border-red-500' : ''"
+                  >
+                  <span v-if="formCustomerErrors.phone_number" class="text-red-500 text-sm">{{ formCustomerErrors.phone_number }}</span>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Ngày sinh</label>
+                  <input type="date" v-model="newCustomer.birthday" :min="minDate" :max="maxDate" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Giới tính</label>
+                  <select v-model="newCustomer.gender" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                    <option v-for="option in optionsGender" :key="option.value" :value="option.value">{{ option.text }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Mã số thuế</label>
+                  <input v-model="newCustomer.mst" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                  <input v-model="newCustomer.address" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" />
                 </div>
               </div>
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Loại khách hàng">
-                  <select class="form-control" v-model="newCustomer.type" :options="optionsCustomerType"></select>
-                </div>
+              <div class="text-right mt-4">
+                <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="submit">Tạo khách hàng</button>
               </div>
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Số điện thoại *"
-                  :state="formCustomerErrors.phone_number ? false : null"
-                  :invalid-feedback="formCustomerErrors.phone_number"
-                >
-                  <input v-model="newCustomer.phone_number" :state="formCustomerErrors.phone_number ? false : null">
-                </div>
-              </div>
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Ngày sinh">
-                  <input type="date" v-model="newCustomer.birthday" :min="minDate" :max="maxDate">
-                </div>
-              </div>
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Giới tính">
-                  <select class="form-control" v-model="newCustomer.gender" :options="optionsGender"></select>
-                </div>
-              </div>
-              <div class="w-full md:w-6 px-2">
-                <div class="form-group" label="Mã số thuế">
-                  <input v-model="newCustomer.mst">
-                </div>
-              </div>
-              <div class="w-12 px-2">
-                <div class="form-group" label="Địa chỉ">
-                  <input v-model="newCustomer.address">
-                </div>
-              </div>
-            </div>
-
-            <div class="text-right">
-              <button class="btn btn-success" type="submit">Tạo khách hàng</button>
-            </div>
-          </form>
-        </div>
-      </div>
+            </form>
           </div>
         </div>
       </div>
@@ -610,61 +575,57 @@
     <!-- Modal khuyến mãi -->
     <div
       v-if="modalPromotion"
-      id="promotion-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Khuyến mãi</h5>
-            <button type="button" class="close" @click="modalPromotion = false">&times;</button>
-          </div>
-          <div class="modal-body">
-      <!-- Danh sách khuyến mãi -->
-      <div class="mb-3">
-        <h6 class="mb-2">Danh sách khuyến mãi:</h6>
-        <div class="d-flex flex-wrap">
-          <button
-            v-for="promo in promotionList"
-            :key="promo.id"
-            size="sm"
-            class="m-1"
-            variant="outline-success"
-            @click="addPromotion(promo)"
-          >
-            {{ promo.name }}
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-full overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h5 class="text-lg font-semibold">Khuyến mãi</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-600" @click="modalPromotion = false">
+            <span class="text-2xl">&times;</span>
           </button>
         </div>
-      </div>
-
-      <!-- Danh sách khuyến mãi đã chọn -->
-      <div v-if="selectedPromotions.length">
-        <h6 class="mb-2">Đã chọn:</h6>
-        <ul class="list-group mb-3">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            v-for="(promo, index) in selectedPromotions"
-            :key="promo.id"
-          >
-            <div>
-              <strong>{{ promo.name }}</strong>
+        <div class="p-4">
+          <!-- Danh sách khuyến mãi -->
+          <div class="mb-6">
+            <h6 class="text-md font-semibold mb-3">Danh sách khuyến mãi:</h6>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="promo in promotionList"
+                :key="promo.id"
+                class="bg-green-100 text-green-700 border border-green-300 px-3 py-2 rounded text-sm hover:bg-green-200"
+                @click="addPromotion(promo)"
+              >
+                {{ promo.name }}
+              </button>
             </div>
-            <div class="d-flex align-items-center">
-              <button class="btn btn-sm btn-outline-primary" @click="decreaseQtyPmt(index)">−</button>
-              <span class="mx-2">{{ promo.quantity }}</span>
-              <button class="btn btn-sm btn-outline-primary" @click="increaseQtyPmt(index)">+</button>
-              <button class="btn btn-sm btn-outline-danger ml-2" @click="removePromotion(index)">×</button>
-            </div>
-          </li>
-        </ul>
-      </div>
+          </div>
 
-      <!-- Nút -->
-      <div v-if="selectedPromotions.length" class="d-flex justify-content-between">
-        <button class="btn btn-secondary" @click="hideModalPmt">Bỏ qua</button>
-        <button class="btn btn-success" @click="applyPromotions">Áp dụng</button>
-      </div>
+          <!-- Danh sách khuyến mãi đã chọn -->
+          <div v-if="selectedPromotions.length" class="mb-6">
+            <h6 class="text-md font-semibold mb-3">Đã chọn:</h6>
+            <div class="space-y-3">
+              <div
+                class="flex justify-between items-center bg-gray-50 p-3 rounded border"
+                v-for="(promo, index) in selectedPromotions"
+                :key="promo.id"
+              >
+                <div>
+                  <strong class="text-gray-800">{{ promo.name }}</strong>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" @click="decreaseQtyPmt(index)">−</button>
+                  <span class="mx-2 font-semibold">{{ promo.quantity }}</span>
+                  <button class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" @click="increaseQtyPmt(index)">+</button>
+                  <button class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600" @click="removePromotion(index)">×</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nút -->
+          <div v-if="selectedPromotions.length" class="flex justify-between">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" @click="hideModalPmt">Bỏ qua</button>
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="applyPromotions">Áp dụng</button>
           </div>
         </div>
       </div>
@@ -674,87 +635,73 @@
     <!-- Modal Chi phí thêm / Giảm tiền -->
     <div
       v-if="modalExtraFee"
-      id="extraFee-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Chi phí thêm / Giảm tiền</h5>
-            <button type="button" class="close" @click="modalExtraFee = false">&times;</button>
-          </div>
-          <div class="modal-body"
-      scrollable
-      hide-footer
-    >
-      <!-- Form thêm phí -->
-      <form @submit.prevent="addExtraFee">
-
-        <div class="align-items-end">
-          <!-- Tên phí -->
-          <div class="w-full md:w-12 px-2">
-            <div class="input-group">
-              <input type="radio" v-model="newFee.type" name="type" value="0" class="mt-2">
-              <label class="ml-4 mt-1">Chi phí thêm</label>
-              <input type="radio" v-model="newFee.type" name="type" value="1" class="ml-5 mt-2">
-              <label class="ml-4 mt-1">Giảm tiền</label>
-            </div>
-            <!-- <div class="form-group" label="Lý do phụ thu / thêm phí">
-              <input v-model="newFee.name" required>
-            </div> -->
-          </div>
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-full overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h5 class="text-lg font-semibold">Chi phí thêm / Giảm tiền</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-600" @click="modalExtraFee = false">
+            <span class="text-2xl">&times;</span>
+          </button>
         </div>
+        <div class="p-4">
+          <!-- Form thêm phí -->
+          <form @submit.prevent="addExtraFee" class="mb-6">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Loại phí:</label>
+              <div class="flex gap-4">
+                <label class="flex items-center space-x-2">
+                  <input type="radio" v-model="newFee.type" name="type" value="0" class="form-radio" />
+                  <span>Chi phí thêm</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input type="radio" v-model="newFee.type" name="type" value="1" class="form-radio" />
+                  <span>Giảm tiền</span>
+                </label>
+              </div>
+            </div>
 
-        <div class="align-items-end">
-          <!-- Số tiền -->
-          <div class="w-full md:w-12 px-2">
-            <div class="form-group" label="Số tiền">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Số tiền:</label>
               <input
                 type="number"
                 v-model.number="newFee.price"
                 min="0"
                 required
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                placeholder="Nhập số tiền"
               >
             </div>
-          </div>
-        </div>
 
-        <!-- Button Thêm -->
-        <div class="text-center">
-          <div md="12" class="text-center">
-            <button class="btn "type="submit" variant="success" size="sm">Thêm</button>
-          </div>
-        </div>
-      </form>
-
-      <!-- Danh sách phí đã thêm -->
-      <div v-if="extraFees.length" class="mt-4">
-        <h6 class="mb-2">Đã thêm:</h6>
-        <ul class="list-group mb-3">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            v-for="(fee, index) in extraFees"
-            :key="index"
-          >
-            <div>
-              <strong>{{ fee.type == '0' ? 'Chi phí thêm' : 'Giảm tiền' }}</strong>
-              <small class="d-block text-muted">
-                {{ currencyFormat(fee.price) }}đ
-              </small>
+            <div class="text-center">
+              <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="submit">Thêm</button>
             </div>
-            <div class="d-flex align-items-center">
-              <button class="btn btn-sm btn-outline-danger ml-2" @click="removeExtraFee(index)">×</button>
-            </div>
-          </li>
-        </ul>
-      </div>
+          </form>
 
-      <!-- Nút -->
-      <div v-if="extraFees.length" class="d-flex justify-content-between">
-        <button class="btn btn-secondary" @click="hideModalExtraFees">Bỏ qua</button>
-        <button class="btn btn-success" @click="applyExtraFees">Áp dụng</button>
-      </div>
+          <!-- Danh sách phí đã thêm -->
+          <div v-if="extraFees.length" class="mb-6">
+            <h6 class="text-md font-semibold mb-3">Đã thêm:</h6>
+            <div class="space-y-3">
+              <div
+                class="flex justify-between items-center bg-gray-50 p-3 rounded border"
+                v-for="(fee, index) in extraFees"
+                :key="index"
+              >
+                <div>
+                  <strong class="text-gray-800">{{ fee.type == '0' ? 'Chi phí thêm' : 'Giảm tiền' }}</strong>
+                  <div class="text-sm text-gray-600">
+                    {{ currencyFormat(fee.price) }}đ
+                  </div>
+                </div>
+                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600" @click="removeExtraFee(index)">×</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nút -->
+          <div v-if="extraFees.length" class="flex justify-between">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" @click="hideModalExtraFees">Bỏ qua</button>
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="applyExtraFees">Áp dụng</button>
           </div>
         </div>
       </div>
@@ -764,49 +711,50 @@
     <!-- Modal chọn loại tiền thanh toán -->
     <div
       v-if="modalCurrency"
-      id="currency-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Chọn loại tiền thanh toán</h5>
-            <button type="button" class="close" @click="modalCurrency = false">&times;</button>
+      <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-full overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h5 class="text-lg font-semibold">Chọn loại tiền thanh toán</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-600" @click="modalCurrency = false">
+            <span class="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <!-- Tổng tiền cần thanh toán -->
+          <p class="font-semibold text-center mb-4">
+            Số tiền cần thanh toán: {{ currencyFormat(trade.total) }}
+          </p>
+
+          <!-- Các loại thanh toán -->
+          <div v-for="(method, key) in paymentOptions" :key="key" class="mb-4">
+            <label class="flex items-center space-x-2 mb-2">
+              <input
+                type="checkbox"
+                v-model="method.checked"
+                @change="onCheckboxChange(key)"
+                class="form-checkbox"
+              >
+              <span>{{ method.label }}</span>
+            </label>
+            <input
+              v-model.number="method.amount"
+              type="number"
+              min="0"
+              class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+              :placeholder="`Nhập số tiền ${method.label.toLowerCase()}`"
+            >
           </div>
-          <div class="modal-body">
-      <!-- Tổng tiền cần thanh toán -->
-      <p class="font-weight-bold text-center mb-4">
-        Số tiền cần thanh toán: {{ currencyFormat(trade.total) }}
-      </p>
 
-      <!-- Các loại thanh toán -->
-      <div v-for="(method, key) in paymentOptions" :key="key" class="form-group mb-3">
-        <input type="checkbox"
-          v-model="method.checked"
-          @change="onCheckboxChange(key)"
-        >
-          {{ method.label }}
+          <!-- Error nếu tổng nhỏ hơn -->
+          <p v-if="paymentError" class="text-red-500 text-center font-semibold">
+            {{ paymentError }}
+          </p>
 
-        <input
-          v-model.number="method.amount"
-          type="number"
-          min="0"
-          class="mt-2"
-          :placeholder="`Nhập số tiền ${method.label.toLowerCase()}`"
-        >
-      </div>
-
-      <!-- Error nếu tổng nhỏ hơn -->
-      <p v-if="paymentError" class="text-danger text-center font-weight-bold">
-        {{ paymentError }}
-      </p>
-
-      <!-- Buttons -->
-      <div class="d-flex justify-content-between mt-4">
-        <button class="btn btn-secondary" @click="hideModalCurrency">Bỏ qua</button>
-        <button class="btn btn-success" @click="applyCurrency">Áp dụng</button>
-      </div>
+          <!-- Buttons -->
+          <div class="flex justify-between mt-4">
+            <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="hideModalCurrency">Bỏ qua</button>
+            <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" @click="applyCurrency">Áp dụng</button>
           </div>
         </div>
       </div>
@@ -816,45 +764,41 @@
     <!-- Modal xác nhận thanh toán -->
     <div
       v-if="modalPayment"
-      id="payment-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-      <div class="text-center px-4 py-3">
-        <!-- Custom title -->
-        <h4 class="font-weight-bold mb-4" style="color: #3b82f6;">Xác nhận thanh toán</h4>
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-semibold mb-4 text-blue-600">Xác nhận thanh toán</h4>
 
-        <!-- Tên khách hàng -->
-        <p class="mb-2" style="font-size: 1.25rem;">
-          👤 <strong>Khách hàng: {{ selectedCustomer.name || 'Chưa chọn khách hàng' }}</strong>
-        </p>
+          <!-- Tên khách hàng -->
+          <p class="mb-2 text-lg">
+            👤 <strong>Khách hàng: {{ selectedCustomer.name || 'Chưa chọn khách hàng' }}</strong>
+          </p>
 
-        <!-- Số tiền thanh toán -->
-        <p class="mb-4" style="font-size: 2rem; font-weight: bold; color: #10b981;">
-          💰 {{ currencyFormat(trade.total_paid ? trade.total_paid : trade.total) }}
-        </p>
+          <!-- Số tiền thanh toán -->
+          <p class="mb-4 text-2xl font-bold text-green-600">
+            💰 {{ currencyFormat(trade.total_paid ? trade.total_paid : trade.total) }}
+          </p>
 
-        <!-- Số tiền ghi nợ -->
-        <p v-show="trade.total_paid && trade.total_paid < trade.total" class="mb-4" style="font-size: 2rem; font-weight: bold; color: #dc3545;">
-          🧾 Ghi nợ: {{ currencyFormat(trade.total - trade.total_paid) }}
-        </p>
+          <!-- Số tiền ghi nợ -->
+          <p v-show="trade.total_paid && trade.total_paid < trade.total" class="mb-4 text-2xl font-bold text-red-600">
+            🧾 Ghi nợ: {{ currencyFormat(trade.total - trade.total_paid) }}
+          </p>
 
-        <!-- Buttons -->
-        <div class="d-flex justify-content-center gap-3">
-          <button class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm"
-            @click="modalPayment = false">
-            ❌ Hủy
-          </button>
-
-          <button class="btn btn-success rounded-pill px-4 py-2 shadow-sm"
-            @click="confirmPayment">
-            ✅ Xác nhận thanh toán
-          </button>
-        </div>
-      </div>
+          <!-- Buttons -->
+          <div class="flex justify-center space-x-4">
+            <button
+              class="px-6 py-2 bg-gray-200 text-gray-700 rounded-full shadow-sm hover:bg-gray-300"
+              @click="modalPayment = false"
+            >
+              ❌ Hủy
+            </button>
+            <button
+              class="px-6 py-2 bg-green-500 text-white rounded-full shadow-sm hover:bg-green-600"
+              @click="confirmPayment"
+            >
+              ✅ Xác nhận thanh toán
+            </button>
           </div>
         </div>
       </div>
@@ -863,36 +807,30 @@
     <!-- Modal xác nhận tạo bill mới -->
     <div
       v-if="modalNewBill"
-      id="new-bill-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-      <div class="text-center px-4 py-3">
-        <!-- Custom title -->
-        <h4 class="font-weight-bold mb-4" style="color: #3b82f6;">Xác nhận tạo bill mới</h4>
-        <hr>
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-semibold mb-4 text-blue-600">Xác nhận tạo bill mới</h4>
+          <hr class="mb-4">
 
-        <!-- Số tiền thanh toán -->
-        <p class="mb-4" style="font-weight: bold">
-          Thông tin bill hiện tại đã được lưu nháp tại "Danh sách bill", bạn có thể chỉnh sửa hoặc xóa bill này nếu muốn!
-        </p>
+          <p class="mb-4 font-medium">
+            Thông tin bill hiện tại đã được lưu nháp tại "Danh sách bill", bạn có thể chỉnh sửa hoặc xóa bill này nếu muốn!
+          </p>
 
-        <!-- Buttons -->
-        <div class="d-flex justify-content-center gap-3">
-          <button class="btn btn-outline-secondary rounded-pill px-4 py-2 shadow-sm"
-            @click="modalNewBill = false">
-            ❌ Hủy
-          </button>
-
-          <button class="btn btn-success rounded-pill px-4 py-2 shadow-sm"
-            @click="resetBill">
-            ✅ Xác nhận
-          </button>
-        </div>
-      </div>
+          <div class="flex justify-center space-x-4">
+            <button
+              class="px-6 py-2 bg-gray-200 text-gray-700 rounded-full shadow-sm hover:bg-gray-300"
+              @click="modalNewBill = false"
+            >
+              ❌ Hủy
+            </button>
+            <button
+              class="px-6 py-2 bg-green-500 text-white rounded-full shadow-sm hover:bg-green-600"
+              @click="resetBill"
+            >
+              ✅ Xác nhận
+            </button>
           </div>
         </div>
       </div>
@@ -901,157 +839,144 @@
     <!-- Modal ghi nợ -->
     <div
       v-if="showDebtModal"
-      id="debt-modal"
-      class="modal-overlay"
-      style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
     >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thông tin ghi nợ</h5>
-            <button type="button" class="close" @click="showDebtModal = false">&times;</button>
-          </div>
-          <div class="modal-body">
-    <div class="form-row">
-      <div md="12" class="mt-2">
-        <h4>Số tiền cần thanh toán: <span class="text-header">{{currencyFormat(trade.total)}}</span></h4>
-      </div>
-    </div>
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-full overflow-y-auto">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h5 class="text-lg font-semibold">Thông tin ghi nợ</h5>
+          <button type="button" class="text-gray-400 hover:text-gray-600" @click="showDebtModal = false">
+            <span class="text-2xl">&times;</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-lg font-semibold text-blue-600">Số tiền cần thanh toán: <span class="text-green-600">{{currencyFormat(trade.total)}}</span></h4>
+            </div>
 
-    <div class="form-row">
-      <div md="3" class="mt-1">
-        <label>Số tiền khách trả</label>
-      </div>
-      <div md="9" class="mt-1">
-        <input
-          id="total_paid"
-          type="text"
-          class="form-control"
-          v-model="currentDebt.total_paid"
-          autocomplete="new-password"
-          maxlength="14"
-          @keyup="integerAndPointOnly($event.target)">
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <label class="text-sm font-medium text-gray-700">Số tiền khách trả:</label>
+              <div class="md:col-span-2">
+                <input
+                  id="total_paid"
+                  type="text"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                  v-model="currentDebt.total_paid"
+                  autocomplete="new-password"
+                  maxlength="14"
+                  placeholder="Nhập số tiền khách trả"
+                  @keyup="integerAndPointOnly($event.target)">
+              </div>
+            </div>
 
-    <div class="form-row" v-show="currentDebt.total_paid && currentDebt.total_paid < trade.total">
-      <div md="12" class="mt-2">
-        <h4>Số tiền ghi nợ: <span class="text-header">{{currencyFormat(trade.total - currentDebt.total_paid)}}</span></h4>
-      </div>
-    </div>
+            <div v-show="currentDebt.total_paid && currentDebt.total_paid < trade.total">
+              <h4 class="text-lg font-semibold text-red-600">Số tiền ghi nợ: <span>{{currencyFormat(trade.total - currentDebt.total_paid)}}</span></h4>
+            </div>
 
-    <div class="form-row">
-      <div md="3" class="mt-1">
-        <label>Lãi suất (%)</label>
-      </div>
-      <div md="9" class="mt-1">
-        <input
-          id="interest_rate"
-          type="text"
-          class="form-control"
-          v-model="currentDebt.interest_rate"
-          autocomplete="new-password"
-          maxlength="5"
-          @keyup="integerAndPointOnly($event.target)">
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <label class="text-sm font-medium text-gray-700">Lãi suất (%):</label>
+              <div class="md:col-span-2">
+                <input
+                  id="interest_rate"
+                  type="text"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                  v-model="currentDebt.interest_rate"
+                  autocomplete="new-password"
+                  maxlength="5"
+                  placeholder="Nhập lãi suất"
+                  @keyup="integerAndPointOnly($event.target)">
+              </div>
+            </div>
 
-    <div class="form-row">
-      <div md="3" class="mt-1">
-        <label>Kỳ hạn tính lãi</label>
-      </div>
-      <div md="9" class="mt-1">
-        <select class="form-control"
-          :options="periodOptions"
-          id="interest_period"
-          type="text"
-          autocomplete="new-password"
-          v-model="currentDebt.interest_period">
-        </select>
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <label class="text-sm font-medium text-gray-700">Kỳ hạn tính lãi:</label>
+              <div class="md:col-span-2">
+                <select class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                  id="interest_period"
+                  v-model="currentDebt.interest_period">
+                  <option v-for="option in periodOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
+                </select>
+              </div>
+            </div>
 
-    <div class="form-row">
-      <div md="3" class="mt-1">
-        <label>Ngày hẹn thanh toán </label>
-      </div>
-      <div md="9" class="mt-1">
-        <datepicker v-model="currentDebt.appointment_date" format="yyyy-MM-dd" :typeable="true"
-                    placeholder="" input-class="datepicker-cus" ></datepicker>
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <label class="text-sm font-medium text-gray-700">Ngày hẹn thanh toán:</label>
+              <div class="md:col-span-2">
+                <datepicker
+                  v-model="currentDebt.appointment_date"
+                  format="yyyy-MM-dd"
+                  :typeable="true"
+                  placeholder="Chọn ngày hẹn thanh toán"
+                  input-class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                ></datepicker>
+              </div>
+            </div>
 
-    <div class="form-row">
-      <div md="3" class="mt-1">
-        <label>Nhắc hẹn thanh toán trước số ngày </label>
-      </div>
-      <div md="9" class="mt-1">
-        <input
-          id="forewarning"
-          type="text"
-          maxlength="14"
-          autocomplete="new-password"
-          class="form-control"
-          v-model="currentDebt.forewarning"
-          @keyup="integerOnly($event.target)">
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+              <label class="text-sm font-medium text-gray-700">Nhắc hẹn trước (ngày):</label>
+              <div class="md:col-span-2">
+                <input
+                  id="forewarning"
+                  type="text"
+                  maxlength="14"
+                  autocomplete="new-password"
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                  v-model="currentDebt.forewarning"
+                  placeholder="Số ngày nhắc trước"
+                  @keyup="integerOnly($event.target)">
+              </div>
+            </div>
 
-      <!-- Nút -->
-      <div class="d-flex justify-content-between mt-2">
-        <button class="btn btn-secondary" @click="cancelDebt">Bỏ qua</button>
-        <button class="btn btn-success" @click="applyDebt">Áp dụng</button>
-      </div>
+            <div class="flex justify-between pt-4">
+              <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" @click="cancelDebt">Bỏ qua</button>
+              <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" @click="applyDebt">Áp dụng</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!--Modal cảnh báo bán quá số lượng trong kho -->
-    <div class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-body">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-12 px-2">
-          <h4 class="modal-title text-center text-success">Sản phẩm bán vượt quá số lượng trong kho</h4>
-        </div>
-      </div>
-      <hr>
+    <div
+      v-if="showModalConfirmSell"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-full overflow-y-auto">
+        <div class="p-6">
+          <div class="text-center mb-6">
+            <h4 class="text-xl font-semibold text-green-600">Sản phẩm bán vượt quá số lượng trong kho</h4>
+          </div>
 
-      <div class="mt-2">
-        <div class="w-full px-2">
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th v-for="f in productImportFields" :key="f.key">{{ f.label }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in productNotEnoughQuantity" :key="item.stt">
-                <td>{{ item.stt }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.quantity_repo }}</td>
-                <td>{{ item.quantity }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <hr class="mb-6">
 
-      <div class="flex flex-wrap -mx-2">
-        <div cols="4" class="text-left mt-3">
-          <button class="btn btn-danger px-4" @click="hideModalConfirmSell">
-            Hủy bán
-          </button>
-        </div>
-        <div cols="8" class="text-right mt-3">
-          <button class="btn btn-primary px-4 default-btn-bg"
-          @click="modalPayment = true; hideModalConfirmSell();">
-            Tiếp tục bán
-          </button>
-        </div>
-      </div>
+          <div class="overflow-x-auto mb-6">
+            <table class="w-full table-auto border-collapse border border-gray-300">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th v-for="f in productImportFields" :key="f.key" class="border border-gray-300 px-3 py-2 text-left">{{ f.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in productNotEnoughQuantity" :key="item.stt" class="hover:bg-gray-50">
+                  <td class="border border-gray-300 px-3 py-2">{{ item.stt }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.name }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.quantity_repo }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.quantity }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex justify-between">
+            <button class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600" @click="hideModalConfirmSell">
+              Hủy bán
+            </button>
+            <button
+              class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+              @click="modalPayment = true; hideModalConfirmSell();"
+            >
+              Tiếp tục bán
+            </button>
           </div>
         </div>
       </div>
@@ -1890,6 +1815,14 @@ export default {
 
     hideModalPmt() {
       this.modalPromotion = false
+    },
+
+    hideModalExtraFees() {
+      this.modalExtraFee = false
+    },
+
+    hideModalCurrency() {
+      this.modalCurrency = false
     },
 
     /**

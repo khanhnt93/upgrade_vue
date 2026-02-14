@@ -73,14 +73,9 @@
                 Số kết quả: {{items.length}}
               </div>
               <div class="w-full md:w-2/3 px-2 text-right">
-              <download-excel
-                class   = "btn btn-default text-header"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Lịch sử công nợ"
-                name    = "lich_su_cong_no.xls">
+              <button class="btn btn-default text-header" @click="exportToExcel(bills, excel_bill_fields, 'lich_su_cong_no.xls')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
               </div>
             </div>
 

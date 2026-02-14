@@ -83,24 +83,24 @@
                     <td>{{item.stt}}</td>
                     <td>{{item.created_at}}</td>
                     <td>{{item.appointment_date}}</td>
-                    <td class="text-right">{{item.total | format_currency}}</td>
-                    <td class="text-right">{{item.remaining | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.total)}}</td>
+                    <td class="text-right">{{formatCurrency(item.remaining)}}</td>
                     <td>{{item.interest_rate}}%</td>
                     <td>{{convertPeriodCodeToName(item.interest_period)}}</td>
                     <td>{{item.interest_period_real}}</td>
-                    <td class="text-right">{{item.interest | format_currency}}</td>
-                    <td class="text-right">{{item.amount | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.interest)}}</td>
+                    <td class="text-right">{{formatCurrency(item.amount)}}</td>
                   </tr>
 
                   <tr>
                     <td class="total text-center font-weight-bold text-header" :colspan="3">Tổng</td>
-                    <td class="text-right font-weight-bold text-header">{{sumTotal | format_currency}}</td>
-                    <td class="text-right font-weight-bold text-header">{{sumRemaining | format_currency}}</td>
+                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumTotal)}}</td>
+                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumRemaining)}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right font-weight-bold text-header">{{sumInterest | format_currency}}</td>
-                    <td class="text-right font-weight-bold text-header">{{sumAmount | format_currency}}</td>
+                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumInterest)}}</td>
+                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumAmount)}}</td>
                   </tr>
 
                   </tbody>
@@ -110,7 +110,7 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <h5 class="text-header">Tổng tiền cần thanh toán: <b>{{sumAmount | format_currency}}đ</b></h5>
+                <h5 class="text-header">Tổng tiền cần thanh toán: <b>{{formatCurrency(sumAmount)}}đ</b></h5>
               </div>
             </div>
 
@@ -407,6 +407,7 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 
 
 export default {
@@ -416,7 +417,8 @@ export default {
   },
   setup() {
     const { toast } = useToast()
-    return { toast }
+    const { formatCurrency } = useFormatters()
+    return { toast, formatCurrency }
   },
   data() {
     return {

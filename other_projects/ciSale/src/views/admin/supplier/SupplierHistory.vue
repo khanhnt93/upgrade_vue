@@ -59,14 +59,9 @@
               Số kết quả: {{items.length}}
             </div>
             <div class="w-full md:w-2/3 px-2 text-right">
-              <download-excel
-                class   = "btn btn-default text-header"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Lịch sử nhà cung cấp"
-                name    = "lich_su_nha_cung_cap.xls">
+              <button class="btn btn-default text-header" @click="exportToExcel(items, excel_fields, 'lich_su_nha_cung_cap.xls')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -137,6 +132,7 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 
@@ -147,10 +143,12 @@ export default {
   setup() {
     const { toast } = useToast()
     const router = useRouter()
+    const { exportToExcel } = useExcelExport()
 
     return {
       toast,
-      router
+      router,
+      exportToExcel
     }
   },
   data () {

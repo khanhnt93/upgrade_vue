@@ -106,14 +106,9 @@
                   Số kết quả: {{bills.length}}
                 </div>
                 <div md="8" class="text-right">
-                  <download-excel
-                    class   = "btn btn-default text-header"
-                    :data   = "bills"
-                    :fields = "excel_bill_fields"
-                    worksheet = "Báo Cáo Theo Bill"
-                    name    = "filename.xls">
+                  <button class="btn btn-default text-header" @click="exportToExcel(bills, excel_bill_fields, 'filename.xls')">
                     <b>Xuất Excel</b>
-                  </download-excel>
+                  </button>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-2">
@@ -203,14 +198,9 @@
                   Số kết quả: {{foods.length}}
                 </div>
                 <div md="8" class="text-right">
-                  <download-excel
-                    class   = "btn btn-default text-header"
-                    :data   = "foods"
-                    :fields = "excel_food_fields"
-                    worksheet = "Báo Cáo Theo Bill"
-                    name    = "filename.xls">
+                  <button class="btn btn-default text-header" @click="exportToExcel(foods, excel_food_fields, 'filename.xls')">
                     <b>Xuất Excel</b>
-                  </download-excel>
+                  </button>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-2">
@@ -281,6 +271,7 @@
 import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import * as XLSX from 'xlsx'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
@@ -371,6 +362,33 @@ export default {
     popToast(variant, content) {
       this.toast(content, variant === 'danger' ? 'error' : variant)
       this.toast(content,  variant === 'danger' ? 'error' : variant)
+    },
+
+    /**
+     * Export data to Excel using xlsx library
+     */
+    exportToExcel(data, fieldsMapping, filename) {
+      if (!data || data.length === 0) {
+        this.popToast('warning', 'Không có dữ liệu để xuất');
+        return;
+      }
+
+      // Transform data based on fields mapping
+      const transformedData = data.map(item => {
+        const newItem = {};
+        Object.entries(fieldsMapping).forEach(([label, key]) => {
+          newItem[label] = item[key] || '';
+        });
+        return newItem;
+      });
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(transformedData);
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+      // Download the file
+      XLSX.writeFile(wb, filename);
     },
 
     /**

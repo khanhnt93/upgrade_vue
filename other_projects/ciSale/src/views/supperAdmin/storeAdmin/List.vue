@@ -116,31 +116,34 @@
     </div>
 
     <!-- Modal xác nhận reset pass -->
-    <div centered hide-footer hide-header id="modal-confirm-reset-pass">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h5 class="text-center text-header">Reset password</h5>
-          <hr>
+    <div v-if="showResetPassModal"
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
+            <h5 class="text-center font-semibold text-lg mb-4">Reset password</h5>
+            <hr>
+          </div>
         </div>
-      </div>
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
-          <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full px-2">
+            <p>Nhân viên: <b>{{currentStaff.name}}</b></p>
+            <p>Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
+          </div>
         </div>
-      </div>
 
-      <div class="flex flex-wrap -mx-2">
-        <div class="text-center mt-3" v-show="!resetting">
-          <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
-            Đóng
-          </button>
-          <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
-            Xác nhận
-          </button>
-        </div>
-        <div v-show="resetting">
-          <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
+        <div class="flex flex-wrap -mx-2">
+          <div class="text-center mt-3" v-show="!resetting">
+            <button class="btn btn-width-120 btn-outline-secondary" @click="hideModalConfirmResetPass()">
+              Đóng
+            </button>
+            <button class="ml-2 btn btn-width-120 btn-outline-success" @click="resetPass()">
+              Xác nhận
+            </button>
+          </div>
+          <div v-show="resetting">
+            <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
+          </div>
         </div>
       </div>
     </div>
@@ -151,6 +154,7 @@
 import superAdminAPI from '@/api/superAdmin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
+import { useToast } from 'vue-toastification'
 
 
 export default {
@@ -214,6 +218,7 @@ export default {
       listIdDeleted: [],
       currentStaff: {},
       resetting: false,
+      showResetPassModal: false
     }
   },
   computed: {
@@ -225,6 +230,8 @@ export default {
     // Get brand options
     this.getOptionBrand()
 
+    this.toast = useToast()
+
     window.addEventListener('scroll', this.onScroll)
     this.search()
   },
@@ -234,8 +241,12 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      this.toast(content, variant === 'danger' ? 'error' : variant)
-      this.toast(content,  variant === 'danger' ? 'error' : variant)
+      switch(variant) {
+        case 'success': this.toast.success(content); break;
+        case 'danger': this.toast.error(content); break;
+        case 'warning': this.toast.warning(content); break;
+        default: this.toast.info(content);
+      }
     },
 
     /**
@@ -296,25 +307,19 @@ export default {
      * Delete
      */
     deleted (id, name, rowIndex) {
-      this.$bvModal.msgBoxConfirm('Xóa [' + name + "]. Bạn có chắc không?", {
-        title: false,
-        buttonSize: 'sm',
-        centered: true, size: 'sm',
-        footerClass: 'p-2'
-      }).then(res => {
-        if(res){
-          superAdminAPI.deleteAdminStore(id).then(res => {
-            // Remove item in list
-            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-            this.items.splice(indexTemp, 1)
-            this.listIdDeleted.push(rowIndex - 1)
-          }).catch(err => {
-            // Handle error
-            let errorMess = commonFunc.handleStaffError(err)
-            this.popToast('danger', errorMess)
-          })
-        }
-      })
+      if (confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+        superAdminAPI.deleteAdminStore(id).then(res => {
+          // Remove item in list
+          let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+          this.items.splice(indexTemp, 1)
+          this.listIdDeleted.push(rowIndex - 1)
+          this.popToast('success', 'Xóa thành công')
+        }).catch(err => {
+          // Handle error
+          let errorMess = commonFunc.handleStaffError(err)
+          this.popToast('danger', errorMess)
+        })
+      }
     },
 
     /**
@@ -395,11 +400,11 @@ export default {
 
     showModalConfirmResetPass(staff) {
       this.currentStaff = staff
-      this.$bvModal.show('modal-confirm-reset-pass')
+      this.showResetPassModal = true
     },
 
     hideModalConfirmResetPass() {
-      this.$bvModal.hide('modal-confirm-reset-pass')
+      this.showResetPassModal = false
     },
 
     /**
@@ -421,12 +426,7 @@ export default {
           this.hideModalConfirmResetPass()
 
           let message = "Mật khẩu mới: " + this.currentStaff.phone_number
-          this.$bvModal.msgBoxOk(message, {
-            title: "Reset Mật Khẩu Thành Công",
-            centered: true,
-            size: 'sm',
-            headerClass: 'bg-success',
-          })
+          this.popToast('success', 'Reset Mật Khẩu Thành Công - ' + message)
         }
 
         this.resetting = false

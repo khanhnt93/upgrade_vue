@@ -81,14 +81,9 @@
                 <span class="text-header"><b>{{totalRow}}</b></span>
               </div>
 
-              <download-excel
-                class   = "btn btn-default text-header btn-width-120 pull-right"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Danh sách nợ phải trả"
-                name    = "Danh sách nợ phải trả">
+              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Danh_sach_no_phai_tra')">
                 <b>Xuất Excel</b>
-              </download-excel>
+              </button>
             </div>
           </div>
 
@@ -119,13 +114,13 @@
                 <tbody>
                   <tr>
                     <td class="total text-center font-weight-bold text-header" :colspan="7">Tổng</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_total | format_currency}}đ</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_remaining | format_currency}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_total)}}đ</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_remaining)}}đ</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_interest | format_currency}}</td>
-                    <td class="text-right total font-weight-bold text-header">{{sum_amount | format_currency}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_interest)}}</td>
+                    <td class="text-right total font-weight-bold text-header">{{formatCurrency(sum_amount)}}</td>
                     <td></td>
                   </tr>
                   <tr v-for="(item) in items">
@@ -136,13 +131,13 @@
                     <td>{{item.status_str}}</td>
                     <td>{{item.created_at}}</td>
                     <td>{{item.appointment_date}}</td>
-                    <td class="text-right">{{item.total | format_currency}}</td>
-                    <td class="text-right">{{item.remaining | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.total)}}</td>
+                    <td class="text-right">{{formatCurrency(item.remaining)}}</td>
                     <td>{{item.interest_rate}}%</td>
                     <td>{{convertPeriodCodeToName(item.interest_period)}}</td>
                     <td>{{item.interest_period_real}}</td>
-                    <td class="text-right">{{item.interest | format_currency}}</td>
-                    <td class="text-right">{{item.amount | format_currency}}</td>
+                    <td class="text-right">{{formatCurrency(item.interest)}}</td>
+                    <td class="text-right">{{formatCurrency(item.amount)}}</td>
 
                     <td>
                       <div class="flex gap-2" v-if="item.status === 0">
@@ -283,7 +278,7 @@
             <div class="flex flex-wrap -mx-2">
                 <div class="w-full px-2">
                   <label>
-                    Số tiền còn lại: <b>{{payData.remaining | format_currency}}đ</b>
+                    Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
                   </label>
                 </div>
             </div>
@@ -311,7 +306,7 @@
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
                 <label>
-                  Số tiền lãi: <b>{{payData.interest | format_currency}}đ</b>
+                  Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
                 </label>
               </div>
             </div>
@@ -319,7 +314,7 @@
               <div class="w-full px-2">
                 <label>
                   Tổng tiền phải trả:
-                  <b class="text-header">{{payData.total_amount | format_currency}}đ</b>
+                  <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
                 </label>
               </div>
             </div>
@@ -413,7 +408,9 @@ import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
+import { useFormatters } from '@/composables/useFormatters'
 import { useRouter } from 'vue-router'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 export default {
@@ -422,8 +419,10 @@ export default {
   },
   setup() {
     const { toast } = useToast()
+    const { formatCurrency } = useFormatters()
     const router = useRouter()
-    return { toast, router }
+    const { exportToExcel } = useExcelExport()
+    return { toast, formatCurrency, router, exportToExcel }
   },
   data () {
     return {
