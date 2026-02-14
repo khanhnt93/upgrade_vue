@@ -13,8 +13,8 @@
               </div>
             </div>
 
-            <div class="form-row">
-              <div md='12'>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
                 <h4 class="mt-1 text-center text-header">Bán Hàng</h4>
               </div>
             </div>
@@ -23,7 +23,7 @@
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
 
-            <div class="form-row mt-2">
+            <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>
                   <span>Từ đơn đặt hàng</span>
@@ -45,11 +45,11 @@
             </div>
 
             <div class="mt-2">
-              <div class="w-full px-2 bg-gray text-white title-partner">
-                <h5>
-                  <span class="pull-left">Thông tin người mua</span>
-                  <span class="pull-right" v-show="showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-down" /></span>
+              <div class="w-full px-2 bg-gray-500 text-white title-partner">
+                <h5 class="flex justify-between items-center">
+                  <span>Thông tin người mua</span>
+                  <span v-show="showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-up" /></span>
+                  <span v-show="!showPartnerInfo" @click="showPartnerInfo = !showPartnerInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
               </div>
             </div>
@@ -57,33 +57,35 @@
             <div v-show="showPartnerInfo">
               <div class="w-full px-2">
 
-                <div class="form-row mt-2">
+                <div class="flex flex-wrap -mx-2 mt-2">
                   <div class="w-full md:w-1/4 px-2 mt-2">
                     <label>
                       <span>Khách hàng</span>
                   </label>
                   </div>
                   <div class="w-full md:w-3/4 px-2 mt-2">
-                    <div class="input-group" v-show="trade.from_type == 0">
-                      <multiselect
-                        v-model="customerSelect"
-                        :options="customerOptionStore"
-                        :loading="loadingGetOptions"
-                        placeholder="--Chọn khách hàng--"
-                        label="name"
-                        track-by="name"
-                        @input="changeCustomer">
-                      </multiselect>
+                    <div class="flex items-center" v-show="trade.from_type == 0">
+                      <div class="flex-1">
+                        <multiselect
+                          v-model="customerSelect"
+                          :options="customerOptionStore"
+                          :loading="loadingGetOptions"
+                          placeholder="--Chọn khách hàng--"
+                          label="name"
+                          track-by="name"
+                          @input="changeCustomer">
+                        </multiselect>
+                      </div>
 
-                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchCustomer" >
+                      <button class="btn btn-outline-primary ml-2"  @click="showModalSearchCustomer" >
                         <i class="fa fa-search"></i>
                       </button>
 
-                      <button class="btn btn-outline-success pull-right ml-2"  @click="showModalAddCustomer" >
+                      <button class="btn btn-outline-success ml-2"  @click="showModalAddCustomer" >
                         <i class="fa fa-plus"></i>
                       </button>
 
-                      <button class="btn pull-right ml-2" v-show="customerSelect && customerSelect.id" variant="outline-success"
+                      <button class="btn ml-2" v-show="customerSelect && customerSelect.id" variant="outline-success"
                                 @click="updateCustomerInfo" >
                         <i class="fa fa-save"></i>
                       </button>
@@ -92,7 +94,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>Tên khách hàng</span>
@@ -110,7 +112,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>SĐT khách hàng</span>
@@ -129,7 +131,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>
                       <span>Địa chỉ khách hàng</span>
@@ -151,41 +153,43 @@
 
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
-                <h5>
-                  <span class="pull-left">Thông tin sản phẩm</span>
-                  <span class="pull-right" v-show="showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-down" /></span>
+              <div class="w-full px-2 bg-teal-500 text-white title-partner" >
+                <h5 class="flex justify-between items-center">
+                  <span>Thông tin sản phẩm</span>
+                  <span v-show="showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-up" /></span>
+                  <span v-show="!showProductInfo" @click="showProductInfo = !showProductInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
               </div>
             </div>
 
             <div v-show="showProductInfo" class="mt-2">
               <div class="w-full px-2">
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Sản phẩm</label><span class="error-sybol"></span>
                   </div>
                   <div class="w-full md:w-3/4 px-2 mt-2" >
-                    <div class="input-group">
-                      <multiselect
-                        v-model="productSelect"
-                        :options="productOptions"
-                        :loading="loadingGetOptions"
-                        placeholder="--Chọn sản phẩm--"
-                        label="name_full"
-                        track-by="name_full"
-                        @input="changeProduct">
-                      </multiselect>
+                    <div class="flex items-center">
+                      <div class="flex-1">
+                        <multiselect
+                          v-model="productSelect"
+                          :options="productOptions"
+                          :loading="loadingGetOptions"
+                          placeholder="--Chọn sản phẩm--"
+                          label="name_full"
+                          track-by="name_full"
+                          @input="changeProduct">
+                        </multiselect>
+                      </div>
 
-                      <button class="btn btn-outline-primary pull-right ml-2"  @click="showModalSearchProduct" >
+                      <button class="btn btn-outline-primary ml-2"  @click="showModalSearchProduct" >
                         <i class="fa fa-search"></i>
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div class="form-row mt-2" v-show="currentProperties.length > 0">
+                <div class="flex flex-wrap -mx-2 mt-2" v-show="currentProperties.length > 0">
                   <div class="w-full md:w-1/4 px-2">
                     <label>Thuộc tính</label>
                   </div>
@@ -202,12 +206,12 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đơn giá nhập</label><span class="error-sybol"></span>
                   </div>
                   <div class="w-full md:w-3/4 px-2 mt-2" >
-                    <div class="input-group">
+                    <div class="flex flex-row">
                       <input
                         v-show="isShowPriceBuy"
                         id="price_buy"
@@ -234,7 +238,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đơn giá bán</label><span class="error-sybol"></span>
                   </div>
@@ -250,7 +254,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số lượng trong kho {{unit_name}}</label><span class="error-sybol"></span>
                   </div>
@@ -267,7 +271,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số lượng bán {{unit_name}}</label><span class="error-sybol"></span>
                   </div>
@@ -333,18 +337,18 @@
             </div>
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
-                <h5>
-                  <span class="pull-left">Thông tin thanh toán</span>
-                  <span class="pull-right" v-show="showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-up" /></span>
-                  <span class="pull-right" v-show="!showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-down" /></span>
+              <div class="w-full px-2 bg-green-600 text-white title-partner" >
+                <h5 class="flex justify-between items-center">
+                  <span>Thông tin thanh toán</span>
+                  <span v-show="showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-up" /></span>
+                  <span v-show="!showPaymentInfo" @click="showPaymentInfo = !showPaymentInfo"><i class="fa fa-angle-double-down" /></span>
                 </h5>
               </div>
             </div>
 
             <div class="mt-2" v-show="showPaymentInfo">
               <div class="w-full px-2">
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Tổng tiền sản phẩm </label>
                   </div>
@@ -360,7 +364,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" v-show="trade.order_id && trade.amount_paid_on_order">
+                <div class="mt-2 flex flex-wrap -mx-2" v-show="trade.order_id && trade.amount_paid_on_order">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Đã thanh toán khi đặt hàng </label>
                   </div>
@@ -376,7 +380,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Chi phí thêm </label>
                   </div>
@@ -392,7 +396,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số tiền giảm</label>
                   </div>
@@ -408,7 +412,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Khuyến mãi</label>
                   </div>
@@ -422,6 +426,7 @@
                         style="width: 100px"
                         v-model="trade.discount_amount"
                         readonly disabled
+                        class="form-control"
                       >
                       <button class="btn btn-outline-success pull-right ml-2"  @click="showModalApplyPmt" >
                         <i class="fa fa-plus"></i>
@@ -438,35 +443,37 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Thuế VAT </label>
                   </div>
                   <div class="w-full md:w-3/4 px-2 mt-2" >
                     <div class="input-group">
                       <input type="checkbox" id="have_vat" v-model="trade.have_vat" class="mr-2" @change="calculateAmount">
-                      <input
-                        id="vat_percent"
-                        type="text"
-                        maxlength="3"
-                        autocomplete="new-password"
-                        class="mr-2"
-                        style="width: 50px"
-                        v-model="trade.vat_percent"
-                        @change="calculateAmount">%
-                      <input
-                        id="vat_value"
-                        type="text"
-                        maxlength="14"
-                        autocomplete="new-password"
-                        class="form-control"
-                        v-model="trade.vat_value"
-                        @change="calculateAmount">
+                      <div class="flex flex-row">
+                        <input
+                          id="vat_percent"
+                          type="text"
+                          maxlength="3"
+                          autocomplete="new-password"
+                          class="form-control mr-2"
+                          style="width: 50px"
+                          v-model="trade.vat_percent"
+                          @change="calculateAmount">%
+                        <input
+                          id="vat_value"
+                          type="text"
+                          maxlength="14"
+                          autocomplete="new-password"
+                          class="form-control ml-2"
+                          v-model="trade.vat_value"
+                          @change="calculateAmount">
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Thành tiền </label><span class="error-sybol"></span>
                   </div>
@@ -482,7 +489,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Số tiền thanh toán </label>
                   </div>
@@ -498,7 +505,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" v-show="isShowApoimentPayment">
+                <div class="mt-2 flex flex-wrap -mx-2" v-show="isShowApoimentPayment">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Lãi suất (%)</label>
                   </div>
@@ -514,7 +521,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" v-show="isShowApoimentPayment">
+                <div class="mt-2 flex flex-wrap -mx-2" v-show="isShowApoimentPayment">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Kỳ hạn tính lãi</label>
                   </div>
@@ -530,7 +537,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" v-show="isShowApoimentPayment">
+                <div class="mt-2 flex flex-wrap -mx-2" v-show="isShowApoimentPayment">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Ngày hẹn thanh toán </label>
                   </div>
@@ -540,7 +547,7 @@
                   </div>
                 </div>
 
-                <div class="form-row" v-show="isShowApoimentPayment">
+                <div class="mt-2 flex flex-wrap -mx-2" v-show="isShowApoimentPayment">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Nhắc hẹn thanh toán trước số ngày </label>
                   </div>
@@ -556,13 +563,13 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Loại tiền thanh toán </label>
                   </div>
                   <div class="w-full md:w-3/4 px-2 pl-2" >
 
-                    <div class="form-row">
+                    <div class="flex flex-wrap -mx-2">
                       <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Tiền mặt </label>
                       </div>
@@ -578,7 +585,7 @@
                       </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="mt-2 flex flex-wrap -mx-2">
                       <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Chuyển khoản </label>
                       </div>
@@ -594,7 +601,7 @@
                       </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="mt-2 flex flex-wrap -mx-2">
                       <div class="w-full md:w-1/4 px-2 mt-2" >
                         <label>Tiền điện tử </label>
                       </div>
@@ -612,7 +619,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="mt-2 flex flex-wrap -mx-2">
                   <div class="w-full md:w-1/4 px-2 mt-2" >
                     <label>Ghi chú </label>
                   </div>
@@ -629,7 +636,7 @@
             </div>
 
             <div class="mt-2">
-              <div class="w-full px-2 text-center" >
+              <div class="w-full px-2 flex justify-end" >
                 <button class="btn btn-outline-primary pull-right btn-width-200"  @click="printProvisionalInvoice">
                   In hóa đơn tạm tính
                 </button>
@@ -638,9 +645,8 @@
 
             <div class="mt-2">
               <div class="w-full px-2 text-center" >
-                <button class="btn" v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="checkBeforeSell"
+                <button class="btn btn-outline-success" v-show="!saving" variant="outline-success" style="height: 50px; width: 240px" @click="checkBeforeSell"
                           :disabled="saving || !this.trade.id">
-                  <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
                   Xác Nhận Bán
                 </button>
                 <span class="loading-more" v-show="saving"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
@@ -878,15 +884,25 @@
     </div>
 
     <!--Modal tìm kiếm sản phẩm -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
+    <!--Modal tìm kiếm sản phẩm -->
+    <TransitionRoot appear :show="isOpenSearchProduct" as="template">
+      <Dialog as="div" @close="isOpenSearchProduct = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
         <div class="flex flex-wrap -mx-2">
           <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h4>
+            <h4 class="modal-title text-center text-green-600">Tìm kiếm sản phẩm</h4>
           </div>
         </div>
         <hr>
 
-        <div class="form-row">
+        <div class="flex flex-wrap -mx-2">
           <div class="w-full md:w-1/4 px-2 mt-2" >
             <label>Nhóm sản phẩm </label>
             <multiselect
@@ -937,12 +953,12 @@
         </div>
 
         <div class="mt-2">
-          <div class="w-full px-2">
-            <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchProduct">
+          <div class="w-full px-2 flex justify-between">
+            <button class="btn btn-outline-secondary btn-width-120"  @click.prevent="hideModalSearchProduct">
               Quay lại
             </button>
 
-            <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchProduct"
+            <button class="btn btn-outline-primary btn-width-120"  :disabled="onSearchProduct"
                       @click.prevent="searchProduct">
               Tìm Kiếm
             </button>
@@ -983,13 +999,28 @@
           </div>
         </div>
 
-      </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!--Modal tìm kiếm khách hàng -->
-    <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-customer">
+    <!--Modal tìm kiếm khách hàng -->
+    <TransitionRoot appear :show="isOpenSearchCustomer" as="template">
+      <Dialog as="div" @close="isOpenSearchCustomer = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
+          <h4 class="modal-title text-center text-green-600">Tìm kiếm khách hàng</h4>
         </div>
       </div>
       <hr>
@@ -1019,12 +1050,12 @@
       </div>
 
       <div class="mt-2">
-        <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click.prevent="hideModalSearchCustomer">
+        <div class="w-full px-2 flex justify-between">
+          <button class="btn btn-outline-secondary btn-width-120"  @click.prevent="hideModalSearchCustomer">
             Quay lại
           </button>
 
-          <button class="btn btn-outline-primary pull-right btn-width-120"  :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+          <button class="btn btn-outline-primary btn-width-120"  :disabled="onSearchCustomer" @click.prevent="searchCustomer">
             Tìm Kiếm
           </button>
         </div>
@@ -1063,169 +1094,203 @@
         </div>
       </div>
 
-    </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!--Modal thêm khách hàng -->
-    <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-add-customer">
+    <!--Modal thêm khách hàng -->
+    <TransitionRoot appear :show="isOpenAddCustomer" as="template">
+      <Dialog as="div" @close="isOpenAddCustomer = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-4xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Thêm khách hàng</h4>
+          <h4 class="modal-title text-center text-green-600">Thêm khách hàng</h4>
         </div>
       </div>
       <hr>
 
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Loại khách hàng </label>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Loại khách hàng </label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <div class="input-group">
+              <input type="radio" v-model="customer.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
+              <input type="radio" v-model="customer.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
+            </div>
+          </div>
         </div>
-        <div class="w-full md:w-3/4 px-2">
-          <div class="input-group">
-            <input type="radio" v-model="customer.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
-            <input type="radio" v-model="customer.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Tên </label><span class="error-sybol"></span>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <input
+              id="nameCus"
+              type="text"
+              class="form-control"
+              v-model="customer.name"
+              autocomplete="new-password"
+              maxlength="75">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Số Điện Thoại </label><span class="error-sybol"></span>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <input
+              id="phoneCuss"
+              type="text"
+              class="form-control"
+              v-model="customer.phone_number"
+              @keyup="integerOnly($event.target)"
+              autocomplete="new-password"
+              maxlength="20"
+              v-on:change="checkPhoneNumberFormat($event.target.value)">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Giới Tính</label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <select class="form-control" v-model="customer.gender">
+              <option v-for="option in optionsGender" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Ngày Tháng Năm Sinh</label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
+                                  placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Tỉnh/ Thành Phố</label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <select class="form-control form-control"
+              id="city_id"
+              v-model="customer.city_id"
+              v-on:change="changeCity($event.target)">
+              <option v-for="option in optionsCity" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Quận/ Huyện</label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <select class="form-control form-control"
+              id="district_id"
+              v-model="customer.district_id"
+              :disabled="!customer.city_id">
+              <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Địa chỉ </label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <input
+              id="addressCus"
+              type="text"
+              class="form-control"
+              v-model="customer.address"
+              autocomplete="new-password"
+              maxlength="255">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/4 px-2 mt-2" >
+            <label>Mã số thuế </label>
+          </div>
+          <div class="w-full md:w-3/4 px-2">
+            <input
+              id="tax_code"
+              type="text"
+              class="form-control"
+              v-model="customer.tax_code"
+              @keyup="integerOnly($event.target)"
+              autocomplete="new-password"
+              maxlength="20">
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="mt-2">
+        <div class="w-full px-2 flex justify-between items-center">
+          <button class="btn btn-outline-secondary btn-width-120"  @click="backCustomer">
+            Hủy bỏ
+          </button>
+          <div class="flex justify-end items-center">
+            <button class="btn btn-outline-success btn-width-120" v-show="!savingCustomer"
+                       @click="saveCustomer"
+                      :disabled="savingCustomer">
+              Lưu
+            </button>
+            <span class="loading-more" v-show="savingCustomer"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
           </div>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Tên </label><span class="error-sybol"></span>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
         </div>
-        <div class="w-full md:w-3/4 px-2">
-          <input
-            id="nameCus"
-            type="text"
-            class="form-control"
-            v-model="customer.name"
-            autocomplete="new-password"
-            maxlength="75">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Số Điện Thoại </label><span class="error-sybol"></span>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <input
-            id="phoneCuss"
-            type="text"
-            class="form-control"
-            v-model="customer.phone_number"
-            @keyup="integerOnly($event.target)"
-            autocomplete="new-password"
-            maxlength="20"
-            v-on:change="checkPhoneNumberFormat($event.target.value)">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Giới Tính</label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <select class="form-control" v-model="customer.gender">
-            <option v-for="option in optionsGender" :key="option.value" :value="option.value">
-              {{ option.text }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Ngày Tháng Năm Sinh</label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <datepicker v-model="customer.birthday" format="yyyy-MM-dd" :typeable="true"
-                                placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Tỉnh/ Thành Phố</label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <select class="form-control form-control"
-            id="city_id"
-            v-model="customer.city_id"
-            v-on:change="changeCity($event.target)">
-            <option v-for="option in optionsCity" :key="option.id" :value="option.id">
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Quận/ Huyện</label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <select class="form-control form-control"
-            id="district_id"
-            v-model="customer.district_id"
-            :disabled="!customer.city_id">
-            <option v-for="option in optionsDistrict" :key="option.id" :value="option.id">
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Địa chỉ </label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <input
-            id="addressCus"
-            type="text"
-            class="form-control"
-            v-model="customer.address"
-            autocomplete="new-password"
-            maxlength="255">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="w-full md:w-1/4 px-2 mt-2" >
-          <label>Mã số thuế </label>
-        </div>
-        <div class="w-full md:w-3/4 px-2">
-          <input
-            id="tax_code"
-            type="text"
-            class="form-control"
-            v-model="customer.tax_code"
-            @keyup="integerOnly($event.target)"
-            autocomplete="new-password"
-            maxlength="20">
-        </div>
-      </div>
-
-      <div class="mt-2">
-        <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120"  @click="backCustomer">
-            Hủy bỏ
-          </button>
-          <button class="btn pull-right btn-width-120" v-show="!savingCustomer" variant="outline-success"
-                     @click="saveCustomer"
-                    :disabled="savingCustomer">
-            Lưu
-          </button>
-          <span class="loading-more" v-show="savingCustomer"><i class="fas fa-spinner fa-spin fa-3x text-primary"></i></span>
-
-        </div>
-      </div>
-
-    </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!--Modal thao tác sau khi xác nhận mua -->
-      <div centered hide-footer hide-header no-close-on-backdrop size="lg" id="modal-actions">
+    <!--Modal thao tác sau khi xác nhận mua -->
+    <TransitionRoot appear :show="isOpenActions" as="template">
+      <Dialog as="div" @close="isOpenActions = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-4xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
         <div class="flex flex-wrap -mx-2">
           <div class="w-full px-2">
-            <h4 class="modal-title text-center text-success">Bán hàng thành công!</h4>
+            <h4 class="modal-title text-center text-green-600">Bán hàng thành công!</h4>
           </div>
         </div>
         <hr>
@@ -1248,10 +1313,25 @@
           </div>
         </div>
 
-      </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!-- Modal apply pmt -->
-    <div title="Áp dụng khuyến mãi" centered hide-header hide-footer no-close-on-backdrop id="modal-apply-pmt" size="xl">
+    <!-- Modal apply pmt -->
+    <TransitionRoot appear :show="isOpenApplyPmt" as="template">
+      <Dialog as="div" @close="isOpenApplyPmt = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
           <h5 class="text-center">Áp dụng khuyến mãi</h5>
@@ -1295,13 +1375,28 @@
         </div>
       </div>
 
-    </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
     <!--Modal cảnh báo bán quá số lượng trong kho -->
-    <div centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-confirm-sell">
+    <!--Modal cảnh báo bán quá số lượng trong kho -->
+    <TransitionRoot appear :show="isOpenConfirmSell" as="template">
+      <Dialog as="div" @close="isOpenConfirmSell = false" class="relative z-50">
+        <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95" enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100" leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl max-h-[80vh] overflow-y-auto transform rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
       <div class="flex flex-wrap -mx-2">
         <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Sản phẩm bán vượt quá số lượng trong kho</h4>
+          <h4 class="modal-title text-center text-green-600">Sản phẩm bán vượt quá số lượng trong kho</h4>
         </div>
       </div>
       <hr>
@@ -1338,7 +1433,12 @@
         </div>
       </div>
 
-    </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
@@ -1355,21 +1455,35 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { Dialog, DialogPanel, TransitionRoot, TransitionChild } from '@headlessui/vue'
 
 export default {
   components: {
     Datepicker,
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel,
+    TransitionRoot,
+    TransitionChild
   },
   setup() {
     const authStore = useAuthStore()
+    const { popToast } = useToast()
 
     return {
-      authStore
+      authStore,
+      popToast
     }
   },
   data () {
     return {
+      isOpenSearchProduct: false,
+      isOpenSearchCustomer: false,
+      isOpenAddCustomer: false,
+      isOpenActions: false,
+      isOpenApplyPmt: false,
+      isOpenConfirmSell: false,
       loadingGetOptions: false,
       orderSelect: null,
       orderOptions: [],
@@ -1634,23 +1748,13 @@ export default {
   },
   methods: {
 
-    /**
-     * Make toast without title
-     */
-    popToast(variant, content) {
-      this.$bvToast.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant,
-        autoHideDelay: 3000
-      })
-    },
 
       /**
      * Get city options
      */
     getOptionCity() {
       MasterApi.getCityOptions().then(res => {
+        console.log(res.data.data)
         this.optionsCity = MasterMapper.mapCityModelToDto(res.data.data)
         this.changeCity()
       })
@@ -1672,11 +1776,11 @@ export default {
     },
 
     showModalSearchProduct() {
-      this.$bvModal.show('modal-search-product')
+      this.isOpenSearchProduct = true
     },
 
     hideModalSearchProduct() {
-      this.$bvModal.hide('modal-search-product')
+      this.isOpenSearchProduct = false
     },
 
     backProduct() {
@@ -1688,7 +1792,7 @@ export default {
           "unit_id": null,
           "description": null
       }
-      this.$bvModal.hide('modal-add-product')
+      this.isOpenAddProduct = false
     },
 
     getPmtOfStore() {
@@ -1810,15 +1914,15 @@ export default {
         this.getProductSelectedById(product_id)
         this.changeProduct()
 
-      this.$bvModal.hide('modal-search-product')
+      this.isOpenSearchProduct = false
     },
 
     showModalAddCustomer() {
-      this.$bvModal.show('modal-add-customer')
+      this.isOpenAddCustomer = true
     },
 
     showModalSearchCustomer() {
-      this.$bvModal.show('modal-search-customer')
+      this.isOpenSearchCustomer = true
     },
 
     backCustomer() {
@@ -1833,11 +1937,11 @@ export default {
           "address": null,
           "tax_code": null,
       }
-      this.$bvModal.hide('modal-add-customer')
+      this.isOpenAddCustomer = false
     },
 
     hideModalSearchCustomer() {
-      this.$bvModal.hide('modal-add-customer')
+      this.isOpenSearchCustomer = false
     },
 
     saveCustomer() {
@@ -1930,7 +2034,7 @@ export default {
 
       this.getCustomerItemById(this.trade.customer_id)
 
-      this.$bvModal.hide('modal-search-customer')
+      this.isOpenSearchCustomer = false
     },
 
       /**
@@ -2869,14 +2973,14 @@ export default {
 
       if(this.productNotEnoughQuantity.length > 0) {
         // Show modal cảnh báo bán quá số lượng trong kho
-        this.$bvModal.show('modal-confirm-sell')
+        this.isOpenConfirmSell = true
         return
       }
       this.save()
     },
 
     hideModalConfirmSell() {
-      this.$bvModal.hide('modal-confirm-sell')
+      this.isOpenConfirmSell = false
     },
 
     /**
@@ -2944,8 +3048,8 @@ export default {
               this.trade = res.data.data
 
               this.suffix_print_title = ""
-              this.$bvModal.show('modal-actions')
-              this.$bvModal.hide('modal-confirm-sell')
+              this.isOpenActions = true
+              this.isOpenConfirmSell = false
 
             }
           }
@@ -3078,7 +3182,7 @@ export default {
         this.customerSelect = {}
         this.refreshTradeInfo()
 
-        this.$bvModal.hide('modal-actions')
+        this.isOpenActions = false
       },
 
       printInvoice() {
@@ -3176,7 +3280,7 @@ export default {
     showModalApplyPmt() {
       this.pmtTemp = JSON.parse(JSON.stringify(this.trade.promotions))
 
-      this.$bvModal.show('modal-apply-pmt')
+      this.isOpenApplyPmt = true
 
 
       setTimeout(this.updatePmtAllyToModal, 1000)
@@ -3227,7 +3331,7 @@ export default {
       },
 
     hideModalApplyPmt() {
-      this.$bvModal.hide('modal-apply-pmt')
+      this.isOpenApplyPmt = false
     },
 
     /**
@@ -3293,7 +3397,7 @@ export default {
     cancelApplyPmt () {
       this.pmtTemp = []
 
-      this.$bvModal.hide('modal-apply-pmt')
+      this.isOpenApplyPmt = false
     },
 
 

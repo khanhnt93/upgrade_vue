@@ -53,8 +53,8 @@
           </div>
 
           <div class="flex flex-wrap -mx-2">
-            <div class="px-2 w-full">
-              <button class="btn btn-outline-primary pull-right btn-width-120"
+            <div class="px-2 w-full flex justify-end">
+              <button class="btn btn-outline-primary btn-width-120"
                         :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
               </button>
@@ -91,14 +91,16 @@
                   <td class="text-right">{{ currencyFormat(item.sub_total) }}</td>
                   <td class="text-right">{{ currencyFormat(item.total) }}</td>
                   <td class="actions-cell">
-                    <button v-show="item.trade_status != 1" class="btn btn-outline-danger pull-right btn-width-120 mr-2"
-                              @click="goToUpdateTrade(item.id, item.trade_type_int)">
-                      Sửa
-                    </button>
-                    <button v-show="item.trade_status == 1" class="btn btn-outline-success pull-right btn-width-120 mr-2"
-                              @click="goToDetail(item.id)">
-                      Chi tiết
-                    </button>
+                    <div class="flex justify-end space-x-2">
+                        <button v-show="item.trade_status != 1" class="btn btn-outline-danger btn-width-120"
+                                  @click="goToUpdateTrade(item.id, item.trade_type_int)">
+                          Sửa
+                        </button>
+                        <button v-show="item.trade_status == 1" class="btn btn-outline-success btn-width-120"
+                                  @click="goToDetail(item.id)">
+                          Chi tiết
+                        </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -439,4 +441,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .table-bordered {
+    border: 1px solid #dee2e6;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #dee2e6;
+  }
 </style>

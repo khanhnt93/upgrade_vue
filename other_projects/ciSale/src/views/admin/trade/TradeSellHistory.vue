@@ -52,7 +52,7 @@
 
           </div>
 
-          <div class="flex flex-wrap -mx-2">
+          <div class="flex flex-wrap -mx-2 mt-2">
             <div class="px-2 w-full">
               <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
@@ -67,7 +67,7 @@
           </div>
 
           <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-bordered table-striped">
               <thead>
                 <tr>
                   <th class="text-center">STT</th>
@@ -436,4 +436,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.table-bordered {
+  border: 1px solid #dee2e6;
+  th, td {
+    border: 1px solid #dee2e6;
+  }
+  thead th {
+    border-bottom-width: 2px;
+  }
+}
 </style>
