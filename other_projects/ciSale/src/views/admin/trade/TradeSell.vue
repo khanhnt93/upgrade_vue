@@ -3550,11 +3550,12 @@ export default {
   }
 
   table {
-   margin: auto;
+    margin: 0 auto;
     border-collapse: collapse;
     overflow-x: auto;
     display: block;
-    width: fit-content;
+    width: fit-content !important;
+    min-width: 0 !important;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
