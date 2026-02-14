@@ -1008,12 +1008,11 @@
                       <div class="w-full px-2 mt-2" >
                         <label> Hãng sản phẩm </label>
                         <select class="form-control form-control"
+                          :options="productBrandOptions"
                           id="product_brand"
-                          v-model="product.product_brand_id">
-                          <option v-for="(item, index) in productBrandOptions" :key="index" :value="item.id !== undefined ? item.id : item.value">
-                            {{ item.name || item.text }}
-                          </option>
-                        </select>
+                          type="text"
+                          autocomplete="new-password"
+                          v-model="product.product_brand_id"></select>
                       </div>
                     </div>
 
@@ -1047,12 +1046,11 @@
                       <div class="w-full px-2 mt-2" >
                         <label> Đơn vị </label><span class="error-sybol"></span>
                         <select class="form-control form-control"
+                          :options="unitOptions"
                           id="unit"
-                          v-model="product.unit_id">
-                          <option v-for="(item, index) in unitOptions" :key="index" :value="item.id !== undefined ? item.id : item.value">
-                            {{ item.name || item.text }}
-                          </option>
-                        </select>
+                          type="text"
+                          autocomplete="new-password"
+                          v-model="product.unit_id"></select>
                       </div>
                     </div>
 
@@ -1074,7 +1072,7 @@
                         </button>
                         <div class="flex items-center">
                             <span class="loading-more mr-2" v-show="savingProduct"><i class="fas fa-spinner fa-spin fa-2x"></i></span>
-                            <button class="btn btn-outline-success" v-show="!savingProduct"
+                            <button class="btn variant-outline-success" v-show="!savingProduct"
                                       @click="saveProduct"
                                       :disabled="savingProduct">
                               Lưu
@@ -1171,8 +1169,8 @@
                     </div>
 
                     <div class="mt-4">
-                      <div class="w-full px-2">
-                        <table class="table table-bordered table-striped fixed_header" style="width: 100%;">
+                      <div class="w-full px-2 overflow-x-auto">
+                        <table class="table table-bordered table-striped min-w-full">
                           <thead>
                             <tr>
                               <th v-for="field in productSearchFields" :key="field.key" class="p-2 border">{{ field.label }}</th>
@@ -1369,11 +1367,7 @@
                       <label>Giới Tính</label>
                     </div>
                     <div class="w-full md:w-3/4 px-2">
-                      <select class="form-control" v-model="customer.gender">
-                        <option v-for="(item, index) in optionsGender" :key="index" :value="item.value">
-                          {{ item.text }}
-                        </option>
-                      </select>
+                      <select class="form-control" :options="optionsGender" v-model="customer.gender"></select>
                     </div>
                   </div>
 
@@ -1394,13 +1388,10 @@
                     <div class="w-full md:w-3/4 px-2">
                       <select class="form-control form-control"
                         id="city_id"
+                        :options="optionsCity"
                         v-model="customer.city_id"
-                        @change="changeCity"
-                      >
-                        <option v-for="(item, index) in optionsCity" :key="index" :value="item.value">
-                          {{ item.text }}
-                        </option>
-                      </select>
+                        v-on:change="changeCity($event.target)"
+                      ></select>
                     </div>
                   </div>
 
@@ -1411,13 +1402,10 @@
                     <div class="w-full md:w-3/4 px-2">
                       <select class="form-control form-control"
                         id="district_id"
+                        :options="optionsDistrict"
                         v-model="customer.district_id"
                         :disabled="!customer.city_id"
-                      >
-                        <option v-for="(item, index) in optionsDistrict" :key="index" :value="item.value">
-                          {{ item.text }}
-                        </option>
-                      </select>
+                      ></select>
                     </div>
                   </div>
 
