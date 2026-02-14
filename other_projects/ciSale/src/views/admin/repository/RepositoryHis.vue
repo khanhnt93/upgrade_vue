@@ -242,7 +242,7 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = new Date()
+    this.inputs.to_date = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
     this.inputs.from_date = fromDate
 
