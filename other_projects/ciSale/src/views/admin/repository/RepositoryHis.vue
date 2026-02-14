@@ -42,11 +42,12 @@
               <label> Loại hoạt động </label>
               <select
                 id="type"
-                :options="typeOptions"
-                type="text"
-                autocomplete="new-password"
-                class="form-select"
-                v-model="inputs.type_id"></select>
+                class="form-select form-control"
+                v-model="inputs.type_id">
+                <option v-for="(item, index) in typeOptions" :key="index" :value="item.value">
+                  {{ item.text }}
+                </option>
+              </select>
             </div>
 
             <div class="w-full md:w-1/4 px-2">
@@ -241,9 +242,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    this.inputs.to_date = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
@@ -377,8 +378,8 @@ export default {
         "product_group_id": this.productGroupSelect && this.productGroupSelect.id ? this.productGroupSelect.id : null,
         "product_type_id": this.productTypeSelect && this.productTypeSelect.id ? this.productTypeSelect.id : null,
         "type_id": this.inputs.type_id,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? new Date(this.inputs.from_date).toISOString().slice(0, 10) : null,
+        "to_date": this.inputs.to_date ? new Date(this.inputs.to_date).toISOString().slice(0, 10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }

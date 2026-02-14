@@ -214,9 +214,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    this.inputs.to_date = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     window.addEventListener('scroll', this.onScroll)
 
@@ -386,8 +386,8 @@ export default {
         "product_group_id": this.productGroupSelect && this.productGroupSelect.id ? this.productGroupSelect.id : null,
         "product_type_id": this.productTypeSelect && this.productTypeSelect.id ? this.productTypeSelect.id : null,
         "product_id": this.inputs.product_id,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? new Date(this.inputs.from_date).toISOString().slice(0, 10) : null,
+        "to_date": this.inputs.to_date ? new Date(this.inputs.to_date).toISOString().slice(0, 10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }
