@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="card card-overflow-visible">
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">
@@ -24,7 +24,7 @@
             </div>
             <hr/>
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -213,6 +213,7 @@ import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter, useRoute } from 'vue-router'
+import moment from 'moment'
 
 
 export default {
@@ -221,10 +222,10 @@ export default {
     Multiselect
   },
   setup() {
-    const { toast } = useToast()
+    const { popToast } = useToast()
     const router = useRouter()
     const route = useRoute()
-    return { toast, router, route }
+    return { popToast, router, route }
   },
   data() {
     return {
@@ -260,7 +261,7 @@ export default {
   mounted() {
     let dateNow = new Date()
     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
-    this.debt.appointment_date = toDate.toJSON().slice(0,10)
+    this.debt.appointment_date = toDate
     this.debt.created_at = new Date()
 
     // Get tất cả các list options liên quan trong màn hình
@@ -268,6 +269,21 @@ export default {
 
     // Get sale channel detail
     this.getDeptDetail()
+  },
+  watch: {
+    customerSelect(val) {
+      if(val && val.id) {
+        this.debt.customer_id = val.id
+        this.debt.customer_name = val.name
+        this.debt.customer_phone_number = val.phone_number
+        this.debt.customer_address = val.address
+      } else {
+        this.debt.customer_id = null
+        this.debt.customer_name = null
+        this.debt.customer_phone_number = null
+        this.debt.customer_address = null
+      }
+    }
   },
   computed: {
     errorName: function () {
@@ -315,7 +331,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.toast(errorMess, 'error')
+        this.popToast('error', errorMess)
       })
     },
 
@@ -323,17 +339,7 @@ export default {
      *  Event change customer
      */
     changeCustomer() {
-      if(this.customerSelect && this.customerSelect.id) {
-        this.debt.customer_id = this.customerSelect.id
-        this.debt.customer_name = this.customerSelect.name
-        this.debt.customer_phone_number = this.customerSelect.phone_number
-        this.debt.customer_address = this.customerSelect.address
-      } else {
-        this.debt.customer_id = null
-        this.debt.customer_name = null
-        this.debt.customer_phone_number = null
-        this.debt.customer_address = null
-      }
+      // Handled by watcher
     },
 
     /**
@@ -350,6 +356,8 @@ export default {
           if (res != null && res.data != null && res.data.data != null) {
             this.debt = res.data.data
 
+            this.debt.created_at = new Date(this.debt.created_at)
+            this.debt.appointment_date = new Date(this.debt.appointment_date)
             this.debt.total = this.currencyFormat(this.debt.total)
           }
 
@@ -378,29 +386,36 @@ export default {
       }
 
       this.saving = true
-      this.debt.total = this.debt.total.replaceAll(",", "")
+
+      let params = {
+        ...this.debt,
+        total: (this.debt.total + "").replaceAll(".", "").replaceAll(",", ""),
+        created_at: moment(this.debt.created_at).format('YYYY-MM-DD'),
+        appointment_date: moment(this.debt.appointment_date).format('YYYY-MM-DD')
+      }
 
       let id = this.route.params.id
       if (id) {
         // Edit
-        this.debt.id = id
-        debitAPI.updatePublicDept(this.debt).then(res => {
+        params.id = id
+        debitAPI.updatePublicDept(params).then(res => {
           this.saving = false
           if (res != null && res.data != null) {
             if (res.data.status == 200) {
               // show popup success
-              this.toast('Cập nhật thành công!!! ', 'success')
+              this.popToast('success', 'Cập nhật thành công!!! ')
+              this.router.push("/public-debt")
             }
           }
         }).catch(err => {
           this.saving = false
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.toast(errorMess, 'error')
+          this.popToast('error', errorMess)
         })
       } else {
         // Add
-        debitAPI.addPublicDept(this.debt).then(res => {
+        debitAPI.addPublicDept(params).then(res => {
           this.saving = false
           if (res != null && res.data != null) {
 
@@ -412,14 +427,14 @@ export default {
           this.saving = false
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)
-          this.toast(errorMess, 'error')
+          this.popToast('error', errorMess)
         })
       }
     },
 
       changeTotal() {
         if(this.debt.total) {
-            let total = this.debt.total.replaceAll(",", "")
+            let total = this.debt.total.replaceAll(".", "").replaceAll(",", "")
             this.debt.total = this.currencyFormat(total)
         }
       },
@@ -475,3 +490,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.card-overflow-visible {
+  overflow: visible !important;
+}
+</style>
