@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="card card-overflow-visible">
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">
@@ -73,20 +73,18 @@
                 Số kết quả: {{items.length}}
               </div>
               <div class="w-full md:w-2/3 px-2 text-right">
-              <download-excel
-                class   = "btn btn-default text-header"
-                :data   = "items"
-                :fields = "excel_fields"
-                worksheet = "Lịch sử công nợ"
-                name    = "lich_su_cong_no.xls">
+              <button
+                  class="btn btn-default text-header btn-width-120 float-right"
+                  @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
+                  title="Xuất Excel">
                 <b>Xuất Excel</b>
-              </download-excel>
+                </button>
               </div>
             </div>
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
               <table class="table table-bordered table-striped fixed_header">
                 <thead>
                 <tr>
@@ -139,13 +137,17 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import tradeApi from '@/api/trade'
 import Multiselect from 'vue-multiselect'
+import moment from 'moment'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 
 export default {
   setup() {
     const { popToast } = useToast()
-    return { popToast }
+    const { exportToExcel } = useExcelExport()
+
+    return { popToast, exportToExcel }
   },
   components: {
     Datepicker,
@@ -160,8 +162,8 @@ export default {
         customer_id: null,
         customer_name: null,
         customer_phone_number: null,
-        from_date: '',
-        to_date: ''
+        from_date: new Date(),
+        to_date: new Date()
       },
       items: [],
       excel_fields: {
@@ -185,9 +187,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    // this.inputs.to_date = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
@@ -267,8 +269,8 @@ export default {
         "customer_id": this.inputs.customer_id,
         "customer_name": this.inputs.customer_name,
         "customer_phone_number": this.inputs.customer_phone_number,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date
+        "from_date": moment(this.inputs.from_date).format('YYYY-MM-DD'),
+        "to_date": moment(this.inputs.to_date).format('YYYY-MM-DD')
       }
 
       // Search
@@ -322,20 +324,22 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+
+<style lang="scss" scoped>
+  .label-width {
+    width: 100%;
+  }
+
 
   table {
     margin: auto;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
 
   td, th {
-    border: solid rgb(200, 200, 200) 1px;
     padding: .5rem;
   }
 
@@ -345,7 +349,6 @@ export default {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
     border-top: none;
   }
 
