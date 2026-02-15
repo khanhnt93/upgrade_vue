@@ -25,9 +25,8 @@
                 <label> Khách hàng </label><span class="error-sybol"></span>
               </div>
               <div class="w-full md:w-3/4 px-2">
-                <div class="input-group flex items-center">
+                <div class="input-group flex flex-row">
                   <multiselect
-                    class="flex-grow"
                     v-model="customerSelect"
                     :options="customerOptions"
                     :loading="loadingGetOptions"
@@ -122,6 +121,8 @@
                 </h5>
               </div>
             </div>
+
+            <div class="flex flex-col gap-2 mt-2">
 
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -279,6 +280,7 @@
                   @keyup="integerOnly($event.target)">
               </div>
             </div>
+          </div>
 
             <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full px-2 text-center">
@@ -296,111 +298,132 @@
     </div>
 
     <!--Modal tìm kiếm khách hàng -->
-    <div v-if="showSearchModal" class="modal-backdrop">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-          <div class="modal-body">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </div>
-      </div>
-      <hr>
+    <TransitionRoot appear :show="showSearchModal" as="template">
+      <Dialog as="div" @close="hideModalSearchCustomer" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-1/2 px-2">
-          <label> Tên </label>
-          <input
-            id="nameCusSearch"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.name"
-            maxlength="75">
-        </div>
-        <div class="w-full md:w-1/2 px-2">
-          <label> Số điện thoại </label>
-          <input
-            id="phoneNumberCus"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.phone"
-            maxlength="11"
-            @keyup="integerOnly($event.target)">
-        </div>
-      </div>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h4" class="modal-title text-center text-success">
+                  Tìm kiếm khách hàng
+                </DialogTitle>
+                <hr class="my-3">
 
-      <div class="flex flex-wrap -mx-2 mt-2">
-        <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
-            Quay lại
-          </button>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Tên </label>
+                    <input
+                      id="nameCusSearch"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.name"
+                      maxlength="75">
+                  </div>
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Số điện thoại </label>
+                    <input
+                      id="phoneNumberCus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.phone"
+                      maxlength="11"
+                      @keyup="integerOnly($event.target)">
+                  </div>
+                </div>
 
-          <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
-            Tìm Kiếm
-          </button>
-        </div>
-      </div>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2">
+                    <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
+                      Quay lại
+                    </button>
 
-      <div class="flex flex-wrap -mx-2 mt-2">
-        <div class="w-full px-2">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Loại</th>
-                <th>Tên</th>
-                <th>Số điện thoại</th>
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
-                <th>Mã số thuế</th>
-                <th>Tỉnh/TP</th>
-                <th>Quận/Huyện</th>
-                <th>Địa chỉ</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in customerSearchItems" :key="index">
-                <td>{{item.stt}}</td>
-                <td>{{item.type}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.phone_number}}</td>
-                <td>{{item.gender}}</td>
-                <td>{{item.birthday}}</td>
-                <td>{{item.tax_code}}</td>
-                <td>{{item.city_name}}</td>
-                <td>{{item.district_name}}</td>
-                <td>{{item.address}}</td>
-                <td>
-                  <button class="btn btn-outline-success pull-right btn-width-120"
-                            @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
-                    Chọn
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                    <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+                      Tìm Kiếm
+                    </button>
+                  </div>
+                </div>
 
-      <div class="flex flex-wrap -mx-2 mt-3">
-        <div class="w-full px-2">
-          <span>--Hết--</span>
-        </div>
-      </div>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th class="text-center">STT</th>
+                          <th class="text-center">Loại</th>
+                          <th class="text-center">Tên</th>
+                          <th class="text-center">Số điện thoại</th>
+                          <th class="text-center">Giới tính</th>
+                          <th class="text-center">Ngày sinh</th>
+                          <th class="text-center">Mã số thuế</th>
+                          <th class="text-center">Tỉnh/TP</th>
+                          <th class="text-center">Quận/Huyện</th>
+                          <th class="text-center">Địa chỉ</th>
+                          <th class="text-center actions-cell"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item, index) in customerSearchItems" :key="index">
+                          <td>{{item.stt}}</td>
+                          <td>{{item.type}}</td>
+                          <td>{{item.name}}</td>
+                          <td>{{item.phone_number}}</td>
+                          <td>{{item.gender}}</td>
+                          <td>{{item.birthday}}</td>
+                          <td>{{item.tax_code}}</td>
+                          <td>{{item.city_name}}</td>
+                          <td>{{item.district_name}}</td>
+                          <td>{{item.address}}</td>
+                          <td class="actions-cell">
+                            <button class="btn btn-outline-success pull-right btn-width-120"
+                                    @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
+                              Chọn
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
+                <div class="flex flex-wrap -mx-2 mt-3">
+                  <div class="w-full px-2">
+                    <span>--Hết--</span>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
-      </div>
-    </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
 <script>
 
 
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import customerAPI from '@/api/customer'
@@ -414,7 +437,12 @@ import moment from 'moment'
 export default {
   components: {
     Datepicker,
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild
   },
   setup() {
     const { popToast } = useToast()
