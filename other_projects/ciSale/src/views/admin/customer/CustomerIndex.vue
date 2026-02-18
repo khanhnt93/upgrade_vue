@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="card card-overflow-visible">
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">

@@ -352,7 +352,7 @@
                 </div>
 
                 <div class="flex flex-wrap -mx-2 mt-2">
-                  <div class="w-full px-2">
+                  <div class="w-full px-2 flex flex-row justify-between">
                     <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
                       Quay lại
                     </button>

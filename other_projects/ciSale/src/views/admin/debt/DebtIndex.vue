@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="card card-overflow-visible">
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">
@@ -24,7 +24,7 @@
             </div>
             <hr/>
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -153,7 +153,6 @@
               <div class="w-full md:w-3/4 px-2 mt-2">
                 <select
                   id="interest_period"
-                  type="text"
                   autocomplete="new-password"
                   class="form-control"
                   v-model="debt.interest_period">
@@ -214,6 +213,7 @@ import tradeApi from '@/api/trade'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import moment from 'moment'
 
 
 export default {
@@ -246,8 +246,8 @@ export default {
         total: null,
         status: 0,
         customer_id: null,
-        created_at: null,
-        appointment_date: null,
+        created_at: new Date(),
+        appointment_date: new Date(),
         forewarning: 30,
         interest_rate: 0,
         interest_period: "month"
@@ -261,9 +261,7 @@ export default {
   mounted() {
     let dateNow = new Date()
     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
-      this.debt.created_at = new Date()
-    this.debt.appointment_date = toDate.toJSON().slice(0,10)
-      this.debt.forewarning = 30
+    this.debt.appointment_date = toDate
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
@@ -273,6 +271,21 @@ export default {
 
     // Get sale channel detail
     this.getDeptDetail()
+  },
+  watch: {
+    customerSelect(val) {
+      if(val && val.id) {
+        this.debt.customer_id = val.id
+        this.debt.customer_name = val.name
+        this.debt.customer_phone_number = val.phone_number
+        this.debt.customer_address = val.address
+      } else {
+        this.debt.customer_id = null
+        this.debt.customer_name = null
+        this.debt.customer_phone_number = null
+        this.debt.customer_address = null
+      }
+    }
   },
   computed: {
     errorName: function () {
@@ -329,17 +342,7 @@ export default {
      *  Event change customer
      */
     changeCustomer() {
-      if(this.customerSelect && this.customerSelect.id) {
-        this.debt.customer_id = this.customerSelect.id
-        this.debt.customer_name = this.customerSelect.name
-        this.debt.customer_phone_number = this.customerSelect.phone_number
-        this.debt.customer_address = this.customerSelect.address
-      } else {
-        this.debt.customer_id = null
-        this.debt.customer_name = null
-        this.debt.customer_phone_number = null
-        this.debt.customer_address = null
-      }
+      // Handled by watcher
     },
 
     // /**
@@ -379,8 +382,9 @@ export default {
         debitAPI.getDeptDetail(id).then(res => {
           if (res != null && res.data != null && res.data.data != null) {
             this.debt = res.data.data
-
-              this.debt.total = this.currencyFormat(this.debt.total)
+            this.debt.created_at = new Date(this.debt.created_at)
+            this.debt.appointment_date = new Date(this.debt.appointment_date)
+            this.debt.total = this.currencyFormat(this.debt.total)
           }
 
           this.loading = false
@@ -422,19 +426,24 @@ export default {
         return
       }
 
-      this.debt.total = (this.debt.total + "").replaceAll(",", "")
-      this.saving = true
+      let params = {
+        ...this.debt,
+        total: (this.debt.total + "").replaceAll(",", ""),
+        created_at: moment(this.debt.created_at).format('YYYY-MM-DD'),
+        appointment_date: moment(this.debt.appointment_date).format('YYYY-MM-DD')
+      }
 
       let id = this.route.params.id
       if (id) {
         // Edit
-        this.debt.id = id
-        debitAPI.updateDept(this.debt).then(res => {
+        params.id = id
+        debitAPI.updateDept(params).then(res => {
           this.saving = false
           if (res != null && res.data != null) {
             if (res.data.status == 200) {
               // show popup success
               this.popToast('success', 'Cập nhật thành công!!! ')
+              this.router.push("/debt")
             }
           }
         }).catch(err => {
@@ -445,7 +454,7 @@ export default {
         })
       } else {
         // Add
-        debitAPI.addDept(this.debt).then(res => {
+        debitAPI.addDept(params).then(res => {
           this.saving = false
           if (res != null && res.data != null) {
 
@@ -520,3 +529,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.card-overflow-visible {
+  overflow: visible !important;
+}
+</style>

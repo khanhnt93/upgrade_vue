@@ -82,9 +82,9 @@
               </div>
 
               <button
-                class="btn btn-default text-header btn-width-120 float-right"
-                @click="exportToExcel"
-                title="Xuất Excel">
+                  class="btn btn-default text-header btn-width-120 float-right"
+                  @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
+                  title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
             </div>
@@ -435,6 +435,7 @@ import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
 import ConfirmModal from '@/components/common/ConfirmModal.vue'
+import { useExcelExport } from '@/composables/useExcelExport'
 
 
 export default {
@@ -451,7 +452,9 @@ export default {
     const { toast } = useToast()
     const router = useRouter()
     const { formatCurrency } = useFormatters()
-    return { toast, router, formatCurrency }
+    const { exportToExcel } = useExcelExport()
+
+    return { toast, router, formatCurrency, exportToExcel }
   },
   data () {
     return {

@@ -6,11 +6,11 @@
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+              <div class="w-full px-2 flex justify-between">
+                <button class="btn btn-outline-secondary btn-width-120" @click="back">
                   Quay lại
                 </button>
-                <button class="btn btn-outline-primary pull-right btn-width-120" @click="printInvoice">
+                <button class="btn btn-outline-primary btn-width-120" @click="printInvoice">
                   In hóa đơn
                 </button>
               </div>
@@ -30,7 +30,7 @@
             </div>
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2 bg-gray text-white title-partner">
+              <div class="w-full px-2 bg-gray-500 text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin
                     <span v-show="trade.from_type == 1">nhà cung cấp</span>
@@ -73,7 +73,7 @@
 
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
+              <div class="w-full px-2 bg-teal-500 text-white title-partner" >
                 <h5>
                   <span class="pull-left">Danh sách sản phẩm</span>
                 </h5>
@@ -112,7 +112,7 @@
                 </div>
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
+              <div class="w-full px-2 bg-green-500 text-white title-partner" >
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                 </h5>

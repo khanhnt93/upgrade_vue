@@ -90,7 +90,7 @@
           </div>
 
           <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered table-striped">
               <thead>
                 <tr>
                   <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
@@ -242,7 +242,7 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow
+    this.inputs.to_date = new Date()
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
     this.inputs.from_date = fromDate
 
@@ -440,3 +440,43 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+    width: fit-content !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+  }
+  td, th {
+    border: solid rgb(200, 200, 200) 1px;
+    padding: .5rem;
+  }
+
+  th {
+    text-align: left;
+    background-color: rgb(190, 220, 250);
+    text-transform: uppercase;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: rgb(50, 50, 100) solid 2px;
+    border-top: none;
+  }
+
+  td {
+    white-space: nowrap;
+    border-bottom: none;
+    color: rgb(20, 20, 20);
+  }
+
+  td:first-of-type, th:first-of-type {
+    border-left: none;
+  }
+
+  td:last-of-type, th:last-of-type {
+    border-right: none;
+  }
+</style>

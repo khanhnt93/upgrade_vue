@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="bg-white shadow rounded-lg p-4">
 
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
@@ -131,7 +131,9 @@
           </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <div class="text-center" v-show="loading">
+            <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+          </div>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
         </div>
@@ -174,7 +176,9 @@
 
                 <div class="flex flex-wrap -mx-2 mt-2">
                   <div class="w-full px-2">
-                    <span class="loading-more" v-show="loadingCheckProductImport"><icon name="loading" width="60" /></span>
+                  <div class="text-center" v-show="loadingCheckProductImport">
+                    <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+                  </div>
                     <table class="table table-bordered table-striped">
                       <thead>
                         <tr>
@@ -268,8 +272,8 @@ export default {
       inputs: {
         customer_name: null,
         customer_phone: null,
-        from_date: '2000-01-01',
-        to_date: '2000-01-02'
+        from_date: new Date(),
+        to_date: new Date()
       },
       modalCheckProductImport: false,
       fields: [
@@ -377,10 +381,16 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    let toDate = new Date(dateNow.setDate(dateNow.getDate() + 15))
-    this.inputs.to_date = toDate.toJSON().slice(0,10)
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 30))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    // let toDate = new Date(dateNow.setDate(dateNow.getDate() + 15))
+    // this.inputs.to_date = toDate
+    // let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 30))
+    // this.inputs.from_date = fromDate
+    
+    // Set default dates correctly as Date objects
+    this.inputs.to_date = new Date(dateNow.setDate(dateNow.getDate() + 15))
+    // Reset dateNow for correct calculation if needed or use a new Date()
+    let dateNow2 = new Date()
+    this.inputs.from_date = new Date(dateNow2.setDate(dateNow2.getDate() - 30))
 
     window.addEventListener('scroll', this.onScroll)
 
@@ -393,7 +403,15 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.toast(content, variant)
+      if (variant === 'success') {
+        this.toast.success(content)
+      } else if (variant === 'error' || variant === 'danger') {
+        this.toast.error(content)
+      } else if (variant === 'warning') {
+        this.toast.warning(content)
+      } else {
+        this.toast.info(content)
+      }
     },
 
     /**
@@ -403,7 +421,7 @@ export default {
       if(this.onSearch) {
         return
       }
-      event.preventDefault()
+      // event.preventDefault() // Removed to allow normal scrolling behavior
       var body = document.body
       var html = document.documentElement
       if (window.pageYOffset + window.innerHeight + 5 > Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)) {
@@ -455,8 +473,8 @@ export default {
       let params = {
         "customer_name": this.inputs.customer_name,
         "customer_phone": this.inputs.customer_phone,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? new Date(this.inputs.from_date).toISOString().slice(0, 10) : null,
+        "to_date": this.inputs.to_date ? new Date(this.inputs.to_date).toISOString().slice(0, 10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }
