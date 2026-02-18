@@ -26,157 +26,159 @@
             <!-- Loading -->
             <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                  <label> Loại khách hàng </label>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <div class="input-group">
-                    <input type="radio" v-model="inputs.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
-                    <input type="radio" v-model="inputs.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
-                  </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                  <label> Tên </label><span class="error-sybol"></span>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                  <input
-                  id="name"
-                  type="text"
-                  class="form-control"
-                  v-model="inputs.name"
-                  autocomplete="new-password"
-                  maxlength="75">
-                <div class="invalid-feedback d-block" v-if="errorName">
-                  Vui lòng nhập tên
+            <div class="grid grid-cols-1 gap-2">
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Loại khách hàng </label>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <div class="input-group">
+                      <input type="radio" v-model="inputs.type" name="type" value="0" class="mt-2"><label class="ml-4 mt-1">Cá nhân</label>
+                      <input type="radio" v-model="inputs.type" name="type" value="1" class="ml-5 mt-2"><label class="ml-4 mt-1">Công ty</label>
+                    </div>
                 </div>
               </div>
-            </div>
 
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                  <label> Số Điện Thoại </label><span class="error-sybol"></span>
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Tên </label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                    <input
+                    id="name"
+                    type="text"
+                    class="form-control"
+                    v-model="inputs.name"
+                    autocomplete="new-password"
+                    maxlength="75">
+                  <div class="invalid-feedback d-block" v-if="errorName">
+                    Vui lòng nhập tên
+                  </div>
+                </div>
               </div>
-              <div class="w-full md:w-3/4 px-2">
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label> Số Điện Thoại </label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                    <input
+                    id="phone"
+                    type="text"
+                    class="form-control"
+                    v-model="inputs.phone_number"
+                    @keyup="integerOnly($event.target)"
+                    autocomplete="new-password"
+                    maxlength="20">
+                  <div class="invalid-feedback d-block" v-if="errorPhone">
+                    Số điện thoại không đúng
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Giới Tính</label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <select class="form-control" v-model="inputs.gender">
+                    <option v-for="option in optionsGender" :key="option.value" :value="option.value">
+                      {{ option.text }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback d-block" v-if="errorGender">
+                    Vui lòng chọn giới tính
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                  <div class="w-full md:w-1/4 px-2 mt-2">
+                    <label>Ngày Tháng Năm Sinh</label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                    <datepicker
+                        v-model="inputs.birthday"
+                        format="yyyy-MM-dd"
+                        placeholder="yyyy-mm-dd"
+                        input-class="form-control"
+                        :typeable="true">
+                    </datepicker>
+                    <div class="invalid-feedback d-block" v-if="errorBirthday">
+                      Vui lòng nhập ngày sinh
+                    </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                  <label>Tỉnh/ Thành Phố</label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <select
+                      id="city_id"
+                      v-model="inputs.city_id"
+                      class="form-control"
+                      @change="changeCity">
+                    <option v-for="option in optionsCity" :key="option.value" :value="option.value">
+                      {{ option.text }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback d-block" v-if="errorCity">
+                    Vui lòng chọn thành phố
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                  <label>Quận/ Huyện</label><span class="error-sybol"></span>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <select
+                      id="district_id"
+                      v-model="inputs.district_id"
+                      class="form-control"
+                      :disabled="!inputs.city_id">
+                    <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
+                      {{ option.text }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback d-block" v-if="errorDistrict">
+                    Vui lòng nhập quận
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                  <label> Địa chỉ </label>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
                   <input
-                  id="phone"
+                  id="address"
                   type="text"
                   class="form-control"
-                  v-model="inputs.phone_number"
+                  v-model="inputs.address"
+                  autocomplete="new-password"
+                  maxlength="255">
+                </div>
+              </div>
+
+              <div class="flex flex-wrap -mx-2 form-row">
+                <div class="w-full md:w-1/4 px-2 mt-2">
+                  <label> Mã số thuế </label>
+                </div>
+                <div class="w-full md:w-3/4 px-2">
+                  <input
+                  id="tax_code"
+                  type="text"
+                  class="form-control"
+                  v-model="inputs.tax_code"
                   @keyup="integerOnly($event.target)"
                   autocomplete="new-password"
                   maxlength="20">
-                <div class="invalid-feedback d-block" v-if="errorPhone">
-                  Số điện thoại không đúng
                 </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                  <label>Giới Tính</label><span class="error-sybol"></span>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <select class="form-control" v-model="inputs.gender">
-                  <option v-for="option in optionsGender" :key="option.value" :value="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
-                <div class="invalid-feedback d-block" v-if="errorGender">
-                  Vui lòng chọn giới tính
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-                <div class="w-full md:w-1/4 px-2 mt-2">
-                  <label>Ngày Tháng Năm Sinh</label><span class="error-sybol"></span>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                  <datepicker
-                      v-model="inputs.birthday"
-                      format="yyyy-MM-dd"
-                      placeholder="yyyy-mm-dd"
-                      input-class="form-control"
-                      :typeable="true">
-                  </datepicker>
-                  <div class="invalid-feedback d-block" v-if="errorBirthday">
-                    Vui lòng nhập ngày sinh
-                  </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                <label>Tỉnh/ Thành Phố</label><span class="error-sybol"></span>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <select
-                    id="city_id"
-                    v-model="inputs.city_id"
-                    class="form-control"
-                    @change="changeCity">
-                  <option v-for="option in optionsCity" :key="option.value" :value="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
-                <div class="invalid-feedback d-block" v-if="errorCity">
-                  Vui lòng chọn thành phố
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                <label>Quận/ Huyện</label><span class="error-sybol"></span>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <select
-                    id="district_id"
-                    v-model="inputs.district_id"
-                    class="form-control"
-                    :disabled="!inputs.city_id">
-                  <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
-                    {{ option.text }}
-                  </option>
-                </select>
-                <div class="invalid-feedback d-block" v-if="errorDistrict">
-                  Vui lòng nhập quận
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                <label> Địa chỉ </label>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <input
-                id="address"
-                type="text"
-                class="form-control"
-                v-model="inputs.address"
-                autocomplete="new-password"
-                maxlength="255">
-              </div>
-            </div>
-
-            <div class="flex flex-wrap -mx-2 form-row">
-              <div class="w-full md:w-1/4 px-2 mt-2">
-                <label> Mã số thuế </label>
-              </div>
-              <div class="w-full md:w-3/4 px-2">
-                <input
-                id="tax_code"
-                type="text"
-                class="form-control"
-                v-model="inputs.tax_code"
-                @keyup="integerOnly($event.target)"
-                autocomplete="new-password"
-                maxlength="20">
               </div>
             </div>
 
