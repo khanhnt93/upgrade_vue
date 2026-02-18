@@ -50,7 +50,7 @@
                   v-model="inputs.name"
                   autocomplete="new-password"
                   maxlength="75">
-                <div :class="['invalid-feedback', { 'd-block': errorName }]">
+                <div class="invalid-feedback d-block" v-if="errorName">
                   Vui lòng nhập tên
                 </div>
               </div>
@@ -69,7 +69,7 @@
                   @keyup="integerOnly($event.target)"
                   autocomplete="new-password"
                   maxlength="20">
-                <div :class="['invalid-feedback', { 'd-block': errorPhone }]">
+                <div class="invalid-feedback d-block" v-if="errorPhone">
                   Số điện thoại không đúng
                 </div>
               </div>
@@ -85,7 +85,7 @@
                     {{ option.text }}
                   </option>
                 </select>
-                <div :class="['invalid-feedback', { 'd-block': errorGender }]">
+                <div class="invalid-feedback d-block" v-if="errorGender">
                   Vui lòng chọn giới tính
                 </div>
               </div>
@@ -103,7 +103,7 @@
                       input-class="form-control"
                       :typeable="true">
                   </datepicker>
-                  <div :class="['invalid-feedback', { 'd-block': errorBirthday }]">
+                  <div class="invalid-feedback d-block" v-if="errorBirthday">
                     Vui lòng nhập ngày sinh
                   </div>
               </div>
@@ -123,7 +123,7 @@
                     {{ option.text }}
                   </option>
                 </select>
-                <div class="invalid-feedback">
+                <div class="invalid-feedback d-block" v-if="errorCity">
                   Vui lòng chọn thành phố
                 </div>
               </div>
@@ -143,7 +143,7 @@
                     {{ option.text }}
                   </option>
                 </select>
-                <div class="invalid-feedback">
+                <div class="invalid-feedback d-block" v-if="errorDistrict">
                   Vui lòng nhập quận
                 </div>
               </div>
