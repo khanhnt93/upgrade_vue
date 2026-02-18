@@ -8,11 +8,11 @@
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
                 <button class="btn btn-outline-secondary float-left btn-width-120" @click="back">
-                  Quay lại
+                  <i class="fa fa-arrow-left mr-2"></i> Quay lại
                 </button>
 
                 <button class="btn btn-outline-success float-right btn-width-120" @click="save" :disabled="saving">
-                  Lưu
+                  <i class="fa fa-save mr-2"></i> Lưu
                 </button>
               </div>
             </div>
@@ -24,7 +24,7 @@
             </div>
             <hr/>
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -68,8 +68,7 @@
                   v-model="inputs.phone_number"
                   @keyup="integerOnly($event.target)"
                   autocomplete="new-password"
-                  maxlength="20"
-                  v-on:change="checkPhoneNumberFormat($event.target.value)">
+                  maxlength="20">
                 <div :class="['invalid-feedback', { 'd-block': errorPhone }]">
                   Số điện thoại không đúng
                 </div>
@@ -97,19 +96,15 @@
                   <label>Ngày Tháng Năm Sinh</label><span class="error-sybol"></span>
               </div>
               <div class="w-full md:w-3/4 px-2">
-                  <input
-                      id="birthday"
+                  <datepicker
                       v-model="inputs.birthday"
-                      type="text"
-                      placeholder="dd-mm-yyyy"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-on:change="checkBirthdayFormat($event.target)">
+                      format="yyyy-MM-dd"
+                      placeholder="yyyy-mm-dd"
+                      input-class="form-control"
+                      :typeable="true">
+                  </datepicker>
                   <div :class="['invalid-feedback', { 'd-block': errorBirthday }]">
                     Vui lòng nhập ngày sinh
-                  </div>
-                  <div :class="['invalid-feedback', { 'd-block': !birthdayCheckFlag }]">
-                    Ngày sinh không đúng
                   </div>
               </div>
             </div>
@@ -122,9 +117,8 @@
                 <select
                     id="city_id"
                     v-model="inputs.city_id"
-                    type="text"
                     class="form-control"
-                    v-on:change="changeCity($event.target)">
+                    @change="changeCity">
                   <option v-for="option in optionsCity" :key="option.value" :value="option.value">
                     {{ option.text }}
                   </option>
@@ -143,7 +137,6 @@
                 <select
                     id="district_id"
                     v-model="inputs.district_id"
-                    type="text"
                     class="form-control"
                     :disabled="!inputs.city_id">
                   <option v-for="option in optionsDistrict" :key="option.value" :value="option.value">
@@ -200,6 +193,8 @@ import customerApi from '@/api/customer'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
 import commonFunc from '@/common/commonFunc'
+import Datepicker from 'vue3-datepicker'
+import moment from 'moment'
 
 
 export default {
@@ -208,6 +203,9 @@ export default {
     const route = useRoute()
     const router = useRouter()
     return { popToast, route, router }
+  },
+  components: {
+    Datepicker
   },
   data () {
     return {
@@ -231,7 +229,6 @@ export default {
       optionsDistrict: [],
       click: false,
       phoneNumberCheckFlag: true,
-      birthdayCheckFlag: true,
       saving: false,
       loading: false,
     }
@@ -271,7 +268,7 @@ export default {
     },
     checkValidate () {
       return !(this.errorName || this.errorPhone || this.errorGender || this.errorBirthday
-        || this.errorCity || this.errorDistrict || !this.birthdayCheckFlag || !this.phoneNumberCheckFlag)
+        || this.errorCity || this.errorDistrict || !this.phoneNumberCheckFlag)
     },
 
     /**
@@ -305,6 +302,9 @@ export default {
         customerApi.getCustomerDetailByStore(cusId).then(res => {
           if(res != null && res.data != null && res.data.data != null){
             this.inputs = res.data.data
+            if(this.inputs.birthday) {
+               this.inputs.birthday = new Date(this.inputs.birthday)
+            }
             this.getOptionCity()
           }
         }).catch(err => {
@@ -332,7 +332,7 @@ export default {
       let params = JSON.parse(JSON.stringify(this.inputs))
       params.id = customerId
       params.phone = this.inputs.phone_number
-      params.birthday = this.formatDate(this.inputs.birthday)
+      params.birthday = this.inputs.birthday ? moment(this.inputs.birthday).format('YYYY-MM-DD') : null
       if(customerId){
         // Edit
 
@@ -423,34 +423,9 @@ export default {
 
     },
 
-      /**
-     * Check phone number
-     */
-    checkPhoneNumberFormat(item) {
-      let valueInput = item
-      if (valueInput != null && valueInput != "") {
-        if (!commonFunc.phoneNumberCheck(valueInput)) {
-          return false
-        }
-      }
-      return true
-    },
 
-    /**
-     * Check phone number
-     */
-    checkBirthdayFormat(item) {
-      let valueInput = item.value
-      if (valueInput != null && valueInput != "") {
-        if (commonFunc.dateFormatCheck(valueInput)) {
-          this.birthdayCheckFlag = true
-        } else {
-          this.birthdayCheckFlag = false
-        }
-      } else {
-        this.birthdayCheckFlag = true
-      }
-    },
+
+
 
     /**
      * Back to list
