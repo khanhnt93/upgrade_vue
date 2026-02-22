@@ -6,12 +6,12 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full md:w-1/2 px-2">
               <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
-                Quay lại
+                <i class="fa fa-arrow-left mr-2"></i> Quay lại
               </button>
             </div>
             <div class="w-full md:w-1/2 px-2">
               <button class="btn btn-outline-success pull-right btn-width-120" @click="save" :disabled="saving">
-                Lưu
+                <i class="fa fa-save mr-2"></i> Lưu
               </button>
             </div>
           </div>
@@ -23,8 +23,10 @@
           </div>
           <hr/>
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <!-- Loading -->
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
+        <div class="grid grid-cols-1 gap-2">
           <div class="flex flex-wrap -mx-2 mb-4">
             <div class="w-full md:w-1/4 px-2 mt-2">
               <label> Tên </label><span class="error-sybol"></span>
@@ -37,7 +39,7 @@
                 autocomplete="new-password"
                 class="form-control"
                 v-model="supplier.name">
-              <div class="invalid-feedback { 'd-block': errorName }" >
+              <div class="invalid-feedback d-block" v-if="errorName">
                 Vui lòng nhập tên
               </div>
             </div>
@@ -87,6 +89,7 @@
                 v-model="supplier.tax_code">
             </div>
           </div>
+        </div>
 
         </div>
       </div>
@@ -102,12 +105,12 @@ import { useRouter, useRoute } from 'vue-router'
 
 export default {
   setup() {
-    const { toast } = useToast()
+    const { popToast } = useToast()
     const router = useRouter()
     const route = useRoute()
 
     return {
-      toast,
+      popToast,
       router,
       route
     }
@@ -141,17 +144,7 @@ export default {
       return !(this.errorName)
     },
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant === 'danger' ? 'error' : variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Get detail
@@ -204,6 +197,7 @@ export default {
               if (res.data.status == 200) {
                 // show popup success
                 this.popToast('success', 'Cập nhật đơn vị thành công!!! ')
+                this.back()
               }
             }
           }).catch(err => {
