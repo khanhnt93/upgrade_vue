@@ -1,251 +1,179 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-4 md:p-6">
-    <div class="max-w-7xl mx-auto space-y-8">
+  <div class="container-fluid">
 
-        <!-- Today's Overview Section -->
-        <div class="bg-white shadow-lg rounded-2xl p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Hôm Nay</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto rounded"></div>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full px-2">
+
+        <div class="bg-white shadow rounded-lg p-4">
+
+            <div class="flex flex-wrap -mx-2 mb-2">
+              <div class="w-full px-2">
+                <h4 class="text-center text-header"><b>Hôm Nay</b></h4>
+              </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg rounded-2xl p-6 border border-blue-200 text-center relative overflow-hidden h-full flex flex-col justify-center min-h-[160px]">
-                  <div class="absolute top-0 right-0 w-20 h-20 bg-blue-200 rounded-full opacity-20 -mr-10 -mt-10"></div>
-                  <h5 class="text-lg font-semibold text-blue-800 mb-4">Số bill</h5>
-                  <div class="flex items-center justify-center space-x-4">
-                    <div class="bg-blue-500 p-3 md:p-4 rounded-full">
-                      <i class="fa fa-clipboard text-2xl md:text-3xl text-white"></i>
-                    </div>
-                    <div>
-                      <span class="text-3xl md:text-4xl font-bold text-blue-700">{{formatCurrency(todayBillNumber)}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-2xl p-6 border border-orange-200 text-center relative overflow-hidden h-full flex flex-col justify-center min-h-[160px]">
-                  <div class="absolute top-0 right-0 w-20 h-20 bg-orange-200 rounded-full opacity-20 -mr-10 -mt-10"></div>
-                  <h5 class="text-lg font-semibold text-orange-800 mb-4">Doanh thu</h5>
-                  <div class="flex items-center justify-center space-x-4">
-                    <div class="bg-orange-500 p-3 md:p-4 rounded-full">
-                      <i class="fa fa-chart-line text-2xl md:text-3xl text-white"></i>
-                    </div>
-                    <div>
-                      <span class="text-2xl md:text-4xl font-bold text-orange-700">{{formatCurrency(todayRevenue)}}</span>
+          <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(229 249 255)">
+                  <h5>Số bill</h5>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <i class="fa fa-clipboard" style="font-size:55px;color:#78B7D0;width:20%;"></i>
+                      <div class="text-center" style="width: 75%">
+                        <b style="font-size:40px;">{{formatCurrency(todayBillNumber)}}</b>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg rounded-2xl p-6 border border-purple-200 text-center relative overflow-hidden h-full flex flex-col justify-center min-h-[160px]">
-                  <div class="absolute top-0 right-0 w-20 h-20 bg-purple-200 rounded-full opacity-20 -mr-10 -mt-10"></div>
-                  <h5 class="text-lg font-semibold text-purple-800 mb-4">Lợi nhuận</h5>
-                  <div class="flex items-center justify-center space-x-4">
-                    <div class="bg-purple-500 p-3 md:p-4 rounded-full">
-                      <i class="fa fa-dollar-sign text-2xl md:text-3xl text-white"></i>
-                    </div>
-                    <div>
-                      <span class="text-2xl md:text-4xl font-bold text-purple-700">{{formatCurrency(todayProfit)}}</span>
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(255 237 229)">
+                  <h5>Doanh thu</h5>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <i class="fa fa-plus" style="font-size:60px;color:#FFDBB5;width:20%;"></i>
+                      <div class="text-center" style="width: 75%">
+                        <b style="font-size:40px;">{{formatCurrency(todayRevenue)}}</b>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="w-full md:w-1/3 px-2">
+                <div class="bg-white shadow rounded-lg p-4 border border-primary text-center" style="background-color: rgb(234 229 255)">
+                  <h5>Lợi nhuận</h5>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <i class="fa fa-check" style="font-size:60px;color:#C8A1E0;width:20%;"></i>
+                      <div class="text-center" style="width: 75%">
+                        <b style="font-size:40px;">{{formatCurrency(todayProfit)}}</b>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
+            <h4 class="text-center text-header"><b>Biểu Đồ Doanh Thu</b></h4>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2">
+                <GChart
+                  type="ColumnChart"
+                  :data="chartRevenueData"
+                  :options="chartOptions"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
+                <a href="/chart-revenue">Xem nhiều hơn</a>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
+            <h4 class="text-center text-header"><b>Kho Hàng</b></h4>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Số Loại Sản Phẩm</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.number_of_product)}}</h5>
+                  </div>
+                </div>
+
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Tổng Tiền Mua</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_buy)}}đ</h5>
+                  </div>
+                </div>
+
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Tổng Tiền Bán (dự tính)</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_sell)}}đ</h5>
+                  </div>
+                </div>
+
+              </div>
+              <div class="w-full md:w-1/4 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-secondary text-center">
+                  <div class="font-semibold text-secondary mb-2">Lợi nhuận (dự tính)</div>
+                  <div>
+                    <h5 class="text-center text-header">{{formatCurrency(repo.total_price_sell - repo.total_price_buy)}}đ</h5>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full px-2 text-center">
+                <a href="/chart-revenue">Xem nhiều hơn</a>
               </div>
             </div>
         </div>
 
-        <!-- Revenue Chart Section -->
-        <div class="bg-white shadow-lg rounded-2xl p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Biểu Đồ Doanh Thu</h2>
-                <div class="w-24 h-1 bg-green-500 mx-auto rounded"></div>
-            </div>
+        <div class="bg-white shadow rounded-lg p-4 mt-4">
+          <div class="p-4">
+            <h4 class="text-center text-header"><b>Nợ công - Công nợ</b></h4>
 
-            <div class="bg-gray-50 rounded-xl p-4 md:p-6 mb-6">
-                <div class="w-full overflow-x-auto">
-                    <GChart
-                      type="ColumnChart"
-                      :data="chartRevenueData"
-                      :options="chartOptions"
-                      class="w-full min-h-[300px]"
-                    />
-                </div>
-            </div>
-
-            <div class="text-center">
-                <a href="/chart-revenue" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg">
-                  <i class="fa fa-chart-bar mr-2"></i>
-                  Xem nhiều hơn
-                </a>
-            </div>
-        </div>
-
-        <!-- Inventory Section -->
-        <div class="bg-white shadow-lg rounded-2xl p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Kho Hàng</h2>
-                <div class="w-24 h-1 bg-yellow-500 mx-auto rounded"></div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 shadow-lg rounded-xl p-6 border border-indigo-200 text-center h-full flex flex-col justify-between min-h-[140px]">
-                  <div class="flex items-center justify-center mb-4">
-                    <div class="bg-indigo-500 p-3 rounded-full">
-                      <i class="fa fa-box text-2xl text-white"></i>
-                    </div>
-                  </div>
+            <div class="flex flex-wrap -mx-2">
+              <div class="w-full md:w-1/2 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-success text-center">
+                  <div class="font-semibold text-success mb-2">Công nợ (Nợ cần thu hồi)</div>
                   <div>
-                    <div class="text-sm font-semibold text-indigo-600 mb-2">Số Loại Sản Phẩm</div>
-                    <h5 class="text-2xl font-bold text-indigo-800">{{formatCurrency(repo.number_of_product)}}</h5>
+                    <h5 class="text-center text-success">Tổng công nợ: {{formatCurrency(debt_total)}}đ</h5>
+                    - Số lượng công nợ sắp đến hạn thu hồi: {{formatCurrency(debt_number)}}<br>
+                    - Tổng tiền công nợ sắp đến hạn thu hồi: <span class="text-success"><b>{{formatCurrency(debt_amount)}}đ</b></span>
                   </div>
                 </div>
-              </div>
 
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-green-50 to-green-100 shadow-lg rounded-xl p-6 border border-green-200 text-center h-full flex flex-col justify-between min-h-[140px]">
-                  <div class="flex items-center justify-center mb-4">
-                    <div class="bg-green-500 p-3 rounded-full">
-                      <i class="fa fa-shopping-cart text-2xl text-white"></i>
-                    </div>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2 text-center">
+                    <a href="/debt">Xem nhiều hơn</a>
                   </div>
+                </div>
+
+              </div>
+              <div class="w-full md:w-1/2 px-2 mb-4">
+                <div class="bg-white shadow rounded-lg p-4 border border-danger text-center">
+                  <div class="font-semibold text-danger mb-2">Nợ công (Nợ phải trả)</div>
                   <div>
-                    <div class="text-sm font-semibold text-green-600 mb-2">Tổng Tiền Mua</div>
-                    <h5 class="text-xl lg:text-2xl font-bold text-green-800">{{formatCurrency(repo.total_price_buy)}}đ</h5>
+                    <h5 class="text-center text-header">Tổng nợ công: {{formatCurrency(public_debt_total)}}đ</h5>
+                    - Số lượng nợ công sắp đến hạn trả: {{formatCurrency(public_debt_number)}}<br>
+                    - Tổng tiền nợ công sắp đến hạn trả: <span class="text-header"><b>{{formatCurrency(public_debt_amount)}}đ</b></span>
                   </div>
                 </div>
-              </div>
 
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg rounded-xl p-6 border border-blue-200 text-center h-full flex flex-col justify-between min-h-[140px]">
-                  <div class="flex items-center justify-center mb-4">
-                    <div class="bg-blue-500 p-3 rounded-full">
-                      <i class="fa fa-tag text-2xl text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="text-sm font-semibold text-blue-600 mb-2">Tổng Tiền Bán (dự tính)</div>
-                    <h5 class="text-xl lg:text-2xl font-bold text-blue-800">{{formatCurrency(repo.total_price_sell)}}đ</h5>
-                  </div>
-                </div>
-              </div>
-
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg rounded-xl p-6 border border-purple-200 text-center h-full flex flex-col justify-between min-h-[140px]">
-                  <div class="flex items-center justify-center mb-4">
-                    <div class="bg-purple-500 p-3 rounded-full">
-                      <i class="fa fa-chart-line text-2xl text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="text-sm font-semibold text-purple-600 mb-2">Lợi nhuận (dự tính)</div>
-                    <h5 class="text-xl lg:text-2xl font-bold text-purple-800">{{formatCurrency(repo.total_price_sell - repo.total_price_buy)}}đ</h5>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2 text-center">
+                    <a href="/public-debt">Xem nhiều hơn</a>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="text-center mt-8">
-                <a href="/repo-report" class="inline-flex items-center px-6 py-3 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-700 transition-colors duration-200 shadow-md hover:shadow-lg">
-                  <i class="fa fa-warehouse mr-2"></i>
-                  Xem nhiều hơn
-                </a>
-            </div>
-        </div>
-
-        <!-- Debt Management Section -->
-        <div class="bg-white shadow-lg rounded-2xl p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Nợ công - Công nợ</h2>
-                <div class="w-24 h-1 bg-red-500 mx-auto rounded"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-lg rounded-xl p-6 md:p-8 border border-emerald-200 h-full flex flex-col">
-                  <div class="flex items-center mb-6">
-                    <div class="bg-emerald-500 p-3 md:p-4 rounded-full mr-4">
-                      <i class="fa fa-hand-holding-usd text-2xl md:text-3xl text-white"></i>
-                    </div>
-                    <h3 class="text-lg md:text-xl font-bold text-emerald-800">Công nợ (Nợ cần thu hồi)</h3>
-                  </div>
-
-                  <div class="space-y-4 flex-grow">
-                    <div class="bg-emerald-600 text-white p-4 rounded-lg">
-                      <p class="text-xl md:text-2xl font-bold">Tổng công nợ: {{formatCurrency(debt_total)}}đ</p>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-lg border border-emerald-200 space-y-3">
-                      <p class="text-emerald-700">
-                        <i class="fa fa-clock mr-2"></i>
-                        <span class="font-semibold">Số lượng công nợ sắp đến hạn thu hồi:</span>
-                        <span class="font-bold ml-2">{{formatCurrency(debt_number)}}</span>
-                      </p>
-                      <p class="text-emerald-700">
-                        <i class="fa fa-money-bill mr-2"></i>
-                        <span class="font-semibold">Tổng tiền công nợ sắp đến hạn thu hồi:</span>
-                      </p>
-                      <p class="text-emerald-800 font-bold text-lg ml-6">
-                        {{formatCurrency(debt_amount)}}đ
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="text-center mt-6">
-                    <a href="/debt" class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors duration-200 shadow-md hover:shadow-lg w-full justify-center sm:w-auto">
-                      <i class="fa fa-eye mr-2"></i>
-                      Xem nhiều hơn
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="group hover:scale-105 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-red-50 to-red-100 shadow-lg rounded-xl p-6 md:p-8 border border-red-200 h-full flex flex-col">
-                  <div class="flex items-center mb-6">
-                    <div class="bg-red-500 p-3 md:p-4 rounded-full mr-4">
-                      <i class="fa fa-credit-card text-2xl md:text-3xl text-white"></i>
-                    </div>
-                    <h3 class="text-lg md:text-xl font-bold text-red-800">Nợ công (Nợ phải trả)</h3>
-                  </div>
-
-                  <div class="space-y-4 flex-grow">
-                    <div class="bg-red-600 text-white p-4 rounded-lg">
-                      <p class="text-xl md:text-2xl font-bold">Tổng nợ công: {{formatCurrency(public_debt_total)}}đ</p>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-lg border border-red-200 space-y-3">
-                      <p class="text-red-700">
-                        <i class="fa fa-clock mr-2"></i>
-                        <span class="font-semibold">Số lượng nợ công sắp đến hạn trả:</span>
-                        <span class="font-bold ml-2">{{formatCurrency(public_debt_number)}}</span>
-                      </p>
-                      <p class="text-red-700">
-                        <i class="fa fa-money-bill mr-2"></i>
-                        <span class="font-semibold">Tổng tiền nợ công sắp đến hạn trả:</span>
-                      </p>
-                      <p class="text-red-800 font-bold text-lg ml-6">
-                        {{formatCurrency(public_debt_amount)}}đ
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="text-center mt-6">
-                    <a href="/public-debt" class="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-md hover:shadow-lg w-full justify-center sm:w-auto">
-                      <i class="fa fa-eye mr-2"></i>
-                      Xem nhiều hơn
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </div>
         </div>
 
       </div>
     </div>
+
+  </div>
 </template>
 
 

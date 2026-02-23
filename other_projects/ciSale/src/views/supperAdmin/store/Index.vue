@@ -175,7 +175,6 @@ import superAdminAPI from '@/api/superAdmin'
 import commonFunc from '@/common/commonFunc'
 import MasterApi from '@/api/master'
 import MasterMapper from '@/mapper/master'
-import { useToast } from 'vue-toastification'
 
 
 export default {
@@ -201,8 +200,6 @@ export default {
   mounted() {
     // Get brand options
     this.getOptionBrand()
-
-    this.toast = useToast()
 
     // Get default date
     this.getDefaultDate()
@@ -334,8 +331,14 @@ export default {
               let message = ""
               if (res.data.status == 200) {
                 // show popup success
-                this.toast.success("Cập nhật thành công")
-                this.router.push("/store/list")
+                this.$bvModal.msgBoxOk("Cập nhật thành công", {
+                  title: "Cập Nhật Cửa Hàng",
+                  centered: true,
+                  size: 'sm',
+                  headerClass: 'bg-success',
+                }).then(res => {
+                  this.router.push("/store/list")
+                })
               }
             }
           }).catch(err => {
@@ -347,7 +350,12 @@ export default {
             } else {
               message = "Lỗi hệ thống"
             }
-            this.toast.error(message)
+            this.$bvModal.msgBoxOk(message, {
+              title: "Cập Nhật Cửa Hàng",
+              centered: true,
+              size: 'sm',
+              headerClass: 'bg-danger',
+            })
           })
         } else {
           // Add
@@ -357,8 +365,14 @@ export default {
               let message = ""
               if (res.data.status == 200) {
                 // show popup success
-                this.toast.success("Thêm thành công")
-                this.router.push("/store/list")
+                this.$bvModal.msgBoxOk("Thêm thành công", {
+                  title: "Thêm Cửa Hàng",
+                  centered: true,
+                  size: 'sm',
+                  headerClass: 'bg-success',
+                }).then(res => {
+                  this.router.push("/store/list")
+                })
               }
 
             }
@@ -370,7 +384,12 @@ export default {
               } else {
                 message = "Lỗi hệ thống"
               }
-              this.toast.error(message)
+              this.$bvModal.msgBoxOk(message, {
+                title: "Thêm Cửa Hàng",
+                centered: true,
+                size: 'sm',
+                headerClass: 'bg-danger',
+              })
           })
         }
       }

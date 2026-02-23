@@ -6,11 +6,11 @@
           <div class="p-4">
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2">
-                <button class="btn btn-outline-secondary pull-left btn-width-120" @click="back">
+              <div class="w-full px-2 flex justify-between">
+                <button class="btn btn-outline-secondary btn-width-120" @click="back">
                   Quay lại
                 </button>
-                <button class="btn btn-outline-primary pull-right btn-width-120" @click="printInvoice">
+                <button class="btn btn-outline-primary btn-width-120" @click="printInvoice">
                   In hóa đơn
                 </button>
               </div>
@@ -24,10 +24,13 @@
             <hr/>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <!-- Loading -->
+            <div class="text-center" v-show="loading">
+              <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+            </div>
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2 bg-gray text-white title-partner">
+              <div class="w-full px-2 bg-gray-500 text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin
                     <span v-show="trade.from_type == 1">nhà cung cấp</span>
@@ -70,7 +73,7 @@
 
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-info bg-gradient text-white title-partner" >
+              <div class="w-full px-2 bg-teal-500 text-white title-partner" >
                 <h5>
                   <span class="pull-left">Danh sách sản phẩm</span>
                 </h5>
@@ -109,7 +112,7 @@
                 </div>
 
             <div class="mt-3">
-              <div class="w-full px-2 bg-success bg-gradient text-white title-partner" >
+              <div class="w-full px-2 bg-green-500 text-white title-partner" >
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                 </h5>
@@ -554,13 +557,21 @@ import tradeApi from '@/api/trade'
 import superAdminAPI from '@/api/superAdmin'
 import commonFunc from '@/common/commonFunc'
 import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   setup() {
     const authStore = useAuthStore()
+    const { toast } = useToast()
+    const route = useRoute()
+    const router = useRouter()
 
     return {
-      authStore
+      authStore,
+      toast,
+      route,
+      router
     }
   },
   data () {
@@ -601,6 +612,7 @@ export default {
       today_day: "",
       today_month: "",
       today_year: "",
+      suffix_print_title: ""
     }
   },
   mounted() {
@@ -622,10 +634,10 @@ export default {
      * Make toast without title
      */
     popToast(variant, content) {
-      this.$bvToast.toast(content, {
+      this.toast(content, {
         toastClass: 'my-toast',
         noCloseButton: true,
-        variant: variant,
+        variant: variant === 'danger' ? 'error' : variant,
         autoHideDelay: 3000
       })
     },
@@ -634,7 +646,7 @@ export default {
      *  Get detail
      */
     getTradeDetail() {
-      let tradeId = this.$route.params.id
+      let tradeId = this.route.params.id
       if(tradeId){
         this.loading = true
 
@@ -747,7 +759,7 @@ export default {
      */
     back() {
       // Go to list
-      this.$router.push("/trade-sell-his")
+      this.router.push("/trade-sell-his")
     },
 
     /**
@@ -781,11 +793,12 @@ export default {
   }
 
   table {
-   margin: auto;
+    margin: 0 auto;
     border-collapse: collapse;
     overflow-x: auto;
     display: block;
-    width: fit-content;
+    width: fit-content !important;
+    min-width: 0 !important;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }

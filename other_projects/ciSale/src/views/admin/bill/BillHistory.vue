@@ -11,55 +11,43 @@
               </div>
             </div>
 
-            <div class="flex flex-wrap -mx-2 mt-4">
+            <div class="flex flex-wrap -mx-2 mt-4 items-end">
 
-              <div class="w-full md:w-1/2 px-2 mb-3">
-                <label>
-                  Thời gian:
-                </label>
-              <div class="input-group">
-                  <span class="input-group-addon pr-1">Từ ngày</span>
-                  <input
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label class="font-bold">Từ ngày</label>
+                <input
                     id="fromDate"
                     type="text"
-                    autocomplete="new-password"
-                    class="form-control"
+                    autocomplete="off"
+                    class="w-full h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500"
                     v-model="inputs.fromDate"
                     maxlength="10"
                     @keyup="inputDateOnly($event.target)"
+                    placeholder="dd/mm/yyyy"
                     :disabled="onSearch">
-                  <!-- <input
-                    id="date"
-                    type="date"
-                    v-model="inputs.fromDate"
-                    class="form-control"
-                    @change="inputs.fromDate=$event.target.value"> -->
-                  <span class="input-group-addon pl-1 pr-1">Đến ngày</span>
-                  <input
-                    id="toDate"
-                    type="text"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="inputs.toDate"
-                    maxlength="10"
-                    @keyup="inputDateOnly($event.target)"
-                    :disabled="onSearch">
-                  <!-- <input
-                    id="date"
-                    type="date"
-                    :value="inputs.toDate"
-                    class="form-control"
-                    @change="inputs.toDate=$event.target.value"> -->
-                </div>
               </div>
 
               <div class="w-full md:w-1/4 px-2 mb-3">
-                <label>
-                  Trạng thái đơn:
+                <label class="font-bold">Đến ngày</label>
+                <input
+                    id="toDate"
+                    type="text"
+                    autocomplete="off"
+                    class="w-full h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500"
+                    v-model="inputs.toDate"
+                    maxlength="10"
+                    @keyup="inputDateOnly($event.target)"
+                    placeholder="dd/mm/yyyy"
+                    :disabled="onSearch">
+              </div>
+
+              <div class="w-full md:w-1/4 px-2 mb-3">
+                <label class="font-bold">
+                  Trạng thái đơn
                 </label>
                 <select
                   id="status"
-                  class="form-control"
+                  class="w-full h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500"
                   v-model="inputs.status">
                   <option v-for="option in statusOption" :key="option.value" :value="option.value">
                     {{ option.text }}
@@ -68,10 +56,10 @@
               </div>
 
               <div class="w-full md:w-1/4 px-2 mb-3">
-                <label class="label-width text-white">
+                <label class="invisible">
                    Xem
                 </label>
-                <button class="btn btn-outline-primary float-right px-4 btn-width-120"
+                <button class="w-32 h-10 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white rounded"
                   :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
@@ -79,7 +67,7 @@
             </div>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <div class="text-center py-4" v-show="loading"><i class="fas fa-spinner fa-spin fa-2x text-primary"></i></div>
 
             <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length">
               <div class="w-full px-2">
@@ -127,14 +115,18 @@
                           <span class="text-danger" v-if="bill.trade_status == 0">Lưu nháp</span>
                           <span v-if="bill.trade_status == 1">Đã thanh toán</span>
                         </td>
-                        <td class="text-right">
-                          <div v-if="bill.trade_status == 0" class="button-group" style="white-space: nowrap;">
-                            <button class="btn btn-sm btn-primary" @click="router.push('/bill/edit/' + bill.id)">Sửa</button>
-                            <button class="btn btn-sm btn-danger ml-2" @click.prevent="deleteBill(bill)">Xoá</button>
+                        <td class="text-center align-middle">
+                          <div v-if="bill.trade_status == 0" class="flex justify-center gap-2">
+                            <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="router.push('/bill/edit/' + bill.id)">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" title="Xoá" @click.prevent="deleteBill(bill)">
+                              <i class="fas fa-trash"></i>
+                            </button>
                           </div>
-                          <button v-if="bill.trade_status == 1" class="btn btn-outline-success float-right btn-width-120 mt-2 mr-2"
+                          <button v-if="bill.trade_status == 1" class="btn btn-sm btn-outline-success"
                           @click="router.push('/bill/edit/' + bill.id)">
-                            In hóa đơn
+                            <i class="fas fa-print mr-1"></i> In hóa đơn
                           </button>
                         </td>
                       </tr>
@@ -405,11 +397,12 @@ export default {
   }
 
   table {
-   margin: auto;
+    margin: 0 auto;
     border-collapse: collapse;
     overflow-x: auto;
     display: block;
-    width: fit-content;
+    width: fit-content !important;
+    min-width: 0 !important;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }

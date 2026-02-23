@@ -10,35 +10,35 @@
                 <div class="w-full md:w-1/5 px-2">
                   <div class="card text-center" style="background-color: rgb(247, 247, 247);">
                     <div class="card-header">Số lượng hoá đơn</div>
-                    <div class="card-body"><h3>{{ formatCurrency(billNumber) }}</h3></div>
+                    <div class="card-body"><h3>{{ billNumber | format_currency }}</h3></div>
                   </div>
                 </div>
 
                 <div class="w-full md:w-1/5 px-2">
                   <div class="card text-center" style="background-color: rgb(247, 247, 247);">
                     <div class="card-header">Tổng doanh thu</div>
-                    <div class="card-body"><h3>{{ formatCurrency(revenue) }}</h3></div>
+                    <div class="card-body"><h3>{{ revenue | format_currency }}</h3></div>
                   </div>
                 </div>
 
                 <div class="w-full md:w-1/5 px-2">
                   <div class="card text-center" style="background-color: rgb(247, 247, 247);">
                     <div class="card-header">Tổng chi phí</div>
-                    <div class="card-body"><h3>{{ formatCurrency(fee) }}</h3></div>
+                    <div class="card-body"><h3>{{ fee | format_currency }}</h3></div>
                   </div>
                 </div>
 
                 <div class="w-full md:w-1/5 px-2">
                   <div class="card text-center" style="background-color: rgb(247, 247, 247);">
                     <div class="card-header">Tổng lợi nhuận</div>
-                    <div class="card-body"><h3>{{ formatCurrency(profit) }}</h3></div>
+                    <div class="card-body"><h3>{{ profit | format_currency }}</h3></div>
                   </div>
                 </div>
 
                 <div class="w-full md:w-1/5 px-2">
                   <div class="card text-center" style="background-color: rgb(247, 247, 247);">
                     <div class="card-header">Tiền vốn đầu ngày</div>
-                    <div class="card-body"><h3>{{ formatCurrency(fund) }}</h3></div>
+                    <div class="card-body"><h3>{{ fund | format_currency }}</h3></div>
                   </div>
                 </div>
               </div>
@@ -60,9 +60,15 @@
               <div class="flex flex-wrap -mx-2">
                 <div class="w-full md:w-1/3 px-2"> Số kết quả: {{ bills.length }} </div>
                 <div class="w-full md:w-2/3 px-2 text-right">
-                  <button class="btn btn-default text-header" @click="exportToExcel(bills, excel_bill_fields, 'bao_cao_theo_bill.xls')">
+                  <download-excel
+                    class="btn btn-default text-header"
+                    :data="bills"
+                    :fields="excel_bill_fields"
+                    worksheet="Báo Cáo Theo Bill"
+                    name="bao_cao_theo_bill.xls"
+                  >
                     <b>Xuất Excel</b>
-                  </button>
+                  </download-excel>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-2">
@@ -94,29 +100,29 @@
                         <td>{{ bill.bill_number }}</td>
                         <td>{{ bill.room_name }}</td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.sub_total) }}
+                          {{ bill.sub_total | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.service_price) }}
+                          {{ bill.service_price | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.discount_amount) }}
+                          {{ bill.discount_amount | format_currency }}
                         </td>
                         <td class="text-right">{{ bill.vat_percent }}</td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.vat_value) }}
+                          {{ bill.vat_value | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.total) }}
+                          {{ bill.total | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.cash) }}
+                          {{ bill.cash | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.credit) }}
+                          {{ bill.credit | format_currency }}
                         </td>
                         <td class="text-right">
-                          {{ formatCurrency(bill.e_money) }}
+                          {{ bill.e_money | format_currency }}
                         </td>
                       </tr>
 
@@ -128,29 +134,29 @@
                           Tổng
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(totalPrice) }}
+                          {{ totalPrice | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(totalServicePrice) }}
+                          {{ totalServicePrice | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(totalDiscount) }}
+                          {{ totalDiscount | format_currency }}
                         </td>
                         <td></td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(totalVat) }}
+                          {{ totalVat | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(totalAmount) }}
+                          {{ totalAmount | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(total_cash) }}
+                          {{ total_cash | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(total_credit) }}
+                          {{ total_credit | format_currency }}
                         </td>
                         <td class="text-right total font-weight-bold">
-                          {{ formatCurrency(total_emoney) }}
+                          {{ total_emoney | format_currency }}
                         </td>
                       </tr>
                     </tbody>
@@ -176,15 +182,11 @@ import adminAPI from "@/api/admin";
 import commonFunc from "@/common/commonFunc";
 import moment from 'moment';
 import { useToast } from '@/composables/useToast'
-import { useFormatters } from '@/composables/useFormatters'
-import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   setup() {
     const { toast } = useToast()
-    const { formatCurrency } = useFormatters()
-    const { exportToExcel } = useExcelExport()
-    return { toast, formatCurrency, exportToExcel }
+    return { toast }
   },
   data() {
     return {

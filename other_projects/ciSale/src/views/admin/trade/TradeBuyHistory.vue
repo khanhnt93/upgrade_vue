@@ -53,8 +53,8 @@
           </div>
 
           <div class="flex flex-wrap -mx-2">
-            <div class="px-2 w-full">
-              <button class="btn btn-outline-primary pull-right btn-width-120"
+            <div class="px-2 w-full flex justify-end">
+              <button class="btn btn-outline-primary btn-width-120"
                         :disabled="onSearch" @click.prevent="prepareToSearch">
                 Tìm Kiếm
               </button>
@@ -91,14 +91,16 @@
                   <td class="text-right">{{ currencyFormat(item.sub_total) }}</td>
                   <td class="text-right">{{ currencyFormat(item.total) }}</td>
                   <td class="actions-cell">
-                    <button v-show="item.trade_status != 1" class="btn btn-outline-danger pull-right btn-width-120 mr-2"
-                              @click="goToUpdateTrade(item.id, item.trade_type_int)">
-                      Sửa
-                    </button>
-                    <button v-show="item.trade_status == 1" class="btn btn-outline-success pull-right btn-width-120 mr-2"
-                              @click="goToDetail(item.id)">
-                      Chi tiết
-                    </button>
+                    <div class="flex justify-end space-x-2">
+                        <button v-show="item.trade_status != 1" class="btn btn-outline-danger btn-width-120"
+                                  @click="goToUpdateTrade(item.id, item.trade_type_int)">
+                          Sửa
+                        </button>
+                        <button v-show="item.trade_status == 1" class="btn btn-outline-success btn-width-120"
+                                  @click="goToDetail(item.id)">
+                          Chi tiết
+                        </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -212,9 +214,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    this.inputs.to_date = new Date()
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     window.addEventListener('scroll', this.onScroll)
 
@@ -384,8 +386,8 @@ export default {
         "product_group_id": this.productGroupSelect && this.productGroupSelect.id ? this.productGroupSelect.id : null,
         "product_type_id": this.productTypeSelect && this.productTypeSelect.id ? this.productTypeSelect.id : null,
         "product_id": this.inputs.product_id,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? new Date(this.inputs.from_date).toISOString().slice(0, 10) : null,
+        "to_date": this.inputs.to_date ? new Date(this.inputs.to_date).toISOString().slice(0, 10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }
@@ -439,4 +441,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .table-bordered {
+    border: 1px solid #dee2e6;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #dee2e6;
+  }
 </style>

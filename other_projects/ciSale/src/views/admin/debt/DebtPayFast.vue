@@ -13,7 +13,7 @@
             <hr/>
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2 bg-gray text-white title-partner">
+              <div class="w-full px-2 bg-gray-500 text-white title-partner">
                 <h5>
                   <span class="float-left">Thông tin người trả</span>
                 </h5>
@@ -25,17 +25,17 @@
                 <label> Khách hàng </label><span class="error-sybol"></span>
               </div>
               <div class="w-full md:w-3/4 px-2">
-                <div class="input-group">
-                  <multiselect
-                    v-model="customerSelect"
-                    :options="customerOptions"
-                    :loading="loadingGetOptions"
-                    placeholder="--Chọn khách hàng--"
-                    label="name"
-                    track-by="name"
-                    @input="changeCustomer">
-                  </multiselect>
-                  <button class="btn btn-outline-primary float-right ml-2" @click="showModalSearchCustomer" >
+                  <div class="input-group flex flex-row">
+                    <multiselect
+                      v-model="customerSelect"
+                      :options="customerOptions"
+                      :loading="loadingGetOptions"
+                      placeholder="--Chọn khách hàng--"
+                      label="name"
+                      track-by="name"
+                      @input="changeCustomer">
+                    </multiselect>
+                  <button class="btn btn-outline-primary ml-2" @click="showModalSearchCustomer" >
                     <i class="fa fa-search"></i>
                   </button>
                 </div>
@@ -52,14 +52,14 @@
             </div>
 
             <div class="flex flex-wrap -mx-2 mt-3">
-              <div class="w-full px-2 bg-info bg-gradient text-white title-partner">
+              <div class="w-full px-2 bg-cyan-600 text-white title-partner">
                 <h5>
                   <span class="float-left">Thông tin khoản vay</span>
                 </h5>
               </div>
             </div>
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full px-2">
@@ -115,13 +115,15 @@
             </div>
 
             <div class="flex flex-wrap -mx-2 mt-3">
-              <div class="w-full px-2 bg-success bg-gradient text-white title-partner">
+              <div class="w-full px-2 bg-green-600 text-white title-partner">
                 <h5>
                   <span class="float-left">Thông tin thanh toán</span>
                 </h5>
               </div>
             </div>
+            <div class="flex flex-col gap-2 mt-2">
 
+            
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
                 <label>Số tiền miễn trừ</label>
@@ -287,11 +289,12 @@
             <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full px-2 text-center">
                 <button v-show="!saving" class="btn btn-outline-success" style="height: 50px; width: 240px" @click="confirmPayment" :disabled="saving">
-                  <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
+                  <i class="fa fa-edit" style="margin-right: 5px" />
                   Xác Nhận
                 </button>
-                <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+                <span class="loading-more" v-show="saving"><i class="fa fa-spinner fa-spin fa-2x text-primary"></i></span>
               </div>
+            </div>
             </div>
 
           </div>
@@ -432,6 +435,7 @@ import customerAPI from '@/api/customer'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
+import moment from 'moment'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 
@@ -478,8 +482,9 @@ export default {
         credit: 0,
         e_money: 0,
         remaining: 0,
-        created_at: null,
-        appointment_date: null,
+        remaining: 0,
+        created_at: new Date(),
+        appointment_date: new Date(),
         forewarning: 30,
         interest_rate: 0,
         interest_period: "month"
@@ -556,15 +561,30 @@ export default {
   mounted() {
     let dateNow = new Date()
     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
-      this.debt.created_at = new Date()
-    this.debt.appointment_date = toDate.toJSON().slice(0,10)
-      this.debt.forewarning = 30
+    this.debt.appointment_date = toDate
+    this.debt.forewarning = 30
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
 
     // // Get list customer option
     // this.getCustomerOption()
+  },
+  watch: {
+    customerSelect(val) {
+      if(val && val.id) {
+        this.debt.customer_id = val.id
+        this.debt.customer_name = val.name
+        this.debt.customer_phone_number = val.phone_number
+        this.debt.customer_address = val.address
+      } else {
+        this.debt.customer_id = null
+        this.debt.customer_name = null
+        this.debt.customer_phone_number = null
+        this.debt.customer_address = null
+      }
+      this.getListDebtByCustomer()
+    }
   },
   methods: {
 
@@ -600,20 +620,7 @@ export default {
      *  Event change customer
      */
     changeCustomer() {
-      if(this.customerSelect && this.customerSelect.id) {
-        this.debt.customer_id = this.customerSelect.id
-        this.debt.customer_name = this.customerSelect.name
-        this.debt.customer_phone_number = this.customerSelect.phone_number
-        this.debt.customer_address = this.customerSelect.address
-      } else {
-        this.debt.customer_id = null
-        this.debt.customer_name = null
-        this.debt.customer_phone_number = null
-        this.debt.customer_address = null
-      }
-
-      // Get lại danh sách các khoản vay
-      this.getListDebtByCustomer()
+      // Handled by watcher
     },
 
     convertPeriodCodeToName(code) {
@@ -630,16 +637,16 @@ export default {
      * Xác nhận thanh toán
      */
     confirmPayment() {
-      if ((this.debt.amount_pay + '').replaceAll(",", "") <= 0) {
+      if ((this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "") <= 0) {
         this.toast('Số tiền trả phải lớn hơn 0', 'error')
         return;
       }
 
       try {
-        if(parseInt((this.debt.amount_pay + '').replaceAll(",", "")) !=
-          parseInt((this.debt.cash + '').replaceAll(",", ""))
-          + parseInt((this.debt.credit + '').replaceAll(",", ""))
-          + parseInt((this.debt.e_money + '').replaceAll(",", ""))) {
+        if(parseInt((this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "")) !=
+          parseInt((this.debt.cash + '').replaceAll(".", "").replaceAll(",", ""))
+          + parseInt((this.debt.credit + '').replaceAll(".", "").replaceAll(",", ""))
+          + parseInt((this.debt.e_money + '').replaceAll(".", "").replaceAll(",", ""))) {
           this.toast("Tổng loại tiền phải bằng số tiền thanh toán", 'error')
           return
         }
@@ -647,13 +654,20 @@ export default {
         this.toast('Vui lòng nhập loại tiền', 'error')
       }
       this.saving = true
-      this.debt.amount_pay = (this.debt.amount_pay + '').replaceAll(",", "")
-      this.debt.amount_minus = (this.debt.amount_minus + '').replaceAll(",", "")
-      this.debt.cash = (this.debt.cash + '').replaceAll(",", "")
-      this.debt.credit = (this.debt.credit + '').replaceAll(",", "")
-      this.debt.e_money = (this.debt.e_money + '').replaceAll(",", "")
+      this.debt.amount_pay = (this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.amount_minus = (this.debt.amount_minus + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.cash = (this.debt.cash + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.credit = (this.debt.credit + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.e_money = (this.debt.e_money + '').replaceAll(".", "").replaceAll(",", "")
       this.debt.total_amount = this.sumAmount
-      debitAPI.payDebtFast(this.debt).then(res => {
+
+      let params = {
+        ...this.debt,
+        created_at: moment(this.debt.created_at).format('YYYY-MM-DD'),
+        appointment_date: moment(this.debt.appointment_date).format('YYYY-MM-DD')
+      }
+
+      debitAPI.payDebtFast(params).then(res => {
         if(res != null && res.data != null) {
           this.toast("Thanh toán thành công", 'success')
 
@@ -674,8 +688,9 @@ export default {
               credit: 0,
               e_money: 0,
               remaining: 0,
-              created_at: null,
-              appointment_date: null,
+              remaining: 0,
+              created_at: new Date(),
+              appointment_date: new Date(),
               forewarning: 30,
               interest_rate: 0,
               interest_period: "month"
@@ -693,8 +708,8 @@ export default {
     },
 
     calculate() {
-      let amount_minus = (this.debt.amount_minus + "").replaceAll(",", "")
-      let amount_pay = (this.debt.amount_pay + "").replaceAll(",", "")
+      let amount_minus = (this.debt.amount_minus + "").replaceAll(".", "").replaceAll(",", "")
+      let amount_pay = (this.debt.amount_pay + "").replaceAll(".", "").replaceAll(",", "")
 
       let remaining = this.sumAmount - amount_minus - amount_pay
       this.debt.remaining = this.currencyFormat(remaining)
@@ -707,21 +722,21 @@ export default {
 
     changeCash() {
       if(this.debt.cash) {
-        let cash = this.debt.cash.replaceAll(",", "")
+        let cash = this.debt.cash.replaceAll(".", "").replaceAll(",", "")
         this.debt.cash = this.currencyFormat(cash)
       }
     },
 
     changeCredit() {
       if(this.debt.credit) {
-        let credit = this.debt.credit.replaceAll(",", "")
+        let credit = this.debt.credit.replaceAll(".", "").replaceAll(",", "")
         this.debt.credit = this.currencyFormat(credit)
       }
     },
 
     changeEMoney() {
       if(this.debt.e_money) {
-        let e_money = this.debt.e_money.replaceAll(",", "")
+        let e_money = this.debt.e_money.replaceAll(".", "").replaceAll(",", "")
         this.debt.e_money = this.currencyFormat(e_money)
       }
     },
@@ -845,18 +860,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .label-width {
+    width: 100%;
+  }
+
+
   table {
     margin: auto;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
 
   td, th {
-    border: solid rgb(200, 200, 200) 1px;
     padding: .5rem;
   }
 
@@ -866,7 +883,6 @@ export default {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
     border-top: none;
   }
 

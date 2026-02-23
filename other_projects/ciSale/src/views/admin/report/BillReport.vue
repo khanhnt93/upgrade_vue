@@ -3,7 +3,7 @@
 
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
+        <div class="bg-white shadow rounded-lg p-4">
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
               <h4 class="text-center text-header">Báo Cáo Hóa Đơn</h4>
@@ -31,7 +31,6 @@
               </label>
               <select
                 id="type"
-                type="text"
                 autocomplete="new-password"
                 class="form-control"
                 v-model="inputs.type">
@@ -58,7 +57,7 @@
 
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
           <div class="flex flex-wrap -mx-2" v-show="firstSearch == false && bills.length > 0">
             <div class="w-full px-2">
@@ -67,7 +66,10 @@
                   Số kết quả: {{bills.length}}
                 </div>
                 <div class="w-full md:w-2/3 px-2 text-right">
-                  <button class="btn btn-default text-header" @click="exportToExcel(bills, excel_bill_fields, 'bao_cao_theo_bill.xls')">
+                  <button
+                    class="btn btn-default text-header btn-width-120 pull-right"
+                    @click="exportToExcel(bills, excel_bill_fields, 'bao_cao_theo_bill.xls', 'Báo Cáo Theo Bill')"
+                    title="Xuất Excel">
                     <b>Xuất Excel</b>
                   </button>
                 </div>
@@ -155,15 +157,16 @@
 import reportAPI from '@/api/report'
 import commonFunc from '@/common/commonFunc'
 
-// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
+import { useExcelExport } from '@/composables/useExcelExport'
+import moment from 'moment'
 
 export default {
   setup() {
-    const { toast } = useToast()
+    const { popToast } = useToast()
     const { exportToExcel } = useExcelExport()
-    return { toast, exportToExcel }
+    return { popToast, exportToExcel }
   },
   components: {
     Datepicker
@@ -176,8 +179,8 @@ export default {
       ],
       inputs: {
         type: 1,
-        fromDate: null,
-        toDate: null
+        fromDate: new Date(),
+        toDate: new Date()
       },
       onSearch: false,
       bills: [],
@@ -211,7 +214,7 @@ export default {
     }
   },
   mounted() {
-    let dateNow = new Date().toJSON().slice(0,10)
+    let dateNow = new Date()
     this.inputs.toDate = dateNow
     this.inputs.fromDate = dateNow
 
@@ -229,8 +232,8 @@ export default {
 
       let params = {
         "type": this.inputs.type,
-        "fromDate": this.inputs.fromDate,
-        "toDate": this.inputs.toDate
+        "fromDate": moment(this.inputs.fromDate).format('YYYY-MM-DD'),
+        "toDate": moment(this.inputs.toDate).format('YYYY-MM-DD')
       }
 
       // Search
@@ -271,7 +274,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.toast(errorMess, 'error')
+        this.popToast('danger', errorMess)
 
         this.firstSearch = false
         this.onSearch = false

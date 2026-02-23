@@ -66,8 +66,8 @@
                 <label> Đến ngày </label>
                 <datepicker v-model="inputs.to_date" format="yyyy-MM-dd" placeholder="yyyy-mm-dd" input-class="datepicker-cus" :typeable="true"  ></datepicker>
               </div>
-              <div class="w-full md:w-1/3 px-2">
-                <label class="label-width text-white">
+              <div class="w-full md:w-1/3 px-2 flex flex-col items-end">
+                <label class="invisible">
                    Xem
                 </label>
                 <button class="btn btn-outline-primary float-right btn-width-120" :disabled="onSearch" @click="getFundHistory">
@@ -80,14 +80,17 @@
               <div class="w-full px-2">
                 <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
 
-                <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Lich_su_quy')">
-                  <b>Xuất Excel</b>
+                <button
+                  class="btn btn-default text-header btn-width-120 float-right"
+                  @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
+                  title="Xuất Excel">
+                <b>Xuất Excel</b>
                 </button>
               </div>
             </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="onSearch"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
           <div class="p-4">
             <div class="flex flex-wrap -mx-2">
@@ -278,7 +281,7 @@ import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
 import { useFormatters } from '@/composables/useFormatters'
 import { useExcelExport } from '@/composables/useExcelExport'
-
+import moment from 'moment'
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
 
@@ -361,9 +364,10 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
-    let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.to_date = dateNow
+    let fromDate = new Date()
+    fromDate.setDate(fromDate.getDate() - 6)
+    this.inputs.from_date = fromDate
 
     this.getFundInfo();
 
@@ -421,7 +425,12 @@ export default {
         // }
 
         this.onSearch = true
-      fundAPI.getFundHistory(this.inputs).then(res => {
+        let params = {
+           ...this.inputs,
+           from_date: moment(this.inputs.from_date).format('YYYY-MM-DD'),
+           to_date: moment(this.inputs.to_date).format('YYYY-MM-DD')
+        }
+      fundAPI.getFundHistory(params).then(res => {
         if(res != null && res.data != null && res.data.data != null) {
           this.items = res.data.data
 
@@ -482,6 +491,11 @@ export default {
       this.moneyNumber = "Số tiền thêm"
       this.moneyContent = "Nội dung thêm"
       this.fundUpdate.type = 0
+      this.fundUpdate.total = ""
+      this.fundUpdate.note = ""
+      this.fundUpdate.cash = 0
+      this.fundUpdate.credit = 0
+      this.fundUpdate.e_money = 0
       this.modalChangeMoney = true
     },
 
@@ -494,6 +508,11 @@ export default {
       this.moneyNumber = "Số tiền chi"
       this.moneyContent = "Nội dung chi"
       this.fundUpdate.type = 1
+      this.fundUpdate.total = ""
+      this.fundUpdate.note = ""
+      this.fundUpdate.cash = 0
+      this.fundUpdate.credit = 0
+      this.fundUpdate.e_money = 0
       this.modalChangeMoney = true
     },
 
@@ -583,17 +602,19 @@ export default {
         return
       }
 
-      if(parseInt((this.fundUpdate.total + '').replaceAll(",", "")) !=
-          parseInt((this.fundUpdate.cash + '').replaceAll(",", ""))
-          + parseInt((this.fundUpdate.credit + '').replaceAll(",", ""))
-          + parseInt((this.fundUpdate.e_money + '').replaceAll(",", ""))) {
+      let total = parseInt((this.fundUpdate.total + '').replaceAll(",", "") || 0)
+      let cash = parseInt((this.fundUpdate.cash + '').replaceAll(",", "") || 0)
+      let credit = parseInt((this.fundUpdate.credit + '').replaceAll(",", "") || 0)
+      let e_money = parseInt((this.fundUpdate.e_money + '').replaceAll(",", "") || 0)
+
+      if(total != cash + credit + e_money) {
         this.popToast('error', "Tổng loại tiền phải bằng số tiền nhập")
         return
       }
-      this.fundUpdate.total = (this.fundUpdate.total +'').replaceAll(",", "")
-        this.fundUpdate.cash = (this.fundUpdate.cash +'').replaceAll(",", "")
-        this.fundUpdate.credit = (this.fundUpdate.credit +'').replaceAll(",", "")
-        this.fundUpdate.e_money = (this.fundUpdate.e_money +'').replaceAll(",", "")
+      this.fundUpdate.total = total
+      this.fundUpdate.cash = cash
+      this.fundUpdate.credit = credit
+      this.fundUpdate.e_money = e_money
 
         this.saving = true
         // Call api, update data
@@ -650,17 +671,14 @@ export default {
 
 
   table {
-   margin: auto;
+    margin: auto;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
 
   td, th {
-    border: solid rgb(200, 200, 200) 1px;
     padding: .5rem;
   }
 
@@ -670,7 +688,6 @@ export default {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
     border-top: none;
   }
 

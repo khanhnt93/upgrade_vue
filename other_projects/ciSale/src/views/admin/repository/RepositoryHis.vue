@@ -42,11 +42,12 @@
               <label> Loại hoạt động </label>
               <select
                 id="type"
-                :options="typeOptions"
-                type="text"
-                autocomplete="new-password"
-                class="form-select"
-                v-model="inputs.type_id"></select>
+                class="form-select form-control"
+                v-model="inputs.type_id">
+                <option v-for="(item, index) in typeOptions" :key="index" :value="item.value">
+                  {{ item.text }}
+                </option>
+              </select>
             </div>
 
             <div class="w-full md:w-1/4 px-2">
@@ -77,14 +78,19 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
               <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
-              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'San_pham_trong_kho')">
+              <download-excel
+                class   = "btn btn-default text-header btn-width-120 pull-right"
+                :data   = "items"
+                :fields = "excel_fields"
+                worksheet = "Sản phẩm trong kho"
+                name    = "Sản phẩm trong kho">
                 <b>Xuất Excel</b>
-              </button>
+              </download-excel>
             </div>
           </div>
 
           <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered table-striped">
               <thead>
                 <tr>
                   <th v-for="field in fields" :key="field.key">{{ field.label }}</th>
@@ -131,7 +137,6 @@ import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
-import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Multiselect from 'vue-multiselect'
@@ -141,8 +146,7 @@ import Multiselect from 'vue-multiselect'
 export default {
   setup() {
     const { toast } = useToast()
-    const { exportToExcel } = useExcelExport()
-    return { toast, exportToExcel }
+    return { toast }
   },
   components: {
     Datepicker,
@@ -238,9 +242,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    this.inputs.to_date = new Date()
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
@@ -374,8 +378,8 @@ export default {
         "product_group_id": this.productGroupSelect && this.productGroupSelect.id ? this.productGroupSelect.id : null,
         "product_type_id": this.productTypeSelect && this.productTypeSelect.id ? this.productTypeSelect.id : null,
         "type_id": this.inputs.type_id,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date,
+        "from_date": this.inputs.from_date ? new Date(this.inputs.from_date).toISOString().slice(0, 10) : null,
+        "to_date": this.inputs.to_date ? new Date(this.inputs.to_date).toISOString().slice(0, 10) : null,
         "limit": this.pageLimit,
         "offset": this.offset
       }
@@ -436,3 +440,43 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+    width: fit-content !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+  }
+  td, th {
+    border: solid rgb(200, 200, 200) 1px;
+    padding: .5rem;
+  }
+
+  th {
+    text-align: left;
+    background-color: rgb(190, 220, 250);
+    text-transform: uppercase;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: rgb(50, 50, 100) solid 2px;
+    border-top: none;
+  }
+
+  td {
+    white-space: nowrap;
+    border-bottom: none;
+    color: rgb(20, 20, 20);
+  }
+
+  td:first-of-type, th:first-of-type {
+    border-left: none;
+  }
+
+  td:last-of-type, th:last-of-type {
+    border-right: none;
+  }
+</style>

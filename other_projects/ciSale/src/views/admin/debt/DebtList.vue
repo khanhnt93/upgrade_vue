@@ -59,7 +59,6 @@
                 </label>
                 <select
                   id="status"
-                  type="text"
                   autocomplete="new-password"
                   class="form-control"
                   v-model="inputs.status">
@@ -80,9 +79,12 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-              <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
+              <div class="btn-width-120 float-left">Số kết quả: <span class="text-header"><b>{{totalRow}}</b></span></div>
 
-              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi')">
+              <button
+                class="btn btn-default text-header btn-width-120 float-right"
+                @click="exportToExcel(items, excel_fields, 'Danh sách nợ thu hồi.xls', 'Danh sách nợ thu hồi')"
+                title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
               </div>
@@ -92,7 +94,8 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-              <table class="table table-bordered table-striped">
+              <div class="overflow-x-auto">
+                <table class="table table-bordered table-striped w-full min-w-full">
                 <thead>
                   <tr>
                     <th class="text-center">STT</th>
@@ -141,14 +144,14 @@
                     <td class="text-right">{{formatCurrency(item.amount)}}</td>
 
                     <td>
-                      <div class="flex gap-1" v-if="item.status === 0">
-                        <button class="btn btn-sm btn-outline-danger" title="Thanh toán" @click="openPayModal(item)">
-                          <i class="fa fa-check-square-o"/>
+                      <div class="flex gap-2" v-if="item.status === 0">
+                        <button class="btn btn-sm btn-outline-success" title="Thanh toán" @click="openPayModal(item)">
+                          <i class="fa fa-credit-card"/>
                         </button>
                         <button class="btn btn-sm btn-outline-primary" title="Sửa" @click="edit(item.id)">
                           <i class="fa fa-edit" />
                         </button>
-                        <button class="btn btn-sm btn-outline-secondary" title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
+                        <button class="btn btn-sm btn-outline-danger" title="Xoá nợ" @click="deleted(item.id, item.customer_name)">
                           <i class="fa fa-trash" />
                         </button>
                       </div>
@@ -158,10 +161,13 @@
                 </tbody>
               </table>
               </div>
+              </div>
             </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading">
+            <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+          </span>
           <span class="loading-more">--Hết--</span>
           </div>
         </div>
@@ -193,128 +199,123 @@
               leave="duration-200 ease-in"
               leave-from="opacity-100 scale-100"
               leave-to="opacity-0 scale-95">
-              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle as="h5" class="text-center">
-                  Thanh toán
+              <DialogPanel class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 text-center mb-4">
+                  Thanh toán công nợ
                 </DialogTitle>
-                <hr class="my-3">
 
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Số tiền còn lại: <b>{{formatCurrency(payData.remaining)}}đ</b>
-                    </label>
+                <!-- Debt Summary Card -->
+                <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+                  <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
+                    <div class="col-span-2 sm:col-span-1">
+                      <span class="text-gray-500 block">Số tiền còn lại</span>
+                      <span class="font-semibold text-gray-900">{{formatCurrency(payData.remaining)}}đ</span>
+                    </div>
+
+                     <div class="col-span-2 sm:col-span-1">
+                      <span class="text-gray-500 block">Tổng tiền phải trả</span>
+                      <span class="font-bold text-red-600 text-base">{{formatCurrency(payData.total_amount)}}đ</span>
+                    </div>
+
+                    <div>
+                      <span class="text-gray-500 block">Lãi suất</span>
+                      <span class="font-medium">{{payData.interest_rate}}%</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-500 block">Kỳ hạn</span>
+                      <span class="font-medium">{{payData.interest_period}}</span>
+                    </div>
+
+                    <div>
+                      <span class="text-gray-500 block">Thời gian tính lãi</span>
+                      <span class="font-medium">{{payData.interest_period_real}}</span>
+                    </div>
+
+                    <div>
+                      <span class="text-gray-500 block">Tiền lãi</span>
+                      <span class="font-medium text-orange-600">{{formatCurrency(payData.interest)}}đ</span>
+                    </div>
                   </div>
                 </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Lãi suất: {{payData.interest_rate}}%
-                    </label>
-                  </div>
-                </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Kỳ hạn: {{payData.interest_period}}
-                    </label>
-                  </div>
-                </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Thời gian tính lãi: {{payData.interest_period_real}}
-                    </label>
-                  </div>
-                </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Số tiền lãi: <b>{{formatCurrency(payData.interest)}}đ</b>
-                    </label>
-                  </div>
-                </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Tổng tiền phải trả:
-                      <b class="text-header">{{formatCurrency(payData.total_amount)}}đ</b>
-                    </label>
-                  </div>
-                </div>
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2">
-                    <label>
-                      Số tiền trả
+
+                <!-- Payment Inputs -->
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                      Số tiền thực trả
                     </label>
                     <input
                       id="amount"
-                      autocomplete="new-password"
-                      class="form-control"
+                      autocomplete="off"
+                      class="form-control text-lg font-bold text-right text-blue-700"
                       v-model="payData.amount"
                       @keyup="integerOnly($event.target)"
                       @change="changeAmount()"
-                      maxlength="14">
+                      maxlength="14"
+                      placeholder="0">
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-4 items-center">
+                    <label class="col-span-1 text-sm font-medium text-gray-700">Tiền mặt</label>
+                    <div class="col-span-2">
+                      <input
+                        id="cash_input"
+                        type="text"
+                        class="form-control"
+                        v-model="payData.cash"
+                        autocomplete="off"
+                        @keyup="integerOnly($event.target)"
+                        @change="changeCash()"
+                        maxlength="14">
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-4 items-center">
+                    <label class="col-span-1 text-sm font-medium text-gray-700">Chuyển khoản</label>
+                    <div class="col-span-2">
+                       <input
+                        id="credit_input"
+                        type="text"
+                        class="form-control"
+                        v-model="payData.credit"
+                        autocomplete="off"
+                        @keyup="integerOnly($event.target)"
+                        @change="changeCredit()"
+                        maxlength="14">
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-4 items-center">
+                    <label class="col-span-1 text-sm font-medium text-gray-700">Tiền điện tử</label>
+                    <div class="col-span-2">
+                      <input
+                        id="e_money_input"
+                        type="text"
+                        class="form-control"
+                        v-model="payData.e_money"
+                        autocomplete="off"
+                        @keyup="integerOnly($event.target)"
+                        @change="changeEMoney()"
+                        maxlength="14">
+                    </div>
                   </div>
                 </div>
 
-                <div class="flex flex-wrap -mx-2 form-row">
-                  <div class="w-full md:w-1/3 px-2 mt-2">
-                    <label> Tiền mặt </label>
-                  </div>
-                  <div class="w-full md:w-2/3 px-2">
-                    <input
-                    id="cash_input"
-                    type="text"
-                    class="form-control"
-                    v-model="payData.cash"
-                    autocomplete="new-password"
-                    @keyup="integerOnly($event.target)"
-                    @change="changeCash()"
-                    maxlength="14">
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap -mx-2 form-row">
-                  <div class="w-full md:w-1/3 px-2 mt-2">
-                    <label> Chuyển khoản </label>
-                  </div>
-                  <div class="w-full md:w-2/3 px-2">
-                    <input
-                    id="credit_input"
-                    type="text"
-                    class="form-control"
-                    v-model="payData.credit"
-                    autocomplete="new-password"
-                    @keyup="integerOnly($event.target)"
-                    @change="changeCredit()"
-                    maxlength="14">
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap -mx-2 form-row">
-                  <div class="w-full md:w-1/3 px-2 mt-2">
-                    <label> Tiền điện tử </label>
-                  </div>
-                  <div class="w-full md:w-2/3 px-2">
-                    <input
-                    id="e_money_input"
-                    type="text"
-                    class="form-control"
-                    v-model="payData.e_money"
-                    autocomplete="new-password"
-                    @keyup="integerOnly($event.target)"
-                    @change="changeEMoney()"
-                    maxlength="14">
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap -mx-2">
-                  <div class="w-full px-2 text-right mt-3">
-                    <button class="btn btn-primary px-4 default-btn-bg" @click="pay()">
+                <div class="mt-8 flex justify-end gap-3">
+                    <button
+                      type="button"
+                      class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                      @click="hidePayModal"
+                    >
+                      Hủy
+                    </button>
+                    <button
+                      type="button"
+                      class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                      @click="pay()"
+                    >
                       Thanh toán
                     </button>
-                  </div>
                 </div>
 
               </DialogPanel>
@@ -323,6 +324,8 @@
         </div>
       </Dialog>
     </TransitionRoot>
+
+    <ConfirmModal ref="confirmDeleteModal" />
 </template>
 
 
@@ -336,9 +339,8 @@ import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
 import { useFormatters } from '@/composables/useFormatters'
+import ConfirmModal from '@/components/common/ConfirmModal.vue'
 import { useExcelExport } from '@/composables/useExcelExport'
-
-// import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
 
 export default {
@@ -349,7 +351,8 @@ export default {
     TransitionRoot,
     TransitionChild,
     Datepicker,
-    Multiselect
+    Multiselect,
+    ConfirmModal
   },
   setup() {
     const { toast } = useToast()
@@ -532,10 +535,14 @@ export default {
     /**
      *  Delete
      */
-    deleted (id, name) {
-      if (!confirm('Xóa nợ [' + name + "]. Bạn có chắc không?")) {
-        return
-      }
+    async deleted (id, name) {
+      const ok = await this.$refs.confirmDeleteModal.open({
+        title: 'Xác nhận xóa',
+        message: `Xóa nợ [${name}]. Bạn có chắc không?`,
+        confirmText: 'Xóa',
+        confirmClass: 'bg-red-600 hover:bg-red-700 text-white'
+      })
+      if (!ok) return
 
       debitAPI.deleteDebt(id).then(res => {
         if(res != null && res.data != null) {
@@ -725,8 +732,6 @@ export default {
         }
         return "Tháng"
       },
-
-
   }
 }
 </script>
@@ -738,17 +743,14 @@ export default {
 
 
   table {
-   margin: auto;
+    margin: auto;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
   }
 
   td, th {
-    border: solid rgb(200, 200, 200) 1px;
     padding: .5rem;
   }
 
@@ -758,7 +760,6 @@ export default {
     text-transform: uppercase;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
     border-top: none;
   }
 

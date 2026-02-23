@@ -59,7 +59,10 @@
               Số kết quả: {{items.length}}
             </div>
             <div class="w-full md:w-2/3 px-2 text-right">
-              <button class="btn btn-default text-header" @click="exportToExcel(items, excel_fields, 'lich_su_nha_cung_cap.xls')">
+              <button
+                  class="btn btn-default text-header btn-width-120 pull-right"
+                  @click="exportToExcel(items, excel_fields, 'lich_su_nha_cung_cap.xls', 'Lịch sử nhà cung cấp')"
+                  title="Xuất Excel">
                 <b>Xuất Excel</b>
               </button>
             </div>
@@ -67,7 +70,7 @@
 
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
               <table class="table table-bordered table-striped fixed_header">
                 <thead>
                 <tr>
@@ -131,24 +134,23 @@ import commonFunc from '@/common/commonFunc'
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 import Datepicker from 'vue3-datepicker'
 import { useToast } from '@/composables/useToast'
-import { useRouter } from 'vue-router'
 import { useExcelExport } from '@/composables/useExcelExport'
-
-
+import { useRouter } from 'vue-router'
+import moment from 'moment'
 
 export default {
   components: {
     Datepicker
   },
   setup() {
-    const { toast } = useToast()
-    const router = useRouter()
+    const { popToast } = useToast()
     const { exportToExcel } = useExcelExport()
+    const router = useRouter()
 
     return {
-      toast,
-      router,
-      exportToExcel
+      popToast,
+      exportToExcel,
+      router
     }
   },
   data () {
@@ -156,8 +158,8 @@ export default {
       inputs: {
         name: null,
         phone: null,
-        from_date: '',
-        to_date: ''
+        from_date: new Date(),
+        to_date: new Date()
       },
       items: [],
       excel_fields: {
@@ -180,9 +182,9 @@ export default {
   mounted() {
     // Get default from date and to date
     let dateNow = new Date()
-    this.inputs.to_date = dateNow.toJSON().slice(0,10)
+    // this.inputs.to_date = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 6))
-    this.inputs.from_date = fromDate.toJSON().slice(0,10)
+    this.inputs.from_date = fromDate
 
     // Load list when load page
     this.search()
@@ -195,17 +197,7 @@ export default {
     //   return !(this.errorFromDate || this.errorToDate)
     // },
 
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant === 'danger' ? 'error' : variant,
-        autoHideDelay: 3000
-      })
-    },
+
 
     /**
      * Go to detail
@@ -266,8 +258,8 @@ export default {
       let params = {
         "name": this.inputs.name,
         "phone": this.inputs.phone,
-        "from_date": this.inputs.from_date,
-        "to_date": this.inputs.to_date
+        "from_date": moment(this.inputs.from_date).format('YYYY-MM-DD'),
+        "to_date": moment(this.inputs.to_date).format('YYYY-MM-DD')
       }
 
       // Search

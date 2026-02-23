@@ -76,9 +76,14 @@
                 Số kết quả: {{items.length}}
               </div>
               <div md="8" class="text-right">
-                <button class="btn btn-default text-header" @click="exportToExcel(items, excel_statistic_fields, 'filename.xls')">
+                <download-excel
+                  class   = "btn btn-default text-header"
+                  :data   = "items"
+                  :fields = "excel_statistic_fields"
+                  worksheet = "Thống kê"
+                  name    = "filename.xls">
                   <b>Xuất Excel</b>
-                </button>
+                </download-excel>
               </div>
             </div>
 
@@ -124,8 +129,6 @@
 <script>
 import adminAPI from '@/api/admin'
 import commonFunc from '@/common/commonFunc'
-import { useExcelExport } from '@/composables/useExcelExport'
-import * as XLSX from 'xlsx'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
@@ -222,31 +225,6 @@ export default {
     popToast(variant, content) {
       this.toast(content, variant === 'danger' ? 'error' : variant)
       this.toast(content,  variant === 'danger' ? 'error' : variant)
-    },
-
-    /**
-     * Export data to Excel using xlsx library
-     */
-    exportToExcel(data, fieldsMapping, filename) {
-      if (!data || data.length === 0) {
-        this.popToast('warning', 'Không có dữ liệu để xuất');
-        return;
-      }
-
-      // Transform data based on fields mapping
-      const transformedData = data.map(item => {
-        const newItem = {};
-        Object.entries(fieldsMapping).forEach(([label, key]) => {
-          newItem[label] = item[key] || '';
-        });
-        return newItem;
-      });
-
-      // Use XLSX to create and download file
-      const ws = XLSX.utils.json_to_sheet(transformedData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      XLSX.writeFile(wb, filename);
     },
 
     /**

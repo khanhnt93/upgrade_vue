@@ -4,16 +4,13 @@
       <div class="w-full px-2">
 
       <div class="bg-white shadow rounded-lg p-4">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full px-2">
-            <button class="btn btn-outline-success pull-right btn-width-120" @click.prevent="goToRepoHis">
-              Lịch sử kho
-            </button>
-
-            <button class="btn btn-outline-primary pull-right btn-width-120 mr-2" @click="openModalImportFile">
+        <div class="flex justify-end items-center mb-4">
+            <button class="btn btn-outline-primary mr-2" @click="openModalImportFile">
               Upload
             </button>
-          </div>
+            <button class="btn btn-outline-success" @click.prevent="goToRepoHis">
+              Lịch sử kho
+            </button>
         </div>
 
         <div class="flex flex-wrap -mx-2">
@@ -59,11 +56,8 @@
                 v-model="inputs.name">
               </div>
 
-            <div class="w-full md:w-1/4 px-2">
-              <label class="label-width text-white">
-                Xem
-              </label>
-              <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch"
+            <div class="w-full md:w-1/4 px-2 flex items-end">
+              <button class="btn btn-outline-primary w-full" :disabled="onSearch"
                         @click.prevent="getListProductInRepository">
                 Tìm Kiếm
               </button>
@@ -71,14 +65,17 @@
 
           </div>
 
-        <div class="flex flex-wrap -mx-2">
-            <div class="w-full px-2">
-              <div class="btn-width-120 pull-left">Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
+        <div class="flex justify-between items-center mt-4 mb-4">
+              <div>Số kết quả: <span class="text-header"><b>{{items.length}}</b></span></div>
 
-              <button class="btn btn-default text-header btn-width-120 pull-right" @click="exportToExcel(items, excel_fields, 'Lich_su_kho')">
+              <download-excel
+                class   = "btn btn-default text-header"
+                :data   = "items"
+                :fields = "excel_fields"
+                worksheet = "Lịch sử kho"
+                name    = "Lịch sử kho">
                 <b>Xuất Excel</b>
-              </button>
-            </div>
+              </download-excel>
           </div>
 
           <!-- Loading -->
@@ -251,7 +248,6 @@ import Datepicker from 'vue3-datepicker'
 import { Dialog, DialogPanel } from '@headlessui/vue'
 import { useToast } from '@/composables/useToast'
 import { useRouter } from 'vue-router'
-import { useExcelExport } from '@/composables/useExcelExport'
 
 // import JsonExcel from 'vue-json-excel' // TODO: Replace with xlsx library
 
@@ -262,8 +258,7 @@ export default {
   setup() {
     const { toast } = useToast()
     const router = useRouter()
-    const { exportToExcel } = useExcelExport()
-    return { toast, router, exportToExcel }
+    return { toast, router }
   },
   components: {
     Datepicker,
@@ -563,42 +558,13 @@ export default {
   }
 
 
-  table {
-   margin: auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-    box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-  }
-
-  td, th {
-    border: solid rgb(200, 200, 200) 1px;
-    padding: .5rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: rgb(190, 220, 250);
-    text-transform: uppercase;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: rgb(50, 50, 100) solid 2px;
-    border-top: none;
-  }
-
-  td {
-    white-space: nowrap;
-    border-bottom: none;
-    color: rgb(20, 20, 20);
-  }
-
-  td:first-of-type, th:first-of-type {
-    border-left: none;
-  }
-
-  td:last-of-type, th:last-of-type {
-    border-right: none;
+  .table-bordered {
+    border: 1px solid #dee2e6;
+    th, td {
+      border: 1px solid #dee2e6;
+    }
+    thead th {
+      border-bottom-width: 2px;
+    }
   }
 </style>

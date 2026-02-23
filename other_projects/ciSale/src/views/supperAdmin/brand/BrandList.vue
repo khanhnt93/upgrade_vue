@@ -145,12 +145,8 @@ export default {
    * Make toast without title
    */
     popToast(variant, content) {
-      switch(variant) {
-        case 'success': this.toast.success(content); break;
-        case 'danger': this.toast.error(content); break;
-        case 'warning': this.toast.warning(content); break;
-        default: this.toast.info(content);
-      }
+      this.toast(content, variant === 'danger' ? 'error' : variant)
+      this.toast(content,  variant === 'danger' ? 'error' : variant)
     },
 
     /**
@@ -187,19 +183,25 @@ export default {
      * Delete
      */
     deleted (id, name, rowIndex) {
-      if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
-        superAdminAPI.deleteBrand(id).then(res => {
-          // Remove item in list
-          let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
-          this.items.splice(indexTemp, 1)
-          this.listIdDeleted.push(rowIndex - 1)
-          this.popToast('success', 'Xóa thành công')
-        }).catch(err => {
-          // Handle error
-          let errorMess = commonFunc.handleStaffError(err)
-          this.popToast('danger', errorMess)
-        })
-      }
+      this.$bvModal.msgBoxConfirm('Xóa ' + name + ". Bạn có chắc không?", {
+        title: false,
+        buttonSize: 'sm',
+        centered: true, size: 'sm',
+        footerClass: 'p-2'
+      }).then(res => {
+        if(res){
+          superAdminAPI.deleteBrand(id).then(res => {
+            // Remove item in list
+            let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
+            this.items.splice(indexTemp, 1)
+            this.listIdDeleted.push(rowIndex - 1)
+          }).catch(err => {
+            // Handle error
+            let errorMess = commonFunc.handleStaffError(err)
+            this.popToast('danger', errorMess)
+          })
+        }
+      })
     },
 
     /**

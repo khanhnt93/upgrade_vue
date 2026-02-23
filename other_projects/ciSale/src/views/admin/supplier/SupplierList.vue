@@ -6,7 +6,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2">
               <button class="btn btn-outline-success pull-right btn-width-120" @click="goToAdd()">
-                Thêm
+                <i class="fa fa-plus mr-1"></i> Thêm
               </button>
             </div>
           </div>
@@ -53,7 +53,7 @@
           </div>
 
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
           <span class="loading-more">--Hết--</span>
         </div>
       </div>
@@ -69,11 +69,11 @@ import { useRouter } from 'vue-router'
 
 export default {
   setup() {
-    const { toast } = useToast()
+    const { popToast } = useToast()
     const router = useRouter()
 
     return {
-      toast,
+      popToast,
       router
     }
   },
@@ -93,19 +93,6 @@ export default {
     this.getSupplierList()
   },
   methods: {
-
-    /**
-   * Make toast without title
-   */
-    popToast(variant, content) {
-      this.toast(content, {
-        toastClass: 'my-toast',
-        noCloseButton: true,
-        variant: variant === 'danger' ? 'error' : variant,
-        autoHideDelay: 3000
-      })
-    },
-
     /**
      * Load list
      */
@@ -140,6 +127,7 @@ export default {
           let indexTemp = commonFunc.updateIndex(rowIndex - 1, this.listIdDeleted)
           this.items.splice(indexTemp, 1)
           this.listIdDeleted.push(rowIndex - 1)
+          this.popToast('success', 'Xóa nhà cung cấp thành công')
         }).catch(err => {
           // Handle error
           let errorMess = commonFunc.handleStaffError(err)

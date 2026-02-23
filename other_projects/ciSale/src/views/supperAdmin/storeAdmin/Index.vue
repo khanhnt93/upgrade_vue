@@ -137,7 +137,6 @@ import superAdminAPI from '@/api/superAdmin'
 import Mapper from '@/mapper/staff'
 import MapperStore from '@/mapper/store'
 import commonFunc from '@/common/commonFunc'
-import { useToast } from 'vue-toastification'
 
 
 export default {
@@ -163,8 +162,6 @@ export default {
   mounted() {
     // Get brand options
     this.getOptionBrand()
-
-    this.toast = useToast()
 
     this.getStoreListDB()
     this.getAdminStoreDetail()
@@ -274,8 +271,14 @@ export default {
               let message = ""
               if (res.data.status == 200) {
                 // show popup success
-                this.toast.success("Cập nhật thành công")
-                this.router.push("/admin-store/list")
+                this.$bvModal.msgBoxOk("Cập nhật thành công", {
+                  title: "Cập Nhật Admin",
+                  centered: true,
+                  size: 'sm',
+                  headerClass: 'bg-success',
+                }).then(res => {
+                  this.router.push("/admin-store/list")
+                })
               }
             }
           }).catch(err => {
@@ -288,7 +291,12 @@ export default {
             } else {
               message = "Lỗi hệ thống"
             }
-            this.toast.error(message)
+            this.$bvModal.msgBoxOk(message, {
+              title: "Cập Nhật Admin",
+              centered: true,
+              size: 'sm',
+              headerClass: 'bg-danger',
+            })
           })
         } else {
           // Add
@@ -298,8 +306,14 @@ export default {
               let message = ""
               if (res.data.status == 200) {
                 // show popup success
-                this.toast.success("Thêm thành công")
-                this.router.push("/admin-store/list")
+                this.$bvModal.msgBoxOk("Thêm thành công", {
+                  title: "Thêm Admin",
+                  centered: true,
+                  size: 'sm',
+                  headerClass: 'bg-success',
+                }).then(res => {
+                  this.router.push("/admin-store/list")
+                })
               }
             }
           }).catch(err => {
@@ -311,7 +325,12 @@ export default {
               } else {
                 message = "Lỗi hệ thống"
               }
-              this.toast.error(message)
+              this.$bvModal.msgBoxOk(message, {
+                title: "Thêm Admin",
+                centered: true,
+                size: 'sm',
+                headerClass: 'bg-danger',
+              })
           })
         }
       } else {

@@ -13,7 +13,7 @@
             <hr/>
 
             <div class="flex flex-wrap -mx-2">
-              <div class="w-full px-2 bg-gray text-white title-partner">
+              <div class="w-full px-2 bg-gray-500 text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin người trả</span>
                 </h5>
@@ -25,17 +25,16 @@
                 <label> Khách hàng </label><span class="error-sybol"></span>
               </div>
               <div class="w-full md:w-3/4 px-2">
-                <div class="input-group">
+                <div class="input-group flex flex-row">
                   <multiselect
                     v-model="customerSelect"
                     :options="customerOptions"
                     :loading="loadingGetOptions"
                     placeholder="--Chọn khách hàng--"
                     label="name"
-                    track-by="name"
-                    @input="changeCustomer">
+                    track-by="name">
                   </multiselect>
-                  <button class="btn btn-outline-primary pull-right ml-2" @click="showModalSearchCustomer" >
+                  <button class="btn btn-outline-primary ml-2" @click="showModalSearchCustomer" >
                     <i class="fa fa-search"></i>
                   </button>
                 </div>
@@ -52,14 +51,15 @@
             </div>
 
             <div class="flex flex-wrap -mx-2 mt-3">
-              <div class="w-full px-2 bg-info bg-gradient text-white title-partner">
+              <div class="w-full px-2 bg-cyan-600 bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin khoản vay</span>
                 </h5>
               </div>
             </div>
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60"/></span>
+            <!-- Loading -->
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
 
             <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full px-2">
@@ -83,24 +83,24 @@
                     <td>{{item.stt}}</td>
                     <td>{{item.created_at}}</td>
                     <td>{{item.appointment_date}}</td>
-                    <td class="text-right">{{formatCurrency(item.total)}}</td>
-                    <td class="text-right">{{formatCurrency(item.remaining)}}</td>
+                    <td class="text-right">{{item.total | format_currency}}</td>
+                    <td class="text-right">{{item.remaining | format_currency}}</td>
                     <td>{{item.interest_rate}}%</td>
                     <td>{{convertPeriodCodeToName(item.interest_period)}}</td>
                     <td>{{item.interest_period_real}}</td>
-                    <td class="text-right">{{formatCurrency(item.interest)}}</td>
-                    <td class="text-right">{{formatCurrency(item.amount)}}</td>
+                    <td class="text-right">{{item.interest | format_currency}}</td>
+                    <td class="text-right">{{item.amount | format_currency}}</td>
                   </tr>
 
                   <tr>
                     <td class="total text-center font-weight-bold text-header" :colspan="3">Tổng</td>
-                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumTotal)}}</td>
-                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumRemaining)}}</td>
+                    <td class="text-right font-weight-bold text-header">{{sumTotal | format_currency}}</td>
+                    <td class="text-right font-weight-bold text-header">{{sumRemaining | format_currency}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumInterest)}}</td>
-                    <td class="text-right font-weight-bold text-header">{{formatCurrency(sumAmount)}}</td>
+                    <td class="text-right font-weight-bold text-header">{{sumInterest | format_currency}}</td>
+                    <td class="text-right font-weight-bold text-header">{{sumAmount | format_currency}}</td>
                   </tr>
 
                   </tbody>
@@ -110,17 +110,19 @@
 
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <h5 class="text-header">Tổng tiền cần thanh toán: <b>{{formatCurrency(sumAmount)}}đ</b></h5>
+                <h5 class="text-header">Tổng tiền cần thanh toán: <b>{{sumAmount | format_currency}}đ</b></h5>
               </div>
             </div>
 
             <div class="flex flex-wrap -mx-2 mt-3">
-              <div class="w-full px-2 bg-success bg-gradient text-white title-partner">
+              <div class="w-full px-2 bg-green-600 bg-gradient text-white title-partner">
                 <h5>
                   <span class="pull-left">Thông tin thanh toán</span>
                 </h5>
               </div>
             </div>
+
+            <div class="flex flex-col gap-2 mt-2">
 
             <div class="flex flex-wrap -mx-2 form-row">
               <div class="w-full md:w-1/4 px-2 mt-2">
@@ -278,14 +280,15 @@
                   @keyup="integerOnly($event.target)">
               </div>
             </div>
+          </div>
 
             <div class="flex flex-wrap -mx-2 mt-2">
               <div class="w-full px-2 text-center">
                 <button v-show="!saving" class="btn btn-outline-success" style="height: 50px; width: 240px" @click="confirmPayment" :disabled="saving">
-                  <i class="fa fa-pencil-square-o" style="margin-right: 5px" />
+                  <i class="fa fa-edit" style="margin-right: 5px" />
                   Xác Nhận
                 </button>
-                <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+                <span class="loading-more" v-show="saving"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></span>
               </div>
             </div>
 
@@ -295,111 +298,132 @@
     </div>
 
     <!--Modal tìm kiếm khách hàng -->
-    <div v-if="showSearchModal" class="modal-backdrop">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-          <div class="modal-body">
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full px-2">
-          <h4 class="modal-title text-center text-success">Tìm kiếm khách hàng</h4>
-        </div>
-      </div>
-      <hr>
+    <TransitionRoot appear :show="showSearchModal" as="template">
+      <Dialog as="div" @close="hideModalSearchCustomer" class="relative z-50">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0">
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
 
-      <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-1/2 px-2">
-          <label> Tên </label>
-          <input
-            id="nameCusSearch"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.name"
-            maxlength="75">
-        </div>
-        <div class="w-full md:w-1/2 px-2">
-          <label> Số điện thoại </label>
-          <input
-            id="phoneNumberCus"
-            type="text"
-            autocomplete="new-password"
-            class="form-control"
-            v-model="customerSearch.phone"
-            maxlength="11"
-            @keyup="integerOnly($event.target)">
-        </div>
-      </div>
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95">
+              <DialogPanel class="w-full max-w-6xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogTitle as="h4" class="modal-title text-center text-success">
+                  Tìm kiếm khách hàng
+                </DialogTitle>
+                <hr class="my-3">
 
-      <div class="flex flex-wrap -mx-2 mt-2">
-        <div class="w-full px-2">
-          <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
-            Quay lại
-          </button>
+                <div class="flex flex-wrap -mx-2">
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Tên </label>
+                    <input
+                      id="nameCusSearch"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.name"
+                      maxlength="75">
+                  </div>
+                  <div class="w-full md:w-1/2 px-2">
+                    <label> Số điện thoại </label>
+                    <input
+                      id="phoneNumberCus"
+                      type="text"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="customerSearch.phone"
+                      maxlength="11"
+                      @keyup="integerOnly($event.target)">
+                  </div>
+                </div>
 
-          <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
-            Tìm Kiếm
-          </button>
-        </div>
-      </div>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2 flex flex-row justify-between">
+                    <button class="btn btn-outline-secondary pull-left btn-width-120" @click.prevent="hideModalSearchCustomer">
+                      Quay lại
+                    </button>
 
-      <div class="flex flex-wrap -mx-2 mt-2">
-        <div class="w-full px-2">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Loại</th>
-                <th>Tên</th>
-                <th>Số điện thoại</th>
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
-                <th>Mã số thuế</th>
-                <th>Tỉnh/TP</th>
-                <th>Quận/Huyện</th>
-                <th>Địa chỉ</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in customerSearchItems" :key="index">
-                <td>{{item.stt}}</td>
-                <td>{{item.type}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.phone_number}}</td>
-                <td>{{item.gender}}</td>
-                <td>{{item.birthday}}</td>
-                <td>{{item.tax_code}}</td>
-                <td>{{item.city_name}}</td>
-                <td>{{item.district_name}}</td>
-                <td>{{item.address}}</td>
-                <td>
-                  <button class="btn btn-outline-success pull-right btn-width-120"
-                            @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
-                    Chọn
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                    <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearchCustomer" @click.prevent="searchCustomer">
+                      Tìm Kiếm
+                    </button>
+                  </div>
+                </div>
 
-      <div class="flex flex-wrap -mx-2 mt-3">
-        <div class="w-full px-2">
-          <span>--Hết--</span>
-        </div>
-      </div>
+                <div class="flex flex-wrap -mx-2 mt-2">
+                  <div class="w-full px-2">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th class="text-center">STT</th>
+                          <th class="text-center">Loại</th>
+                          <th class="text-center">Tên</th>
+                          <th class="text-center">Số điện thoại</th>
+                          <th class="text-center">Giới tính</th>
+                          <th class="text-center">Ngày sinh</th>
+                          <th class="text-center">Mã số thuế</th>
+                          <th class="text-center">Tỉnh/TP</th>
+                          <th class="text-center">Quận/Huyện</th>
+                          <th class="text-center">Địa chỉ</th>
+                          <th class="text-center actions-cell"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item, index) in customerSearchItems" :key="index">
+                          <td>{{item.stt}}</td>
+                          <td>{{item.type}}</td>
+                          <td>{{item.name}}</td>
+                          <td>{{item.phone_number}}</td>
+                          <td>{{item.gender}}</td>
+                          <td>{{item.birthday}}</td>
+                          <td>{{item.tax_code}}</td>
+                          <td>{{item.city_name}}</td>
+                          <td>{{item.district_name}}</td>
+                          <td>{{item.address}}</td>
+                          <td class="actions-cell">
+                            <button class="btn btn-outline-success pull-right btn-width-120"
+                                    @click.prevent="chooseCustomer(item.id, item.name, item.phone_number, item.address, item.tax_code)">
+                              Chọn
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
+                <div class="flex flex-wrap -mx-2 mt-3">
+                  <div class="w-full px-2">
+                    <span>--Hết--</span>
+                  </div>
+                </div>
+
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
-      </div>
-    </div>
+      </Dialog>
+    </TransitionRoot>
 
   </div>
 </template>
 <script>
 
 
+import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
 import debitAPI from '@/api/debt'
 import tradeApi from '@/api/trade'
 import customerAPI from '@/api/customer'
@@ -407,18 +431,22 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useToast } from '@/composables/useToast'
-import { useFormatters } from '@/composables/useFormatters'
+import moment from 'moment'
 
 
 export default {
   components: {
     Datepicker,
-    Multiselect
+    Multiselect,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild
   },
   setup() {
-    const { toast } = useToast()
-    const { formatCurrency } = useFormatters()
-    return { toast, formatCurrency }
+    const { popToast } = useToast()
+    return { popToast }
   },
   data() {
     return {
@@ -521,11 +549,16 @@ export default {
     let dateNow = new Date()
     let toDate = new Date(dateNow.setDate(dateNow.getDate() + 60))
     this.debt.created_at = new Date()
-    this.debt.appointment_date = toDate.toJSON().slice(0,10)
+    this.debt.appointment_date = toDate
     this.debt.forewarning = 30
 
     // Get tất cả các list options liên quan trong màn hình
     this.getOptionsRelated()
+  },
+  watch: {
+    customerSelect(val) {
+       this.changeCustomer()
+    }
   },
   methods: {
 
@@ -553,7 +586,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.toast( errorMess)
+        this.popToast('error', errorMess)
       })
     },
 
@@ -591,32 +624,32 @@ export default {
      * Xác nhận thanh toán
      */
     confirmPayment() {
-      if ((this.debt.amount_pay + '').replaceAll(",", "") <= 0) {
-        this.toast( 'Số tiền trả phải lớn hơn 0')
+      if ((this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "") <= 0) {
+        this.popToast('warning', 'Số tiền trả phải lớn hơn 0')
         return;
       }
 
       try {
-        if(parseInt((this.debt.amount_pay + '').replaceAll(",", "")) !=
-          parseInt((this.debt.cash + '').replaceAll(",", ""))
-          + parseInt((this.debt.credit + '').replaceAll(",", ""))
-          + parseInt((this.debt.e_money + '').replaceAll(",", ""))) {
-          this.toast( "Tổng loại tiền phải bằng số tiền thanh toán")
+        if(parseInt((this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "")) !=
+          parseInt((this.debt.cash + '').replaceAll(".", "").replaceAll(",", ""))
+          + parseInt((this.debt.credit + '').replaceAll(".", "").replaceAll(",", ""))
+          + parseInt((this.debt.e_money + '').replaceAll(".", "").replaceAll(",", ""))) {
+          this.popToast('warning', "Tổng loại tiền phải bằng số tiền thanh toán")
           return
         }
       } catch(err) {
-        this.toast( 'Vui lòng nhập loại tiền')
+        this.popToast('warning', 'Vui lòng nhập loại tiền')
       }
       this.saving = true
-      this.debt.amount_pay = (this.debt.amount_pay + '').replaceAll(",", "")
-      this.debt.amount_minus = (this.debt.amount_minus + '').replaceAll(",", "")
-      this.debt.cash = (this.debt.cash + '').replaceAll(",", "")
-      this.debt.credit = (this.debt.credit + '').replaceAll(",", "")
-      this.debt.e_money = (this.debt.e_money + '').replaceAll(",", "")
+      this.debt.amount_pay = (this.debt.amount_pay + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.amount_minus = (this.debt.amount_minus + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.cash = (this.debt.cash + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.credit = (this.debt.credit + '').replaceAll(".", "").replaceAll(",", "")
+      this.debt.e_money = (this.debt.e_money + '').replaceAll(".", "").replaceAll(",", "")
       this.debt.total_amount = this.sumAmount
       debitAPI.payPublicDebtFast(this.debt).then(res => {
         if(res != null && res.data != null) {
-          this.toast( "Thanh toán thành công")
+          this.popToast('success', "Thanh toán thành công")
 
           // Show modal báo, reset data
           this.debtList = []
@@ -654,8 +687,8 @@ export default {
     },
 
     calculate() {
-      let amount_minus = (this.debt.amount_minus + "").replaceAll(",", "")
-      let amount_pay = (this.debt.amount_pay + "").replaceAll(",", "")
+      let amount_minus = (this.debt.amount_minus + "").replaceAll(".", "").replaceAll(",", "")
+      let amount_pay = (this.debt.amount_pay + "").replaceAll(".", "").replaceAll(",", "")
 
       let remaining = this.sumAmount - amount_minus - amount_pay
       this.debt.remaining = this.currencyFormat(remaining)
@@ -682,21 +715,21 @@ export default {
 
     changeCash() {
       if(this.debt.cash) {
-        let cash = this.debt.cash.replaceAll(",", "")
+        let cash = (this.debt.cash + '').replaceAll(".", "").replaceAll(",", "")
         this.debt.cash = this.currencyFormat(cash)
       }
     },
 
     changeCredit() {
       if(this.debt.credit) {
-        let credit = this.debt.credit.replaceAll(",", "")
+        let credit = (this.debt.credit + '').replaceAll(".", "").replaceAll(",", "")
         this.debt.credit = this.currencyFormat(credit)
       }
     },
 
     changeEMoney() {
       if(this.debt.e_money) {
-        let e_money = this.debt.e_money.replaceAll(",", "")
+        let e_money = (this.debt.e_money + '').replaceAll(".", "").replaceAll(",", "")
         this.debt.e_money = this.currencyFormat(e_money)
       }
     },
@@ -773,7 +806,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.toast( errorMess)
+        this.popToast('error', errorMess)
 
         this.onSearchCustomer = false
       })
@@ -810,7 +843,7 @@ export default {
       }).catch(err => {
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.toast( errorMess)
+        this.popToast('error', errorMess)
 
         this.loading = false
       })
@@ -820,18 +853,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .label-width {
+    width: 100%;
+  }
+
 table {
   margin: auto;
   border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
 }
 
 td, th {
-  border: solid rgb(200, 200, 200) 1px;
   padding: .5rem;
 }
 
@@ -841,7 +875,6 @@ th {
   text-transform: uppercase;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  border-bottom: rgb(50, 50, 100) solid 2px;
   border-top: none;
 }
 

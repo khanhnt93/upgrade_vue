@@ -1,19 +1,18 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full p-4">
 
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
-        <div class="card">
-          <div class="card-body p-4">
+        <div class="bg-white shadow rounded-lg">
+          <div class="p-6">
             <h4 class="text-center text-header">BIỂU ĐỒ DOANH THU</h4>
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/4 px-2">
                 <label> Xem theo </label>
                 <select
                   id="status"
-                  type="text"
                   autocomplete="new-password"
-                  class="form-control"
+                  class="w-full h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500"
                   v-model="inputs.chartBy"
                   @change="changeChartBy"
                   :disabled="onSearch">
@@ -25,78 +24,27 @@
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Từ ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="fromDate"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.fromDate"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromDate">-->
-<!--                  Mục từ ngày không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM-dd" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy != 'Month'">
                 <label> Đến ngày </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toDate" format="yyyy-MM-dd" :typeable="true"
-                            placeholder="yyyy-MM-dd" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="toDate"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.toDate"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToDate">-->
-<!--                  Mục đến ngày không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM-dd" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Từ tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.fromMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="fromMonth"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.fromMonth"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorFromMonth">-->
-<!--                  Mục từ tháng không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
               <div class="w-full md:w-1/4 px-2" v-show="inputs.chartBy == 'Month'">
                 <label> Đến tháng </label><span class="error-sybol"></span>
                 <datepicker v-model="inputs.toMonth" format="yyyy-MM" :typeable="true"
-                            placeholder="yyyy-MM" input-class="datepicker-cus" ></datepicker>
-<!--                <input-->
-<!--                  id="toMonth"-->
-<!--                  type="text"-->
-<!--                  autocomplete="new-password"-->
-<!--                  class="form-control"-->
-<!--                  v-model="inputs.toMonth"-->
-<!--                  maxlength="10"-->
-<!--                  @keyup="inputDateOnly($event.target)"-->
-<!--                  :disabled="onSearch">-->
-<!--                <b-form-invalid-feedback  class="invalid-feedback" :state="!errorToMonth">-->
-<!--                  Mục đến tháng không đúng-->
-<!--                </b-form-invalid-feedback>-->
+                            placeholder="yyyy-MM" input-class="w-full !h-10 border border-gray-300 rounded px-3 focus:outline-none focus:border-blue-500" ></datepicker>
               </div>
 
-              <div class="w-full md:w-1/4 px-2">
-                <label class="label-width text-white">
-                   Xem
-                </label>
-                <button class="btn btn-outline-primary pull-right btn-width-120" :disabled="onSearch" @click.prevent="search">
+              <div class="w-full md:w-1/4 px-2 flex flex-col items-end">
+                <button class="mt-6 !ml-0 md:!mr-0 w-1/2 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white h-10 px-4 rounded" :disabled="onSearch" @click.prevent="search">
                   Xem
                 </button>
               </div>
@@ -104,13 +52,16 @@
             </div>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading">
+              <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+            </span>
 
             <GChart
               type="ColumnChart"
               :data="chartData"
               :options="chartOptions"
-              v-show="click && chartData.length > 0"
+              class="w-full"
+              v-if="click && chartData.length > 0"
             />
             <p v-show="click && firstSearch == false && chartData.length == 0" class="text-center">Không có dữ liệu để hiển thị</p>
           </div>
@@ -148,17 +99,18 @@ export default {
         "chartBy": "Day"
       },
       chartByOption: [
-        {value: 'Day', text: ''},
         {value: 'Day', text: 'Ngày'},
         {value: 'Week', text: 'Tuần'},
         {value: 'Month', text: 'Tháng'},
       ],
       chartData: [],
       chartOptions: {
-        chart: {
-          title: 'Biểu đồ doanh thu và lợi nhuận',
-          subtitle: 'Biểu đồ doanh thu và lợi nhuận',
-        }
+        title: 'Biểu đồ doanh thu và lợi nhuận',
+        subtitle: 'Biểu đồ doanh thu và lợi nhuận',
+        height: 500,
+        legend: { position: 'top' },
+        colors: ['#3b82f6', '#10b981'], // blue, green
+        chartArea: { width: '85%', height: '75%' }
       },
       onSearch: false,
       click: false,
@@ -169,11 +121,11 @@ export default {
   mounted() {
     // Get default date
     let dateNow = new Date()
-    this.inputs.toDate = dateNow.toJSON().slice(0,10)
+    this.inputs.toDate = dateNow
     let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-    this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+    this.inputs.fromDate = fromDate
 
-      this.search()
+    this.search()
   },
   // computed: {
   //   // errorFromDate: function () {
@@ -210,16 +162,16 @@ export default {
 
       if(this.inputs.chartBy == "Day") {
         // Get default date
-        this.inputs.toDate = dateNow.toJSON().slice(0,10)
+        this.inputs.toDate = dateNow
         let fromDate = new Date(dateNow.setDate(dateNow.getDate() - 7))
-        this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+        this.inputs.fromDate = fromDate
       }
 
       if(this.inputs.chartBy == "Week") {
         // Get default week
-        this.inputs.toDate = dateNow.toJSON().slice(0,10)
+        this.inputs.toDate = dateNow
         let fromDate = new Date(dateNow.setMonth(dateNow.getMonth() - 2))
-        this.inputs.fromDate = fromDate.toJSON().slice(0,10)
+        this.inputs.fromDate = fromDate
       }
 
       if(this.inputs.chartBy == "Month") {
@@ -394,8 +346,8 @@ export default {
       this.onSearch = true
 
       let params = {
-        "fromDate": this.inputs.fromDate,
-        "toDate": this.inputs.toDate,
+        "fromDate": this.inputs.fromDate ? new Date(this.inputs.fromDate).toISOString().slice(0,10) : null,
+        "toDate": this.inputs.toDate ? new Date(this.inputs.toDate).toISOString().slice(0,10) : null,
         "chartBy": this.inputs.chartBy,
           "fromMonth": this.inputs.fromMonth,
         "toMonth": this.inputs.toMonth,
@@ -435,3 +387,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+:deep(.v3dp__input) {
+  height: 40px; /* Force height to match other inputs (h-10) */
+}
+</style>

@@ -82,9 +82,14 @@
                   Số kết quả: {{items.length}}
                 </div>
                 <div class="w-full md:w-2/3 px-2 text-right">
-                  <button class="btn btn-default text-header" @click="exportToExcel(items, excel_bill_fields, 'bao_cao_theo_nhan_vien.xls')">
+                  <download-excel
+                    class   = "btn btn-default text-header"
+                    :data   = "items"
+                    :fields = "excel_bill_fields"
+                    worksheet = "Báo Cáo Theo Nhân Viên"
+                    name    = "bao_cao_theo_nhan_vien.xls">
                     <b>Xuất Excel</b>
-                  </button>
+                  </download-excel>
                 </div>
               </div>
               <div class="flex flex-wrap -mx-2">
@@ -132,13 +137,11 @@ import adminAPI from '@/api/admin'
 import {Constant} from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
-import { useExcelExport } from '@/composables/useExcelExport'
 
 export default {
   setup() {
     const { toast } = useToast()
-    const { exportToExcel } = useExcelExport()
-    return { toast, exportToExcel }
+    return { toast }
   },
   components: {
   },
