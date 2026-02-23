@@ -21,7 +21,9 @@
                     :class="{ 'active': isActive(item.href) }"
                     @click="handleMenuClick"
                   >
-                    <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                    <span v-if="item.icon" class="sidebar-icon-box">
+                      <i :class="getIconClass(item.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                    </span>
                     <span class="sidebar-title">{{ item.title }}</span>
                   </router-link>
 
@@ -36,7 +38,9 @@
                       class="popover-header popover-header-clickable"
                       @click="handleMenuClick"
                     >
-                      <i v-if="item.icon" :class="getIconClass(item.icon)" class="popover-header-icon" aria-hidden="true"></i>
+                      <span v-if="item.icon" class="sidebar-icon-box">
+                        <i :class="getIconClass(item.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                      </span>
                       <span class="popover-header-title">{{ item.title }}</span>
                     </router-link>
                   </div>
@@ -56,9 +60,11 @@
                     :class="{ 'active': hasActiveChild(item.child), 'open': openMenus[item.title] }"
                     @click.prevent="toggleMenu(item.title)"
                   >
-                    <i v-if="item.icon" :class="getIconClass(item.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                    <span v-if="item.icon" class="sidebar-icon-box">
+                      <i :class="getIconClass(item.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                    </span>
                     <span class="sidebar-title">{{ item.title }}</span>
-                    <i class="fa fa-chevron-right sidebar-arrow" :class="{ 'open': openMenus[item.title] }" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-right sidebar-arrow" aria-hidden="true"></i>
                   </a>
 
                   <!-- Regular submenu (shown when expanded) -->
@@ -70,7 +76,9 @@
                         :class="{ 'active': isActive(child.href) }"
                         @click="handleMenuClick"
                       >
-                        <i v-if="child.icon" :class="getIconClass(child.icon)" class="sidebar-icon" aria-hidden="true"></i>
+                        <span v-if="child.icon" class="sidebar-icon-box">
+                          <i :class="getIconClass(child.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                        </span>
                         <span class="sidebar-title">{{ child.title }}</span>
                       </router-link>
                     </li>
@@ -83,7 +91,9 @@
                     @mouseenter="handleParentHover(item.title)"
                   >
                     <div class="popover-header">
-                      <i v-if="item.icon" :class="getIconClass(item.icon)" class="popover-header-icon" aria-hidden="true"></i>
+                      <span v-if="item.icon" class="sidebar-icon-box">
+                        <i :class="getIconClass(item.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                      </span>
                       <span class="popover-header-title">{{ item.title }}</span>
                       <i class="fa fa-caret-left popover-header-arrow" aria-hidden="true"></i>
                     </div>
@@ -95,7 +105,9 @@
                           :class="{ 'active': isActive(child.href) }"
                           @click="handleMenuClick"
                         >
-                          <i v-if="child.icon" :class="getIconClass(child.icon)" class="popover-icon" aria-hidden="true"></i>
+                          <span v-if="child.icon" class="sidebar-icon-box">
+                            <i :class="getIconClass(child.icon)" class="sidebar-icon-inner" aria-hidden="true"></i>
+                          </span>
                           <span class="popover-title">{{ child.title }}</span>
                         </router-link>
                       </li>
@@ -123,7 +135,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps({
@@ -148,7 +160,7 @@ const props = defineProps({
 const emit = defineEmits(['toggle', 'close'])
 
 const route = useRoute()
-const openMenus = ref({})
+const openMenus = reactive({})
 const hoveredMenu = ref(null)
 const clickedMenu = ref(null)
 
@@ -174,7 +186,10 @@ const getIconClass = (icon) => {
     'fa-file-o': 'far fa-file',
     'fa-folder-o': 'far fa-folder',
     'fa-heart-o': 'far fa-heart',
-    'fa-star-o': 'far fa-star'
+    'fa-star-o': 'far fa-star',
+    'fa-dropbox': 'fab fa-dropbox',
+    'fa-commenting-o': 'far fa-comment-dots',
+    'fa-hand-paper-o': 'far fa-hand-paper'
   }
 
   // Check if icon needs mapping
@@ -213,15 +228,15 @@ const toggleMenu = (title) => {
     }
   } else {
     // When expanded, toggle the submenu and close others
-    const isCurrentlyOpen = openMenus.value[title]
+    const isCurrentlyOpen = openMenus[title]
 
     // Close all other menus
-    Object.keys(openMenus.value).forEach(key => {
-      openMenus.value[key] = false
+    Object.keys(openMenus).forEach(key => {
+      openMenus[key] = false
     })
 
     // Toggle the current menu
-    openMenus.value[title] = !isCurrentlyOpen
+    openMenus[title] = !isCurrentlyOpen
   }
 }
 
@@ -261,7 +276,7 @@ const shouldShowPopover = (title) => {
 watch(() => route.path, () => {
   props.menu.forEach(item => {
     if (item.child && hasActiveChild(item.child)) {
-      openMenus.value[item.title] = true
+      openMenus[item.title] = true
     }
   })
 }, { immediate: true })
@@ -270,8 +285,8 @@ watch(() => route.path, () => {
 watch(() => props.collapsed, (isCollapsed) => {
   if (isCollapsed) {
     // Close all expanded menus
-    Object.keys(openMenus.value).forEach(key => {
-      openMenus.value[key] = false
+    Object.keys(openMenus).forEach(key => {
+      openMenus[key] = false
     })
     // Close any clicked/hovered popover
     clickedMenu.value = null
@@ -351,6 +366,11 @@ watch(() => props.collapsed, (isCollapsed) => {
   flex: 1;
   overflow-y: auto;
   overflow-x: visible;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .collapsed & {
     overflow: visible;
@@ -454,16 +474,28 @@ watch(() => props.collapsed, (isCollapsed) => {
   }
 }
 
-.sidebar-icon {
+
+.sidebar-icon-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
   width: 30px;
   height: 30px;
+  background: #23272b;
+  border-radius: 6px;
+  margin-right: 10px;
   flex-shrink: 0;
-  font-size: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.sidebar-icon-inner {
+  font-size: 15px;
   color: #fff;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-title {
@@ -479,15 +511,15 @@ watch(() => props.collapsed, (isCollapsed) => {
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  transition: transform 0.3s ease;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.25s ease;
+}
 
-  &.open {
-    transform: translateY(-50%) rotate(90deg);
-  }
+.sidebar-link.open .sidebar-arrow {
+  transform: translateY(-50%) rotate(90deg);
 }
 
 .sidebar-submenu {
@@ -495,10 +527,6 @@ watch(() => props.collapsed, (isCollapsed) => {
   margin: 0;
   padding: 0;
   background-color: rgba(0, 0, 0, 0.2);
-
-  .sidebar-link {
-    padding-left: 55px;
-  }
 }
 
 // Popover styles
