@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
         <h4 class="text-xl font-semibold text-center text-orange-600">Nhóm - Loại Thu Chi</h4>

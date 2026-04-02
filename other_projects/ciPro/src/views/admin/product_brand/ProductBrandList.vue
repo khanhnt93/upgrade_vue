@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-4 py-6">
+  <div class="w-full px-4 py-6">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-end mb-4">

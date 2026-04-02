@@ -1,6 +1,6 @@
 <template>
   <div class="app flex items-center is-fixed-page">
-    <div class="container mx-auto px-4">
+    <div class="w-full mx-auto px-4">
       <div class="flex justify-center">
         <div class="w-full md:w-1/2">
           <div class="bg-white rounded-lg shadow p-6">

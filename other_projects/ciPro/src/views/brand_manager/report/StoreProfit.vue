@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="w-full mx-auto px-4">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full px-2">
         <div class="bg-white rounded-lg shadow">

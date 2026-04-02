@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-4 py-6">
+  <div class="w-full px-4 py-6">
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Title -->
       <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">{{title_prefix}} Khoản Cho Vay</h4>

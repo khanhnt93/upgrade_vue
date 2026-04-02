@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-4 py-6">
+  <div class="w-full px-4 py-6">
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Action Buttons -->
       <div class="flex justify-end mb-4 space-x-2">

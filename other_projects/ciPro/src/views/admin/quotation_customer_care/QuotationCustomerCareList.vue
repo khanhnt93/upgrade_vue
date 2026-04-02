@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Settings Button Row -->
       <div class="flex justify-end mb-4">

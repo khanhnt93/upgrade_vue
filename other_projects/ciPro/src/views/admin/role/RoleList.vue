@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
         <button

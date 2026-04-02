@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full">
     <div class="grid grid-cols-1 gap-4">
       <div class="w-full">
         <div class="bg-white shadow rounded-lg p-4">

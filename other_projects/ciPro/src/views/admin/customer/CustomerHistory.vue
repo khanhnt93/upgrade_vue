@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div>
         <h4 class="mt-2 text-center text-header font-bold">Lịch Sử Khách Hàng</h4>

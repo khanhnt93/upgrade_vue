@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4">
+  <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <!-- Header Buttons -->
       <div class="flex justify-end gap-2 mb-4">

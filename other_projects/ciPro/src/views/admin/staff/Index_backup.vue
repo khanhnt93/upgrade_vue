@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="w-full">
     <b-row>
       <b-col>
         <b-card>

@@ -9,7 +9,7 @@
 
     <!-- Features Section -->
     <section id="features" class="services-area pt-32">
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="flex justify-center">
           <div class="w-full lg:w-10/12">
             <div class="text-center pb-10">
@@ -109,7 +109,7 @@
 
     <!-- About Section 1 -->
     <section id="about" class="about-area pt-20">
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="flex flex-wrap items-center -mx-4">
           <div class="w-full lg:w-1/2 px-4 mt-6">
             <div class="about-content mt-12 fadeInLeftBig">
@@ -140,7 +140,7 @@
 
     <!-- About Section 2 -->
     <section class="about-area pt-20">
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="flex flex-wrap items-center -mx-4">
           <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-last">
             <div class="about-content mt-12 fadeInLeftBig">
@@ -172,7 +172,7 @@
 
     <!-- About Section 3 -->
     <section class="about-area pt-20">
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="flex flex-wrap items-center -mx-4">
           <div class="w-full lg:w-1/2 px-4 mt-6">
             <div class="about-content mt-12 fadeInLeftBig">
@@ -206,7 +206,7 @@
       <div class="about-shape-2 absolute top-0 left-0 w-1/3 h-full -z-10 hidden md:block">
         <img src="/static/img/project/home/about-shape-2.svg" alt="shape" class="w-full" />
       </div>
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="flex flex-wrap items-center -mx-4">
           <div class="w-full lg:w-1/2 px-4 mt-6 lg:order-last">
             <div class="about-content mt-12 fadeInLeftBig">
@@ -238,7 +238,7 @@
 
     <!-- Footer -->
     <footer id="footer" class="footer-area pt-32 mt-48">
-      <div class="container mx-auto px-4">
+      <div class="w-full mx-auto px-4">
         <div class="footer-widget pb-24">
           <div class="flex flex-wrap -mx-4">
             <!-- Footer About -->

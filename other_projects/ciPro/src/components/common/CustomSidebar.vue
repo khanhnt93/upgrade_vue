@@ -286,7 +286,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   top: 55px;
   left: 0;
   height: calc(100vh - 55px);
-  background-color: #2f353a;
+  background-color: #e5e7eb;
   z-index: 1000;
   transition: width 0.3s ease, transform 0.3s ease;
   overflow-y: auto;
@@ -382,8 +382,9 @@ watch(() => props.collapsed, (isCollapsed) => {
   }
 
   .toggle-icon {
-    font-size: 16px;
+    font-size: 14px;
     transition: transform 0.3s ease;
+    color: #ed592a !important;
   }
 
   .toggle-text {
@@ -435,11 +436,11 @@ watch(() => props.collapsed, (isCollapsed) => {
   width: 100%;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #7d7c7c;
   }
 
   &.active {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: #7d7c7c;
     font-weight: 600;
     border-left: 4px solid #ed592a;
 
@@ -462,16 +463,17 @@ watch(() => props.collapsed, (isCollapsed) => {
   width: 30px;
   height: 30px;
   flex-shrink: 0;
-  font-size: 18px;
-  color: #fff;
+  font-size: 16px;
+  color: #ed592a !important;
 }
 
 .sidebar-title {
   flex: 1;
-  color: #fff;
+  color: #ed592a !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 16px;
 }
 
 .sidebar-arrow {
@@ -484,6 +486,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ed592a !important;
 
   &.open {
     transform: translateY(-50%) rotate(90deg);
@@ -546,7 +549,7 @@ watch(() => props.collapsed, (isCollapsed) => {
   height: 16px;
   flex-shrink: 0;
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #ed592a !important;
 }
 
 .popover-header-icon {
@@ -609,12 +612,12 @@ watch(() => props.collapsed, (isCollapsed) => {
   height: 20px;
   flex-shrink: 0;
   font-size: 16px;
-  color: #fff;
+  color: #ed592a !important;
 }
 
 .popover-title {
   flex: 1;
-  color: #fff;
+  color: #ed592a !important;
   white-space: nowrap;
   font-size: 14px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="w-full mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
       <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
         <!-- Header -->
