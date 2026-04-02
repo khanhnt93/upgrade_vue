@@ -114,7 +114,7 @@
       </div>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
       <span class="loading-more" v-if="hasNext === false">--Hết--</span>
       <span class="loading-more" v-if="hasNext === true && total_row != 0"><i class="fa fa-angle-double-down has-next"></i></span>
     </div>

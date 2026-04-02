@@ -1336,4 +1336,17 @@ onUnmounted(() => {
   ring: 2px;
   ring-color: #3b82f6;
 }
+
+:deep(.multiselect__placeholder) {
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: inherit;
+}
+
+:deep(.multiselect__single),
+:deep(.multiselect__input) {
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: inherit;
+}
 </style>

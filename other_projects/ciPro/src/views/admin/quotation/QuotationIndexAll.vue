@@ -17,9 +17,9 @@
 
             <div class="grid grid-cols-1 gap-4 form-row">
               <div class="w-full" md="12">
-                <h4 class="mt-1 text-center text-header">
+                <h3 class="mt-1 text-center text-header">
                   {{ prefix_title }} Báo Giá
-                </h4>
+                </h3>
               </div>
             </div>
             <hr />
@@ -52,7 +52,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4" v-show="showPartnerInfo">
-              <div class="w-full">
+              <div class="w-full space-y-2">
                 <div class="grid grid-cols-1 gap-4 form-row mt-2">
                   <div class="w-full md:col-span-2 mt-2">
                     <label>
@@ -109,131 +109,135 @@
                 ></span>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>
-                      Tên khách hàng<span class="error-sybol"></span>
-                    </label>
-                    <input
-                      id="customer_name"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.customer_name"
-                      :disabled="saving"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Tên khách hàng<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="customer_name"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.customer_name"
+                        :disabled="saving"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>
-                      Tên người liên hệ<span class="error-sybol"></span>
-                    </label>
-                    <input
-                      id="contact_person_name"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.contact_person_name"
-                      :disabled="saving"
-                    />
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>
-                      <span>SĐT khách hàng</span>
-                    </label>
-                    <input
-                      id="customer_phone"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.customer_phone"
-                      :disabled="saving"
-                      @keyup="integerOnly($event.target)"
-                    />
-                  </div>
-                  <div>
-                    <label>
-                      Sđt người liên hệ<span class="error-sybol"></span>
-                    </label>
-                    <input
-                      id="contact_person_phone"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.contact_person_phone"
-                      :disabled="saving"
-                      @keyup="integerOnly($event.target)"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Tên người liên hệ<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="contact_person_name"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.contact_person_name"
+                        :disabled="saving"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>
-                      <span>Địa chỉ khách hàng</span>
-                    </label>
-                    <input
-                      id="address"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.customer_address"
-                      :disabled="saving"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">SĐT khách hàng</label>
+                    <div class="flex-1">
+                      <input
+                        id="customer_phone"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.customer_phone"
+                        :disabled="saving"
+                        @keyup="integerOnly($event.target)"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Loại CTY<span class="error-sybol"></span> </label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      v-model="trade.customer_company_type_id"
-                    >
-                      <option
-                        v-for="option in optionsCompanyType"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Sđt người liên hệ<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="contact_person_phone"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.contact_person_phone"
+                        :disabled="saving"
+                        @keyup="integerOnly($event.target)"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Địa chỉ khách hàng</label>
+                    <div class="flex-1">
+                      <input
+                        id="address"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.customer_address"
+                        :disabled="saving"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Loại CTY<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        v-model="trade.customer_company_type_id"
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in optionsCompanyType"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Email K.H</label>
-                    <input
-                      id="customer_email"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.customer_email"
-                      :disabled="saving"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Email K.H</label>
+                    <div class="flex-1">
+                      <input
+                        id="customer_email"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.customer_email"
+                        :disabled="saving"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label
-                      >Tình trạng K.H<span class="error-sybol"></span
-                    ></label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      v-model="trade.customer_status"
-                      disabled
-                    >
-                      <option
-                        v-for="option in customerStatusOptions"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Tình trạng K.H<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        v-model="trade.customer_status"
+                        disabled
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in customerStatusOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -536,177 +540,194 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Giá list</label>
-                    <input
-                      id="price_list"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.price_list"
-                      @change="calculateCurrentProduct('price_list')"
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Giá list</label>
+                    <div class="flex-1">
+                      <input
+                        id="price_list"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.price_list"
+                        @change="calculateCurrentProduct('price_list')"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Chiết khấu từ NCC (%)</label>
-                    <input
-                      id="discount"
-                      type="text"
-                      maxlength="5"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.discount"
-                      @change="calculateCurrentProduct('discount')"
-                    />
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Giá gốc<span class="error-sybol"></span></label>
-                    <input
-                      id="price"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.price"
-                      @change="calculateCurrentProduct('price')"
-                    />
-                  </div>
-                  <div>
-                    <label>% Lợi nhuận theo giá list</label>
-                    <input
-                      id="discount_sale"
-                      type="text"
-                      maxlength="5"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.discount_sale"
-                      @change="calculateCurrentProduct('discount_sale')"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Chiết khấu từ NCC (%)</label>
+                    <div class="flex-1">
+                      <input
+                        id="discount"
+                        type="text"
+                        maxlength="5"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.discount"
+                        @change="calculateCurrentProduct('discount')"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>% Lợi nhuận theo giá gốc</label>
-                    <input
-                      id="discount_original_price"
-                      type="text"
-                      maxlength="5"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.discount_original_price"
-                      @change="
-                        calculateCurrentProduct('discount_original_price')
-                      "
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Giá gốc<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="price"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.price"
+                        @change="calculateCurrentProduct('price')"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Lợi nhuận/sản phẩm</label>
-                    <input
-                      id="profit_on_item"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.profit_on_item"
-                      @change="calculateCurrentProduct('profit_on_item')"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">% Lợi nhuận theo giá list</label>
+                    <div class="flex-1">
+                      <input
+                        id="discount_sale"
+                        type="text"
+                        maxlength="5"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.discount_sale"
+                        @change="calculateCurrentProduct('discount_sale')"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Giá bán<span class="error-sybol"></span></label>
-                    <input
-                      id="price_sell"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.price_sell"
-                      @change="calculateCurrentProduct('price_sell')"
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">% Lợi nhuận theo giá gốc</label>
+                    <div class="flex-1">
+                      <input
+                        id="discount_original_price"
+                        type="text"
+                        maxlength="5"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.discount_original_price"
+                        @change="calculateCurrentProduct('discount_original_price')"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label
-                      >SL trong kho
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận/sản phẩm</label>
+                    <div class="flex-1">
+                      <input
+                        id="profit_on_item"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.profit_on_item"
+                        @change="calculateCurrentProduct('profit_on_item')"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Giá bán<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="price_sell"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.price_sell"
+                        @change="calculateCurrentProduct('price_sell')"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">SL trong kho
                       {{
                         root_unit.name
                           ? "(ĐV: " + root_unit.name + ")"
                           : currentProduct.unit_name_input
                             ? "(Đơn vị: " + currentProduct.unit_name_input + ")"
                             : ""
-                      }}</label
-                    >
-                    <input
-                      id="quantity_repo"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.quantity_repo"
-                      readonly
-                    />
+                      }}</label>
+                    <div class="flex-1">
+                      <input
+                        id="quantity_repo"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.quantity_repo"
+                        readonly
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      >SL báo giá {{ handleUnitName()
-                      }}<span class="error-sybol"></span
-                    ></label>
-                    <input
-                      id="quantity"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.quantity"
-                      @change="calculateCurrentProduct('quantity')"
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">SL báo giá {{ handleUnitName() }}<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="quantity"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.quantity"
+                        @change="calculateCurrentProduct('quantity')"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Thành tiền</label>
-                    <input
-                      id="amount_sell"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.amount_sell"
-                      readonly
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Thành tiền</label>
+                    <div class="flex-1">
+                      <input
+                        id="amount_sell"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.amount_sell"
+                        readonly
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Lợi nhuận tổng</label>
-                    <input
-                      id="profit"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.profit"
-                      readonly
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận tổng</label>
+                    <div class="flex-1">
+                      <input
+                        id="profit"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.profit"
+                        readonly
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Ghi chú</label>
-                    <input
-                      id="note"
-                      type="text"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="currentProduct.note"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Ghi chú</label>
+                    <div class="flex-1">
+                      <input
+                        id="note"
+                        type="text"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="currentProduct.note"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1428,65 +1449,70 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 mt-2" v-show="showPaymentInfo">
-              <div class="w-full">
+              <div class="w-full space-y-2">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Tổng tiền sản phẩm</label>
-                    <input
-                      id="sub_total"
-                      type="text"
-                      maxlength="100"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.sub_total"
-                      readonly
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Tổng tiền sản phẩm</label>
+                    <div class="flex-1">
+                      <input
+                        id="sub_total"
+                        type="text"
+                        maxlength="100"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.sub_total"
+                        readonly
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Chi phí thêm</label>
-                    <input
-                      id="extra_fee"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.extra_fee"
-                      placeholder="Số tiền"
-                      @change="calculateAmount"
-                    />
-                    <input
-                      id="note_extra_fee"
-                      type="text"
-                      maxlength="255"
-                      autocomplete="new-password"
-                      class="form-control mt-2"
-                      placeholder="Ghi chú cho chi phí thêm"
-                      v-model="trade.note_extra_fee"
-                    />
+                  <div class="flex items-start gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm mt-2">Chi phí thêm</label>
+                    <div class="flex-1">
+                      <input
+                        id="extra_fee"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.extra_fee"
+                        placeholder="Số tiền"
+                        @change="calculateAmount"
+                      />
+                      <input
+                        id="note_extra_fee"
+                        type="text"
+                        maxlength="255"
+                        autocomplete="new-password"
+                        class="form-control w-full mt-2"
+                        placeholder="Ghi chú cho chi phí thêm"
+                        v-model="trade.note_extra_fee"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                  <div>
-                    <label>Số tiền giảm</label>
-                    <input
-                      id="fixed_discount"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.fixed_discount"
-                      @change="calculateAmount"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Số tiền giảm</label>
+                    <div class="flex-1">
+                      <input
+                        id="fixed_discount"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.fixed_discount"
+                        @change="calculateAmount"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Thuế VAT</label>
-                    <div class="input-group">
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Thuế VAT</label>
+                    <div class="flex-1 flex items-center gap-2">
                       <input
                         type="checkbox"
                         id="have_vat"
                         v-model="trade.have_vat"
-                        class="mr-2"
                         @change="calculateAmount('vat')"
                       />
                       <input
@@ -1494,7 +1520,7 @@
                         type="text"
                         maxlength="14"
                         autocomplete="new-password"
-                        class="form-control mr-2"
+                        class="form-control flex-1"
                         v-model="trade.vat_percent"
                         @change="calculateAmount"
                       />
@@ -1503,7 +1529,7 @@
                         type="text"
                         maxlength="14"
                         autocomplete="new-password"
-                        class="form-control"
+                        class="form-control flex-1"
                         v-model="trade.vat_value"
                         @change="calculateAmount"
                       />
@@ -1512,53 +1538,59 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Thành tiền<span class="error-sybol"></span> </label>
-                    <input
-                      id="amount"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.total"
-                      readonly
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Thành tiền<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                      <input
+                        id="amount"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.total"
+                        readonly
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Lợi nhuận</label>
-                    <input
-                      id="trade_profit"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.profit"
-                      readonly
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận</label>
+                    <div class="flex-1">
+                      <input
+                        id="trade_profit"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.profit"
+                        readonly
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Tài khoản nhận thanh toán</label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="bank_account_id"
-                      v-model="trade.bank_account_id"
-                      @change="changeBankAccount"
-                    >
-                      <option
-                        v-for="option in bankAccountOptions"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Tài khoản nhận thanh toán</label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="bank_account_id"
+                        v-model="trade.bank_account_id"
+                        @change="changeBankAccount"
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in bankAccountOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
-                  <div>
-                    <label>Hình thức thanh toán</label>
-                    <div class="flex gap-2 items-start">
+                  <div class="flex items-start gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm mt-2">Hình thức thanh toán</label>
+                    <div class="flex-1 flex gap-2 items-start">
                       <div class="flex-1">
                         <select
                           class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -1583,7 +1615,6 @@
                         class="form-control"
                         v-model="trade.payment_method_input"
                       />
-
                       <button
                         class="px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50"
                         @click="openModalPaymentMethod"
@@ -1595,9 +1626,9 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Thỏa thuận vận chuyển</label>
-                    <div class="flex gap-2 items-start">
+                  <div class="flex items-start gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm mt-2">Thỏa thuận vận chuyển</label>
+                    <div class="flex-1 flex gap-2 items-start">
                       <div class="flex-1">
                         <select
                           class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -1613,7 +1644,6 @@
                           </option>
                         </select>
                       </div>
-
                       <button
                         class="px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50"
                         @click="openModalShippingAgreement"
@@ -1622,100 +1652,112 @@
                       </button>
                     </div>
                   </div>
-                  <div>
-                    <label>Phí giao hàng</label>
-                    <input
-                      id="shipping_fee"
-                      type="text"
-                      maxlength="14"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.shipping_fee"
-                      @change="changeCurrencyField('shipping_fee')"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Phí giao hàng</label>
+                    <div class="flex-1">
+                      <input
+                        id="shipping_fee"
+                        type="text"
+                        maxlength="14"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.shipping_fee"
+                        @change="changeCurrencyField('shipping_fee')"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Hiệu lực báo giá (ngày)</label>
-                    <input
-                      id="quotation_expiry_date"
-                      type="text"
-                      maxlength="3"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.quotation_expiry_date"
-                      @keyup="integerOnly($event.target)"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Hiệu lực báo giá (ngày)</label>
+                    <div class="flex-1">
+                      <input
+                        id="quotation_expiry_date"
+                        type="text"
+                        maxlength="3"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.quotation_expiry_date"
+                        @keyup="integerOnly($event.target)"
+                      />
+                    </div>
                   </div>
-                  <div v-if="userRole.value == 'admin'">
-                    <label>Nhân viên phụ trách</label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="staff_in_charge"
-                      v-model="trade.staff_in_charge"
-                      @change="changeStaffInChange"
-                    >
-                      <option
-                        v-for="option in optionsStaff"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2" v-if="userRole.value == 'admin'">
+                    <label class="w-36 shrink-0 text-right text-sm">Nhân viên phụ trách</label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="staff_in_charge"
+                        v-model="trade.staff_in_charge"
+                        @change="changeStaffInChange"
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in optionsStaff"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>
-                      <span>Thời gian giao hàng</span>
-                    </label>
-                    <input
-                      id="shipping_date"
-                      type="text"
-                      maxlength="255"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.shipping_date"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Thời gian giao hàng</label>
+                    <div class="flex-1">
+                      <input
+                        id="shipping_date"
+                        type="text"
+                        maxlength="255"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.shipping_date"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Bảo hành</label>
-                    <input
-                      id="guarantee"
-                      type="text"
-                      maxlength="255"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.guarantee"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Bảo hành</label>
+                    <div class="flex-1">
+                      <input
+                        id="guarantee"
+                        type="text"
+                        maxlength="255"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.guarantee"
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label>Giấy tờ kèm theo</label>
-                    <input
-                      id="attach_doc"
-                      type="text"
-                      maxlength="255"
-                      autocomplete="new-password"
-                      class="form-control"
-                      v-model="trade.attach_doc"
-                    />
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Giấy tờ kèm theo</label>
+                    <div class="flex-1">
+                      <input
+                        id="attach_doc"
+                        type="text"
+                        maxlength="255"
+                        autocomplete="new-password"
+                        class="form-control w-full"
+                        v-model="trade.attach_doc"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label>Ghi chú</label>
-                    <textarea
-                      class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="description"
-                      style="width: 100%"
-                      rows="2"
-                      v-model="trade.description"
-                    ></textarea>
+                  <div class="flex items-start gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm mt-2">Ghi chú</label>
+                    <div class="flex-1">
+                      <textarea
+                        class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="description"
+                        style="width: 100%"
+                        rows="2"
+                        v-model="trade.description"
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4428,7 +4470,7 @@ const handleProductExcel = () => {
         amount: productsExcel[i].amount_sell,
         note: productsExcel[i].note,
       };
-      products_excel.push(item);
+      products_excel.value.push(item);
     }
   }
 };
@@ -5770,6 +5812,7 @@ const handleTradeInfoBeforeSave = (data) => {
  */
 const updateDraft = () => {
   if (trade.id == null) {
+    saveDraft();
     return;
   }
 

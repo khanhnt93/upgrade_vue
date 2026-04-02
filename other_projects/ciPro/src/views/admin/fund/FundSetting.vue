@@ -89,7 +89,7 @@
           {{btn_text}}
         </button>
         <div v-show="saving" class="inline-block">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
       </div>
 
@@ -138,7 +138,7 @@
       </div>
 
       <div v-show="loading" class="flex justify-center my-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div class="text-center my-4">--Hết--</div>
     </div>

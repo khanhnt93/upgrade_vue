@@ -92,15 +92,9 @@
           Số kết quả: <span class="font-bold text-gray-800">{{ totalRow }}</span>
         </div>
         <div class="flex gap-2">
-          <download-excel
-            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none font-bold"
-            :data="excel_items"
-            :fields="excel_fields"
-            worksheet="Danh sách nợ phải thu"
-            name="Danh sách nợ phải thu"
-          >
+          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none font-bold" @click="exportExcel()">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
@@ -180,7 +174,7 @@
       <!-- Loading & Pagination -->
       <div class="text-center mt-4">
         <span v-show="loading" class="text-blue-500">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </span>
         <span v-if="!loading && hasNext === false" class="text-gray-500">--Hết--</span>
         <span v-if="!loading && hasNext === true && totalRow != 0" class="text-gray-500">
@@ -248,7 +242,7 @@
             Cấn trừ
           </button>
           <span v-show="payingOverPayment" class="text-blue-500">
-            <icon name="loading" width="60" />
+            <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
           </span>
         </div>
       </div>
@@ -258,6 +252,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import debtApi from '@/api/debt'
 import { Constant } from '@/common/constant'
@@ -554,8 +549,24 @@ const payOverPayment = async () => {
 }
 
 // Lifecycle
+const exportExcel = () => {
+  const data = excel_items.value
+  const fields = excel_fields
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Danh sách nợ phải thu')
+  XLSX.writeFile(wb, 'Danh sách nợ phải thu.xls', { bookType: 'xls' })
+}
+
 onMounted(() => {
-  // Determine UI by role
   const url = location.href
   if (url.includes('debt-sale')) {
     userRole.value = 'staff'

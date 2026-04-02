@@ -10,7 +10,7 @@
       </div>
 
       <div class="clear-both">
-        <h4 class="mt-1 text-center text-header font-bold">Danh Sách Nhóm Quyền</h4>
+        <h3 class="mt-1 text-center text-header font-bold">Danh Sách Nhóm Quyền</h3>
       </div>
       <hr class="my-4">
 
@@ -51,7 +51,7 @@
       </div>
 
       <!-- Loading -->
-      <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
+      <span v-show="loading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
     </div>
   </div>
 </template>

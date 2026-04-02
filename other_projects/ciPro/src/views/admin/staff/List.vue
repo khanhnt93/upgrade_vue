@@ -8,7 +8,7 @@
       </div>
 
       <div class="clear-both">
-        <h4 class="mt-1 text-center text-header font-bold">Danh Sách Nhân Viên</h4>
+        <h3 class="mt-1 text-center text-header font-bold">Danh Sách Nhân Viên</h3>
       </div>
       <hr class="my-4">
 
@@ -77,7 +77,7 @@
       </div>
 
       <!-- Loading -->
-      <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
+      <span v-show="loading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
       <span v-if="hasNext === false" class="loading-more">--Hết--</span>
       <span v-if="hasNext === true && totalRow != 0" class="loading-more"><i class="fa fa-angle-double-down has-next"></i></span>
     </div>
@@ -98,7 +98,7 @@
           </button>
         </div>
         <div v-if="resetting" class="text-center">
-          <span class="loading-more"><icon name="loading" width="60" /></span>
+          <span class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
         </div>
       </div>
     </div>

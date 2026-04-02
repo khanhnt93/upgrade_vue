@@ -165,7 +165,7 @@
           Xác nhận
         </button>
         <div v-show="saving" class="inline-block">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
       </div>
     </div>

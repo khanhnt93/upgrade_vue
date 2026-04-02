@@ -6,7 +6,7 @@
         <!-- Year Report Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="mb-4">
-            <h4 class="text-center text-header font-bold">Báo Cáo Năm</h4>
+            <h3 class="text-center text-header font-bold">Báo Cáo Năm</h3>
           </div>
 
           <div class="mb-4 text-center">
@@ -60,7 +60,7 @@
         <!-- Revenue Chart Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h4 class="text-center text-header font-bold mb-6">Biểu Đồ Doanh Thu Theo Tháng</h4>
+            <h3 class="text-center text-header font-bold mb-6">Biểu Đồ Doanh Thu Theo Tháng</h3>
 
             <div class="w-full">
               <GChart
@@ -75,7 +75,7 @@
         <!-- Inventory Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h4 class="text-center text-header font-bold mb-6">Kho Hàng</h4>
+            <h3 class="text-center text-header font-bold mb-6">Kho Hàng</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Inventory Stats -->
@@ -126,7 +126,7 @@
         <!-- Debt Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h4 class="text-center text-header font-bold mb-6">Nợ công - Công nợ</h4>
+            <h3 class="text-center text-header font-bold mb-6">Nợ công - Công nợ</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Receivable Debt -->
@@ -135,8 +135,8 @@
                   Công nợ (Nợ cần thu hồi)
                 </div>
                 <div>
-                  <h5 class="text-center text-green-600 mb-2">Tổng công nợ: {{ formatCurrency(debt_total) }}đ</h5>
-                  <div class="text-left">
+                  <h4 class="text-center text-green-600 mb-2">Tổng công nợ: {{ formatCurrency(debt_total) }}đ</h4>
+                  <div class="text-center text-sm">
                     - Số lượng công nợ sắp đến hạn thu hồi: {{ formatCurrency(debt_number) }}<br>
                     - Tổng tiền công nợ sắp đến hạn thu hồi: <span class="text-green-600"><b>{{ formatCurrency(debt_amount) }}đ</b></span>
                   </div>
@@ -149,8 +149,8 @@
                   Nợ công (Nợ phải trả)
                 </div>
                 <div>
-                  <h5 class="text-center text-header mb-2">Tổng nợ công: {{ formatCurrency(public_debt_total) }}đ</h5>
-                  <div class="text-left">
+                  <h4 class="text-center text-header mb-2">Tổng nợ công: {{ formatCurrency(public_debt_total) }}đ</h4>
+                  <div class="text-center text-sm">
                     - Số lượng nợ công sắp đến hạn trả: {{ formatCurrency(public_debt_number) }}<br>
                     - Tổng tiền nợ công sắp đến hạn trả: <span class="text-header"><b>{{ formatCurrency(public_debt_amount) }}đ</b></span>
                   </div>

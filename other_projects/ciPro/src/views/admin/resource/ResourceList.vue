@@ -144,7 +144,7 @@
 
       <!-- Loading -->
       <div v-show="loading" class="text-center my-8">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div v-if="hasNext === false" class="text-center my-4 text-gray-500">--Hết--</div>
       <div v-if="hasNext === true && totalRow != 0" class="text-center my-4">
@@ -161,7 +161,7 @@
 
         <!-- Loading -->
         <div v-show="saving" class="text-center my-8">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
 
         <div class="space-y-4">
@@ -238,7 +238,7 @@
 
         <!-- Loading -->
         <div v-show="saving" class="text-center my-8">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
 
         <div class="space-y-4">
@@ -313,7 +313,7 @@
 
         <!-- Loading -->
         <div v-show="saving" class="text-center my-8">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
 
         <div class="space-y-4">

@@ -51,7 +51,7 @@
 
         <!-- Loading -->
         <div class="text-center mt-4">
-          <span v-show="loading" class="inline-block"><icon name="loading" width="60" /></span>
+          <span v-show="loading" class="inline-block"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
           <span class="text-gray-500">--Hết--</span>
         </div>
       </div>

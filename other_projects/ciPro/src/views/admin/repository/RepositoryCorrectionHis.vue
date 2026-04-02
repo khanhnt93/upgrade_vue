@@ -17,7 +17,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">Lịch Sử Hiệu Chỉnh Kho</h4>
+        <h4 class="text-2xl font-semibold text-header text-center mb-4">Lịch Sử Hiệu Chỉnh Kho</h4>
         <hr class="mb-6">
 
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
@@ -209,7 +209,7 @@
                   >
                     In phiếu xuất kho
                   </button>
-                  <span v-show="creatingPHG"><icon name="loading" width="60" /></span>
+                  <span v-show="creatingPHG"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
                 </td>
                 <td class="px-4 py-2 text-sm text-gray-900 border">{{item.product_code}}</td>
                 <td class="px-4 py-2 text-sm text-gray-900 border">{{item.product_name}}</td>
@@ -229,7 +229,7 @@
 
         <!-- Loading -->
         <div v-show="loading" class="text-center py-4">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
         <div v-if="hasNext === false" class="text-center py-4 text-gray-500">--Hết--</div>
         <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">

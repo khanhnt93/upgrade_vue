@@ -4,7 +4,25 @@
 
 /* Global Page Title Styles */
 @layer base {
+  h1 {
+    @apply text-4xl font-semibold;
+  }
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+  h3 {
+    @apply text-2xl font-semibold;
+  }
   h4 {
+    @apply text-xl font-semibold;
+  }
+  h5 {
+    @apply text-lg font-semibold;
+  }
+  h6 {
+    @apply text-base font-semibold;
+  }
+  h3.text-header, h4.text-header {
     @apply text-orange-600;
   }
 }
@@ -160,6 +178,19 @@
 .multiselect__spinner {
   height: 33px;
   background-color: white;
+}
+
+.multiselect__placeholder {
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: inherit;
+}
+
+.multiselect__single,
+.multiselect__input {
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: inherit;
 }
 
 @layer components {

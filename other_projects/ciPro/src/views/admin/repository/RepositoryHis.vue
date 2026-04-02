@@ -223,7 +223,7 @@
                 >
                   In phiếu xuất kho
                 </button>
-                <span v-show="creatingPHG" class="inline-block"><icon name="loading" width="40" /></span>
+                <span v-show="creatingPHG" class="inline-block"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
               </td>
               <td class="px-4 py-2 text-sm border">{{item.product_code}}</td>
               <td class="px-4 py-2 text-sm border">{{item.product_name}}</td>
@@ -243,7 +243,7 @@
 
       <!-- Loading Indicator -->
       <div v-show="loading" class="text-center py-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div v-if="hasNext === false" class="text-center py-4 text-gray-500">--Hết--</div>
       <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">

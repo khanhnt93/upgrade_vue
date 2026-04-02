@@ -90,7 +90,7 @@
           </template>
           </b-table>
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
           <span class="loading-more" v-if="hasNext === false">--Hết--</span>
           <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
         </b-card>
@@ -122,7 +122,7 @@
           </button>
         </b-col>
         <b-col v-show="resetting">
-          <span class="loading-more" v-show="resetting"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="resetting"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
         </b-col>
       </b-row>
     </b-modal>

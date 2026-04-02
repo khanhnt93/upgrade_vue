@@ -16,7 +16,7 @@
       <hr class="my-4"/>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div class="bg-gray-600 text-white rounded-t-md p-3">
         <h5 class="text-lg font-semibold flex justify-between items-center">
@@ -398,7 +398,7 @@
           <i class="fa fa-pencil-square-o mr-2" />
           Xác Nhận Đơn Hàng
         </button>
-        <span class="loading-more" v-show="saving"><icon name="loading" width="60" /></span>
+        <span class="loading-more" v-show="saving"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
       </div>
     </div>
 
@@ -487,7 +487,7 @@
             style="width: 120px">
             Tìm Kiếm
           </button>
-          <span class="loading-more" v-show="onSearchProduct"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="onSearchProduct"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
         </div>
 
         <div class="overflow-x-auto">

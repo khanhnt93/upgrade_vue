@@ -7,7 +7,7 @@
 
               <b-row class="form-row">
                 <b-col md='12'>
-                  <h4 class="mt-1 text-center text-header">Hình Ảnh Sản Phẩm</h4>
+                  <h3 class="mt-1 text-center text-header">Hình Ảnh Sản Phẩm</h3>
                 </b-col>
               </b-row>
               <hr/>
@@ -126,7 +126,7 @@
 
 <!--            Chỗ này show list image review-->
             <!-- Loading -->
-            <span class="loading-more" v-show="loadingImage"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loadingImage"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
             <b-row>
               <b-col md="3" v-for="(item, index) in images">
                 <img v-bind:src="item.image_url" style="width: 100%" />
@@ -136,7 +136,7 @@
                             @click="deleteImage(item.id, item.image, index)" :disabled="loadingDelete">
                     Xoá hình
                   </b-button>
-                  <span class="loading-more" v-show="loadingDelete"><icon name="loading" width="60" /></span>
+                  <span class="loading-more" v-show="loadingDelete"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
                 </div>
               </b-col>
             </b-row>
@@ -150,7 +150,7 @@
     <b-modal centered hide-footer hide-header no-close-on-backdrop size="xl" id="modal-search-product">
       <b-row>
         <b-col md="12">
-          <h4 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h4>
+          <h3 class="modal-title text-center text-success">Tìm kiếm sản phẩm</h3>
         </b-col>
       </b-row>
       <hr>

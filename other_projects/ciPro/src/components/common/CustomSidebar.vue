@@ -259,6 +259,10 @@ const shouldShowPopover = (title) => {
 
 // Auto-open menu if child is active
 watch(() => route.path, () => {
+  // Close all menus first
+  Object.keys(openMenus.value).forEach(key => {
+    openMenus.value[key] = false
+  })
   props.menu.forEach(item => {
     if (item.child && hasActiveChild(item.child)) {
       openMenus.value[item.title] = true
@@ -446,7 +450,7 @@ watch(() => props.collapsed, (isCollapsed) => {
 
     .sidebar-icon,
     .sidebar-title {
-      color: #fff !important;
+      color: #ed592a !important;
     }
   }
 
@@ -497,10 +501,14 @@ watch(() => props.collapsed, (isCollapsed) => {
   list-style: none;
   margin: 0;
   padding: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #b4b4b3;
 
   .sidebar-link {
     padding-left: 55px;
+
+    &.active {
+      background-color: #b4b4b3;
+    }
   }
 }
 

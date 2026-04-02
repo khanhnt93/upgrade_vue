@@ -16,7 +16,7 @@
       <hr class="my-4"/>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
@@ -84,14 +84,9 @@
 
       <div class="border border-gray-300 border-t-0 p-4 rounded-b-md">
         <div class="text-right mb-2">
-          <download-excel
-            class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded cursor-pointer inline-block"
-            :data="products_excel"
-            :fields="excel_fields"
-            worksheet="Danh sách sản phẩm báo giá"
-            name="danh_sach_san_pham_bao_gia.xls">
+          <button class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded cursor-pointer inline-block" @click="exportExcel()">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
 
         <div class="overflow-x-auto" v-show="trade.products.length > 0">
@@ -306,6 +301,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRoute, useRouter } from 'vue-router'
 import orderSellApi from '@/api/orderSell'
 import commonFunc from '@/common/commonFunc'
@@ -406,6 +402,23 @@ const excel_fields = {
 const loading = ref(false)
 const userRole = ref("admin")
 const projectProducts = ref([])
+
+const exportExcel = () => {
+  const data = products_excel.value
+  const fields = excel_fields
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Danh sách sản phẩm báo giá')
+  XLSX.writeFile(wb, 'danh_sach_san_pham_bao_gia.xls', { bookType: 'xls' })
+}
 
 onMounted(() => {
   // UI by staff

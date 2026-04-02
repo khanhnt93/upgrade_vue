@@ -4,7 +4,7 @@
       <div class="w-full px-2">
         <div class="bg-white rounded-lg shadow">
           <div class="p-4">
-            <h4 class="text-center text-header font-bold">BIỂU ĐỒ DOANH THU</h4>
+            <h3 class="text-center text-header font-bold">BIỂU ĐỒ DOANH THU</h3>
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/4 px-2">
                 <label class="block mb-2"> Cửa hàng </label>
@@ -116,7 +116,7 @@
             </div>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
             <GChart
               type="ColumnChart"

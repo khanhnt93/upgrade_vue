@@ -6,7 +6,7 @@
           <div class="p-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <h4 class="text-center text-header font-bold">Tổng chuỗi</h4>
+                <h3 class="text-center text-header font-bold">Tổng chuỗi</h3>
               </div>
             </div>
 
@@ -58,7 +58,7 @@
           <div class="p-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <h4 class="text-center font-bold">{{ item.store_name }}</h4>
+                <h3 class="text-center font-bold">{{ item.store_name }}</h3>
               </div>
             </div>
 

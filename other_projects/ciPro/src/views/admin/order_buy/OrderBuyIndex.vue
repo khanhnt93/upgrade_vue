@@ -55,7 +55,7 @@
 
         <!-- Loading -->
         <div v-show="loadingOrderSell" class="flex justify-center my-4">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
 
         <!-- Product list from order sell -->
@@ -395,7 +395,7 @@
             <span>Xác Nhận Tất Cả</span>
           </button>
           <div v-show="saving" class="flex justify-center">
-            <icon name="loading" width="60" />
+            <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
           </div>
         </div>
 

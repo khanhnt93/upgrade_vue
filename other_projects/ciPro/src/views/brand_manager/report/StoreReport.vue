@@ -5,7 +5,7 @@
         <div class="bg-white rounded-lg shadow">
           <div class="flex flex-wrap -mx-2 p-4">
             <div class="w-full px-2">
-              <h4 class="text-center text-header font-bold">BÁO CÁO BÁN HÀNG</h4>
+              <h3 class="text-center text-header font-bold">BÁO CÁO BÁN HÀNG</h3>
             </div>
           </div>
 
@@ -100,7 +100,7 @@
       <div class="w-full px-2">
         <div class="bg-white rounded-lg shadow">
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
           <div v-show="firstSearch == false && bills.length > 0" class="p-4">
             <div class="flex flex-wrap -mx-2 mb-4">
@@ -189,7 +189,7 @@
       <div class="w-full px-2">
         <div class="bg-white rounded-lg shadow">
           <!-- Loading -->
-          <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+          <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
           <div v-show="firstSearch == false && foods.length > 0" class="p-4">
             <div class="flex flex-wrap -mx-2 mb-4">

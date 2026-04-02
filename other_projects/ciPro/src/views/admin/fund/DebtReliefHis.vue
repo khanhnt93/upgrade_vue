@@ -47,14 +47,9 @@
 
       <div class="flex justify-between items-center mb-4 clear-both">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
-        <download-excel
-          class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold"
-          :data="excel_items"
-          :fields="excel_fields"
-          worksheet="Lịch Sử Xoá Nợ"
-          name="Lịch Sử Xoá Nợ">
+        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
           Xuất Excel
-        </download-excel>
+        </button>
       </div>
 
       <div class="overflow-x-auto">
@@ -89,7 +84,7 @@
       </div>
 
       <div v-show="loading" class="flex justify-center my-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div v-if="hasNext === false" class="text-center my-4">--Hết--</div>
       <div v-if="hasNext === true && totalRow != 0" class="text-center my-4">
@@ -101,11 +96,12 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useToast } from '@/composables/useToast'
+import * as XLSX from 'xlsx'
 import fundApi from '@/api/fund'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
+import { useToast } from '@/composables/useToast'
 
 const { popToast } = useToast()
 
@@ -297,9 +293,24 @@ const currencyFormat = (num) => {
   return result
 }
 
+const exportExcel = () => {
+  const data = excel_items.value
+  const fields = excel_fields.value
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Lịch Sử Xoá Nợ')
+  XLSX.writeFile(wb, 'Lịch Sử Xoá Nợ.xls', { bookType: 'xls' })
+}
+
 onMounted(() => {
-  window.addEventListener('scroll', onScroll)
-  prepareDateInput()
   prepareToSearch()
 })
 

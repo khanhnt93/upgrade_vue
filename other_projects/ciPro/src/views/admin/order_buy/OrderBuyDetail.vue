@@ -16,7 +16,7 @@
       <hr class="my-4"/>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div class="mb-4">
         <label class="block text-gray-700">

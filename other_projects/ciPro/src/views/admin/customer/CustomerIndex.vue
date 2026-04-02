@@ -11,12 +11,12 @@
       </div>
 
       <div class="clear-both">
-        <h4 class="mt-2 text-center text-header font-bold">{{prefix_title}} Khách Hàng</h4>
+        <h3 class="mt-2 text-center text-header font-bold">{{prefix_title}} Khách Hàng</h3>
       </div>
       <hr class="my-4">
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div class="space-y-4">
         <!-- Customer Type -->

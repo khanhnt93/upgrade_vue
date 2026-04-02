@@ -14,7 +14,7 @@
               <b-col cols="6">
                 <b-button variant="outline-success" class="pull-right btn-width-120" @click="save" :disabled="saving">
                   Lưu
-                  <!--<span v-show="saving" class="loading-more"><icon name="loading" width="60" /></span>-->
+                  <!--<span v-show="saving" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>-->
                 </b-button>
 
               </b-col>
@@ -27,7 +27,7 @@
               </b-row>
               <hr/>
               <!-- Loading -->
-              <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+              <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
               <b-row class="form-row">
                 <b-col md="3" class="mt-2">

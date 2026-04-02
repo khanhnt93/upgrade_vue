@@ -116,7 +116,7 @@
             </div>
 
             <!-- Loading -->
-            <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
             <div class="flex flex-wrap -mx-2" v-show="click && datas.length > 0">
               <div class="w-full px-2 table-cus">

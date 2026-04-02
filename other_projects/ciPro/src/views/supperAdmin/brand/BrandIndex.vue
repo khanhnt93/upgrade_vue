@@ -20,7 +20,7 @@
       <hr class="mb-4"/>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div class="grid grid-cols-12 gap-4 mb-4">
         <div class="col-span-3 flex items-center">

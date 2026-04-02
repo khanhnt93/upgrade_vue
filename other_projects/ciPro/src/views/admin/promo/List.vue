@@ -129,7 +129,7 @@
 
         <!-- Loading -->
         <div class="text-center mt-4">
-          <span v-show="loading" class="inline-block"><icon name="loading" width="60" /></span>
+          <span v-show="loading" class="inline-block"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
           <span v-if="hasNext === false" class="text-gray-500">--Hết--</span>
           <span v-if="hasNext === true && totalRow != 0" class="text-gray-500 cursor-pointer">
             <i class="fa fa-angle-double-down text-2xl"></i>

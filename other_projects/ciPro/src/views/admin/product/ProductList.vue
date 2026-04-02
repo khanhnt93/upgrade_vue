@@ -102,15 +102,9 @@
             Số kết quả: {{totalRow}}
           </div>
           <div v-if="excel_items.length > 0">
-            <download-excel
-              class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-colors cursor-pointer inline-block"
-              :data="excel_items"
-              :fields="excel_fields"
-              worksheet="data"
-              name="danh_sach_san_pham.xls"
-            >
+            <button class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-colors cursor-pointer inline-block" @click="exportExcel()">
               <b>Xuất Excel</b>
-            </download-excel>
+            </button>
           </div>
         </div>
 
@@ -192,7 +186,7 @@
 
         <!-- Loading -->
         <div v-show="loading" class="text-center py-4">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </div>
         <div v-if="hasNext === false" class="text-center py-4 text-gray-500">--Hết--</div>
         <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
@@ -225,7 +219,7 @@
           </div>
 
           <div v-show="uploading" class="text-center py-4">
-            <icon name="loading" width="60" />
+            <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
           </div>
 
           <div class="flex justify-end space-x-2 mt-4">
@@ -268,6 +262,7 @@
 </template>
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import productApi from '@/api/product'
 import { Constant } from '@/common/constant'
@@ -530,8 +525,24 @@ const handleFileUpload = () => {
 }
 
 // Lifecycle
+const exportExcel = () => {
+  const data = excel_items.value
+  const fields = excel_fields
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'data')
+  XLSX.writeFile(wb, 'danh_sach_san_pham.xls', { bookType: 'xls' })
+}
+
 onMounted(() => {
-  getProductGroupOption()
   getProductBrandOption()
   getProductTypeOption()
 

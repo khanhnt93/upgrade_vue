@@ -111,15 +111,9 @@
         <div class="text-sm">
           Số kết quả: <span class="text-blue-600 font-semibold">{{totalRow}}</span>
         </div>
-        <download-excel
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] cursor-pointer"
-          :data="excel_items"
-          :fields="excel_fields"
-          worksheet="Danh sách tạm ứng"
-          name="Danh sách tạm ứng"
-        >
+        <button class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] cursor-pointer" @click="exportExcel()">
           <b>Xuất Excel</b>
-        </download-excel>
+        </button>
       </div>
 
       <hr class="mb-4">
@@ -182,7 +176,7 @@
 
       <!-- Loading Indicator -->
       <div v-show="onSearch" class="text-center py-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div v-if="hasNext === false" class="text-center py-4 text-gray-500">--Hết--</div>
       <div v-if="hasNext === true && totalRow != 0" class="text-center py-4">
@@ -198,7 +192,7 @@
           <hr class="mb-4">
 
           <div v-show="loadingPayment" class="text-center py-4">
-            <icon name="loading" width="60" />
+            <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
           </div>
 
           <div class="overflow-x-auto">
@@ -242,6 +236,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
@@ -328,6 +323,23 @@ const isRoot = ref(false)
 const paymentItems = ref([])
 const loadingPayment = ref(false)
 const showPaymentModal = ref(false)
+
+const exportExcel = () => {
+  const data = excel_items.value
+  const fields = excel_fields
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Danh sách tạm ứng')
+  XLSX.writeFile(wb, 'Danh sách tạm ứng.xls', { bookType: 'xls' })
+}
 
 // Lifecycle
 onMounted(() => {

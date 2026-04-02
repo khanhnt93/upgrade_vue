@@ -243,7 +243,7 @@
       <!-- Loading indicators -->
       <div class="text-center mt-4">
         <span v-show="loading" class="inline-block">
-          <icon name="loading" width="60" />
+          <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
         </span>
         <span v-if="hasNext === false" class="text-gray-600">--Hết--</span>
         <span v-if="hasNext === true && totalRow != 0" class="text-blue-600 cursor-pointer">
@@ -300,7 +300,7 @@
               Quay lại
             </button>
             <span v-show="onChangeNote" class="inline-block ml-3">
-              <icon name="loading" width="60" />
+              <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
         </div>
@@ -351,7 +351,7 @@
               Quay lại
             </button>
             <span v-show="onChangeProductGroupNote" class="inline-block ml-3">
-              <icon name="loading" width="60" />
+              <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
         </div>
@@ -412,7 +412,7 @@
               Quay lại
             </button>
             <span v-show="onChangeStatus" class="inline-block ml-3">
-              <icon name="loading" width="60" />
+              <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
         </div>
@@ -468,7 +468,7 @@
               Quay lại
             </button>
             <span v-show="onChangeSetting" class="inline-block ml-3">
-              <icon name="loading" width="60" />
+              <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
         </div>

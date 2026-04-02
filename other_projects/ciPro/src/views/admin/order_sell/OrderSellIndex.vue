@@ -17,9 +17,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
               <div class="w-full md:col-span-12">
-                <h4 class="mt-1 text-center text-header">
+                <h3 class="mt-1 text-center text-header">
                   {{ prefix_title }} Đơn Hàng Bán
-                </h4>
+                </h3>
               </div>
             </div>
             <hr />
@@ -1521,9 +1521,9 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Tìm kiếm báo giá
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />
@@ -1631,9 +1631,9 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Tìm kiếm sản phẩm
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />
@@ -1787,9 +1787,9 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Tìm kiếm khách hàng
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />
@@ -1894,9 +1894,9 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Thêm khách hàng
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />
@@ -2244,9 +2244,9 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Chọn Đơn Vị Báo Giá
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />
@@ -2306,10 +2306,10 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success">
               Sản phẩm có sẵn trong kho. Bạn có muốn giữ hàng cho đơn hàng này
               không?
-            </h4>
+            </h3>
           </div>
         </div>
         <hr />

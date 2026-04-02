@@ -11,7 +11,7 @@
       </div>
 
       <div class="clear-both">
-        <h4 class="mt-2 text-center text-header font-bold">Danh Sách Khách Hàng</h4>
+        <h3 class="mt-2 text-center text-header font-bold">Danh Sách Khách Hàng</h3>
       </div>
       <hr class="my-4">
 
@@ -57,7 +57,7 @@
             {{time_option == 1 ? 'Từ ngày' : 'Năm' }}
           </label>
           <!-- Date -->
-          <datepicker v-show="time_option == 1" v-model="inputs.created_from" format="yyyy-MM-dd" placeholder="yyyy-MM-dd" input-class="datepicker-cus"></datepicker>
+          <datepicker v-show="time_option == 1" v-model="dateFrom" format="yyyy-MM-dd" placeholder="yyyy-MM-dd" input-class="datepicker-cus"></datepicker>
           <!-- Year -->
           <select v-show="time_option != 1 && time_option != 5" v-model="year_input" class="form-control w-full">
             <option v-for="option in yearOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
@@ -68,7 +68,7 @@
             {{time_option == 1 ? 'Đến ngày' : time_option == 2 ? 'Tháng' : 'Quý' }}
           </label>
           <!-- Date -->
-          <datepicker v-show="time_option == 1" v-model="inputs.created_to" format="yyyy-MM-dd" placeholder="yyyy-MM-dd" input-class="datepicker-cus"></datepicker>
+          <datepicker v-show="time_option == 1" v-model="dateTo" format="yyyy-MM-dd" placeholder="yyyy-MM-dd" input-class="datepicker-cus"></datepicker>
           <!-- Month -->
           <select v-show="time_option == 2" v-model="month_input" class="form-control w-full">
             <option v-for="option in monthOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
@@ -91,14 +91,9 @@
           Số kết quả: <b>{{totalRow}}</b>
         </div>
         <div class="text-right" v-if="isUserRoot && excel_items.length > 0">
-          <download-excel
-            class="btn btn-default text-header"
-            :data="excel_items"
-            :fields="excel_fields"
-            worksheet="data"
-            name="danh_sach_khach_hang.xls">
+          <button class="btn btn-default text-header" @click="exportExcel()">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
       </div>
 
@@ -156,7 +151,7 @@
       </div>
 
       <!-- Loading -->
-      <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
+      <span v-show="loading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
       <span v-if="hasNext === false" class="loading-more">--Hết--</span>
       <span v-if="hasNext === true && totalRow != 0" class="loading-more"><i class="fa fa-angle-double-down has-next"></i></span>
     </div>
@@ -164,7 +159,7 @@
     <!-- Upload Modal -->
     <div v-if="showUploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-        <h4 class="text-center font-bold mb-4">Upload khách hàng từ file excel</h4>
+        <h3 class="text-center font-bold mb-4">Upload khách hàng từ file excel</h3>
         <p class="text-left mb-4">
           Tải xuống file mẫu:
           <a target="_blank" href="https://api.cipro.vn/files/upload_excel_template/ciPro_upload_customer_template.xlsx" class="text-blue-500 hover:underline">Tải xuống</a>
@@ -177,7 +172,7 @@
         </div>
 
         <div class="text-right mt-4">
-          <span v-show="uploading" class="loading-more"><icon name="loading" width="60" /></span>
+          <span v-show="uploading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
           <button v-show="!uploading" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
             Upload
           </button>
@@ -211,7 +206,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
@@ -336,6 +332,35 @@ const excel_fields = ref({
 })
 const isGetExcelItems = ref(false)
 const showUploadModal = ref(false)
+
+const exportExcel = () => {
+  if (!excel_items.value || excel_items.value.length === 0) return
+  const fields = excel_fields.value
+  const headers = Object.keys(fields)
+  const rows = excel_items.value.map(item => {
+    return headers.map(header => {
+      const fieldDef = fields[header]
+      if (typeof fieldDef === 'string') {
+        return item[fieldDef] !== undefined ? item[fieldDef] : ''
+      }
+      const raw = item[fieldDef.field] !== undefined ? item[fieldDef.field] : ''
+      return fieldDef.callback ? fieldDef.callback(raw) : raw
+    })
+  })
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'data')
+  XLSX.writeFile(wb, 'danh_sach_khach_hang.xls', { bookType: 'xls' })
+}
+
+const dateFrom = computed({
+  get: () => inputs.value.created_from ? new Date(inputs.value.created_from + 'T00:00:00') : null,
+  set: (val) => { inputs.value.created_from = val ? val.toISOString().slice(0, 10) : null }
+})
+const dateTo = computed({
+  get: () => inputs.value.created_to ? new Date(inputs.value.created_to + 'T00:00:00') : null,
+  set: (val) => { inputs.value.created_to = val ? val.toISOString().slice(0, 10) : null }
+})
 
 const onScroll = (event) => {
   if (onSearch.value) {

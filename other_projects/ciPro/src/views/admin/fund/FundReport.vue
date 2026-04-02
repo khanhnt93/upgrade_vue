@@ -16,7 +16,7 @@
       <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Báo Cáo Quỹ</h2>
 
       <div v-show="loading" class="flex justify-center my-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -152,18 +152,13 @@
 
       <div class="flex justify-between items-center mb-4 clear-both">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{currencyFormat(totalRow)}}</span></div>
-        <download-excel
-          class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold"
-          :data="excel_items"
-          :fields="excel_fields"
-          worksheet="Lịch sử quỹ"
-          name="Lịch sử quỹ">
+        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
           Xuất Excel
-        </download-excel>
+        </button>
       </div>
 
       <div v-show="onSearch" class="flex justify-center my-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -228,7 +223,7 @@
       </div>
 
       <div v-show="loadByScroll" class="flex justify-center my-4">
-        <icon name="loading" width="60" />
+        <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
       </div>
       <div v-if="hasNext === false" class="text-center my-4">--Hết--</div>
       <div v-if="hasNext === true && totalRow != 0" class="text-center my-4">
@@ -279,6 +274,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
@@ -714,8 +710,25 @@ const deleteFund = (id, name) => {
   }
 }
 
+const exportExcel = () => {
+  const data = excel_items.value
+  const fields = excel_fields.value
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Lịch sử quỹ')
+  XLSX.writeFile(wb, 'Lịch sử quỹ.xls', { bookType: 'xls' })
+}
+
 onMounted(() => {
-  if(authStore.user && authStore.user.isRoot) {
+  if (authStore.user && authStore.user.isRoot) {
     isUserRoot.value = true
   } else {
     isUserRoot.value = false

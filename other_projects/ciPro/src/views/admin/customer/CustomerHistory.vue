@@ -2,7 +2,7 @@
   <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div>
-        <h4 class="mt-2 text-center text-header font-bold">Lịch Sử Khách Hàng</h4>
+        <h3 class="mt-2 text-center text-header font-bold">Lịch Sử Khách Hàng</h3>
       </div>
       <hr class="my-4">
 
@@ -36,19 +36,14 @@
           Số kết quả: {{items.length}}
         </div>
         <div class="text-right">
-          <download-excel
-            class="btn btn-default text-header"
-            :data="items"
-            :fields="excel_fields"
-            worksheet="Lịch sử khách hàng"
-            name="lich_su_khach_hang.xls">
+          <button class="btn btn-default text-header" @click="exportExcel()">
             <b>Xuất Excel</b>
-          </download-excel>
+          </button>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <span v-show="loading" class="loading-more"><icon name="loading" width="60" /></span>
+        <span v-show="loading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
         <table class="min-w-full divide-y divide-gray-200 border">
           <thead class="bg-gray-50">
             <tr>
@@ -96,6 +91,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
 import customerApi from '@/api/customer'
@@ -108,8 +104,8 @@ const { popToast } = useToast()
 const inputs = ref({
   name: null,
   phone: null,
-  from_date: '',
-  to_date: ''
+  from_date: null,
+  to_date: null
 })
 const items = ref([])
 const excel_fields = ref({
@@ -126,6 +122,14 @@ const sum_total = ref(0)
 const onSearch = ref(false)
 const loading = ref(false)
 
+const formatDateLocal = (date) => {
+  if (!(date instanceof Date)) return date
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 const prepareToSearch = () => {
   items.value = []
   search()
@@ -139,8 +143,8 @@ const search = () => {
   let params = {
     "name": inputs.value.name,
     "phone": inputs.value.phone,
-    "from_date": inputs.value.from_date,
-    "to_date": inputs.value.to_date
+    "from_date": formatDateLocal(inputs.value.from_date),
+    "to_date": formatDateLocal(inputs.value.to_date)
   }
 
   customerApi.getCustomerHistory(params).then(res => {
@@ -189,13 +193,28 @@ const currencyFormat = (num) => {
   return result
 }
 
+const exportExcel = () => {
+  const data = items.value
+  const fields = excel_fields.value
+  if (!data || data.length === 0) return
+  const headers = Object.keys(fields)
+  const rows = data.map(item => headers.map(header => {
+    const f = fields[header]
+    if (typeof f === 'string') return item[f] !== undefined ? item[f] : ''
+    const raw = item[f.field] !== undefined ? item[f.field] : ''
+    return f.callback ? f.callback(raw) : raw
+  }))
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'Lịch sử khách hàng')
+  XLSX.writeFile(wb, 'lich_su_khach_hang.xls', { bookType: 'xls' })
+}
+
 onMounted(() => {
   // Get default from date and to date
   let dateNow = new Date()
-  inputs.value.from_date = dateNow.toJSON().slice(0, 8) + '01'
-  let dayOfMonth = new Date(dateNow.getFullYear(), dateNow.getMonth() + 1, 0).getDate()
-  let toDate = new Date(dateNow.setDate(dayOfMonth))
-  inputs.value.to_date = toDate.toJSON().slice(0, 10)
+  inputs.value.from_date = new Date(dateNow.getFullYear(), dateNow.getMonth(), 1)
+  inputs.value.to_date = new Date(dateNow.getFullYear(), dateNow.getMonth() + 1, 0)
 
   // Load list when load page
   search()

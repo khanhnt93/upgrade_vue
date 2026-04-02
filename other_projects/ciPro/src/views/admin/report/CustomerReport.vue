@@ -205,7 +205,7 @@
       </div>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
       <span class="loading-more" v-if="hasNext === false">--Hết--</span>
       <span class="loading-more" v-if="hasNext === true && totalRow != 0"><i class="fa fa-angle-double-down has-next"></i></span>
     </div>
@@ -302,7 +302,7 @@
                 </tr>
               </tbody>
             </table>
-            <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="onSearch"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
             <p class="text-center">--Hết--</p>
           </div>
         </div>
@@ -399,7 +399,7 @@
                 </tr>
               </tbody>
             </table>
-            <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="onSearch"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
             <p class="text-center">--Hết--</p>
           </div>
         </div>
@@ -496,7 +496,7 @@
                 </tr>
               </tbody>
             </table>
-            <span class="loading-more" v-show="onSearch"><icon name="loading" width="60" /></span>
+            <span class="loading-more" v-show="onSearch"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
             <p class="text-center">--Hết--</p>
           </div>
         </div>
@@ -695,8 +695,8 @@ const openModalOrderSellHis = (customer) => {
   search_year_input.value = JSON.parse(JSON.stringify(year_input.value))
   search_month_input.value = JSON.parse(JSON.stringify(month_input.value))
   search_quarter_input.value = JSON.parse(JSON.stringify(quarter_input.value))
-  search_inputs.value.from_date = JSON.parse(JSON.stringify(inputs.value.from_date))
-  search_inputs.value.to_date = JSON.parse(JSON.stringify(inputs.value.to_date))
+  search_inputs.value.from_date = new Date(inputs.value.from_date)
+  search_inputs.value.to_date = new Date(inputs.value.to_date)
 
   showModalOrderSell.value = true
   searchOrderSell()
@@ -713,8 +713,8 @@ const openModalQuotationHis = (customer) => {
   search_year_input.value = JSON.parse(JSON.stringify(year_input.value))
   search_month_input.value = JSON.parse(JSON.stringify(month_input.value))
   search_quarter_input.value = JSON.parse(JSON.stringify(quarter_input.value))
-  search_inputs.value.from_date = JSON.parse(JSON.stringify(inputs.value.from_date))
-  search_inputs.value.to_date = JSON.parse(JSON.stringify(inputs.value.to_date))
+  search_inputs.value.from_date = new Date(inputs.value.from_date)
+  search_inputs.value.to_date = new Date(inputs.value.to_date)
 
   showModalQuotation.value = true
   searchQuotation()

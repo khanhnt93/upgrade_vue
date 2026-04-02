@@ -130,7 +130,7 @@
       </div>
 
       <!-- Loading -->
-      <span class="loading-more" v-show="loading"><icon name="loading" width="60" /></span>
+      <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div v-show="items.length > 0" class="mb-4">
         <p class="text-header">Doanh thu: <b>{{currencyFormat(revenue_total)}}đ</b></p>
@@ -349,26 +349,36 @@ const changeProductGroup = () => {
   }
 }
 
+const formatDateLocal = (date) => {
+  if (!(date instanceof Date)) return date
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 const search = () => {
   if (loading.value) { return }
 
-  if(time_option.value == 2) {
-    inputs.value.from_date = year_input.value + '-' + month_input.value + '-01'
-    inputs.value.to_date = year_input.value + '-' + month_input.value + '-' + new Date(year_input.value, month_input.value, 0).getDate()
-  }
-  if(time_option.value == 3) {
+  let fromDate, toDate
+  if(time_option.value == 1) {
+    fromDate = formatDateLocal(inputs.value.from_date)
+    toDate = formatDateLocal(inputs.value.to_date)
+  } else if(time_option.value == 2) {
+    fromDate = year_input.value + '-' + String(month_input.value).padStart(2, '0') + '-01'
+    toDate = year_input.value + '-' + String(month_input.value).padStart(2, '0') + '-' + new Date(year_input.value, month_input.value, 0).getDate()
+  } else if(time_option.value == 3) {
     let quarter = commonFunc.getMonthByQuarter(quarter_input.value)
-    inputs.value.from_date = year_input.value + '-' + quarter + '-01'
-    inputs.value.to_date = year_input.value + '-' + (quarter + 2) + '-' + new Date(year_input.value, (quarter + 2), 0).getDate()
-  }
-  if(time_option.value == 4) {
-    inputs.value.from_date = year_input.value + '-01-01'
-    inputs.value.to_date = year_input.value + '-12-' + new Date(year_input.value, 12, 0).getDate()
+    fromDate = year_input.value + '-' + String(quarter).padStart(2, '0') + '-01'
+    toDate = year_input.value + '-' + String(quarter + 2).padStart(2, '0') + '-' + new Date(year_input.value, (quarter + 2), 0).getDate()
+  } else if(time_option.value == 4) {
+    fromDate = year_input.value + '-01-01'
+    toDate = year_input.value + '-12-' + new Date(year_input.value, 12, 0).getDate()
   }
 
   let params = {
-    "from_date": inputs.value.from_date,
-    "to_date": inputs.value.to_date,
+    "from_date": fromDate,
+    "to_date": toDate,
     "order_sell_number": inputs.value.order_sell_number,
     "product_group_id": productGroupSelect.value && productGroupSelect.value.id ? productGroupSelect.value.id : null,
     "product_type_id": productTypeSelect.value && productTypeSelect.value.id ? productTypeSelect.value.id : null,
