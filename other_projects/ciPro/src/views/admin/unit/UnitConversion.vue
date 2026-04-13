@@ -181,12 +181,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import unitApi from '@/api/unit'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import Multiselect from 'vue-multiselect'
 
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const unitConvert = ref({
   product_id: null,
@@ -372,9 +374,9 @@ const currencyFormat = (num) => {
   return result
 }
 
-const deleted = (item) => {
+const deleted = async (item) => {
   if(item.id) {
-    if (confirm('Xóa chuyển đổi từ đơn vị [' + item.root_unit_name + '] qua đơn vị [' + item.target_unit_name + '] của sản phẩm [' + item.product_name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa chuyển đổi từ đơn vị [' + item.root_unit_name + '] qua đơn vị [' + item.target_unit_name + '] của sản phẩm [' + item.product_name + "]. Bạn có chắc không?")) {
       unitApi.deleteUnitConversion(item.id).then(res => {
         if(res != null && res.data != null){
           search()

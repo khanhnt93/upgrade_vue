@@ -81,9 +81,11 @@ import { useRouter } from 'vue-router'
 import ProductBrandAPI from '@/api/productBrand'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const items = ref([])
@@ -111,8 +113,8 @@ const getProductBrandList = () => {
   })
 }
 
-const deleted = (id, name, rowIndex) => {
-  if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+const deleted = async (id, name, rowIndex) => {
+  if (await confirmDialog(`Xóa ${name}. Bạn có chắc không?`)) {
     ProductBrandAPI.deleteProductBrand(id).then(res => {
       if(res != null && res.data != null) {
         popToast('success', "Xoá hãng sản phẩm thành công!")

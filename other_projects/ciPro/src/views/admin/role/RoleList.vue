@@ -60,6 +60,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import adminAPI from '@/api/admin'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
@@ -69,6 +70,7 @@ const router = useRouter()
 
 // Toast
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const fields = ref([
@@ -100,9 +102,9 @@ const rows = computed(() => {
 })
 
 // Methods
-const deleted = (id, name) => {
+const deleted = async (id, name) => {
   if (id && name) {
-    if (confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa [' + name + "]. Bạn có chắc không?")) {
       adminAPI.deleteRole(id).then(res => {
         items.value = res.data.data
       }).catch(err => {

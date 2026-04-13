@@ -268,10 +268,12 @@ import productApi from '@/api/product'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import { useFormatters } from '@/composables/useFormatters'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 const { formatCurrency } = useFormatters()
 
 // Data
@@ -381,9 +383,9 @@ const changeProductGroup = () => {
   }
 }
 
-const deleted = (id, name, rowIndex) => {
+const deleted = async (id, name, rowIndex) => {
   if(id && name) {
-    if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+    if (await confirmDialog(`Xóa ${name}. Bạn có chắc không?`)) {
       productApi.deleteProduct(id).then(res => {
         popToast('success', "Xoá sản phẩm thành công!")
         prepareToSearch()

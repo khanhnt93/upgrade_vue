@@ -211,6 +211,7 @@ import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import customerApi from '@/api/customer'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
@@ -221,6 +222,7 @@ import Datepicker from 'vue3-datepicker'
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const timeOptions = ref([
   { "value": 1, "text": 'Ngày' },
@@ -571,9 +573,9 @@ const handleFileUpload = () => {
   fileUpload.value = file.value.files[0]
 }
 
-const deleted = (id, name) => {
+const deleted = async (id, name) => {
   if (id && name) {
-    if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
       customerApi.deleteCustomer(id).then(res => {
         prepareToSearch()
       }).catch(err => {

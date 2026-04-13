@@ -87,9 +87,11 @@ import { useRouter } from 'vue-router'
 import productApi from '@/api/product'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const items = ref([])
@@ -114,8 +116,8 @@ const getProductTypeList = () => {
   })
 }
 
-const deleted = (id, name) => {
-  if (confirm(`Xóa ${name}. Bạn có chắc không?`)) {
+const deleted = async (id, name) => {
+  if (await confirmDialog(`Xóa ${name}. Bạn có chắc không?`)) {
     productApi.deleteProductType(id).then(res => {
       if(res != null && res.data != null) {
         popToast('success', "Xoá loại sản phẩm thành công!")

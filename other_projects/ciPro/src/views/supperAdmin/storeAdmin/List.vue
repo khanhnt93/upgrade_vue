@@ -187,9 +187,11 @@ import superAdminAPI from '@/api/superAdmin'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Reactive state
 const items = ref([])
@@ -261,8 +263,8 @@ const prepareToSearch = () => {
   search()
 }
 
-const deleted = (id, name, rowIndex) => {
-  if (confirm(`Xóa [${name}]. Bạn có chắc không?`)) {
+const deleted = async (id, name, rowIndex) => {
+  if (await confirmDialog(`Xóa [${name}]. Bạn có chắc không?`)) {
     superAdminAPI.deleteAdminStore(id).then(() => {
       const indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
       items.value.splice(indexTemp, 1)

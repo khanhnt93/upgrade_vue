@@ -366,6 +366,7 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import * as XLSX from 'xlsx'
 import repositoryApi from '@/api/repository'
 import { Constant } from '@/common/constant'
@@ -376,6 +377,7 @@ import Multiselect from 'vue-multiselect'
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const timeOptions = ref([
@@ -761,9 +763,9 @@ function goToAddInput() {
   router.push("/repo-input")
 }
 
-function deleted(id, name) {
+async function deleted(id, name) {
   if (id && name) {
-    if (confirm('Xóa phiếu [' + name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa phiếu [' + name + "]. Bạn có chắc không?")) {
       repositoryApi.deleteRepoHis(id).then(res => {
         popToast('success', 'Xoá phiếu [' + name + '] thành công!')
         prepareToSearch()

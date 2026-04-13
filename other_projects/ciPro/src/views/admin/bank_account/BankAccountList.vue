@@ -71,11 +71,13 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import bankAccountAPI from '@/api/bankAccount'
 import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const items = ref([])
 const listIdDeleted = ref([])
@@ -108,8 +110,8 @@ const getBankAccountList = () => {
  * @param name
  * @param rowIndex
  */
-const deleted = (id, name, rowIndex) => {
-  if (confirm('Xóa số TK [' + name + "]. Bạn có chắc không?")) {
+const deleted = async (id, name, rowIndex) => {
+  if (await confirmDialog('Xóa số TK [' + name + "]. Bạn có chắc không?")) {
     bankAccountAPI.deleteBankAccount(id).then(res => {
       // Remove item in list
       getBankAccountList()

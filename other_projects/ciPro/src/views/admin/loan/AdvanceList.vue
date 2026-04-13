@@ -240,6 +240,7 @@ import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import loanApi from '@/api/loan'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
@@ -249,6 +250,7 @@ import Multiselect from 'vue-multiselect'
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const timeOptions = ref([
@@ -518,9 +520,9 @@ function edit(id) {
   router.push('/advance/edit/' + id)
 }
 
-function deleted(id, name) {
+async function deleted(id, name) {
   if (id && name) {
-    if (confirm('Xóa tạm ứng của [' + name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa tạm ứng của [' + name + "]. Bạn có chắc không?")) {
       loanApi.deleteLoan(id).then(res => {
         prepareToSearch()
       }).catch(err => {

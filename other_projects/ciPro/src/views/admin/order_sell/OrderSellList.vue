@@ -524,12 +524,14 @@ import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import * as XLSX from 'xlsx'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Time options
 const timeOptions = [
@@ -1006,13 +1008,13 @@ const currencyFormat = (num) => {
   return result
 }
 
-const deleteOrderSellAfterCancel = (id, name) => {
+const deleteOrderSellAfterCancel = async (id, name) => {
   if (userRole.value == 'staff') {
     popToast('danger', "Bạn không được quyền thực hiện chức năng này!")
     return
   }
   if (id) {
-    if (confirm('Xóa đơn hàng của K.H [' + name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa đơn hàng của K.H [' + name + "]. Bạn có chắc không?")) {
       orderSellApi.deleteOrderSellAfterCancel(id, userRole.value).then(res => {
         if (res != null && res.data != null && res.data.status == 200) {
           prepareToSearch()

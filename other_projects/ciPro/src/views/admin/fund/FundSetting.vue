@@ -148,10 +148,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import fundApi from '@/api/fund'
 import commonFunc from '@/common/commonFunc'
 
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const fundSetting = ref({
   type: null,
@@ -235,9 +237,9 @@ const integerOnly = (item) => {
   item.value = result
 }
 
-const deleted = (id, name) => {
+const deleted = async (id, name) => {
   if(id && name) {
-    if(confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+    if(await confirmDialog('Xóa [' + name + "]. Bạn có chắc không?")) {
       fundApi.deleteFundSetting(id).then(res => {
         if(res != null && res.data != null && res.data.data != null){
           items.value = res.data.data

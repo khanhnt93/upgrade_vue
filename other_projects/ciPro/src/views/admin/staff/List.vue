@@ -110,6 +110,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import adminAPI from '@/api/admin'
 import staffAPI from '@/api/staff'
 import { Constant } from '@/common/constant'
@@ -118,6 +119,7 @@ import commonFunc from '@/common/commonFunc'
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const roleOptions = ref([])
 const fields = ref([
@@ -180,9 +182,9 @@ const prepareToSearch = () => {
   search()
 }
 
-const deleted = (id, name, rowIndex) => {
+const deleted = async (id, name, rowIndex) => {
   if (id && name) {
-    if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
       adminAPI.deleteStaff(id).then(res => {
         let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
         items.value.splice(indexTemp, 1)

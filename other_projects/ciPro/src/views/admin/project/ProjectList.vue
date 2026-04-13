@@ -74,11 +74,13 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import projectApi from '@/api/project'
 import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const items = ref([])
 const loading = ref(false)
@@ -107,8 +109,8 @@ const getProjectList = () => {
 /**
  * Delete
  */
-const deleted = (id, name) => {
-  if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+const deleted = async (id, name) => {
+  if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
     projectApi.deleteProject(id).then(res => {
       // Reload data
       getProjectList()

@@ -385,6 +385,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import adminAPI from '@/api/admin'
 import unitAPI from '@/api/unit'
 import { Constant } from '@/common/constant'
@@ -392,6 +393,7 @@ import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
 const { showToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const inputs = ref({
   name: null,
@@ -548,9 +550,9 @@ const getUnitOptions = () => {
   })
 }
 
-const deleted = (id, name, rowIndex) => {
+const deleted = async (id, name, rowIndex) => {
   if (id && name) {
-    if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
       adminAPI.deleteResource(id).then(res => {
         let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
         items.value.splice(indexTemp, 1)

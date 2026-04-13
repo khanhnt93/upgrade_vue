@@ -358,11 +358,13 @@ import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import * as XLSX from 'xlsx'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const timeOptions = [
@@ -697,9 +699,9 @@ const goToAddInput = () => {
   router.push("/repo-correction-input")
 }
 
-const deleted = (id, name) => {
+const deleted = async (id, name) => {
   if(id && name) {
-    if (confirm('Xóa phiếu [' + name + "]. Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa phiếu [' + name + "]. Bạn có chắc không?")) {
       repositoryApi.deleteRepoHis(id).then(res => {
         popToast('success', 'Xoá phiếu [' + name + '] thành công!')
         prepareToSearch()

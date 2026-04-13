@@ -106,6 +106,7 @@
         <router-view />
       </main>
     </template>
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -117,6 +118,7 @@ import navSpAdminData from '@/navSpAdmin'
 import navCusNotLoginData from '@/navCusNotLogin'
 import HeaderDropdownStaffAcc from '@/components/common/HeaderDropdownStaffAcc.vue'
 import CustomSidebar from '@/components/common/CustomSidebar.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import {Constant} from '@/common/constant'
 
 const route = useRoute()

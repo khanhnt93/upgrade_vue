@@ -278,6 +278,7 @@ import * as XLSX from 'xlsx'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import fundAPI from '@/api/fund'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
@@ -287,6 +288,7 @@ import Multiselect from 'vue-multiselect'
 const router = useRouter()
 const authStore = useAuthStore()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const total = ref(0)
 const cash = ref(0)
@@ -696,9 +698,9 @@ const editFund = (item) => {
   }
 }
 
-const deleteFund = (id, name) => {
+const deleteFund = async (id, name) => {
   if(id && name) {
-    if(confirm('Xóa [' + name + "]. Bạn có chắc không?")) {
+    if(await confirmDialog('Xóa [' + name + "]. Bạn có chắc không?")) {
       fundAPI.deleteFund(id).then(res => {
         prepareToSearch()
         getFundInfo()

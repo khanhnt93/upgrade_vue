@@ -438,6 +438,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import orderBuyApi from '@/api/orderBuy'
 import supplierApi from '@/api/supplier'
 import { Constant } from '@/common/constant'
@@ -448,6 +449,7 @@ import * as XLSX from 'xlsx'
 
 const router = useRouter()
 const { showToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 // Data
 const timeOptions = [
@@ -907,9 +909,9 @@ const hideModalCreateBallot = () => {
   showCreateBallotModal.value = false
 }
 
-const deleteOrderBuy = (id, name) => {
+const deleteOrderBuy = async (id, name) => {
   if (id) {
-    if (confirm('Xóa đơn hàng nhập từ nhà cung cấp [' + name + ']. Bạn có chắc không?')) {
+    if (await confirmDialog('Xóa đơn hàng nhập từ nhà cung cấp [' + name + ']. Bạn có chắc không?')) {
       orderBuyApi.deleteOrderBuy(id).then(res => {
         if (res != null && res.data != null) {
           prepareToSearch()

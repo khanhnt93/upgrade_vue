@@ -144,12 +144,14 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import promotionAPI from '@/api/promotion'
 import commonFunc from '@/common/commonFunc'
 import { Constant } from '@/common/constant'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const inputs = ref({
   name: null,
@@ -205,9 +207,9 @@ const onScroll = (event) => {
 /**
  * Delete
  */
-const deleted = (id, name, rowIndex, method) => {
+const deleted = async (id, name, rowIndex, method) => {
   if(id && name) {
-    if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+    if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
       let dataPost = {
         "id": id,
         "method": method

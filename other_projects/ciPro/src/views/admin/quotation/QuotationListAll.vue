@@ -464,10 +464,12 @@ import commonFunc from '@/common/commonFunc'
 import Datepicker from 'vue3-datepicker'
 import Multiselect from 'vue-multiselect'
 import { useToastNotification } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import * as XLSX from 'xlsx'
 
 const router = useRouter()
 const { popToast } = useToastNotification()
+const { confirmDialog } = useConfirm()
 
 // Refs
 const timeOptions = ref([
@@ -682,10 +684,10 @@ const goToUpdate = (id, type) => {
   }
 }
 
-const goToOrderSell = (id, count_order_sell) => {
+const goToOrderSell = async (id, count_order_sell) => {
   if (id) {
     if (count_order_sell) {
-      if (confirm('Báo giá này đã lập đơn hàng bán, bạn có muốn tạo thêm đơn hàng bán từ báo giá này không?')) {
+      if (await confirmDialog('Báo giá này đã lập đơn hàng bán, bạn có muốn tạo thêm đơn hàng bán từ báo giá này không?')) {
         console.log('this.userRole: ' + userRole.value)
         if (userRole.value === 'staff') {
           router.push('/order-sell-by-quotation-staff/' + id)
@@ -979,14 +981,14 @@ const currencyFormat = (num) => {
   return result
 }
 
-const deleteQuotation = (id, name) => {
+const deleteQuotation = async (id, name) => {
   console.log('this.userRole: ' + userRole.value)
   if (userRole.value === 'staff') {
     popToast('danger', 'Bạn không được quyền thực hiện chức năng này!')
     return
   }
   if (id) {
-    if (confirm('Xóa báo giá cho K.H [' + name + ']. Bạn có chắc không?')) {
+    if (await confirmDialog('Xóa báo giá cho K.H [' + name + ']. Bạn có chắc không?')) {
       quotationApi.deleteQuotation(id, userRole.value).then(res => {
         if (res != null && res.data != null) {
           prepareToSearch()

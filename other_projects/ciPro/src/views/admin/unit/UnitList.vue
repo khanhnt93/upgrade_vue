@@ -63,11 +63,13 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
 import unitAPI from '@/api/unit'
 import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
 const { popToast } = useToast()
+const { confirmDialog } = useConfirm()
 
 const items = ref([])
 const listIdDeleted = ref([])
@@ -100,8 +102,8 @@ const getUnitList = () => {
  * @param name
  * @param rowIndex
  */
-const deleted = (id, name, rowIndex) => {
-  if (confirm('Xóa ' + name + ". Bạn có chắc không?")) {
+const deleted = async (id, name, rowIndex) => {
+  if (await confirmDialog('Xóa ' + name + ". Bạn có chắc không?")) {
     unitAPI.deleteUnit(id).then(res => {
       // Remove item in list
       let indexTemp = commonFunc.updateIndex(rowIndex - 1, listIdDeleted.value)
