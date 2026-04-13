@@ -440,11 +440,11 @@ watch(() => props.collapsed, (isCollapsed) => {
   width: 100%;
 
   &:hover {
-    background-color: #7d7c7c;
+    background-color: #7d7c7c3b;
   }
 
   &.active {
-    background-color: #7d7c7c;
+    background-color: #7d7c7c3b;
     font-weight: 600;
     border-left: 4px solid #ed592a;
 
@@ -501,13 +501,13 @@ watch(() => props.collapsed, (isCollapsed) => {
   list-style: none;
   margin: 0;
   padding: 0;
-  background-color: #b4b4b3;
+  background-color: #7d7c7c3b;
 
   .sidebar-link {
     padding-left: 55px;
 
     &.active {
-      background-color: #b4b4b3;
+      background-color: #7d7c7c3b;
     }
   }
 }
