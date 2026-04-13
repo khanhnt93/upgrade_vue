@@ -6,13 +6,13 @@
         <div class="flex justify-end mb-4">
           <button
             @click="goToPay"
-            class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            class="btn btn-success"
           >
             Thêm phiếu thanh toán
           </button>
         </div>
 
-        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Danh Sách Nợ Phải Trả</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Nợ Phải Trả</h4>
 
         <!-- Summary Information -->
         <div class="grid grid-cols-2 gap-4 mb-6">
@@ -42,7 +42,7 @@
           </label>
           <button
             @click="showModalOverPayment"
-            class="ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            class="ml-4 btn btn-success"
           >
             Cấn trừ công nợ
           </button>
@@ -113,15 +113,15 @@
             Số kết quả: <span class="font-bold text-blue-600">{{ totalRow }}</span>
           </div>
           <div class="flex space-x-4">
+            <button class="btn btn-success" @click="exportExcel()">
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
+            </button>
             <button
               @click="prepareToSearch"
               :disabled="onSearch"
-              class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Tìm Kiếm
-            </button>
-            <button class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 cursor-pointer inline-block" @click="exportExcel()">
-              <b>Xuất Excel</b>
             </button>
           </div>
         </div>
@@ -149,7 +149,7 @@
             <tbody>
               <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ index + 1 }}</td>
-                <td class="border border-gray-300 px-4 py-2">
+                <td class="border border-gray-300 px-3 py-2">
                   <a
                     :href="'/order-buy/detail/' + item.id"
                     target="_blank"
@@ -162,24 +162,24 @@
                   <button
                     @click="goToPayBySupplierId(item.supplier_id)"
                     title="Tạo phiếu chi"
-                    class="ml-2 px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
+                    class="btn btn-sm btn-success ml-2 text-sm"
                   >
                     Thanh toán
                   </button>
                 </td>
-                <td class="border border-gray-300 px-4 py-2">{{ item.supplier_name }}</td>
+                <td class="border border-gray-300 px-3 py-2">{{ item.supplier_name }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.public_debt_date_number }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.total) }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.amount_remaining) }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.input_repo_date }}</td>
-                <td class="border border-gray-300 px-4 py-2">{{ item.status_str }}</td>
+                <td class="border border-gray-300 px-3 py-2">{{ item.status_str }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{ item.payment_date }}</td>
-                <td class="border border-gray-300 px-4 py-2">{{ item.invoice_note }}</td>
+                <td class="border border-gray-300 px-3 py-2">{{ item.invoice_note }}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">
                   <button
                     @click="goToIncome(item.id)"
                     title="Xoá nợ"
-                    class="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                    class="btn btn-sm btn-danger text-sm"
                   >
                     Xoá nợ
                   </button>
@@ -204,7 +204,7 @@
     <div v-if="showOverPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-6xl max-h-screen overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
           <hr class="mb-4" />
 
           <div class="mb-4">
@@ -227,7 +227,7 @@
               <tbody>
                 <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
                   <td class="border border-gray-300 px-4 py-2 text-center">{{ index + 1 }}</td>
-                  <td class="border border-gray-300 px-4 py-2">{{ item.order_buy_number }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.order_buy_number }}</td>
                   <td class="border border-gray-300 px-4 py-2 text-center">{{ item.public_debt_date_number }}</td>
                   <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.total) }}</td>
                   <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.amount_remaining) }}</td>
@@ -247,7 +247,7 @@
           <div class="flex justify-center space-x-4">
             <button
               @click="hideModalOverPayment"
-              class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              class="btn btn-danger"
             >
               Đóng
             </button>
@@ -256,7 +256,7 @@
               @click="payOverPayment"
               :disabled="payForDebts.length == 0"
               title="Cấn trừ công nợ"
-              class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="btn btn-success disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cấn trừ
             </button>

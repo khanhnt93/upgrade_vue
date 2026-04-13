@@ -9,7 +9,7 @@
             Quay lại
           </button>
           <button
-            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            class="btn btn-success w-32"
             @click="save"
             :disabled="saving">
             Lưu
@@ -17,7 +17,7 @@
         </div>
 
         <div class="text-center mb-4">
-          <h4 class="text-xl font-semibold text-orange-600">{{ prefix_text }}Dự Án Mẫu</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ prefix_text }}Dự Án Mẫu</h4>
         </div>
         <hr class="mb-4">
 
@@ -71,9 +71,14 @@
           </div>
           <div class="col-span-12 md:col-span-9">
             <div v-for="(product, index) in project.products" :key="product.product_name" class="mb-2">
-              <p>
+              <p class="flex items-center gap-2">
                 - <b class="mr-2">{{ product.product_name }}</b>
-                <i class="fa fa-trash cursor-pointer text-red-500" @click="deleteProduct(index)"></i>
+                <button
+                  @click="deleteProduct(index)"
+                  class="px-2 py-0.5 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                >
+                  Xoá
+                </button>
               </p>
               <p>{{ currencyFormat(product.product_quantity) }} x {{ currencyFormat(product.product_price) }} = {{ currencyFormat(product.product_amount) }}</p>
             </div>
@@ -117,7 +122,7 @@
 
             <div class="mt-2 text-center">
               <button
-                class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-4 py-2 rounded w-56"
+                class="btn btn-success"
                 @click="addProduct"
                 :disabled="!productSelect.id">
                 Thêm sản phẩm

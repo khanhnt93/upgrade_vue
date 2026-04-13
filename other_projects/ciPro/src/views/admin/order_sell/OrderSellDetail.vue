@@ -4,14 +4,14 @@
       <div class="mb-4">
         <button
           @click="back"
-          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          class="btn btn-secondary"
           style="width: 120px">
           Quay lại
         </button>
       </div>
 
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-orange-600">Chi Tiết Đơn Hàng Bán</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi Tiết Đơn Hàng Bán</h4>
       </div>
       <hr class="my-4"/>
 
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="bg-gray-600 text-white rounded-t-md p-3">
+      <div class="btn btn-secondary p-3">
         <h5 class="text-lg font-semibold">
           <span>Thông tin người mua</span>
         </h5>
@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <div class="bg-blue-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-primary p-3 mt-4">
         <h5 class="text-lg font-semibold">
           <span>Danh sách sản phẩm</span>
         </h5>
@@ -84,13 +84,13 @@
 
       <div class="border border-gray-300 border-t-0 p-4 rounded-b-md">
         <div class="text-right mb-2">
-          <button class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded cursor-pointer inline-block" @click="exportExcel()">
-            <b>Xuất Excel</b>
+          <button class="btn btn-success" @click="exportExcel()">
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
 
         <div class="overflow-x-auto" v-show="trade.products.length > 0">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <colgroup>
               <col style="width:3%">
               <col style="width:13%">
@@ -107,7 +107,7 @@
               <col style="width:8%">
               <col style="width:4%">
             </colgroup>
-            <thead class="bg-gray-50">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">STT</th>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Mã sản phẩm</th>
@@ -212,7 +212,7 @@
         </div>
       </div>
 
-      <div class="bg-green-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-success p-3 mt-4">
         <h5 class="text-lg font-semibold">
           <span>Thông tin thanh toán</span>
         </h5>
@@ -268,7 +268,7 @@
         </div>
       </div>
 
-      <div class="bg-yellow-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-warning p-3 mt-4">
         <h5 class="text-lg font-semibold">
           <span>Thông tin giao hàng</span>
         </h5>

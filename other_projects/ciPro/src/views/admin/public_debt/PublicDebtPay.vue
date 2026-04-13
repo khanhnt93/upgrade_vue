@@ -5,13 +5,13 @@
         <div class="mb-6">
           <button
             @click="back"
-            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 w-32"
+            class="btn btn-secondary w-32"
           >
             Quay lại
           </button>
         </div>
 
-        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Thanh Toán Nợ Phải Trả</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Thanh Toán Nợ Phải Trả</h4>
         <hr class="mb-6" />
 
         <!-- Supplier Selection -->
@@ -42,7 +42,7 @@
 
         <!-- Order Information Section -->
         <div v-show="supplierSelect.id" class="mb-6">
-          <div class="bg-blue-500 text-white p-3 rounded-t-lg">
+          <div class="btn btn-primary p-3">
             <h5 class="text-lg font-semibold">Thông tin đơn hàng</h5>
           </div>
 
@@ -60,10 +60,10 @@
               <tbody>
                 <tr v-for="(item, index) in debtList" :key="index" class="hover:bg-gray-50">
                   <td class="border border-gray-300 px-4 py-2 text-center">{{ index + 1 }}</td>
-                  <td class="border border-gray-300 px-4 py-2">{{ item.order_buy_number }}</td>
-                  <td class="border border-gray-300 px-4 py-2">{{ item.supplier_name }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.order_buy_number }}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{ item.supplier_name }}</td>
                   <td class="border border-gray-300 px-4 py-2 text-right">{{ currencyFormat(item.amount_remaining) }}</td>
-                  <td class="border border-gray-300 px-4 py-2">
+                  <td class="border border-gray-300 px-3 py-2">
                     <input
                       :id="'total_' + index"
                       type="text"
@@ -83,7 +83,7 @@
 
         <!-- Payment Information Section -->
         <div v-show="supplierSelect.id" class="mb-6">
-          <div class="bg-green-500 text-white p-3 rounded-t-lg">
+          <div class="btn btn-success p-3">
             <h5 class="text-lg font-semibold">Thông tin thanh toán</h5>
           </div>
           <!-- Date Input -->
@@ -172,7 +172,7 @@
               v-show="!saving"
               @click="confirmPayment"
               :disabled="saving || debt.amount_pay <= 0"
-              class="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="btn btn-lg btn-success disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <i class="fa fa-pencil-square-o mr-2" />
               Xác Nhận

@@ -5,14 +5,14 @@
       <div class="flex justify-end mb-4">
         <button
           @click="goToNew"
-          class="px-4 py-2 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors min-w-[120px]"
+          class="btn btn-success"
         >
           Thêm mới
         </button>
       </div>
 
       <!-- Title -->
-      <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Khoản Cho Vay</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Khoản Cho Vay</h4>
       <hr class="mb-6">
 
       <!-- Filter Section -->
@@ -100,7 +100,7 @@
         <button
           @click="prepareToSearch"
           :disabled="onSearch"
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50"
+          class="btn btn-primary"
         >
           Tìm Kiếm
         </button>
@@ -111,8 +111,8 @@
         <div class="text-sm">
           Số kết quả: <span class="text-blue-600 font-semibold">{{totalRow}}</span>
         </div>
-        <button class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] cursor-pointer" @click="exportExcel()">
-          <b>Xuất Excel</b>
+        <button class="btn btn-success" @click="exportExcel()">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
@@ -120,8 +120,8 @@
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-2 text-center text-xs font-medium text-gray-700 uppercase border" style="width:3%">STT</th>
               <th class="px-4 py-2 text-center text-xs font-medium text-gray-700 uppercase border" style="width:12%">Tên K.H</th>
@@ -162,16 +162,25 @@
               </td>
               <td class="px-4 py-2 text-sm text-right border">{{currencyFormat(item.remaining)}}</td>
               <td class="px-4 py-2 text-sm border">
-                <div class="flex flex-col gap-2">
-                  <div v-if="item.status == -1 || isRoot" class="flex gap-2">
-                    <i v-if="item.status == -1" class="fa fa-edit cursor-pointer text-blue-600 hover:text-blue-800" title="Cập nhật" @click="edit(item.id)"></i>
-                    <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" title="Xóa" @click="deleted(item.id, item.customer_name)"></i>
-                  </div>
+                <div class="flex gap-2 items-center whitespace-nowrap">
+                  <button
+                    v-if="item.status == -1"
+                    @click="edit(item.id)"
+                    class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs"
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    v-if="item.status == -1 || isRoot"
+                    @click="deleted(item.id, item.customer_name)"
+                    class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                  >
+                    Xoá
+                  </button>
                   <button
                     v-if="item.status != 2"
                     @click="goToPayment(item.id)"
                     class="px-3 py-1 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors text-xs"
-                    title="Thanh toán"
                   >
                     Thanh toán
                   </button>
@@ -196,7 +205,7 @@
     <div v-if="showPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden">
         <div class="p-6">
-          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Thanh Toán</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Thanh Toán</h4>
           <hr class="mb-4">
 
           <div v-show="loadingPayment" class="text-center py-4">
@@ -204,8 +213,8 @@
           </div>
 
           <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">STT</th>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">Ngày</th>

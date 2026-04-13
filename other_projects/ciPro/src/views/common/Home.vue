@@ -39,7 +39,7 @@
                 <i class="lni-cog text-white text-4xl relative z-10"></i>
               </div>
               <div class="services-content mt-8">
-                <h4 class="text-2xl font-bold mb-4">
+                <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Quản lý từ xa</a>
                 </h4>
                 <p class="text-gray-600 leading-7">
@@ -66,7 +66,7 @@
                 <i class="lni-baloon text-white text-4xl relative z-10"></i>
               </div>
               <div class="services-content mt-8">
-                <h4 class="text-2xl font-bold mb-4">
+                <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Hiệu quả quản lý</a>
                 </h4>
                 <p class="text-gray-600 leading-7">
@@ -94,7 +94,7 @@
                 <i class="lni-bolt-alt text-white text-4xl relative z-10"></i>
               </div>
               <div class="services-content mt-8">
-                <h4 class="text-2xl font-bold mb-4">
+                <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   <a href="#" class="text-gray-800 hover:text-purple-600 transition-colors">Tiết kiệm chi phí</a>
                 </h4>
                 <p class="text-gray-600 leading-7">
@@ -279,7 +279,7 @@
             <div class="w-full lg:w-4/12 md:w-7/12 px-4">
               <div class="footer-link mt-12 fadeIn">
                 <div class="footer-title mb-6">
-                  <h4 class="text-2xl font-bold text-orange-600">ciPro</h4>
+                  <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">ciPro</h4>
                 </div>
                 <ul class="link space-y-4">
                   <li>
@@ -317,7 +317,7 @@
             <div class="w-full lg:w-4/12 md:w-5/12 px-4">
               <div class="footer-contact mt-12 fadeIn">
                 <div class="footer-title mb-6">
-                  <h4 class="text-2xl font-bold text-orange-600">Thông tin liên hệ</h4>
+                  <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Thông tin liên hệ</h4>
                 </div>
                 <ul class="contact space-y-2 text-gray-600">
                   <li>Cty CiInTech</li>

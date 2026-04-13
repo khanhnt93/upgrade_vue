@@ -7,7 +7,7 @@
 
               <b-row class="form-row">
                 <b-col md='12'>
-                  <h3 class="mt-1 text-center text-header">Hình Ảnh Sản Phẩm</h3>
+                  <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Hình Ảnh Sản Phẩm</h3>
                 </b-col>
               </b-row>
               <hr/>

@@ -5,20 +5,20 @@
       <div class="flex justify-end mb-4 space-x-2">
         <button
           @click="goToAddInput"
-          class="px-4 py-2 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors min-w-[160px]"
+          class="btn btn-success"
         >
           Thêm phiếu nhập
         </button>
         <button
           @click="goToAddOutput"
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[160px]"
+          class="btn btn-success"
         >
           Thêm phiếu xuất
         </button>
       </div>
 
       <!-- Title -->
-      <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Xuất-Nhập Kho</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Xuất-Nhập Kho</h4>
       <hr class="mb-6">
 
       <!-- Filter Section - Row 1 -->
@@ -169,7 +169,7 @@
         <button
           @click="prepareToSearch"
           :disabled="onSearch"
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50"
+          class="btn btn-primary"
         >
           Tìm Kiếm
         </button>
@@ -182,16 +182,16 @@
         </div>
         <button
           @click="exportToExcel"
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] cursor-pointer"
+          class="btn btn-success"
         >
-          <b>Xuất Excel</b>
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border" style="width:3%">STT</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border" style="width:7%">Ngày</th>
@@ -234,7 +234,7 @@
               <td class="px-4 py-2 text-sm border">{{currencyFormat(item.amount)}}</td>
               <td class="px-4 py-2 text-sm border">{{item.created_by_name}}</td>
               <td class="px-4 py-2 text-sm border">
-                <i v-if="isUserRoot" class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" title="Xoá" @click="deleted(item.id, item.repository_number)"></i>
+                <button v-if="isUserRoot" @click="deleted(item.id, item.repository_number)" class="btn btn-danger">Xoá</button>
               </td>
             </tr>
           </tbody>

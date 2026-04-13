@@ -4,14 +4,14 @@
       <div class="mb-4">
         <button
           @click="back"
-          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          class="btn btn-secondary"
           style="width: 120px">
           Quay lại
         </button>
       </div>
 
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-orange-600">Chi tiết ĐH Nhập</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi tiết ĐH Nhập</h4>
       </div>
       <hr class="my-4"/>
 
@@ -30,7 +30,7 @@
         </label>
       </div>
 
-      <div class="bg-gray-600 text-white rounded-t-md p-3">
+      <div class="btn btn-secondary p-3">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin nhà cung cấp</span>
           <span class="cursor-pointer" @click="showPartnerInfo = !showPartnerInfo">
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div class="bg-blue-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-primary p-3 mt-4">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin sản phẩm</span>
           <span class="cursor-pointer" @click="showProductInfo = !showProductInfo">
@@ -63,7 +63,7 @@
       <div v-show="showProductInfo" class="border border-gray-300 border-t-0 p-4 rounded-b-md">
         <div class="mb-4" v-show="orderBuy.products.length > 0">
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+            <table class="min-w-full border-collapse border border-gray-300">
               <colgroup>
                 <col style="width:4%">
                 <col style="width:20%">
@@ -75,7 +75,7 @@
                 <col style="width:15%">
                 <col style="width:8%">
               </colgroup>
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">STT</th>
                   <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Mã sản phẩm(*)</th>
@@ -106,7 +106,7 @@
         </div>
       </div>
 
-      <div class="bg-green-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-success p-3 mt-4">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin thanh toán và giao hàng</span>
           <span class="cursor-pointer" @click="showPaymentInfo = !showPaymentInfo">

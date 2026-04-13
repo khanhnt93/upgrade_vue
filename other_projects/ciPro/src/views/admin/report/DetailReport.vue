@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
-      <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Báo Cáo Doanh Thu - Lợi Nhuận Chi Tiết</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo Cáo Doanh Thu - Lợi Nhuận Chi Tiết</h4>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-2">
@@ -124,7 +124,7 @@
 
       <div class="mt-4 mb-4 text-right">
         <button
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="loading"
           @click.prevent="search">
           Tìm Kiếm
@@ -135,8 +135,8 @@
       <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
       <div v-show="items.length > 0" class="mb-4">
-        <p class="text-header">Doanh thu: <b>{{currencyFormat(revenue_total)}}đ</b></p>
-        <p class="text-header">Lợi nhuận: <b>{{currencyFormat(profit_total)}}đ</b></p>
+        <p class="text-orange-600 font-semibold">Doanh thu: <b>{{currencyFormat(revenue_total)}}đ</b></p>
+        <p class="text-orange-600 font-semibold">Lợi nhuận: <b>{{currencyFormat(profit_total)}}đ</b></p>
       </div>
 
       <div v-show="items.length > 0" class="flex justify-between items-center mb-4">
@@ -146,9 +146,9 @@
         <div>
           <button
             @click="exportToExcel"
-            class="btn btn-default text-header bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+            class="btn btn-success"
           >
-            <b>Xuất Excel</b>
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
       </div>

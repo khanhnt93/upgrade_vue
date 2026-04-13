@@ -7,7 +7,7 @@
           <h4 class="text-2xl font-semibold text-center flex-1">Admin Store</h4>
           <button
             @click="gotoAdd"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="btn btn-success"
           >
             Thêm
           </button>
@@ -78,7 +78,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            class="btn btn-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             Tìm Kiếm
           </button>
@@ -86,8 +86,8 @@
 
         <!-- Table -->
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r">STT</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-r">Tên</th>
@@ -109,20 +109,16 @@
                 <td class="px-4 py-3 whitespace-nowrap text-sm border-r">{{ item.role_name }}</td>
                 <td class="px-4 py-3 whitespace-nowrap text-sm border-r">{{ item.created_at }}</td>
                 <td class="px-4 py-3 whitespace-nowrap text-sm">
-                  <div class="flex gap-2">
+                  <div class="flex gap-2 items-center whitespace-nowrap">
                     <button
                       @click="edit(item.id)"
-                      title="Edit"
-                      class="text-blue-600 hover:text-blue-800 focus:outline-none"
-                    >
-                      <i class="fa fa-edit"></i>
+                      class="btn btn-primary">
+                      Sửa
                     </button>
                     <button
                       @click="deleted(item.id, item.name, item.stt)"
-                      title="Delete"
-                      class="text-red-600 hover:text-red-800 focus:outline-none"
-                    >
-                      <i class="fa fa-trash"></i>
+                      class="btn btn-danger">
+                      Xoá
                     </button>
                     <button
                       @click="showModalConfirmResetPass(item)"
@@ -149,7 +145,7 @@
     <!-- Modal xác nhận reset pass -->
     <div v-if="showResetPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h5 class="text-xl font-semibold text-center mb-4">Reset password</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Reset password</h5>
         <hr class="mb-4">
 
         <div class="mb-4">
@@ -160,13 +156,13 @@
         <div v-if="!resetting" class="flex justify-center gap-4 mt-6">
           <button
             @click="hideModalConfirmResetPass"
-            class="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            class="btn btn-secondary"
           >
             Đóng
           </button>
           <button
             @click="resetPass"
-            class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            class="btn btn-success"
           >
             Xác nhận
           </button>

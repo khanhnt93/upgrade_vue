@@ -6,7 +6,7 @@
         <!-- Year Report Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="mb-4">
-            <h3 class="text-center text-header font-bold">Báo Cáo Năm</h3>
+            <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo Cáo Năm</h3>
           </div>
 
           <div class="mb-4 text-center">
@@ -60,7 +60,7 @@
         <!-- Revenue Chart Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h3 class="text-center text-header font-bold mb-6">Biểu Đồ Doanh Thu Theo Tháng</h3>
+            <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Biểu Đồ Doanh Thu Theo Tháng</h3>
 
             <div class="w-full">
               <GChart
@@ -75,7 +75,7 @@
         <!-- Inventory Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h3 class="text-center text-header font-bold mb-6">Kho Hàng</h3>
+            <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Kho Hàng</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Inventory Stats -->
@@ -85,7 +85,7 @@
                   <div class="text-blue-600 font-semibold border-b-2 border-blue-500 pb-2 mb-4">
                     Số lượng SP tồn kho
                   </div>
-                  <h5 class="text-center text-header">{{ formatCurrency(repo.number_of_product) }}</h5>
+                  <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ formatCurrency(repo.number_of_product) }}</h5>
                 </div>
 
                 <!-- Inventory Value -->
@@ -93,7 +93,7 @@
                   <div class="text-red-600 font-semibold border-b-2 border-red-500 pb-2 mb-4">
                     Giá trị hàng tồn kho
                   </div>
-                  <h5 class="text-center text-header">{{ formatCurrency(repo.total_price_buy) }}đ</h5>
+                  <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ formatCurrency(repo.total_price_buy) }}đ</h5>
                 </div>
               </div>
 
@@ -126,7 +126,7 @@
         <!-- Debt Card -->
         <div class="bg-white rounded-lg shadow p-6 mb-4">
           <div class="p-4">
-            <h3 class="text-center text-header font-bold mb-6">Nợ công - Công nợ</h3>
+            <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Nợ công - Công nợ</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Receivable Debt -->
@@ -149,10 +149,10 @@
                   Nợ công (Nợ phải trả)
                 </div>
                 <div>
-                  <h4 class="text-center text-header mb-2">Tổng nợ công: {{ formatCurrency(public_debt_total) }}đ</h4>
+                  <h4 class="text-xl font-semibold text-center text-orange-600 mb-2">Tổng nợ công: {{ formatCurrency(public_debt_total) }}đ</h4>
                   <div class="text-center text-sm">
                     - Số lượng nợ công sắp đến hạn trả: {{ formatCurrency(public_debt_number) }}<br>
-                    - Tổng tiền nợ công sắp đến hạn trả: <span class="text-header"><b>{{ formatCurrency(public_debt_amount) }}đ</b></span>
+                    - Tổng tiền nợ công sắp đến hạn trả: <span class="text-orange-600 font-semibold"><b>{{ formatCurrency(public_debt_amount) }}đ</b></span>
                   </div>
                 </div>
               </div>

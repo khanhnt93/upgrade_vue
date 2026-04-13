@@ -5,13 +5,13 @@
       <div class="flex justify-end gap-2 mb-4">
         <button
           @click="goToAddRepo"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-48"
+          class="btn btn-success w-48"
         >
           Thêm mới nhập kho
         </button>
         <button
           @click="goToAdd"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48"
+          class="btn btn-success"
         >
           Thêm mới từ ĐH bán
         </button>
@@ -137,7 +137,7 @@
         <div class="md:col-span-2 flex items-end">
           <button
             @click="prepareToSearch"
-            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            class="w-full btn btn-primary"
           >
             Tìm kiếm
           </button>
@@ -148,16 +148,16 @@
       <div class="flex justify-end mb-4">
         <button
           @click="exportToExcel"
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2"
+          class="btn btn-success"
         >
-          <i class="fa fa-file-excel-o"></i> Excel
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
               <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã ĐH nhập</th>
@@ -197,41 +197,55 @@
                 </span>
               </td>
               <td class="px-3 py-4 text-sm">
-                {{ item.invoice_note }}
-                <i class="fa fa-edit cursor-pointer ml-2" @click="showModalUpdateInvoiceNote(item)" title="Cập nhật HĐ VAT vào"></i>
+                <div class="flex gap-2 items-start">
+                  <button
+                    @click="showModalUpdateInvoiceNote(item)"
+                    class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  >
+                    Sửa
+                  </button>
+                  <span>{{ item.invoice_note }}</span>
+                </div>
               </td>
               <td class="px-3 py-4 whitespace-nowrap text-sm">{{ item.product_back_status_str }}</td>
               <td class="px-3 py-4 text-sm">
-                {{ item.note }}
-                <i class="fa fa-edit cursor-pointer ml-2" @click="showModalUpdateNote(item)" title="Cập nhật ghi chú"></i>
+                <div class="flex gap-2 items-start">
+                  <button
+                    @click="showModalUpdateNote(item)"
+                    class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  >
+                    Sửa
+                  </button>
+                  <span>{{ item.note }}</span>
+                </div>
               </td>
               <td class="px-3 py-4 text-sm">
                 <div class="flex flex-wrap gap-2">
                   <button
                     v-if="item.status < 1"
                     @click="goToUpdate(item.id)"
-                    class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs"
+                    class="btn btn-sm btn-primary text-xs"
                   >
                     Sửa
                   </button>
                   <button
                     v-if="item.status < 1"
                     @click="deleteOrderBuy(item.id, item.supplier_name)"
-                    class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded text-xs"
+                    class="btn btn-sm btn-danger text-xs"
                   >
                     Xóa
                   </button>
                   <button
                     v-show="item.status > -1"
                     @click="openModalCreateBallot(item)"
-                    class="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded text-xs"
+                    class="btn btn-sm btn-success text-xs"
                   >
                     Tạo phiếu
                   </button>
                   <button
                     v-show="item.status < 3 && !loadingDetail"
                     @click="handleProductExcel(item.id)"
-                    class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs"
+                    class="btn btn-sm btn-primary text-xs"
                   >
                     In excel
                   </button>
@@ -261,7 +275,7 @@
     <div v-if="showUpdateNoteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Cập nhật ghi chú</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập nhật ghi chú</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -284,13 +298,13 @@
           <div class="flex justify-between mt-4">
             <button
               @click="hideModalChangeNote"
-              class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-secondary w-32"
             >
               Quay lại
             </button>
             <button
               @click="confirmChangeNote"
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-primary w-32"
             >
               Xác nhận
             </button>
@@ -303,7 +317,7 @@
     <div v-if="showUpdateInvoiceNoteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Cập nhật HĐ VAT vào</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập nhật HĐ VAT vào</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -326,13 +340,13 @@
           <div class="flex justify-between mt-4">
             <button
               @click="hideModalChangeInvoiceNote"
-              class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-secondary w-32"
             >
               Quay lại
             </button>
             <button
               @click="confirmChangeInvoiceNote"
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-primary w-32"
             >
               Xác nhận
             </button>
@@ -345,31 +359,31 @@
     <div v-if="showCreateBallotModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Tạo phiếu liên quan</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tạo phiếu liên quan</h4>
           <hr class="mb-4">
 
           <div class="space-y-3">
             <button
               @click="goToRepoInput(currentOrderBuy.id)"
-              class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              class="w-full btn btn-primary"
             >
               Phiếu nhập kho
             </button>
             <button
               @click="goToProductBack(currentOrderBuy.id)"
-              class="w-full bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              class="w-full btn btn-orange"
             >
               Phiếu trả hàng nhập
             </button>
             <button
               @click="goToExpense(currentOrderBuy.id)"
-              class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              class="w-full btn btn-danger"
             >
               Phiếu chi
             </button>
             <button
               @click="goToIncomeBack(currentOrderBuy.id)"
-              class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              class="w-full btn btn-success"
             >
               Phiếu thu từ trả hàng
             </button>
@@ -378,7 +392,7 @@
           <div class="flex justify-center mt-4">
             <button
               @click="hideModalCreateBallot"
-              class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-secondary w-32"
             >
               Đóng
             </button>
@@ -391,12 +405,12 @@
     <div v-if="showDetailPaymentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-lg font-semibold text-center text-orange-600 mb-4">Chi tiết thanh toán</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi tiết thanh toán</h4>
           <hr class="mb-4">
 
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th v-for="field in expendFields" :key="field.key" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     {{ field.label }}
@@ -423,7 +437,7 @@
           <div class="flex justify-end mt-4">
             <button
               @click="hideModalDetailPayment"
-              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-32"
+              class="btn btn-danger w-32"
             >
               Đóng
             </button>
@@ -448,7 +462,7 @@ import Multiselect from 'vue-multiselect'
 import * as XLSX from 'xlsx'
 
 const router = useRouter()
-const { showToast } = useToast()
+const { popToast } = useToast()
 const { confirmDialog } = useConfirm()
 
 // Data
@@ -608,7 +622,7 @@ const getOptionSupplier = () => {
   }).catch(err => {
     loadingOptions.value = false
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -671,7 +685,7 @@ const confirmChangeNote = () => {
     }
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -702,7 +716,7 @@ const confirmChangeInvoiceNote = () => {
     }
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -735,7 +749,7 @@ const handleProductExcel = (orderBuyId) => {
       }
     }).catch(err => {
       let errorMess = commonFunc.handleStaffError(err)
-      showToast('danger', errorMess)
+      popToast('danger', errorMess)
       loadingDetail.value = false
     })
   }
@@ -851,7 +865,7 @@ const search = () => {
     loading.value = false
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
     onSearch.value = false
     loading.value = false
   })
@@ -918,7 +932,7 @@ const deleteOrderBuy = async (id, name) => {
         }
       }).catch(err => {
         let errorMess = commonFunc.handleStaffError(err)
-        showToast('danger', errorMess)
+        popToast('danger', errorMess)
       })
     }
   }
@@ -934,7 +948,7 @@ const getListExpend = (id) => {
     loadingExpend.value = false
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
     loadingExpend.value = false
   })
 }

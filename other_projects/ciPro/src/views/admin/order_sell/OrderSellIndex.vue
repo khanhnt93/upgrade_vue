@@ -17,7 +17,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
               <div class="w-full md:col-span-12">
-                <h3 class="mt-1 text-center text-header">
+                <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   {{ prefix_title }} Đơn Hàng Bán
                 </h3>
               </div>
@@ -94,7 +94,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
               <div
-                class="w-full md:col-span-12 bg-gray-600 text-white title-partner"
+                class="btn btn-secondary w-full md:col-span-12 title-partner"
               >
                 <h5>
                   <span class="float-left">Thông tin người mua</span>
@@ -581,7 +581,7 @@
                   </div>
                   <div class="w-full md:col-span-3 text-right">
                     <button
-                      class="btn btn-default text-header"
+                      class="btn btn-success"
                       @click="
                         exportToExcel(
                           products_excel,
@@ -590,7 +590,7 @@
                         )
                       "
                     >
-                      <b>Xuất Excel</b>
+                      <i class="fa fa-file-excel-o"></i> Xuất Excel
                     </button>
                   </div>
                 </div>
@@ -793,20 +793,11 @@
                             </td>
                             <td class="text-right">{{ item.note }}</td>
                             <td>
-                              <!--                        <i class="fa fa-edit" @click="editProduct(index)" />-->
-                              <i
-                                class="fa fa-trash ml-2"
-                                @click="
-                                  deleteProduct(
-                                    index,
-                                    1,
-                                    '',
-                                    item.product_id,
-                                    item.quantity,
-                                    item.properties,
-                                  )
-                                "
-                              />
+                              <button
+                                @click="deleteProduct(index, 1, '', item.product_id, item.quantity, item.properties)"
+                                class="btn btn-sm btn-danger">
+                                Xoá
+                              </button>
                             </td>
                           </tr>
                         </tbody>
@@ -1092,21 +1083,11 @@
                               {{ item.note }}
                             </td>
                             <td>
-                              <i
-                                class="fa fa-trash ml-2"
-                                @click="
-                                  deleteProduct(
-                                    index,
-                                    item.product_type,
-                                    item.product_name,
-                                    item.product_id,
-                                    item.quantity,
-                                    item.properties,
-                                    item.project_index,
-                                    item.index,
-                                  )
-                                "
-                              />
+                              <button
+                                @click="deleteProduct(index, item.product_type, item.product_name, item.product_id, item.quantity, item.properties, item.project_index, item.index)"
+                                class="btn btn-sm btn-danger">
+                                Xoá
+                              </button>
                             </td>
                           </tr>
                         </tbody>
@@ -1332,7 +1313,7 @@
 
             <div class="mt-2">
               <div
-                class="w-full md:col-span-12 bg-yellow-500 text-white title-partner"
+                class="btn btn-warning w-full md:col-span-12 title-partner"
               >
                 <h5>
                   <span class="float-left">Thông tin giao hàng</span>
@@ -1474,7 +1455,7 @@
                 </button>
                 <button
                   v-show="trade.products.length > 0"
-                  class="btn btn-default text-header float-right mt-1"
+                  class="btn btn-success float-right mt-1"
                   @click="
                     exportToExcel(
                       products_excel,
@@ -1483,7 +1464,7 @@
                     )
                   "
                 >
-                  <b>Xuất Excel</b>
+                  <i class="fa fa-file-excel-o"></i> Xuất Excel
                 </button>
               </div>
             </div>
@@ -1563,7 +1544,7 @@
             </button>
 
             <button
-              class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 float-right btn-width-120"
+              class="btn btn-primary"
               :disabled="onSearchQuotation"
               @click.prevent="searchQuotation"
             >
@@ -1575,7 +1556,7 @@
         <div class="mt-2">
           <div>
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
               <thead>
                 <tr>
@@ -1721,7 +1702,7 @@
             </button>
 
             <button
-              class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 float-right btn-width-120"
+              class="btn btn-primary"
               :disabled="onSearchProduct"
               @click.prevent="searchProduct"
               v-show="!onSearchProduct"
@@ -1737,7 +1718,7 @@
         <div class="mt-2">
           <div>
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
               <thead>
                 <tr>
@@ -1830,7 +1811,7 @@
             </button>
 
             <button
-              class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 float-right btn-width-120"
+              class="btn btn-primary"
               :disabled="onSearchCustomer"
               @click.prevent="searchCustomer"
             >
@@ -1842,7 +1823,7 @@
         <div class="mt-2">
           <div>
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
               <thead>
                 <tr>
@@ -2316,7 +2297,7 @@
         <div>
           <div>
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
               <thead>
                 <tr>

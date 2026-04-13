@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-orange-600">Lịch Sử Xoá Nợ</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Xoá Nợ</h4>
       </div>
       <hr class="my-4">
 
@@ -38,7 +38,7 @@
 
       <div class="mb-4">
         <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right"
+          class="btn btn-primary float-right"
           :disabled="loading"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -47,8 +47,8 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
-        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
-          Xuất Excel
+        <button class="btn btn-success" @click="exportExcel()">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
@@ -57,27 +57,27 @@
           <thead class="bg-gray-100">
             <tr>
               <th class="border border-gray-300 px-2 py-2 w-12">STT</th>
-              <th class="border border-gray-300 px-2 py-2">Ngày lập</th>
-              <th class="border border-gray-300 px-2 py-2">Loại</th>
-              <th class="border border-gray-300 px-2 py-2">Số ĐH xoá nợ</th>
-              <th class="border border-gray-300 px-2 py-2">Tên K.H/NCC</th>
-              <th class="border border-gray-300 px-2 py-2">Số tiền</th>
-              <th class="border border-gray-300 px-2 py-2">Số ngày nợ</th>
-              <th class="border border-gray-300 px-2 py-2">Lý do xoá nợ</th>
-              <th class="border border-gray-300 px-2 py-2">Tài khoản thực hiện</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày lập</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Loại</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số ĐH xoá nợ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tên K.H/NCC</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số tiền</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số ngày nợ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Lý do xoá nợ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tài khoản thực hiện</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
-              <td class="border border-gray-300 px-2 py-2 text-center">{{index + 1}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.created_at}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.type_str}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.order_number}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.object_name}}</td>
-              <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(item.amount)}}</td>
-              <td class="border border-gray-300 px-2 py-2 text-center">{{item.debt_relief_date_number}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.description}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.staff_name}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-center">{{index + 1}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.created_at}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.type_str}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.order_number}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.object_name}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.amount)}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-center">{{item.debt_relief_date_number}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.description}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.staff_name}}</td>
             </tr>
           </tbody>
         </table>

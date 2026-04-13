@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="flex justify-start mb-4">
-          <button 
+          <button
             @click="back"
             class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors w-32"
           >
@@ -11,7 +11,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">{{title}}</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{title}}</h4>
         <hr class="mb-6">
 
         <div v-if="!repository.is_correction" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
@@ -34,8 +34,8 @@
                 @input="changeOrderBuy"
                 class="flex-1"
               />
-              <button 
-                @click="showModalSearchOrderBuy" 
+              <button
+                @click="showModalSearchOrderBuy"
                 title="Tìm kiếm"
                 class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors"
               >
@@ -46,7 +46,7 @@
         </div>
 
         <div v-if="!repository.is_correction" class="mb-4 mt-6">
-          <div class="bg-gray-500 text-white rounded-t-lg p-3">
+          <div class="btn btn-secondary p-3">
             <h5 class="text-lg font-semibold">Thông tin nhà cung cấp</h5>
           </div>
         </div>
@@ -109,7 +109,7 @@
         </div>
 
         <div class="mb-4 mt-6">
-          <div class="bg-blue-500 text-white rounded-t-lg p-3">
+          <div class="btn btn-primary p-3">
             <h5 class="text-lg font-semibold">Thông tin sản phẩm</h5>
           </div>
         </div>
@@ -175,9 +175,9 @@
         </div>
 
         <div class="text-center mb-4">
-          <button 
+          <button
             @click="confirmBuyProduct"
-            class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors w-32"
+            class="btn btn-success"
           >
             Thêm
           </button>
@@ -188,7 +188,7 @@
         </div>
 
         <div v-show="repository.products.length > 0" class="overflow-x-auto mb-4">
-          <table class="min-w-full border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <colgroup>
               <col style="width:5%">
               <col style="width:17%">
@@ -199,7 +199,7 @@
               <col style="width:15%">
               <col style="width:5%">
             </colgroup>
-            <thead class="bg-gray-50">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase border-b">STT</th>
                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase border-b">Mã SP</th>
@@ -242,7 +242,12 @@
                 </td>
                 <td class="px-4 py-2 text-sm text-gray-900 text-right border">{{currencyFormat(item.amount)}}</td>
                 <td class="px-4 py-2 text-sm text-gray-900 border">
-                  <i class="fa fa-trash text-red-600 cursor-pointer hover:text-red-900" @click="deleteProduct(index)" />
+                  <button
+                    @click="deleteProduct(index)"
+                    class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -256,8 +261,8 @@
         </div>
 
         <div class="text-center mt-8">
-          <button 
-            v-show="!saving" 
+          <button
+            v-show="!saving"
             @click="save"
             :disabled="saving"
             class="px-6 py-3 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors disabled:opacity-50"
@@ -276,7 +281,7 @@
       <div class="fixed inset-0 bg-black bg-opacity-50" @click="hideModalSearchOrderBuy"></div>
       <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full p-6">
-          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -305,24 +310,24 @@
           </div>
 
           <div class="flex justify-between mb-4">
-            <button 
+            <button
               @click.prevent="hideModalSearchOrderBuy"
               class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors w-32"
             >
               Quay lại
             </button>
-            <button 
+            <button
               @click.prevent="searchOrderBuy"
               :disabled="onSearchOrderBuy"
-              class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors w-32 disabled:opacity-50"
+              class="btn btn-primary"
             >
               Tìm Kiếm
             </button>
           </div>
 
           <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b">STT</th>
                   <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b">Ngày lập</th>
@@ -340,7 +345,7 @@
                   <td class="px-4 py-2 text-sm text-gray-900 border">{{item.supplier_name}}</td>
                   <td class="px-4 py-2 text-sm text-gray-900 text-right border">{{item.total}}</td>
                   <td class="px-4 py-2 text-sm text-gray-900 border text-center">
-                    <button 
+                    <button
                       @click.prevent="chooseOrderBuy(item.id, item.supplier_id)"
                       class="px-4 py-2 bg-white text-green-600 border border-green-600 rounded hover:bg-green-50 transition-colors"
                     >
@@ -362,14 +367,14 @@
       <div class="fixed inset-0 bg-black bg-opacity-50" @click="hideModalRepoKeep"></div>
       <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full p-6">
-          <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">
             Bạn có muốn giữ hàng cho các đơn hàng bán dưới đây?
           </h4>
           <hr class="mb-4">
 
           <div class="overflow-x-auto mb-4">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b">STT</th>
                   <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b">ĐH bán</th>
@@ -389,13 +394,13 @@
           </div>
 
           <div class="flex justify-between">
-            <button 
+            <button
               @click.prevent="hideModalRepoKeep"
               class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors w-32"
             >
               Bỏ qua
             </button>
-            <button 
+            <button
               v-show="!saving"
               @click.prevent="confirmRepoKeep"
               :disabled="saving"

@@ -18,7 +18,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">{{prefix_text}} Sản Phẩm</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}} Sản Phẩm</h4>
         <hr class="mb-6">
 
         <!-- Loading -->
@@ -220,9 +220,8 @@
                     <span class="font-medium mr-2">- {{resource.product_name}}</span>
                     <button
                       @click="deleteResource(index)"
-                      class="text-red-600 hover:text-red-900"
-                    >
-                      <i class="fa fa-trash" />
+                      class="btn btn-danger">
+                      Xoá
                     </button>
                   </p>
                   <p class="text-sm text-gray-600">Số lượng: {{currencyFormat(resource.quantity)}}</p>
@@ -260,7 +259,7 @@
               <div class="text-center">
                 <button
                   @click="addResources"
-                  class="px-6 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[220px]"
+                  class="btn btn-success"
                 >
                   Thêm nguyên liệu
                 </button>

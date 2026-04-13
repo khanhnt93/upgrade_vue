@@ -9,7 +9,7 @@
       <div class="space-y-4">
         <div>
           <button
-            class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 default-btn-bg"
+            class="btn btn-lg btn-primary default-btn-bg"
             @click="goToBrandList()">
             Quản lý thương hiệu
           </button>
@@ -17,7 +17,7 @@
         
         <div>
           <button
-            class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 default-btn-bg"
+            class="btn btn-lg btn-primary default-btn-bg"
             @click="goToStoreList()">
             Quản lý cửa hàng
           </button>
@@ -25,7 +25,7 @@
         
         <div>
           <button
-            class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 default-btn-bg"
+            class="btn btn-lg btn-primary default-btn-bg"
             @click="goToAdminStoreList()">
             Quản lý admin
           </button>

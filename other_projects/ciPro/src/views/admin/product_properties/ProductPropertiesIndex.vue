@@ -18,7 +18,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">{{prefix_text}}Thuộc Tính Sản Phẩm</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}}Thuộc Tính Sản Phẩm</h4>
         <hr class="mb-6">
 
         <!-- Loading -->
@@ -80,10 +80,8 @@
                   <span>- {{value}}</span>
                   <button
                     @click="deleteItem(item.name, vIndex)"
-                    class="ml-1 text-red-600 hover:text-red-900"
-                    title="Delete"
-                  >
-                    <i class="fa fa-trash text-xs" />
+                    class="btn btn-danger">
+                    Xoá
                   </button>
                 </span>
               </p>
@@ -133,7 +131,7 @@
           <div class="text-center mt-4">
             <button
               @click="addPropertiesItem()"
-              class="px-6 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[220px]"
+              class="btn btn-success"
             >
               Thêm
             </button>

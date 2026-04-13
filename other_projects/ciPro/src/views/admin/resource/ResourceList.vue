@@ -4,13 +4,13 @@
       <div class="flex justify-end mb-4">
         <button
           @click="goToAdd()"
-          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-32">
+          class="btn btn-success w-32">
           Thêm
         </button>
       </div>
 
       <div class="mb-4">
-        <h4 class="text-center text-2xl font-semibold">Nguyên liệu - Mặt hàng</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Nguyên liệu - Mặt hàng</h4>
       </div>
       <hr class="mb-6">
 
@@ -55,7 +55,7 @@
         <button
           @click.prevent="prepareToSearch"
           :disabled="onSearch"
-          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+          class="btn btn-primary w-32 disabled:opacity-50 disabled:cursor-not-allowed">
           Tìm Kiếm
         </button>
       </div>
@@ -66,8 +66,8 @@
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
                 STT
@@ -125,15 +125,13 @@
                   </button>
                   <button
                     @click="edit(item.id)"
-                    title="Edit"
-                    class="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-600 rounded">
-                    <i class="fa fa-edit" />
+                    class="btn btn-primary">
+                    Sửa
                   </button>
                   <button
                     @click="deleted(item.id, item.name, item.stt)"
-                    title="Delete"
-                    class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-600 rounded">
-                    <i class="fa fa-trash" />
+                    class="btn btn-danger">
+                    Xoá
                   </button>
                 </div>
               </td>
@@ -217,12 +215,12 @@
         <div class="flex justify-center mt-6 space-x-4">
           <button
             @click="confirmBonusQuantity"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-success w-32">
             Xác nhận
           </button>
           <button
             @click="showModalAdd = false"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-secondary w-32">
             Đóng
           </button>
         </div>
@@ -292,12 +290,12 @@
         <div class="flex justify-center mt-6 space-x-4">
           <button
             @click="confirmBonusQuantity"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-success w-32">
             Xác nhận
           </button>
           <button
             @click="showModalMinus = false"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-secondary w-32">
             Đóng
           </button>
         </div>
@@ -367,12 +365,12 @@
         <div class="flex justify-center mt-6 space-x-4">
           <button
             @click="confirmUpdateQuantity"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-success w-32">
             Xác nhận
           </button>
           <button
             @click="showModalUpdate = false"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-secondary w-32">
             Đóng
           </button>
         </div>
@@ -392,7 +390,7 @@ import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
-const { showToast } = useToast()
+const { popToast } = useToast()
 const { confirmDialog } = useConfirm()
 
 const inputs = ref({
@@ -529,7 +527,7 @@ const search = () => {
     loading.value = false
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
 
     onSearch.value = false
     loading.value = false
@@ -546,7 +544,7 @@ const getUnitOptions = () => {
     }
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -561,7 +559,7 @@ const deleted = async (id, name, rowIndex) => {
         totalRow.value = totalRow.value - 1
       }).catch(err => {
         let errorMess = commonFunc.handleStaffError(err)
-        showToast('danger', errorMess)
+        popToast('danger', errorMess)
       })
     }
   }
@@ -625,7 +623,7 @@ const confirmBonusQuantity = () => {
           }
         }
 
-        showToast('success', 'Cập nhật số lượng thành công ')
+        popToast('success', 'Cập nhật số lượng thành công ')
 
         quantityChange.value.id = null
         quantityChange.value.currentQuantity = null
@@ -642,7 +640,7 @@ const confirmBonusQuantity = () => {
   }).catch(err => {
     saving.value = false
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -677,7 +675,7 @@ const confirmUpdateQuantity = () => {
           }
         }
 
-        showToast('success', 'Cập nhật số lượng thành công ')
+        popToast('success', 'Cập nhật số lượng thành công ')
 
         quantityChange.value.id = null
         quantityChange.value.currentQuantity = null
@@ -693,7 +691,7 @@ const confirmUpdateQuantity = () => {
   }).catch(err => {
     saving.value = false
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 

@@ -4,7 +4,7 @@
       <div class="w-full px-2">
         <div class="bg-white rounded-lg shadow">
           <div class="p-4">
-            <h3 class="text-center text-header font-bold">BIỂU ĐỒ DOANH THU</h3>
+            <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">BIỂU ĐỒ DOANH THU</h3>
             <div class="flex flex-wrap -mx-2">
               <div class="w-full md:w-1/4 px-2">
                 <label class="block mb-2"> Cửa hàng </label>
@@ -107,7 +107,7 @@
             <div class="flex flex-wrap -mx-2 mt-4 mb-2">
               <div class="w-full px-2">
                 <button
-                  class="float-right px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="btn btn-primary float-right btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
                   :disabled="onSearch"
                   @click.prevent="search">
                   Xem

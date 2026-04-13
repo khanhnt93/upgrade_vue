@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="text-right">
-          <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" @click="save" :disabled="saving">
+          <button class="btn btn-primary" @click="save" :disabled="saving">
             Lưu
           </button>
         </div>

@@ -18,7 +18,7 @@
       </div>
 
       <!-- Title -->
-      <h3 class="text-2xl font-semibold text-header text-center mb-6">Sản Phẩm Trong Kho</h3>
+      <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Sản Phẩm Trong Kho</h3>
 
       <!-- Filter Section -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -89,7 +89,7 @@
         <button
           @click="prepareToSearch"
           :disabled="onSearch"
-          class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50"
+          class="btn btn-primary"
         >
           Tìm Kiếm
         </button>
@@ -100,14 +100,14 @@
         <div class="text-sm">
           Số kết quả: <span class="text-blue-600 font-semibold">{{totalRow}}</span>
         </div>
-        <button class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] cursor-pointer" @click="exportExcel()">
-          <b>Xuất Excel</b>
+        <button class="btn btn-success" @click="exportExcel()">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
+        <table class="min-w-full border-collapse border border-gray-300">
           <colgroup>
             <col style="width:3%">
             <col style="width:8%">
@@ -120,7 +120,7 @@
             <col style="width:9%">
             <col style="width:9%">
           </colgroup>
-          <thead class="bg-gray-50">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">STT</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">Nhóm SP</th>
@@ -177,7 +177,7 @@
     <div v-if="showModalImport" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showModalImport = false; uploadErrorList = []">
       <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center mb-4">Upload sản phẩm từ file excel</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Upload sản phẩm từ file excel</h4>
           <p class="text-sm mb-4">
             Tải xuống file mẫu:
             <a target="_blank" href="https://api.cipro.vn/files/upload_excel_template/ciPro_upload_repository_product_template.xlsx" class="text-blue-600 hover:underline">Tải xuống</a>
@@ -198,15 +198,15 @@
               v-show="!uploading"
               @click="importProductFromExcelFile()"
               :disabled="!fileUpload || uploading"
-              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
+              class="btn btn-primary disabled:opacity-50"
             >
               Upload
             </button>
           </div>
 
           <div v-show="uploadErrorList.length > 0" class="mt-4 overflow-x-auto">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">Dòng</th>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">Mô tả lỗi</th>
@@ -243,8 +243,8 @@
           </div>
 
           <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">STT</th>
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase border">Mã ĐH</th>
@@ -258,7 +258,12 @@
                   <td class="px-4 py-2 text-sm border">{{item.order_sell_number}}</td>
                   <td class="px-4 py-2 text-sm border">{{currencyFormat(item.quantity_keep)}}</td>
                   <td class="px-4 py-2 text-sm border">
-                    <i class="fa fa-trash cursor-pointer text-red-600 hover:text-red-800" title="Delete" @click="deleteKeepProduct(item.id, item.product_id, item.quantity_keep)"></i>
+                      <button
+                        @click="deleteKeepProduct(item.id, item.product_id, item.quantity_keep)"
+                        class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                      >
+                        Xoá
+                      </button>
                   </td>
                 </tr>
               </tbody>

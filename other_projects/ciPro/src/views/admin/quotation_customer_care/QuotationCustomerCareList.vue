@@ -4,7 +4,7 @@
       <!-- Settings Button Row -->
       <div class="flex justify-end mb-4">
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+          class="px-4 py-2 bg-white border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px]"
           @click="showModalSettingQuotation()">
           Cài đặt
         </button>
@@ -157,7 +157,7 @@
       <!-- Search Button -->
       <div class="flex justify-end mt-4">
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+          class="btn btn-primary w-32"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -172,17 +172,17 @@
         <div v-if="userRole == 'admin' && excel_items.length > 0">
           <button
             @click="exportToExcel"
-            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+            class="btn btn-success"
           >
-            <b>Xuất Excel</b>
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
       </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" style="width:3%">STT</th>
               <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border" style="width:7%">Số BG</th>
@@ -218,22 +218,48 @@
               <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 border">{{ item.contact_person_phone }}</td>
               <td class="px-3 py-2 text-sm text-gray-900 border" :class="item.item_class">
                 {{ item.status_str }}
-                <i v-if="item.status == 0" class="fa fa-edit cursor-pointer ml-1 text-blue-600" @click="showModalUpdateQuotationStatus(item)"
-                   title="Cập nhật trạng thái BG"></i>
+                <button
+                  v-if="item.status == 0"
+                  @click="showModalUpdateQuotationStatus(item)"
+                  class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs ml-1"
+                >
+                  Sửa
+                </button>
                 <br v-if="item.status == 2">
                 <span v-if="item.status == 2">{{ item.updated_reason_falling_note_at + ': ' + item.reason_falling_note }}</span>
               </td>
               <td class="px-3 py-2 text-sm text-gray-900 border">
-                <i class="fa fa-edit cursor-pointer text-blue-600" @click="showModalUpdateNote(item, 1)" title="Cập nhật kết quả chăm sóc báo giá lần 1"></i>
-                {{ item.note_1st ? item.updated_note_1st_at + ': ' + item.note_1st : item.note_1st }}
+                <div class="flex gap-2 items-start">
+                  <button
+                    @click="showModalUpdateNote(item, 1)"
+                    class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  >
+                    Sửa
+                  </button>
+                  <span>{{ item.note_1st ? item.updated_note_1st_at + ': ' + item.note_1st : item.note_1st }}</span>
+                </div>
               </td>
               <td class="px-3 py-2 text-sm text-gray-900 border">
-                <i class="fa fa-edit cursor-pointer text-blue-600" @click="showModalUpdateNote(item, 2)" title="Cập nhật kết quả chăm sóc báo giá lần 2"></i>
-                {{ item.note_2st ? item.updated_note_2st_at + ': ' + item.note_2st : item.note_2st }}
+                <div class="flex gap-2 items-start">
+                  <button
+                    @click="showModalUpdateNote(item, 2)"
+                    class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  >
+                    Sửa
+                  </button>
+                  <span>{{ item.note_2st ? item.updated_note_2st_at + ': ' + item.note_2st : item.note_2st }}</span>
+                </div>
               </td>
               <td class="px-3 py-2 text-sm text-gray-900 border">
-                <i class="fa fa-edit cursor-pointer text-blue-600" @click="showModalUpdateProductGroupNote(item)" title="Cập nhật ghi chú nhóm SP"></i>
-                {{ item.product_group_note }}
+                <div class="flex gap-2 items-start">
+                  <button
+                    @click="showModalUpdateProductGroupNote(item)"
+                    class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  >
+                    Sửa
+                  </button>
+                  <span>{{ item.product_group_note }}</span>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -259,7 +285,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật kết quả chăm sóc báo giá lần {{ currentQuotation.note_number }}</h4>
+            <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập nhật kết quả chăm sóc báo giá lần {{ currentQuotation.note_number }}</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -288,7 +314,7 @@
             <button
               v-show="!onChangeNote"
               type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
               :disabled="onChangeNote"
               @click.prevent="confirmChangeNote">
               Xác nhận
@@ -314,7 +340,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật ghi chú nhóm sản phẩm</h4>
+            <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập nhật ghi chú nhóm sản phẩm</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -339,7 +365,7 @@
             <button
               v-show="!onChangeProductGroupNote"
               type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
               :disabled="onChangeProductGroupNote"
               @click.prevent="confirmChangeProductGroupNote">
               Xác nhận
@@ -365,7 +391,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cập nhật trạng thái báo giá rớt</h4>
+            <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập nhật trạng thái báo giá rớt</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -400,7 +426,7 @@
             <button
               v-show="!onChangeStatus"
               type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
               :disabled="onChangeStatus"
               @click.prevent="confirmChangeStatus">
               Xác nhận
@@ -426,7 +452,7 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Cài Đặt Chăm Sóc Báo Giá</h4>
+            <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cài Đặt Chăm Sóc Báo Giá</h4>
             <hr class="mb-4">
 
             <div class="mb-4">
@@ -456,7 +482,7 @@
             <button
               v-show="!onChangeSetting"
               type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
               :disabled="onChangeSetting"
               @click.prevent="confirmChangeSettingQuotation">
               Lưu

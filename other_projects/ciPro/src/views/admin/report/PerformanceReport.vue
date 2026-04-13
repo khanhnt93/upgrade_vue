@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
-      <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Báo Cáo Hiệu Quả Kinh Doanh</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo Cáo Hiệu Quả Kinh Doanh</h4>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-3">
@@ -59,7 +59,7 @@
 
       <div class="mt-4 mb-4 text-right">
         <button
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="onSearch"
           @click.prevent="search">
           Tìm Kiếm
@@ -67,14 +67,14 @@
       </div>
 
       <div :class="loadingCustomerReport ? 'bg-gray-200' : ''">
-        <h5 class="text-header font-semibold">Khách hàng</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Khách hàng</h5>
         <p>Tổng Số lượng khách hàng: {{currencyFormat(customer_report.total)}}</p>
         <p>Tổng số lượng khách hàng mới: {{currencyFormat(customer_report.total_new)}}</p>
         <p>Tổng số lượng khách hàng cũ: {{currencyFormat(customer_report.total_old)}}</p>
       </div>
 
       <div :class="loadingQuotationReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-header font-semibold">Báo cáo báo giá</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo cáo báo giá</h5>
       </div>
 
       <div :class="loadingQuotationReport ? 'bg-gray-200' : ''" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -179,13 +179,13 @@
       </div>
 
       <div :class="loadingQuotationCareReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-header font-semibold">Chăm sóc báo giá</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Chăm sóc báo giá</h5>
         <p>Tỉ lệ chăm sóc khách hàng lần 1 đúng hạn: {{quotation_care_report.percent_care_1}}%</p>
         <p>Tỉ lệ chăm sóc khách hàng lần 2 đúng hạn: {{quotation_care_report.percent_care_2}}%</p>
       </div>
 
       <div :class="loadingRevenueProfitReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-header font-semibold">Doanh Thu</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Doanh Thu</h5>
         <p>Tổng doanh thu: {{currencyFormat(revenue_profit.revenue)}}</p>
         <p>Tổng lợi nhuận: {{currencyFormat(revenue_profit.profit)}}</p>
       </div>
@@ -268,7 +268,7 @@
       </div>
 
       <div :class="loadingRevenueProfitReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-header font-semibold">Chi Phí bán hàng</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi Phí bán hàng</h5>
         <p>
           Tổng chi phí bán hàng: {{currencyFormat(expend.total)}}
           <button class="button-like-a btn-width-220" @click="goToExpendReport()">Xem chi tiết</button>

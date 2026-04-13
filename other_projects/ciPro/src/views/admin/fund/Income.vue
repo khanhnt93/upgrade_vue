@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-orange-600">{{title_prefix}} Khoản Thu</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{title_prefix}} Khoản Thu</h4>
       </div>
       <hr class="my-4">
 
@@ -63,7 +63,7 @@
               track-by="name"
               class="flex-1"
               @input="changeOrderSell" />
-            <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            <button class="btn btn-primary"
                     title="Tìm kiếm"
                     @click="showModalSearchOrderSell">
               <i class="fa fa-search"></i>
@@ -80,7 +80,7 @@
               track-by="name"
               class="flex-1"
               @input="changeOrderBuy" />
-            <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            <button class="btn btn-primary"
                     title="Tìm kiếm"
                     @click="showModalSearchOrderBuy">
               <i class="fa fa-search"></i>
@@ -230,11 +230,11 @@
       </div>
 
       <div class="flex justify-between mt-4">
-        <button class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="back">
+        <button class="btn btn-lg btn-secondary" @click="back">
           Huỷ
         </button>
         <button v-show="!saving"
-                class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                class="btn btn-lg btn-success"
                 @click="save"
                 :disabled="saving">
           Xác nhận
@@ -265,11 +265,11 @@
         </div>
 
         <div class="flex justify-between mb-4">
-          <button class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          <button class="btn btn-lg btn-secondary"
                   @click.prevent="hideModalSearchOrderSell">
             Quay lại
           </button>
-          <button class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <button class="btn btn-primary"
                   :disabled="onSearchOrderSell"
                   @click.prevent="searchOrderSell">
             Tìm Kiếm
@@ -280,25 +280,25 @@
           <table class="min-w-full border-collapse border border-gray-300">
             <thead class="bg-gray-100">
               <tr>
-                <th class="border border-gray-300 px-2 py-2">STT</th>
-                <th class="border border-gray-300 px-2 py-2">Ngày lập</th>
-                <th class="border border-gray-300 px-2 py-2">Số ĐH</th>
-                <th class="border border-gray-300 px-2 py-2">Tên K.H</th>
-                <th class="border border-gray-300 px-2 py-2">Thành tiền</th>
-                <th class="border border-gray-300 px-2 py-2">NV phụ trách</th>
-                <th class="border border-gray-300 px-2 py-2"></th>
+                <th class="border border-gray-300 px-3 py-2 text-center">STT</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Ngày lập</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số ĐH</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Tên K.H</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Thành tiền</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">NV phụ trách</th>
+                <th class="border border-gray-300 px-3 py-2 text-center"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in orderSellSearchItems" :key="item.stt" class="hover:bg-gray-50">
-                <td class="border border-gray-300 px-2 py-2 text-center">{{item.stt}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.created_at}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.order_sell_number}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.customer_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{item.total}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.staff_on_charge_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">
-                  <button class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                <td class="border border-gray-300 px-3 py-2 text-center">{{item.stt}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.created_at}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.order_sell_number}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.customer_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{item.total}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.staff_on_charge_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">
+                  <button class="btn btn-sm btn-success"
                           @click.prevent="chooseOrderSell(item.id, item.customer_id)">
                     Chọn
                   </button>
@@ -332,11 +332,11 @@
         </div>
 
         <div class="flex justify-between mb-4">
-          <button class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          <button class="btn btn-lg btn-secondary"
                   @click.prevent="hideModalSearchOrderBuy">
             Quay lại
           </button>
-          <button class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          <button class="btn btn-primary"
                   :disabled="onSearchOrderBuy"
                   @click.prevent="searchOrderBuy">
             Tìm Kiếm
@@ -347,23 +347,23 @@
           <table class="min-w-full border-collapse border border-gray-300">
             <thead class="bg-gray-100">
               <tr>
-                <th class="border border-gray-300 px-2 py-2">STT</th>
-                <th class="border border-gray-300 px-2 py-2">Ngày lập</th>
-                <th class="border border-gray-300 px-2 py-2">Số ĐH</th>
-                <th class="border border-gray-300 px-2 py-2">Tên nhà cung cấp</th>
-                <th class="border border-gray-300 px-2 py-2">Thành tiền</th>
-                <th class="border border-gray-300 px-2 py-2"></th>
+                <th class="border border-gray-300 px-3 py-2 text-center">STT</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Ngày lập</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số ĐH</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Tên nhà cung cấp</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Thành tiền</th>
+                <th class="border border-gray-300 px-3 py-2 text-center"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in orderBuySearchItems" :key="item.stt" class="hover:bg-gray-50">
-                <td class="border border-gray-300 px-2 py-2 text-center">{{item.stt}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.created_at}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.order_buy_number}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.supplier_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{item.total}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">
-                  <button class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                <td class="border border-gray-300 px-3 py-2 text-center">{{item.stt}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.created_at}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.order_buy_number}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.supplier_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{item.total}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">
+                  <button class="btn btn-sm btn-success"
                           @click.prevent="chooseOrderBuy(item.id, item.supplier_id)">
                     Chọn
                   </button>

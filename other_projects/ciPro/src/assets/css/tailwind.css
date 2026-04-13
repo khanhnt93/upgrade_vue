@@ -22,71 +22,82 @@
   h6 {
     @apply text-base font-semibold;
   }
-  h3.text-header, h4.text-header {
-    @apply text-orange-600;
-  }
+}
+
+/* text-header utility – orange accent for any element */
+.text-header {
+  color: #ea580c; /* orange-600 */
 }
 
 /* Custom Button Styles */
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded font-medium transition-colors duration-200 inline-flex items-center justify-center;
+    @apply px-4 py-2 rounded font-medium cursor-pointer transition-colors duration-200;
   }
 
   .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply bg-blue-500 text-white hover:bg-blue-600;
   }
 
   .btn-secondary {
-    @apply bg-gray-600 text-white hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    @apply bg-gray-500 text-white hover:bg-gray-600;
   }
 
   .btn-success {
-    @apply bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2;
+    @apply bg-green-500 text-white hover:bg-green-600;
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+    @apply bg-red-500 text-white hover:bg-red-600;
   }
 
   .btn-warning {
-    @apply bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2;
+    @apply bg-yellow-500 text-white hover:bg-yellow-600;
   }
 
   .btn-info {
-    @apply bg-cyan-600 text-white hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2;
+    @apply bg-cyan-500 text-white hover:bg-cyan-600;
+  }
+
+  .btn-light {
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+
+  .btn-orange {
+    @apply bg-orange-500 text-white hover:bg-orange-600;
   }
 
   .btn-outline-primary {
-    @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white;
+    @apply border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white;
   }
 
   .btn-outline-secondary {
-    @apply border-2 border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white;
+    @apply border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white;
   }
 
   .btn-outline-success {
-    @apply border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white;
+    @apply border-2 border-green-500 text-green-600 hover:bg-green-500 hover:text-white;
   }
 
   .btn-outline-danger {
-    @apply border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white;
+    @apply border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white;
   }
 
   .btn-outline-warning {
     @apply border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-500 hover:text-white;
   }
 
-  .btn-outline-info {
-    @apply border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-600 hover:text-white;
-  }
-
   .btn-sm {
-    @apply px-3 py-1.5 text-sm;
+    @apply px-3 py-1 text-sm;
   }
 
   .btn-lg {
-    @apply px-6 py-3 text-lg;
+    @apply px-6 py-2 text-base;
+  }
+
+  /* Page / section title */
+  .page-title {
+    @apply text-xl font-semibold text-center text-orange-600 mb-4;
   }
 
   /* Form Controls */
@@ -244,6 +255,27 @@ select {
   }
 
   .table tbody tr:hover {
+    @apply bg-gray-50;
+  }
+
+  /* Bordered data table (standard for this app) */
+  .data-table {
+    @apply min-w-full border-collapse border border-gray-300;
+  }
+
+  .data-table thead {
+    @apply bg-gray-100;
+  }
+
+  .data-table th {
+    @apply border border-gray-300 px-3 py-2 text-center font-semibold text-gray-700;
+  }
+
+  .data-table td {
+    @apply border border-gray-300 px-3 py-2;
+  }
+
+  .data-table tbody tr:hover {
     @apply bg-gray-50;
   }
 

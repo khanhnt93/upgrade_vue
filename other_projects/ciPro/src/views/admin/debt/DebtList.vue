@@ -5,7 +5,7 @@
       <div v-if="userRole == 'admin'" class="flex justify-end mb-4">
         <button
           @click="goToPay"
-          class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 w-64"
+          class="btn btn-success w-64"
         >
           Thêm phiếu thanh toán
         </button>
@@ -35,7 +35,7 @@
           </label>
           <button
             @click="showModalOverPayment"
-            class="px-4 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="btn btn-sm btn-primary text-sm"
           >
             Cấn trừ công nợ
           </button>
@@ -92,13 +92,13 @@
           Số kết quả: <span class="font-bold text-gray-800">{{ totalRow }}</span>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none font-bold" @click="exportExcel()">
-            <b>Xuất Excel</b>
-          </button>
+          <button class="btn btn-success" @click="exportExcel()">
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
+            </button>
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 w-32"
+            class="btn btn-primary disabled:opacity-50 w-32"
           >
             Tìm Kiếm
           </button>
@@ -112,24 +112,24 @@
         <table class="min-w-full table-auto border-collapse border border-gray-300">
           <thead class="bg-gray-100">
             <tr>
-              <th class="border border-gray-300 px-2 py-2 text-center w-12">STT</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Số ĐH bán</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Tên K.H</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Số ngày công nợ</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Tổng giá trị ĐH (gồm VAT)</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Số tiền còn nợ</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Ngày giao hàng</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Tình trạng giao hàng</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Số HĐ VAT ra</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Ngày thanh toán</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">NV phụ trách</th>
-              <th class="border border-gray-300 px-2 py-2 text-center"></th>
+              <th class="border border-gray-300 px-3 py-2 text-center w-12">STT</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số ĐH bán</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tên K.H</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số ngày công nợ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tổng giá trị ĐH (gồm VAT)</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số tiền còn nợ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày giao hàng</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tình trạng giao hàng</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số HĐ VAT ra</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày thanh toán</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">NV phụ trách</th>
+              <th class="border border-gray-300 px-3 py-2 text-center"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in items" :key="item.id" class="hover:bg-gray-50">
-              <td class="border border-gray-300 px-2 py-2 text-center">{{ index + 1 }}</td>
-              <td class="border border-gray-300 px-2 py-2">
+              <td class="border border-gray-300 px-3 py-2 text-center">{{ index + 1 }}</td>
+              <td class="border border-gray-300 px-3 py-2">
                 <a
                   :href="order_sell_detail_link + item.id"
                   target="_blank"
@@ -142,26 +142,26 @@
                   v-if="userRole == 'admin'"
                   @click="goToPayByCustomerId(item.customer_id)"
                   title="Tạo phiếu thu"
-                  class="ml-2 px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                  class="btn btn-sm btn-success ml-2 text-xs"
                 >
                   Thanh toán
                 </button>
               </td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.customer_name }}</td>
-              <td class="border border-gray-300 px-2 py-2 text-center">{{ item.debt_date_number }}</td>
-              <td class="border border-gray-300 px-2 py-2 text-right">{{ currencyFormat(item.total) }}</td>
-              <td class="border border-gray-300 px-2 py-2 text-right">{{ currencyFormat(item.total_remaining) }}</td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.shipping_date }}</td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.shipping_status_str }}</td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.invoice_note }}</td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.payment_date }}</td>
-              <td class="border border-gray-300 px-2 py-2">{{ item.staff_in_charge_name }}</td>
-              <td class="border border-gray-300 px-2 py-2 text-center">
+              <td class="border border-gray-300 px-3 py-2">{{ item.customer_name }}</td>
+              <td class="border border-gray-300 px-3 py-2 text-center">{{ item.debt_date_number }}</td>
+              <td class="border border-gray-300 px-3 py-2 text-right">{{ currencyFormat(item.total) }}</td>
+              <td class="border border-gray-300 px-3 py-2 text-right">{{ currencyFormat(item.total_remaining) }}</td>
+              <td class="border border-gray-300 px-3 py-2">{{ item.shipping_date }}</td>
+              <td class="border border-gray-300 px-3 py-2">{{ item.shipping_status_str }}</td>
+              <td class="border border-gray-300 px-3 py-2">{{ item.invoice_note }}</td>
+              <td class="border border-gray-300 px-3 py-2">{{ item.payment_date }}</td>
+              <td class="border border-gray-300 px-3 py-2">{{ item.staff_in_charge_name }}</td>
+              <td class="border border-gray-300 px-3 py-2 text-center">
                 <button
                   v-if="userRole == 'admin'"
                   @click="goToExpend(item.id)"
                   title="Xoá nợ"
-                  class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                  class="btn btn-sm btn-danger text-xs"
                 >
                   Xoá nợ
                 </button>
@@ -190,7 +190,7 @@
       @click.self="hideModalOverPayment"
     >
       <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-6xl max-h-screen overflow-y-auto">
-        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cấn Trừ Công Nợ</h4>
         <hr class="mb-4" />
 
         <div class="mb-4">
@@ -203,21 +203,21 @@
             <thead class="bg-gray-100">
               <tr>
                 <th class="border border-gray-300 px-2 py-2 text-center w-16">STT</th>
-                <th class="border border-gray-300 px-2 py-2 text-center">Số ĐH bán</th>
-                <th class="border border-gray-300 px-2 py-2 text-center">Số ngày công nợ</th>
-                <th class="border border-gray-300 px-2 py-2 text-center">Tổng giá trị ĐH (gồm VAT)</th>
-                <th class="border border-gray-300 px-2 py-2 text-center">Số tiền còn nợ</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số ĐH bán</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số ngày công nợ</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Tổng giá trị ĐH (gồm VAT)</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số tiền còn nợ</th>
                 <th class="border border-gray-300 px-2 py-2 text-center w-16"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(item, index) in items" :key="item.id" class="hover:bg-gray-50">
-                <td class="border border-gray-300 px-2 py-2 text-center">{{ index + 1 }}</td>
-                <td class="border border-gray-300 px-2 py-2">{{ item.order_sell_number }}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">{{ item.debt_date_number }}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{ currencyFormat(item.total) }}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{ currencyFormat(item.total_remaining) }}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">
+                <td class="border border-gray-300 px-3 py-2 text-center">{{ index + 1 }}</td>
+                <td class="border border-gray-300 px-3 py-2">{{ item.order_sell_number }}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">{{ item.debt_date_number }}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{ currencyFormat(item.total) }}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{ currencyFormat(item.total_remaining) }}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">
                   <input type="checkbox" v-model="payForDebts" :value="item.id" class="w-4 h-4" />
                 </td>
               </tr>
@@ -228,7 +228,7 @@
         <div class="flex justify-center gap-4 mt-6">
           <button
             @click="hideModalOverPayment"
-            class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 w-32"
+            class="btn btn-danger w-32"
           >
             Đóng
           </button>
@@ -237,7 +237,7 @@
             @click="payOverPayment()"
             :disabled="payForDebts.length == 0"
             title="Cấn trừ công nợ"
-            class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 w-32"
+            class="btn btn-success disabled:opacity-50 w-32"
           >
             Cấn trừ
           </button>

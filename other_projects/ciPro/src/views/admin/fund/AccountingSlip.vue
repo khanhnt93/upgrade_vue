@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-orange-600">Thêm Mới Phiếu Kế Toán</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Thêm Mới Phiếu Kế Toán</h4>
       </div>
       <hr class="my-4">
 
@@ -155,11 +155,11 @@
       </div>
 
       <div class="flex justify-between mt-4">
-        <button class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="back">
+        <button class="btn btn-lg btn-secondary" @click="back">
           Huỷ
         </button>
         <button v-show="!saving"
-                class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                class="btn btn-lg btn-success"
                 @click="save"
                 :disabled="saving">
           Xác nhận

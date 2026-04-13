@@ -5,7 +5,7 @@
         <div class="w-full md:w-1/2 px-2">
           <button
             @click="back"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-32">
+            class="btn btn-secondary w-32">
             Quay lại
           </button>
         </div>
@@ -13,14 +13,14 @@
           <button
             @click="save"
             :disabled="saving"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+            class="btn btn-success w-32 disabled:opacity-50 disabled:cursor-not-allowed">
             Lưu
           </button>
         </div>
       </div>
 
       <div class="mb-4">
-        <h4 class="text-center text-2xl font-semibold">Nguyên liệu - Mặt hàng</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Nguyên liệu - Mặt hàng</h4>
       </div>
       <hr class="mb-6">
 
@@ -122,7 +122,7 @@ import commonFunc from '@/common/commonFunc'
 
 const router = useRouter()
 const route = useRoute()
-const { showToast } = useToast()
+const { popToast } = useToast()
 
 const resource = ref({
   name: null,
@@ -168,7 +168,7 @@ const getUnitOptions = () => {
     }
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 
@@ -187,7 +187,7 @@ const getUnitDetail = () => {
       loading.value = false
 
       let errorMess = commonFunc.handleStaffError(err)
-      showToast('danger', errorMess)
+      popToast('danger', errorMess)
     })
   }
 }
@@ -211,14 +211,14 @@ const save = () => {
         saving.value = false
         if (res != null && res.data != null) {
           if (res.data.status == 200) {
-            showToast('success', 'Cập nhật nguyên liệu thành công!!! ')
+            popToast('success', 'Cập nhật nguyên liệu thành công!!! ')
           }
         }
       }).catch(err => {
         saving.value = false
 
         let errorMess = commonFunc.handleStaffError(err)
-        showToast('danger', errorMess)
+        popToast('danger', errorMess)
       })
     } else {
       // Add
@@ -232,7 +232,7 @@ const save = () => {
       }).catch(err => {
         saving.value = false
         let errorMess = commonFunc.handleStaffError(err)
-        showToast('danger', errorMess)
+        popToast('danger', errorMess)
       })
     }
   } else {

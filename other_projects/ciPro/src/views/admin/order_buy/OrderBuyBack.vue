@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-orange-600">Phiếu Trả Hàng Nhập</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Phiếu Trả Hàng Nhập</h4>
       </div>
       <hr class="my-4"/>
 
@@ -20,7 +20,7 @@
 
       <div class="mb-4" v-show="order_buy_back.products.length > 0">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <colgroup>
               <col style="width:5%">
               <col style="width:12%">
@@ -31,7 +31,7 @@
               <col style="width:13%">
               <col style="width:13%">
             </colgroup>
-            <thead class="bg-gray-50">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">STT</th>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Mã SP</th>
@@ -63,7 +63,12 @@
                 <td class="px-3 py-2 text-right">{{currencyFormat(item.price_buy)}}</td>
                 <td class="px-3 py-2 text-right">{{currencyFormat(item.amount_buy)}}</td>
                 <td class="px-3 py-2">
-                  <i class="fa fa-trash ml-2 cursor-pointer text-red-600 hover:text-red-800" @click="deleteProduct(index)" />
+                  <button
+                    @click="deleteProduct(index)"
+                    class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -88,7 +93,7 @@
           v-show="!saving"
           @click="save"
           :disabled="saving"
-          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-lg btn-success disabled:opacity-50 disabled:cursor-not-allowed"
           style="height: 50px; width: 240px">
           <i class="fa fa-pencil-square-o mr-2" />
           Xác Nhận

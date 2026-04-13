@@ -3,19 +3,19 @@
     <div class="bg-white rounded-lg shadow p-6">
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 btn-width-120" @click="back">
+          <button class="btn btn-secondary btn-width-120" @click="back">
             Quay lại
           </button>
         </div>
         <div class="text-right">
-          <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="save" :disabled="saving">
+          <button class="btn btn-success btn-width-120" @click="save" :disabled="saving">
             Lưu
           </button>
         </div>
       </div>
 
       <div class="mb-4">
-        <h3 class="mt-1 text-center text-header font-bold">{{prefix_text}}Nhân Viên</h3>
+        <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}}Nhân Viên</h3>
       </div>
       <hr class="my-4"/>
       

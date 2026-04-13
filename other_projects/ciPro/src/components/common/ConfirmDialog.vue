@@ -45,6 +45,13 @@
 
 <script setup>
 import { useConfirm } from '@/composables/useConfirm'
+import { useToastNotification } from '@/composables/useToast'
 
-const { visible, message, onConfirm, onCancel } = useConfirm()
+const { visible, message, onConfirm: _onConfirm, onCancel } = useConfirm()
+const { popToast } = useToastNotification()
+
+const onConfirm = () => {
+  _onConfirm()
+  popToast('success', 'Thao tác thành công')
+}
 </script>

@@ -17,7 +17,7 @@
 
             <div class="grid grid-cols-1 gap-4 form-row">
               <div class="w-full" md="12">
-                <h3 class="mt-1 text-center text-header">
+                <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   {{ prefix_title }} Báo Giá
                 </h3>
               </div>
@@ -31,7 +31,7 @@
 
             <div class="grid grid-cols-1 gap-4">
               <div
-                class="w-full md:col-span-12 bg-gray-500 text-white title-partner"
+                class="btn btn-secondary w-full md:col-span-12 title-partner"
               >
                 <h5>
                   <span class="float-left">Thông tin người mua</span>
@@ -751,7 +751,7 @@
                   </div>
                   <div class="w-full md:col-span-3 text-right">
                     <button
-                      class="btn btn-default text-header"
+                      class="btn btn-success"
                       @click="
                         exportToExcel(
                           products_excel,
@@ -760,7 +760,7 @@
                         )
                       "
                     >
-                      <b>Xuất Excel</b>
+                      <i class="fa fa-file-excel-o"></i> Xuất Excel
                     </button>
                   </div>
                 </div>
@@ -1009,17 +1009,11 @@
                               />
                             </td>
                             <td class="fitwidth-50">
-                              <i
-                                class="fa fa-trash ml-2"
-                                @click="
-                                  deleteProduct(
-                                    index,
-                                    item.product_id,
-                                    item.quantity,
-                                    item.properties,
-                                  )
-                                "
-                              />
+                              <button
+                                @click="deleteProduct(index, item.product_id, item.quantity, item.properties)"
+                                class="btn btn-sm btn-danger">
+                                Xoá
+                              </button>
                             </td>
                           </tr>
                         </tbody>
@@ -1361,24 +1355,19 @@
                               />
                             </td>
                             <td class="fitwidth-50">
-                              <i
-                                v-show="item.product_type == 0"
-                                class="fa fa-edit mr-2"
-                                @click="editProject(item.product_name)"
-                              />
-                              <i
-                                class="fa fa-trash"
-                                @click="
-                                  deleteProductOfProject(
-                                    item.index,
-                                    item.product_type,
-                                    item.product_name,
-                                    item.product_id,
-                                    item.quantity,
-                                    item.properties,
-                                  )
-                                "
-                              />
+                              <div class="flex gap-2 items-center whitespace-nowrap">
+                                <button
+                                  v-show="item.product_type == 0"
+                                  @click="editProject(item.product_name)"
+                                  class="btn btn-sm btn-primary">
+                                  Sửa
+                                </button>
+                                <button
+                                  @click="deleteProductOfProject(item.index, item.product_type, item.product_name, item.product_id, item.quantity, item.properties)"
+                                  class="btn btn-sm btn-danger">
+                                  Xoá
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -1825,10 +1814,10 @@
           <div class="w-full" cols="12">
             <button
               v-show="!exportingExcel"
-              class="btn-outline-primary float-left btn-width-120 btn-sm"
+              class="btn btn-success float-left btn-width-120 btn-sm"
               @click="exportExcel('excel')"
             >
-              Xuất Excel
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
             </button>
 
             <button
@@ -2611,7 +2600,7 @@
             </button>
 
             <button
-              class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 float-right btn-width-120"
+              class="btn btn-primary"
               :disabled="onSearchProduct"
               @click.prevent="searchProduct"
               v-show="!onSearchProduct"
@@ -2627,9 +2616,9 @@
         <div class="grid grid-cols-1 gap-4 mt-2">
           <div class="w-full">
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th
                     v-for="field in productSearchFields"
@@ -2727,7 +2716,7 @@
             </button>
 
             <button
-              class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 float-right btn-width-120"
+              class="btn btn-primary"
               :disabled="onSearchCustomer"
               @click.prevent="searchCustomer"
             >
@@ -2739,9 +2728,9 @@
         <div class="grid grid-cols-1 gap-4 mt-2">
           <div class="w-full">
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th
                     v-for="field in customerSearchFields"
@@ -3204,9 +3193,9 @@
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full">
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th
                     v-for="field in fieldsPaymentMethod"
@@ -3231,22 +3220,16 @@
                     {{ item.debt_date_number }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex space-x-2">
+                    <div class="flex gap-2 items-center whitespace-nowrap">
                       <button
-                        title="Cập nhật"
                         @click="editPaymentMethod(index)"
-                        class="text-blue-600 hover:text-blue-800"
-                      >
-                        <i class="fa fa-edit" />
+                        class="btn btn-primary">
+                        Sửa
                       </button>
                       <button
-                        title="Xóa"
-                        @click="
-                          deletedPaymentMethod(item.id, item.payment_method)
-                        "
-                        class="text-red-600 hover:text-red-800"
-                      >
-                        <i class="fa fa-trash" />
+                        @click="deletedPaymentMethod(item.id, item.payment_method)"
+                        class="btn btn-danger">
+                        Xoá
                       </button>
                     </div>
                   </td>
@@ -3348,9 +3331,9 @@
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full">
             <table
-              class="min-w-full divide-y divide-gray-200 border border-gray-300"
+              class="min-w-full border-collapse border border-gray-300"
             >
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th
                     v-for="field in fieldsShippingAgreement"
@@ -3372,25 +3355,16 @@
                     {{ item.shipping_agreement }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex space-x-2">
+                    <div class="flex gap-2 items-center whitespace-nowrap">
                       <button
-                        title="Cập nhật"
                         @click="editShippingAgreement(index)"
-                        class="text-blue-600 hover:text-blue-800"
-                      >
-                        <i class="fa fa-edit" />
+                        class="btn btn-primary">
+                        Sửa
                       </button>
                       <button
-                        title="Xóa"
-                        @click="
-                          deletedShippingAgreement(
-                            item.id,
-                            item.shipping_agreement,
-                          )
-                        "
-                        class="text-red-600 hover:text-red-800"
-                      >
-                        <i class="fa fa-trash" />
+                        @click="deletedShippingAgreement(item.id, item.shipping_agreement)"
+                        class="btn btn-danger">
+                        Xoá
                       </button>
                     </div>
                   </td>

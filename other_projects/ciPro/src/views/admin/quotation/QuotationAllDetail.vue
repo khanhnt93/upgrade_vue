@@ -5,12 +5,12 @@
         <!-- Action Buttons -->
         <div class="flex justify-between mb-4">
           <button
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-32"
+            class="btn btn-secondary w-32"
             @click="back">
             Quay lại
           </button>
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+            class="btn btn-primary w-32"
             @click="openModalChooseFilePrint">
             In báo giá
           </button>
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Customer Information Section -->
-        <div class="bg-gray-600 text-white px-4 py-2 rounded-t mb-2">
+        <div class="btn btn-secondary mb-2">
           <h5 class="text-lg font-semibold">Thông tin khách hàng</h5>
         </div>
 
@@ -85,16 +85,16 @@
         </div>
 
         <!-- Products Section -->
-        <div class="bg-blue-500 text-white px-4 py-2 rounded-t mt-6 mb-2">
+        <div class="btn btn-primary mt-6 mb-2">
           <h5 class="text-lg font-semibold">Danh sách sản phẩm</h5>
         </div>
 
         <div class="flex justify-end mb-2">
           <button
             @click="exportToExcel"
-            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+            class="btn btn-success"
           >
-            <b>Xuất Excel</b>
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
 
@@ -109,7 +109,7 @@
 
         <!-- Products Table -->
         <div v-show="trade.products.length > 0" class="overflow-x-auto mb-4">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <colgroup>
               <col style="width:2%">
               <col style="width:12%">
@@ -127,7 +127,7 @@
               <col style="width:7%">
               <col style="width:4%">
             </colgroup>
-            <thead class="bg-gray-50">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase border">STT</th>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase border">Mã SP</th>
@@ -223,7 +223,7 @@
         </div>
 
         <!-- Payment Information Section -->
-        <div class="bg-green-500 text-white px-4 py-2 rounded-t mt-6 mb-2">
+        <div class="btn btn-success mt-6 mb-2">
           <h5 class="text-lg font-semibold">Thông tin thanh toán</h5>
         </div>
 
@@ -613,20 +613,20 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h4 class="text-center text-xl font-bold text-orange-600 mb-4">Chọn File In Báo Giá</h4>
+            <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chọn File In Báo Giá</h4>
             <hr class="mb-4">
 
             <div class="flex justify-between">
               <button
                 v-show="!exportingExcel"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-32"
+                class="btn btn-primary w-32"
                 @click="exportExcel('excel')">
-                Xuất Excel
+                <i class="fa fa-file-excel-o"></i> Xuất Excel
               </button>
 
               <button
                 v-show="!exportingExcel"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-32"
+                class="btn btn-success w-32"
                 @click="exportExcel('pdf')">
                 Xuất PDF
               </button>

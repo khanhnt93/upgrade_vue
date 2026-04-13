@@ -12,14 +12,14 @@
                 v-if="onEdit"
                 type="button"
                 @click="save"
-                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right">
+                class="btn btn-lg btn-primary float-right">
                 Save
               </button>
               <button
                 v-else
                 type="button"
                 @click="edit"
-                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right">
+                class="btn btn-lg btn-primary float-right">
                 Edit
               </button>
             </div>

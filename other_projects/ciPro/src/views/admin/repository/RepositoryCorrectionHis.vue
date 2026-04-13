@@ -17,7 +17,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-header text-center mb-4">Lịch Sử Hiệu Chỉnh Kho</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Hiệu Chỉnh Kho</h4>
         <hr class="mb-6">
 
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
@@ -158,7 +158,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50"
+            class="btn btn-primary"
           >
             Tìm Kiếm
           </button>
@@ -170,15 +170,15 @@
           </div>
           <button
             @click="exportToExcel"
-            class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-colors cursor-pointer inline-block"
+            class="btn btn-success"
           >
-            <b>Xuất Excel</b>
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="min-w-full border border-gray-300">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b" style="width:3%">STT</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase border-b" style="width:8%">Ngày</th>
@@ -219,8 +219,7 @@
                 <td class="px-4 py-2 text-sm text-gray-900 text-right border">{{currencyFormat(item.amount)}}</td>
                 <td class="px-4 py-2 text-sm text-gray-900 border">{{item.created_by_name}}</td>
                 <td class="px-4 py-2 text-sm text-gray-900 border">
-                  <i v-if="isUserRoot" class="fa fa-trash text-red-600 cursor-pointer hover:text-red-900" title="Xoá"
-                     @click="deleted(item.id, item.repository_number)"/>
+                  <button v-if="isUserRoot" @click="deleted(item.id, item.repository_number)" class="btn btn-danger">Xoá</button>
                 </td>
               </tr>
             </tbody>

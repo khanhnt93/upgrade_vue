@@ -68,7 +68,7 @@
         </div>
 
         <div v-show="productOfOrderSell.length > 0" class="mt-4 overflow-x-auto">
-          <table class="min-w-full border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <colgroup>
               <col style="width:3%">
               <col style="width:3%">
@@ -86,7 +86,7 @@
             <thead class="bg-gray-100">
               <tr>
                 <th class="border border-gray-300 px-2 py-2 text-center font-bold">STT</th>
-                <th class="border border-gray-300 px-2 py-2 text-center">
+                <th class="border border-gray-300 px-3 py-2 text-center">
                   <input type="checkbox" v-model="checkAll" class="mr-2" @change="changeCheckAll()" checked>
                 </th>
                 <th class="border border-gray-300 px-2 py-2 text-center font-bold">Mã hàng</th>
@@ -103,15 +103,15 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in productOfOrderSell" :key="index" class="hover:bg-gray-50">
-                <td class="border border-gray-300 px-2 py-2 text-center">{{index + 1}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">
+                <td class="border border-gray-300 px-3 py-2 text-center">{{index + 1}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">
                   <input type="checkbox" :id="'is_get_' + index" class="mr-2" checked>
                 </td>
-                <td class="border border-gray-300 px-2 py-2">{{item.product_code}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.product_name}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.brand_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{item.unit_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">
+                <td class="border border-gray-300 px-3 py-2">{{item.product_code}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.product_name}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.brand_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{item.unit_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">
                   <input
                     :id="'quantity_' + index"
                     type="text"
@@ -122,7 +122,7 @@
                     @keyup="integerPointAndCommaOnly($event.target)"
                     @change="changeQuantity(index)">
                 </td>
-                <td class="border border-gray-300 px-2 py-2 text-right">
+                <td class="border border-gray-300 px-3 py-2 text-right">
                   <input
                     :id="'price_' + index"
                     type="text"
@@ -132,7 +132,7 @@
                     :value="item.price_buy"
                     @change="changePrice(index)">
                 </td>
-                <td class="border border-gray-300 px-2 py-2 text-right">
+                <td class="border border-gray-300 px-3 py-2 text-right">
                   <input
                     :id="'amount_' + index"
                     type="text"
@@ -142,7 +142,7 @@
                     :value="item.amount"
                     readonly>
                 </td>
-                <td class="border border-gray-300 px-2 py-2">
+                <td class="border border-gray-300 px-3 py-2">
                   <multiselect
                     v-model="supplierSelect[index]"
                     :options="supplierOptions"
@@ -154,8 +154,8 @@
                     track-by="name">
                   </multiselect>
                 </td>
-                <td class="border border-gray-300 px-2 py-2 text-center">{{item.quantity_repo}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-center">{{item.quantity_keep}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">{{item.quantity_repo}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">{{item.quantity_keep}}</td>
               </tr>
             </tbody>
           </table>
@@ -182,14 +182,14 @@
         </div>
 
         <div v-show="orderSells.length > 0" class="mt-4 overflow-x-auto">
-          <table class="min-w-full border border-gray-300">
+          <table class="min-w-full border-collapse border border-gray-300">
             <thead class="bg-gray-100">
               <tr>
                 <th class="border border-gray-300 px-4 py-2 text-center font-bold">STT</th>
                 <th class="border border-gray-300 px-4 py-2 text-center font-bold">Ngày Lập</th>
                 <th class="border border-gray-300 px-4 py-2 text-center font-bold">Số đơn hàng</th>
                 <th class="border border-gray-300 px-4 py-2 text-center font-bold">Khách hàng</th>
-                <th class="border border-gray-300 px-4 py-2"></th>
+                <th class="border border-gray-300 px-3 py-2 text-center"></th>
               </tr>
             </thead>
             <tbody>
@@ -197,11 +197,22 @@
                 <td class="border border-gray-300 px-4 py-2 text-center">{{index + 1}}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{item.created_at}}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">{{item.order_sell_number}}</td>
-                <td class="border border-gray-300 px-4 py-2">{{item.customer_name}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.customer_name}}</td>
                 <td class="border border-gray-300 px-4 py-2 text-center">
-                  <i class="fa fa-edit cursor-pointer text-blue-500 hover:text-blue-700" @click="editOrderSell(index)" title="Sửa" />
-                  <i class="fa fa-trash ml-2 cursor-pointer text-red-500 hover:text-red-700" title="Xoá"
-                     @click="deleteOrderSell(index)" />
+                  <div class="flex gap-2 items-center justify-center whitespace-nowrap">
+                    <button
+                      @click="editOrderSell(index)"
+                      class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs"
+                    >
+                      Sửa
+                    </button>
+                    <button
+                      @click="deleteOrderSell(index)"
+                      class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                    >
+                      Xoá
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -221,7 +232,7 @@
 
           <!-- Products table -->
           <div class="overflow-x-auto mb-4">
-            <table class="min-w-full border border-gray-300">
+            <table class="min-w-full border-collapse border border-gray-300">
               <colgroup>
                 <col style="width:4%">
                 <col style="width:17%">
@@ -245,23 +256,27 @@
                   <th class="border border-gray-300 px-2 py-2 text-center font-bold">Giá nhập</th>
                   <th class="border border-gray-300 px-2 py-2 text-center font-bold">Thành tiền</th>
                   <th class="border border-gray-300 px-2 py-2 text-center font-bold">Ghi Chú</th>
-                  <th class="border border-gray-300 px-2 py-2"></th>
+                  <th class="border border-gray-300 px-3 py-2 text-center"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(product, indexPro) in orderBuy.products" :key="indexPro" class="hover:bg-gray-50">
-                  <td class="border border-gray-300 px-2 py-2 text-center">{{indexPro + 1}}</td>
-                  <td class="border border-gray-300 px-2 py-2">{{product.product_code}}</td>
-                  <td class="border border-gray-300 px-2 py-2">{{product.product_name}}</td>
-                  <td class="border border-gray-300 px-2 py-2">{{product.product_brand}}</td>
-                  <td class="border border-gray-300 px-2 py-2">{{product.unit}}</td>
-                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.quantity)}}</td>
-                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.price_buy)}}</td>
-                  <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(product.amount)}}</td>
-                  <td class="border border-gray-300 px-2 py-2">{{product.note}}</td>
-                  <td class="border border-gray-300 px-2 py-2 text-center">
-                    <i class="fa fa-trash cursor-pointer text-red-500 hover:text-red-700" title="Xoá"
-                       @click="deleteProduct(index, indexPro)" />
+                  <td class="border border-gray-300 px-3 py-2 text-center">{{indexPro + 1}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{product.product_code}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{product.product_name}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{product.product_brand}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{product.unit}}</td>
+                  <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(product.quantity)}}</td>
+                  <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(product.price_buy)}}</td>
+                  <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(product.amount)}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{product.note}}</td>
+                  <td class="border border-gray-300 px-3 py-2 text-center">
+                    <button
+                      @click="deleteProduct(index, indexPro)"
+                      class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                    >
+                      Xoá
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -389,7 +404,7 @@
             v-show="!saving && orderSells.length > 0"
             @click="save"
             :disabled="saving"
-            class="px-8 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="btn btn-lg btn-success disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             style="height: 50px; width: 240px">
             <i class="fa fa-pencil-square-o"></i>
             <span>Xác Nhận Tất Cả</span>
@@ -446,14 +461,14 @@
             <button
               @click="searchOrderSell"
               :disabled="onSearchOrderSell"
-              class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+              class="btn btn-primary w-32 disabled:opacity-50 disabled:cursor-not-allowed">
               Tìm Kiếm
             </button>
           </div>
 
           <!-- Search results table -->
           <div class="overflow-x-auto mb-4">
-            <table class="min-w-full border border-gray-300">
+            <table class="min-w-full border-collapse border border-gray-300">
               <thead class="bg-gray-100">
                 <tr>
                   <th class="border border-gray-300 px-4 py-2 text-center font-bold">STT</th>
@@ -470,9 +485,9 @@
                   <td class="border border-gray-300 px-4 py-2 text-center">{{index + 1}}</td>
                   <td class="border border-gray-300 px-4 py-2 text-center">{{item.created_at}}</td>
                   <td class="border border-gray-300 px-4 py-2 text-center">{{item.order_sell_number}}</td>
-                  <td class="border border-gray-300 px-4 py-2">{{item.customer_name}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{item.customer_name}}</td>
                   <td class="border border-gray-300 px-4 py-2 text-right">{{item.amount}}</td>
-                  <td class="border border-gray-300 px-4 py-2">{{item.staff_in_change}}</td>
+                  <td class="border border-gray-300 px-3 py-2">{{item.staff_in_change}}</td>
                   <td class="border border-gray-300 px-4 py-2 text-center">
                     <button
                       @click="chooseOrderSell(item.id)"

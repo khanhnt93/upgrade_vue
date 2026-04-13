@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
-      <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Báo Cáo Khách Hàng</h4>
+      <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo Cáo Khách Hàng</h4>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-2">
@@ -123,7 +123,7 @@
 
       <div class="mt-4 mb-4 text-right">
         <button
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="loading"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -142,9 +142,9 @@
         <div v-if="excel_items.length > 0">
           <button
             @click="exportToExcel"
-            class="btn btn-default text-header bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+            class="btn btn-success"
           >
-            <b>Xuất Excel</b>
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
       </div>
@@ -179,7 +179,7 @@
               <td>
                 <button
                   v-show="item.count_order_sell > 0"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mr-2 mt-1"
+                  class="btn btn-sm btn-primary text-sm mr-2 mt-1"
                   @click="openModalOrderSellHis(item)">
                   Xem
                 </button>
@@ -187,14 +187,14 @@
               <td>
                 <button
                   v-show="item.count_quotation > 0"
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mr-2 mt-1"
+                  class="btn btn-sm btn-primary text-sm mr-2 mt-1"
                   @click="openModalQuotationHis(item)">
                   Xem
                 </button>
               </td>
               <td>
                 <button
-                  class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm mr-2 mt-1"
+                  class="btn btn-sm btn-primary text-sm mr-2 mt-1"
                   @click="openModalDebtHis(item)">
                   Xem
                 </button>
@@ -214,7 +214,7 @@
     <div v-if="showModalOrderSell" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalOrderSellHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Lịch Sử Mua Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Mua Hàng</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>
@@ -261,12 +261,12 @@
 
           <div class="flex justify-between mb-4">
             <button
-              class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded"
+              class="btn btn-secondary"
               @click.prevent="hideModalOrderSellHis">
               Quay lại
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              class="btn btn-primary disabled:opacity-50"
               :disabled="onSearch"
               @click.prevent="searchOrderSell">
               Tìm Kiếm
@@ -313,7 +313,7 @@
     <div v-if="showModalQuotation" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalQuotationHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Lịch Sử Báo Giá</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Báo Giá</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>
@@ -360,12 +360,12 @@
 
           <div class="flex justify-between mb-4">
             <button
-              class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded"
+              class="btn btn-secondary"
               @click.prevent="hideModalQuotationHis">
               Quay lại
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              class="btn btn-primary disabled:opacity-50"
               :disabled="onSearch"
               @click.prevent="searchQuotation">
               Tìm Kiếm
@@ -410,7 +410,7 @@
     <div v-if="showModalDebt" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalDebtHis">
       <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Chi Tiết Công Nợ</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi Tiết Công Nợ</h4>
           <hr class="mb-4">
 
           <p class="mb-4">Khách hàng: {{currentCustomer.name}}</p>
@@ -457,12 +457,12 @@
 
           <div class="flex justify-between mb-4">
             <button
-              class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded"
+              class="btn btn-secondary"
               @click.prevent="hideModalDebtHis">
               Quay lại
             </button>
             <button
-              class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+              class="btn btn-primary disabled:opacity-50"
               :disabled="onSearch"
               @click.prevent="searchDebt">
               Tìm Kiếm

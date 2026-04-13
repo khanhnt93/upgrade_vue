@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-orange-600">Nhóm - Loại Thu Chi</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Nhóm - Loại Thu Chi</h4>
       </div>
       <hr class="my-4">
 
@@ -83,7 +83,7 @@
 
       <div class="text-center mb-4">
         <button v-show="!saving"
-                class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                class="btn btn-lg btn-primary"
                 :disabled="saving"
                 @click.prevent="addUpdateFundSetting">
           {{btn_text}}
@@ -101,34 +101,32 @@
         <table class="min-w-full border-collapse border border-gray-300">
           <thead class="bg-gray-100">
             <tr>
-              <th class="border border-gray-300 px-2 py-2">STT</th>
-              <th class="border border-gray-300 px-2 py-2">Loại</th>
-              <th class="border border-gray-300 px-2 py-2">Nhóm</th>
-              <th class="border border-gray-300 px-2 py-2">Tên</th>
-              <th class="border border-gray-300 px-2 py-2">Mô tả</th>
-              <th class="border border-gray-300 px-2 py-2">Thứ tự hiển thị</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">STT</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Loại</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Nhóm</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tên</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Mô tả</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Thứ tự hiển thị</th>
               <th class="border border-gray-300 px-2 py-2 w-32"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
-              <td class="border border-gray-300 px-2 py-2 text-center">{{item.stt}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.type_str}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.group_name}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.name}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.description}}</td>
-              <td class="border border-gray-300 px-2 py-2 text-center">{{item.index_sort}}</td>
-              <td class="border border-gray-300 px-2 py-2">
+              <td class="border border-gray-300 px-3 py-2 text-center">{{item.stt}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.type_str}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.group_name}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.description}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-center">{{item.index_sort}}</td>
+              <td class="border border-gray-300 px-3 py-2">
                 <div v-if="item.is_type_can_edit" class="flex gap-2 justify-center">
                   <button @click="edit(index)"
-                          class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                          title="Cập nhật">
-                    <i class="fa fa-edit" />
+                          class="btn btn-sm btn-primary">
+                    Sửa
                   </button>
                   <button @click="deleted(item.id, item.name)"
-                          class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                          title="Xóa">
-                    <i class="fa fa-trash" />
+                          class="btn btn-sm btn-danger">
+                    Xoá
                   </button>
                 </div>
               </td>

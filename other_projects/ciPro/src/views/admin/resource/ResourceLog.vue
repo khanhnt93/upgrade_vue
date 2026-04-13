@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-center text-2xl font-semibold">Lịch sử kho hàng</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch sử kho hàng</h4>
       </div>
       <hr class="mb-6">
 
@@ -66,7 +66,7 @@
         <button
           @click.prevent="prepareToSearch"
           :disabled="onSearch"
-          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+          class="btn btn-primary w-32 disabled:opacity-50 disabled:cursor-not-allowed">
           Tìm Kiếm
         </button>
       </div>
@@ -77,8 +77,8 @@
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">
                 STT
@@ -134,7 +134,7 @@ import adminAPI from '@/api/admin'
 import { Constant } from '@/common/constant'
 import commonFunc from '@/common/commonFunc'
 
-const { showToast } = useToast()
+const { popToast } = useToast()
 
 const resourceOptions = ref([{ value: null, text: '' }])
 const typeOptions = ref([
@@ -206,14 +206,14 @@ const checkFromDateAndToDate = () => {
   let toDate = new Date(commonFunc.convertDDMMYYYYToYYYYMMDD(inputs.value.toDate))
 
   if (fromDate > toDate) {
-    showToast('danger', "Từ ngày không thể lớn hớn đến ngày")
+    popToast('danger', "Từ ngày không thể lớn hớn đến ngày")
     return false
   }
 
   fromDate.setFullYear(fromDate.getFullYear() + 1)
 
   if (fromDate < toDate) {
-    showToast('danger', "Thời gian không quá 1 năm")
+    popToast('danger', "Thời gian không quá 1 năm")
     return false
   }
 
@@ -267,7 +267,7 @@ const search = () => {
     loading.value = false
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
 
     onSearch.value = false
     loading.value = false
@@ -284,7 +284,7 @@ const getResourceOptions = () => {
     }
   }).catch(err => {
     let errorMess = commonFunc.handleStaffError(err)
-    showToast('danger', errorMess)
+    popToast('danger', errorMess)
   })
 }
 

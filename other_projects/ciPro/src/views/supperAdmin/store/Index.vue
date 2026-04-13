@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <!-- Header -->
-        <h4 class="text-2xl font-semibold text-center mb-4">Store</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Store</h4>
         <hr class="my-4 border-gray-200">
 
         <!-- Form Fields -->
@@ -160,7 +160,7 @@
           <div>
             <button
               @click="back"
-              class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              class="btn btn-secondary"
             >
               Quay lại
             </button>
@@ -169,7 +169,7 @@
             <button
               @click="save"
               :disabled="saving"
-              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              class="btn btn-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               Lưu
             </button>

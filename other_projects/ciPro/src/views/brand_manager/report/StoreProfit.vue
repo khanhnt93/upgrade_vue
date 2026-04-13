@@ -107,7 +107,7 @@
             <div class="flex flex-wrap -mx-2 mt-4 mb-2">
               <div class="w-full px-2">
                 <button
-                  class="float-right px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="btn btn-primary float-right btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
                   :disabled="onSearch"
                   @click.prevent="search">
                   Xem
@@ -121,7 +121,7 @@
             <div class="flex flex-wrap -mx-2" v-show="click && datas.length > 0">
               <div class="w-full px-2 table-cus">
                 <div class="overflow-x-auto">
-                  <table class="min-w-full border border-gray-300">
+                  <table class="min-w-full border-collapse border border-gray-300">
                     <thead class="bg-gray-100">
                       <tr>
                         <th class="px-4 py-2 border border-gray-300 text-left">STT</th>

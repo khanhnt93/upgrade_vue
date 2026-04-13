@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
-        <h4 class="text-2xl font-bold text-center text-orange-600 mb-4">Thanh Toán Khoản Đi Vay</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Thanh Toán Khoản Đi Vay</h4>
         <hr class="mb-6" />
 
         <!-- Loan Information -->
@@ -222,7 +222,7 @@
         <div class="flex justify-center space-x-4">
           <button
             @click="back"
-            class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 w-32"
+            class="btn btn-secondary w-32"
           >
             Huỷ
           </button>
@@ -231,7 +231,7 @@
             v-show="!saving"
             @click="save"
             :disabled="saving"
-            class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 w-32"
+            class="btn btn-success w-32"
           >
             Xác nhận
           </button>

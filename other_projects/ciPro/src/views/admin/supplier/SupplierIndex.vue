@@ -9,7 +9,7 @@
             Quay lại
           </button>
           <button
-            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            class="btn btn-success w-32"
             @click="save"
             :disabled="saving">
             Lưu
@@ -17,7 +17,7 @@
         </div>
 
         <div class="mb-4">
-          <h4 class="text-center text-xl font-semibold text-orange-600">{{prefix_title}} Nhà Cung Cấp</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_title}} Nhà Cung Cấp</h4>
         </div>
         <hr class="mb-6">
 

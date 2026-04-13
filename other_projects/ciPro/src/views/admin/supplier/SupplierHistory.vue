@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
         <div class="mb-4">
-          <h4 class="text-center text-xl font-semibold text-orange-600">Lịch Sử Nhà Cung Cấp</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Nhà Cung Cấp</h4>
         </div>
         <hr class="mb-6">
 
@@ -50,7 +50,7 @@
 
         <div class="flex justify-end mb-4">
           <button
-            class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-4 py-2 rounded w-32"
+            class="btn btn-primary"
             :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm
@@ -65,9 +65,9 @@
           <div>
             <button
               @click="exportToExcel"
-              class="btn btn-default text-header cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded border"
+              class="btn btn-success"
             >
-              <b>Xuất Excel</b>
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
             </button>
           </div>
         </div>
@@ -79,8 +79,8 @@
 
         <!-- Table -->
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 border">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">STT</th>
                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">Ngày</th>
@@ -115,7 +115,7 @@
                 <td class="px-4 py-3 text-right">{{currencyFormat(item.total)}}</td>
                 <td class="px-4 py-3 text-center">
                   <button
-                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-24 text-sm"
+                    class="btn btn-success w-24 text-sm"
                     @click="goToDetail(item.id)">
                     Chi tiết
                   </button>

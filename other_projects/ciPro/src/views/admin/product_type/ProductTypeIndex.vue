@@ -18,7 +18,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">{{prefix_text}}Loại Sản Phẩm</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}}Loại Sản Phẩm</h4>
         <hr class="mb-6">
 
         <!-- Loading -->

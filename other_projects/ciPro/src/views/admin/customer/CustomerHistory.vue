@@ -2,7 +2,7 @@
   <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div>
-        <h3 class="mt-2 text-center text-header font-bold">Lịch Sử Khách Hàng</h3>
+        <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Khách Hàng</h3>
       </div>
       <hr class="my-4">
 
@@ -26,7 +26,7 @@
       </div>
 
       <div class="mb-4">
-        <button class="float-right px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 btn-width-120" :disabled="onSearch" @click="prepareToSearch">
+        <button class="btn btn-primary" :disabled="onSearch" @click="prepareToSearch">
           Tìm Kiếm
         </button>
       </div>
@@ -36,16 +36,16 @@
           Số kết quả: {{items.length}}
         </div>
         <div class="text-right">
-          <button class="btn btn-default text-header" @click="exportExcel()">
-            <b>Xuất Excel</b>
-          </button>
+          <button class="btn btn-success" @click="exportExcel()">
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
+            </button>
         </div>
       </div>
 
       <div class="overflow-x-auto">
         <span v-show="loading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
-        <table class="min-w-full divide-y divide-gray-200 border">
-          <thead class="bg-gray-50">
+        <table class="min-w-full border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">STT</th>
               <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">Ngày</th>
@@ -60,9 +60,9 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr>
-              <td class="px-4 py-3 text-center font-bold text-header border" colspan="6">Tổng</td>
-              <td class="px-4 py-3 text-right font-bold text-header border">{{currencyFormat(sum_sub_total)}}</td>
-              <td class="px-4 py-3 text-right font-bold text-header border">{{currencyFormat(sum_total)}}</td>
+              <td class="px-4 py-3 text-center font-bold text-orange-600 border" colspan="6">Tổng</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border">{{currencyFormat(sum_sub_total)}}</td>
+              <td class="px-4 py-3 text-right font-bold text-orange-600 border">{{currencyFormat(sum_total)}}</td>
               <td class="border"></td>
             </tr>
             <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
@@ -75,7 +75,7 @@
               <td class="px-4 py-3 text-right whitespace-nowrap border">{{currencyFormat(item.sub_total)}}</td>
               <td class="px-4 py-3 text-right whitespace-nowrap border">{{currencyFormat(item.total)}}</td>
               <td class="px-4 py-3 text-center border">
-                <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="goToDetail(item.id)">
+                <button class="btn btn-success btn-width-120" @click="goToDetail(item.id)">
                   Chi tiết
                 </button>
               </td>

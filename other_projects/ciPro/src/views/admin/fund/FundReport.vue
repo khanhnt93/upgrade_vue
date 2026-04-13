@@ -2,18 +2,18 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6 mb-4">
       <div class="flex flex-wrap gap-2 justify-end mb-4">
-        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" @click="goToAddAccountingSlip">
+        <button class="btn btn-success" @click="goToAddAccountingSlip">
           Thêm PKT
         </button>
-        <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" @click="goToAddExpend">
+        <button class="btn btn-success" @click="goToAddExpend">
           Thêm khoản chi
         </button>
-        <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" @click="goToAddIncome">
+        <button class="btn btn-success" @click="goToAddIncome">
           Thêm khoản thu
         </button>
       </div>
 
-      <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Báo Cáo Quỹ</h2>
+      <h2 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo Cáo Quỹ</h2>
 
       <div v-show="loading" class="flex justify-center my-4">
         <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
@@ -54,7 +54,7 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-xl font-semibold text-center text-gray-700 mb-4">Danh sách khoản Thu Chi</h3>
+      <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh sách khoản Thu Chi</h3>
 
       <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
         <div>
@@ -136,14 +136,14 @@
           <label class="block mb-2 font-medium">Ngày hoạch toán</label>
           <div class="flex gap-2">
             <Datepicker v-model="inputs.accounting_date" input-class="datepicker-cus flex-1" clearable />
-            <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" @click="clearDate">X</button>
+            <button class="btn btn-sm btn-danger" @click="clearDate">X</button>
           </div>
         </div>
       </div>
 
       <div class="mb-4">
         <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right"
+          class="btn btn-primary float-right"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -152,8 +152,8 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{currencyFormat(totalRow)}}</span></div>
-        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
-          Xuất Excel
+        <button class="btn btn-success" @click="exportExcel()">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
@@ -180,42 +180,42 @@
         <table class="min-w-full border-collapse border border-gray-300">
           <thead class="bg-gray-100">
             <tr>
-              <th class="border border-gray-300 px-2 py-2 text-center w-12">STT</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Ngày phát sinh</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Ngày hạch toán</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Số Phiếu</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Loại sổ thu - chi</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Nhóm khoản thu-chi</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Loại khoản thu-chi</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Diễn giải nội dung</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Đối tượng</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Tiền thu-chi</th>
-              <th class="border border-gray-300 px-2 py-2 text-center">Tồn quỹ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center w-12">STT</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày phát sinh</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày hạch toán</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Số Phiếu</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Loại sổ thu - chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Nhóm khoản thu-chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Loại khoản thu-chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Diễn giải nội dung</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Đối tượng</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tiền thu-chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Tồn quỹ</th>
               <th class="border border-gray-300 px-2 py-2 text-center w-16"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item) in items" :key="item.id" class="hover:bg-gray-50">
-              <td class="border border-gray-300 px-2 py-2 text-center">{{item.stt}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.date_input}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.accounting_date}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.fund_number}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.bank_account_info}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.expend_income_group}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.expend_income_type}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.description}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.object_name}}</td>
-              <td class="border border-gray-300 px-2 py-2 text-right">
+              <td class="border border-gray-300 px-3 py-2 text-center">{{item.stt}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.date_input}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.accounting_date}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.fund_number}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.bank_account_info}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.expend_income_group}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.expend_income_type}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.description}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.object_name}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-right">
                 {{item.type == 0 ? "+" : "-"}}{{currencyFormat(item.amount)}}đ
               </td>
-              <td class="border border-gray-300 px-2 py-2 text-right">
+              <td class="border border-gray-300 px-3 py-2 text-right">
                 <span v-if="item.money_type != 2 && item.fund_amount != null">{{currencyFormat(item.fund_amount)}}đ</span>
               </td>
-              <td class="border border-gray-300 px-2 py-2 text-center">
-                <i v-if="!item.loan_id" class="fa fa-edit ml-2 cursor-pointer text-blue-600 hover:text-blue-800"
-                   title="Sửa" @click="editFund(item)" />
-                <i v-if="isUserRoot" class="fa fa-trash ml-2 cursor-pointer text-red-600 hover:text-red-800"
-                   title="Xoá" @click="deleteFund(item.id, item.fund_number)" />
+              <td class="border border-gray-300 px-3 py-2 text-center">
+                <div class="flex gap-2 items-center whitespace-nowrap">
+                  <button v-if="!item.loan_id" @click="editFund(item)" class="btn btn-primary">Sửa</button>
+                  <button v-if="isUserRoot" @click="deleteFund(item.id, item.fund_number)" class="btn btn-danger">Xoá</button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -241,29 +241,29 @@
           <table class="min-w-full border-collapse border border-gray-300">
             <thead class="bg-gray-100">
               <tr>
-                <th class="border border-gray-300 px-2 py-2">STT</th>
-                <th class="border border-gray-300 px-2 py-2">Loại TK</th>
-                <th class="border border-gray-300 px-2 py-2">Tên TK</th>
-                <th class="border border-gray-300 px-2 py-2">Số TK</th>
-                <th class="border border-gray-300 px-2 py-2">Ngân hàng</th>
-                <th class="border border-gray-300 px-2 py-2 text-right">Số dư TK hiện tại</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">STT</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Loại TK</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Tên TK</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Số TK</th>
+                <th class="border border-gray-300 px-3 py-2 text-center">Ngân hàng</th>
+                <th class="border border-gray-300 px-3 py-2 text-right">Số dư TK hiện tại</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in bankAccountItems" :key="item.stt" class="hover:bg-gray-50">
-                <td class="border border-gray-300 px-2 py-2 text-center">{{item.stt}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.type_str}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.account_name}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.account_number}}</td>
-                <td class="border border-gray-300 px-2 py-2">{{item.bank_name}}</td>
-                <td class="border border-gray-300 px-2 py-2 text-right">{{currencyFormat(item.amount)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-center">{{item.stt}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.type_str}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.account_name}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.account_number}}</td>
+                <td class="border border-gray-300 px-3 py-2">{{item.bank_name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.amount)}}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="flex justify-end mt-4">
-          <button class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600" @click.prevent="hideModalListBankAccount">
+          <button class="btn btn-lg btn-danger" @click.prevent="hideModalListBankAccount">
             Đóng
           </button>
         </div>

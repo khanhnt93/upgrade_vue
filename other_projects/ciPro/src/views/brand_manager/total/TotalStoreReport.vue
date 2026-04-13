@@ -6,7 +6,7 @@
           <div class="p-4">
             <div class="flex flex-wrap -mx-2">
               <div class="w-full px-2">
-                <h3 class="text-center text-header font-bold">Tổng chuỗi</h3>
+                <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">Tổng chuỗi</h3>
               </div>
             </div>
 

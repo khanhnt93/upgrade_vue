@@ -173,14 +173,14 @@
 
         <div class="text-right mt-4">
           <span v-show="uploading" class="loading-more"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
-          <button v-show="!uploading" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
+          <button v-show="!uploading" class="btn btn-primary" @click="importCustomerFromExcelFile()" :disabled="!fileUpload || uploading">
             Upload
           </button>
         </div>
 
         <div v-show="uploadErrorList.length > 0" class="mt-4 overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 border">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Dòng</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border">Mô tả lỗi</th>
@@ -196,7 +196,7 @@
         </div>
 
         <div class="text-center mt-4">
-          <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="closeUploadModal()">
+          <button class="btn btn-secondary" @click="closeUploadModal()">
             Đóng
           </button>
         </div>

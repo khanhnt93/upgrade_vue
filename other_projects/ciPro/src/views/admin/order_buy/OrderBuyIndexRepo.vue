@@ -4,21 +4,21 @@
       <div class="mb-4">
         <button
           @click="back"
-          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+          class="btn btn-secondary"
           style="width: 120px">
           Quay lại
         </button>
       </div>
 
       <div class="mb-4">
-        <h4 class="text-2xl text-center font-semibold text-orange-600">{{prefix_title}} ĐH Nhập Tồn Kho</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_title}} ĐH Nhập Tồn Kho</h4>
       </div>
       <hr class="my-4"/>
 
       <!-- Loading -->
       <span class="loading-more" v-show="loading"><i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i></span>
 
-      <div class="bg-gray-600 text-white rounded-t-md p-3">
+      <div class="btn btn-secondary p-3">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin nhà cung cấp</span>
           <span class="cursor-pointer" @click="showPartnerInfo = !showPartnerInfo">
@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      <div class="bg-blue-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-primary p-3 mt-4">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin sản phẩm</span>
           <span class="cursor-pointer" @click="showProductInfo = !showProductInfo">
@@ -114,7 +114,7 @@
               </Multiselect>
               <button
                 @click="showModalSearchProduct"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2">
+                class="btn btn-primary ml-2">
                 <i class="fa fa-search"></i>
               </button>
             </div>
@@ -171,7 +171,7 @@
         <div class="text-center mb-4">
           <button
             @click="confirmBuyProduct"
-            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded"
+            class="btn btn-primary"
             style="width: 180px">
             {{prefixBuyProduct}} sản phẩm
           </button>
@@ -179,7 +179,7 @@
 
         <div class="mb-4" v-show="orderBuy.products.length > 0">
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+            <table class="min-w-full border-collapse border border-gray-300">
               <colgroup>
                 <col style="width:4%">
                 <col style="width:17%">
@@ -192,7 +192,7 @@
                 <col style="width:13%">
                 <col style="width:7%">
               </colgroup>
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">STT</th>
                   <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Mã sản phẩm(*)</th>
@@ -218,8 +218,20 @@
                   <td class="px-3 py-2 text-right">{{currencyFormat(item.amount)}}</td>
                   <td class="px-3 py-2">{{item.note}}</td>
                   <td class="px-3 py-2">
-                    <i class="fa fa-edit cursor-pointer text-blue-600 hover:text-blue-800" @click="editProduct(index)" />
-                    <i class="fa fa-trash ml-2 cursor-pointer text-red-600 hover:text-red-800" title="Xoá" @click="deleteProduct(index)" />
+                    <div class="flex gap-2 items-center whitespace-nowrap">
+                      <button
+                        @click="editProduct(index)"
+                        class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        @click="deleteProduct(index)"
+                        class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
+                      >
+                        Xoá
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -228,7 +240,7 @@
         </div>
       </div>
 
-      <div class="bg-green-500 text-white rounded-t-md p-3 mt-4">
+      <div class="btn btn-success p-3 mt-4">
         <h5 class="text-lg font-semibold flex justify-between items-center">
           <span>Thông tin thanh toán và giao hàng</span>
           <span class="cursor-pointer" @click="showPaymentInfo = !showPaymentInfo">
@@ -376,15 +388,15 @@
         <button
           @click="updateDraft"
           :disabled="saving || !orderBuy.id"
-          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           style="width: 120px">
           Lưu nháp
         </button>
         <button
           v-if="excel_one_items.length > 0"
           @click="exportExcel"
-          class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded">
-          <b>Xuất Excel</b>
+          class="btn btn-success">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
@@ -393,7 +405,7 @@
           v-show="!saving"
           @click="save"
           :disabled="saving || !orderBuy.id"
-          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-lg btn-success disabled:opacity-50 disabled:cursor-not-allowed"
           style="height: 50px; width: 240px">
           <i class="fa fa-pencil-square-o mr-2" />
           Xác Nhận Đơn Hàng
@@ -406,7 +418,7 @@
     <div v-if="showSearchProductModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" @click="hideModalSearchProduct">
       <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-5xl shadow-lg rounded-md bg-white" @click.stop>
         <div class="mb-4">
-          <h4 class="text-2xl text-center font-semibold text-orange-600">Tìm kiếm sản phẩm</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm sản phẩm</h4>
         </div>
         <hr class="my-4"/>
 
@@ -475,7 +487,7 @@
         <div class="flex justify-between mb-4">
           <button
             @click="hideModalSearchProduct"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+            class="btn btn-secondary"
             style="width: 120px">
             Quay lại
           </button>
@@ -483,7 +495,7 @@
             v-show="!onSearchProduct"
             @click="searchProduct"
             :disabled="onSearchProduct"
-            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+            class="btn btn-primary disabled:opacity-50"
             style="width: 120px">
             Tìm Kiếm
           </button>
@@ -491,8 +503,8 @@
         </div>
 
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">STT</th>
                 <th class="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Nhóm SP</th>
@@ -512,7 +524,7 @@
                 <td class="px-3 py-2">
                   <button
                     @click="chooseProduct(item.id, item.name, item.code, item.product_brand_name, item.unit_name)"
-                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
+                    class="btn btn-sm btn-success"
                     style="width: 120px">
                     Chọn
                   </button>

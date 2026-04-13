@@ -2,7 +2,7 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <h4 class="text-xl font-semibold text-center text-orange-600">Lịch Sử Sửa Phiếu Thu-Chi</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Lịch Sử Sửa Phiếu Thu-Chi</h4>
       </div>
       <hr class="my-4">
 
@@ -45,7 +45,7 @@
 
       <div class="mb-4">
         <button
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 float-right"
+          class="btn btn-primary float-right"
           :disabled="loading"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -54,8 +54,8 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
-        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
-          Xuất Excel
+        <button class="btn btn-success" @click="exportExcel()">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
         </button>
       </div>
 
@@ -64,20 +64,20 @@
           <thead class="bg-gray-100">
             <tr>
               <th class="border border-gray-300 px-2 py-2 w-20">STT</th>
-              <th class="border border-gray-300 px-2 py-2">Ngày</th>
-              <th class="border border-gray-300 px-2 py-2">Người sửa</th>
-              <th class="border border-gray-300 px-2 py-2">Loại phiếu</th>
-              <th class="border border-gray-300 px-2 py-2">Phiếu cũ</th>
-              <th class="border border-gray-300 px-2 py-2">Phiếu mới</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Ngày</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Người sửa</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Loại phiếu</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Phiếu cũ</th>
+              <th class="border border-gray-300 px-3 py-2 text-center">Phiếu mới</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
-              <td class="border border-gray-300 px-2 py-2 text-center">{{index + 1}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.created_at}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.staff_name}}</td>
-              <td class="border border-gray-300 px-2 py-2">{{item.fund_type_str}}</td>
-              <td class="border border-gray-300 px-2 py-2">
+              <td class="border border-gray-300 px-3 py-2 text-center">{{index + 1}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.created_at}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.staff_name}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.fund_type_str}}</td>
+              <td class="border border-gray-300 px-3 py-2">
                 <a :href="'/fund-history-detail/' + item.fund_his_id_old"
                    target="_blank"
                    class="text-blue-600 hover:underline"
@@ -85,7 +85,7 @@
                   {{item.fund_number_old}}
                 </a>
               </td>
-              <td class="border border-gray-300 px-2 py-2">
+              <td class="border border-gray-300 px-3 py-2">
                 <a :href="'/fund-history-detail/' + item.fund_his_id_new"
                    target="_blank"
                    class="text-blue-600 hover:underline"

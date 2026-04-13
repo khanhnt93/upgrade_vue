@@ -5,7 +5,7 @@
         <div class="bg-white rounded-lg shadow">
           <div class="flex flex-wrap -mx-2 p-4">
             <div class="w-full px-2">
-              <h3 class="text-center text-header font-bold">BÁO CÁO BÁN HÀNG</h3>
+              <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">BÁO CÁO BÁN HÀNG</h3>
             </div>
           </div>
 
@@ -85,7 +85,7 @@
           <div class="flex flex-wrap -mx-2 px-4 pb-4">
             <div class="w-full px-2">
               <button
-                class="float-right px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="btn btn-primary float-right btn-width-120 disabled:opacity-50 disabled:cursor-not-allowed"
                 :disabled="onSearch"
                 @click.prevent="search">
                 Xem
@@ -110,15 +110,15 @@
               <div class="w-full md:w-2/3 px-2 text-right">
                 <button
                   @click="exportBillsToExcel"
-                  class="btn btn-default text-header px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+                  class="btn btn-success"
                 >
-                  <b>Xuất Excel</b>
+                  <i class="fa fa-file-excel-o"></i> Xuất Excel
                 </button>
               </div>
             </div>
 
             <div class="overflow-x-auto table-cus">
-              <table class="min-w-full border border-gray-300">
+              <table class="min-w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                   <tr>
                     <th class="px-4 py-2 border border-gray-300 text-left">STT</th>
@@ -199,15 +199,15 @@
               <div class="w-full md:w-2/3 px-2 text-right">
                 <button
                   @click="exportFoodsToExcel"
-                  class="btn btn-default text-header px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+                  class="btn btn-success"
                 >
-                  <b>Xuất Excel</b>
+                  <i class="fa fa-file-excel-o"></i> Xuất Excel
                 </button>
               </div>
             </div>
 
             <div class="overflow-x-auto table-cus">
-              <table class="min-w-full border border-gray-300">
+              <table class="min-w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                   <tr>
                     <th class="px-4 py-2 border border-gray-300 text-left">STT</th>

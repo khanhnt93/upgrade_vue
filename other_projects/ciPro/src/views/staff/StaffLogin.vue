@@ -48,7 +48,7 @@
               <div class="mb-4 text-center">
                 <button
                   type="submit"
-                  class="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed default-btn-bg"
+                  class="btn btn-lg btn-primary disabled:opacity-50 disabled:cursor-not-allowed default-btn-bg"
                   :disabled="onLogin">
                   {{ onLogin ? 'Đăng Nhập...' : 'Đăng Nhập' }}
                 </button>

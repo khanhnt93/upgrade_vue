@@ -85,15 +85,15 @@
     <!-- Reset Password Modal -->
     <div v-if="showResetModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h5 class="text-center text-header font-bold mb-4">Reset password</h5>
+        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Reset password</h5>
         <hr class="my-4">
         <p class="mb-2">Nhân viên: <b>{{currentStaff.name}}</b></p>
         <p class="mb-4">Số điện thoại: <b>{{currentStaff.phone_number}}</b></p>
         <div v-if="!resetting" class="text-center mt-4 space-x-2">
-          <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 btn-width-120" @click="hideModalConfirmResetPass()">
+          <button class="btn btn-secondary btn-width-120" @click="hideModalConfirmResetPass()">
             Đóng
           </button>
-          <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="resetPass()">
+          <button class="btn btn-success btn-width-120" @click="resetPass()">
             Xác nhận
           </button>
         </div>

@@ -2,16 +2,16 @@
   <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <button class="float-left px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 btn-width-120" @click="back">
+        <button class="float-left btn btn-secondary btn-width-120" @click="back">
           Quay lại
         </button>
-        <button class="float-right px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="save" :disabled="saving">
+        <button class="float-right btn btn-success btn-width-120" @click="save" :disabled="saving">
           Lưu
         </button>
       </div>
 
       <div class="clear-both">
-        <h3 class="mt-2 text-center text-header font-bold">{{prefix_title}} Khách Hàng</h3>
+        <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_title}} Khách Hàng</h3>
       </div>
       <hr class="my-4">
 

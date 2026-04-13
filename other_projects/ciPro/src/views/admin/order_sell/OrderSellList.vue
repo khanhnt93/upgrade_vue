@@ -6,14 +6,14 @@
         <div class="flex justify-end mb-4">
           <button
             @click="goToAdd"
-            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition-colors w-32"
+            class="btn btn-success w-32"
           >
             Thêm
           </button>
         </div>
 
         <!-- Title -->
-        <h4 class="text-2xl font-semibold text-center text-orange-600 mb-4">Danh Sách Đơn Hàng Bán</h4>
+        <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Danh Sách Đơn Hàng Bán</h4>
         <hr class="mb-6">
 
         <!-- Filters Row 1 -->
@@ -132,7 +132,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors w-32 disabled:opacity-50"
+            class="btn btn-primary w-32 disabled:opacity-50"
           >
             Tìm Kiếm
           </button>
@@ -146,17 +146,17 @@
           <div v-if="excel_items.length > 0">
             <button
               @click="exportToExcel"
-              class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded"
+              class="btn btn-success"
             >
-              <b>Xuất Excel</b>
+              <i class="fa fa-file-excel-o"></i> Xuất Excel
             </button>
           </div>
         </div>
 
         <!-- Table -->
         <div class="overflow-x-auto">
-          <table class="min-w-full border border-gray-300">
-            <thead class="bg-gray-50">
+          <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
               <tr>
                 <th class="px-2 py-3 text-left text-xs font-medium text-gray-700 uppercase border">STT</th>
                 <th class="px-2 py-3 text-left text-xs font-medium text-gray-700 uppercase border">Số ĐH bán</th>
@@ -216,47 +216,42 @@
                 </td>
                 <td class="px-2 py-2 border">{{item.shipping_status_str}}</td>
                 <td class="px-2 py-2 border">
-                  <i v-if="userRole == 'admin'" class="fa fa-edit cursor-pointer" @click="showModalChangeInvoiceStatus(item)"
-                     title="Cập nhật trạng thái hoá đơn"/>
+                  <button v-if="userRole == 'admin'" @click="showModalChangeInvoiceStatus(item)" class="btn btn-sm btn-primary">Sửa</button>
                   {{item.invoice_note}}
                 </td>
                 <td class="px-2 py-2 border">{{item.product_back_status_str}}</td>
                 <td class="px-2 py-2 border">
-                  <i v-if="userRole == 'admin'" class="fa fa-edit cursor-pointer" @click="showModalChangeAccountingNote(item)"
-                     title="Cập nhật ghi chú kế toán"/>
+                  <button v-if="userRole == 'admin'" @click="showModalChangeAccountingNote(item)" class="btn btn-sm btn-primary">Sửa</button>
                   {{item.accounting_note}}
                 </td>
                 <td class="px-2 py-2 border">
                   <div class="flex flex-col gap-1">
                     <button v-if="item.status == 0"
                             @click="showModalConfirmOrderSell(item)"
-                            class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded"
+                            class="btn btn-sm btn-success text-xs"
                             title="Xác nhận đơn hàng">
                       XN ĐH
                     </button>
                     <button v-if="item.status == 1"
                             @click="showModalCancelOrderSell(item)"
-                            class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded"
+                            class="btn btn-sm btn-danger text-xs"
                             title="Huỷ đơn hàng">
                       Huỷ ĐH
                     </button>
                     <button v-if="item.status < 6"
                             @click="goToUpdate(item.id)"
-                            class="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded"
-                            title="Chỉnh sửa đơn hàng">
-                      <i class="fa fa-edit"></i>
+                            class="btn btn-sm btn-primary text-xs">
+                      Sửa
                     </button>
                     <button v-if="item.status == 6"
                             @click="openModalCreateBallot(item)"
-                            class="px-2 py-1 bg-purple-500 hover:bg-purple-600 text-white text-xs rounded"
-                            title="Tạo phiếu nhập kho">
+                            class="px-2 py-1 bg-purple-500 hover:bg-purple-600 text-white text-xs rounded">
                       <i class="fa fa-plus"></i> PHG
                     </button>
                     <button v-if="item.can_delete"
                             @click="deleteOrderSellAfterCancel(item.id, item.customer_name)"
-                            class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded"
-                            title="Xóa đơn hàng">
-                      <i class="fa fa-trash"></i>
+                            class="btn btn-sm btn-danger text-xs">
+                      Xoá
                     </button>
                   </div>
                 </td>
@@ -276,7 +271,7 @@
     <div v-if="showChangeInvoiceStatusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalChangeInvoiceStatus">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Cập Nhật Trạng Thái Hoá Đơn</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập Nhật Trạng Thái Hoá Đơn</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -298,11 +293,11 @@
 
           <div class="flex justify-end gap-2">
             <button @click="hideModalChangeInvoiceStatus"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
             <button @click="confirmChangeInvoiceStatus"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">
+                    class="btn btn-success">
               Xác nhận
             </button>
           </div>
@@ -314,7 +309,7 @@
     <div v-if="showChangeAccountingNoteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalChangeAccountingNote">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Cập Nhật Ghi Chú Kế Toán</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Cập Nhật Ghi Chú Kế Toán</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -329,11 +324,11 @@
 
           <div class="flex justify-end gap-2">
             <button @click="hideModalChangeAccountingNote"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
             <button @click="confirmChangeAccountingNote"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded">
+                    class="btn btn-success">
               Xác nhận
             </button>
           </div>
@@ -345,7 +340,7 @@
     <div v-if="showCreateBallotModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalCreateBallot">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Tạo Phiếu Nhập Kho - Xuất Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tạo Phiếu Nhập Kho - Xuất Hàng</h4>
           <hr class="mb-4">
 
           <div class="text-center mb-4">
@@ -355,18 +350,18 @@
 
           <div class="flex justify-center gap-4">
             <button @click="goToCreateBallotInput"
-                    class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded">
+                    class="btn btn-lg btn-primary">
               Phiếu nhập kho
             </button>
             <button @click="goToCreateBallotOutput"
-                    class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded">
+                    class="btn btn-lg btn-success">
               Phiếu xuất hàng giao
             </button>
           </div>
 
           <div class="mt-4 flex justify-end">
             <button @click="hideModalCreateBallot"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
           </div>
@@ -378,7 +373,7 @@
     <div v-if="showConfirmOrderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalConfirmOrderSell">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Xác Nhận Đơn Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Xác Nhận Đơn Hàng</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -394,8 +389,8 @@
           <div v-if="product_manual_inputs.length > 0" class="mb-4">
             <h5 class="text-lg font-semibold mb-2">Các sản phẩm nhập tay cần kiểm tra:</h5>
             <div class="overflow-x-auto">
-              <table class="min-w-full border border-gray-300">
-                <thead class="bg-gray-50">
+              <table class="min-w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-100">
                   <tr>
                     <th class="px-2 py-2 border text-left">Mã SP</th>
                     <th class="px-2 py-2 border text-left">Tên SP</th>
@@ -421,12 +416,12 @@
 
           <div class="flex justify-end gap-2">
             <button @click="hideModalConfirmOrderSell"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
             <button @click="confirmOrderSell"
                     :disabled="confirmingOrderSell"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded disabled:opacity-50">
+                    class="btn btn-success disabled:opacity-50">
               Xác nhận
             </button>
           </div>
@@ -438,7 +433,7 @@
     <div v-if="showCancelOrderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalCancelOrderSell">
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">Huỷ Đơn Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Huỷ Đơn Hàng</h4>
           <hr class="mb-4">
 
           <div class="mb-4">
@@ -453,12 +448,12 @@
 
           <div class="flex justify-end gap-2">
             <button @click="hideModalCancelOrderSell"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
             <button @click="cancelOrderSell"
                     :disabled="cancelingOrderSell"
-                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded disabled:opacity-50">
+                    class="btn btn-success disabled:opacity-50">
               Xác nhận
             </button>
           </div>
@@ -470,7 +465,7 @@
     <div v-if="showListIncomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalDetailPayment">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-center text-xl font-semibold text-orange-600 mb-4">{{title_modal_income_expend_list}}</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{title_modal_income_expend_list}}</h4>
           <hr class="mb-4">
 
           <div v-if="loadingIncome" class="text-center py-4">
@@ -478,8 +473,8 @@
           </div>
 
           <div v-else class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300">
-              <thead class="bg-gray-50">
+            <table class="min-w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-100">
                 <tr>
                   <th class="px-2 py-2 border text-left">STT</th>
                   <th class="px-2 py-2 border text-left">Ngày</th>
@@ -504,7 +499,7 @@
 
           <div class="mt-4 flex justify-end">
             <button @click="hideModalDetailPayment"
-                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">
+                    class="btn btn-danger">
               Đóng
             </button>
           </div>

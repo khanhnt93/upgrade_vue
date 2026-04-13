@@ -6,13 +6,13 @@
       <div class="flex justify-end items-center gap-2 mb-4">
         <button
           @click="goToAdd()"
-          class="px-4 py-2 bg-white border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors min-w-[120px]">
+          class="btn btn-success">
           Thêm BG
         </button>
 
         <button
           @click="goToAddProject()"
-          class="px-4 py-2 bg-white border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors min-w-[220px]">
+          class="btn btn-success">
           Thêm BG dự án
         </button>
 
@@ -214,7 +214,7 @@
         <button
           @click.prevent="prepareToSearch"
           :disabled="onSearch"
-          class="px-6 py-2 bg-white border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px] disabled:opacity-50 disabled:cursor-not-allowed">
+          class="btn btn-primary">
           Tìm Kiếm
         </button>
       </div>
@@ -227,15 +227,15 @@
         <div v-if="excel_items.length > 0">
           <button
             @click="exportToExcel"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors font-semibold">
-            Xuất Excel
+            class="btn btn-success">
+            <i class="fa fa-file-excel-o"></i> Xuất Excel
           </button>
         </div>
       </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
+        <table class="min-w-full border-collapse border border-gray-300">
           <thead class="bg-gray-100">
             <tr>
               <th class="px-2 py-3 border-b border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase" style="width:3%">STT</th>
@@ -289,11 +289,12 @@
               <td class="px-2 py-2 text-sm text-gray-900">{{ item.created_at }}</td>
               <td class="px-2 py-2 text-sm text-gray-900" :class="item.item_class">
                 {{ item.status_str }}
-                <i
+                <button
                   v-if="item.status === 0"
-                  class="fa fa-edit cursor-pointer ml-1 text-blue-600 hover:text-blue-800"
                   @click="showModalUpdateQuotationStatus(item)"
-                  title="Cập nhật trạng thái BG"/>
+                  class="btn btn-sm btn-primary ml-1">
+                  Sửa
+                </button>
               </td>
               <td class="px-2 py-2 text-sm text-gray-900">
                 <div class="flex flex-wrap gap-2">
