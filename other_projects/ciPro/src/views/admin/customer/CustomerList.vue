@@ -2,7 +2,7 @@
   <div class="w-full">
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
-        <button class="float-right px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 btn-width-120" @click="goToAdd">
+        <button class="btn btn-success w-32" @click="goToAdd">
           Thêm
         </button>
         <button class="float-right px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 btn-width-120 mr-2" @click="openModalImportFile">
@@ -81,7 +81,7 @@
       </div>
 
       <div class="mb-4">
-        <button class="float-right px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 btn-width-120" :disabled="onSearch" @click.prevent="prepareToSearch">
+        <button class="btn btn-primary" :disabled="onSearch" @click.prevent="prepareToSearch">
           Tìm Kiếm
         </button>
       </div>

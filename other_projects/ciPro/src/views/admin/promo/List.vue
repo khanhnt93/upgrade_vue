@@ -4,7 +4,7 @@
       <div class="p-6">
         <div class="flex justify-end mb-4">
           <button
-            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-32"
+            class="btn btn-success w-32"
             @click="goToAdd">
             Thêm
           </button>
@@ -58,7 +58,7 @@
 
         <div class="flex justify-end mb-4">
           <button
-            class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-4 py-2 rounded w-32"
+            class="btn btn-primary"
             :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm

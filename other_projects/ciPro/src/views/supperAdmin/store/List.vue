@@ -7,7 +7,7 @@
           <h4 class="text-2xl font-semibold text-center flex-1">Store</h4>
           <button
             @click="gotoAdd"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="btn btn-success w-32"
           >
             Thêm
           </button>
@@ -71,7 +71,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            class="btn btn-primary"
           >
             Tìm Kiếm
           </button>
