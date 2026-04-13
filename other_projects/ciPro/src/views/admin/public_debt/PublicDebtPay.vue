@@ -46,21 +46,6 @@
             <h5 class="text-lg font-semibold">Thông tin đơn hàng</h5>
           </div>
 
-          <!-- Date Input -->
-          <div class="flex mt-4 mb-6">
-            <div class="w-1/4">
-              <label class="block mt-2">Ngày ghi nhận tiền<span class="text-red-500"></span></label>
-            </div>
-            <div class="w-3/4">
-              <datepicker
-                v-model="debt.date_input"
-                format="yyyy-MM-dd"
-                placeholder="yyyy-MM-dd"
-                input-class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-
           <div class="mt-4 overflow-x-auto">
             <table class="min-w-full border-collapse border border-gray-300">
               <thead class="bg-gray-100">
@@ -101,7 +86,20 @@
           <div class="bg-green-500 text-white p-3 rounded-t-lg">
             <h5 class="text-lg font-semibold">Thông tin thanh toán</h5>
           </div>
-
+          <!-- Date Input -->
+          <div class="flex mt-4 mb-6">
+            <div class="w-1/4">
+              <label class="block mt-2">Ngày ghi nhận tiền<span class="text-red-500"></span></label>
+            </div>
+            <div class="w-3/4">
+              <datepicker
+                v-model="debt.date_input"
+                format="yyyy-MM-dd"
+                placeholder="yyyy-MM-dd"
+                input-class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
           <!-- Amount Pay -->
           <div class="flex mt-4 mb-6">
             <div class="w-1/4">

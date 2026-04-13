@@ -6,7 +6,7 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <div class="md:col-span-2">
           <label class="block text-sm font-medium mb-1">Thời gian</label>
-          <select v-model="time_option" class="form-select border border-gray-300 rounded px-3 py-2 w-full">
+          <select v-model="time_option" class="form-select w-full">
             <option v-for="option in timeOptions" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>
@@ -17,7 +17,7 @@
           <label class="block text-sm font-medium mb-1">{{time_option == 1 ? 'Từ ngày' : 'Năm' }}</label>
           <Datepicker v-show="time_option == 1" v-model="inputs.from_date" format="yyyy-MM-dd"
                       placeholder="yyyy-MM-dd" input-class="datepicker-cus"></Datepicker>
-          <select v-show="time_option != 1" v-model="year_input" class="form-select border border-gray-300 rounded px-3 py-2 w-full">
+          <select v-show="time_option != 1" v-model="year_input" class="form-select w-full">
             <option v-for="option in yearOptions" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>
@@ -28,12 +28,12 @@
           <label v-show="time_option != 4" class="block text-sm font-medium mb-1">{{time_option == 1 ? 'Đến ngày' : time_option == 2 ? 'Tháng' : 'Quý' }}</label>
           <Datepicker v-show="time_option == 1" v-model="inputs.to_date" format="yyyy-MM-dd"
                       placeholder="yyyy-MM-dd" input-class="datepicker-cus"></Datepicker>
-          <select v-show="time_option == 2" v-model="month_input" class="form-select border border-gray-300 rounded px-3 py-2 w-full">
+          <select v-show="time_option == 2" v-model="month_input" class="form-select w-full">
             <option v-for="option in monthOptions" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>
           </select>
-          <select v-show="time_option == 3" v-model="quarter_input" class="form-select border border-gray-300 rounded px-3 py-2 w-full">
+          <select v-show="time_option == 3" v-model="quarter_input" class="form-select w-full">
             <option v-for="option in quarterOptions" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>
@@ -78,7 +78,8 @@
             type="text"
             maxlength="100"
             autocomplete="new-password"
-            class="form-control border border-gray-300 rounded px-3 py-2 w-full"
+            class="form-control w-full"
+            style="height: 38px !important"
             v-model="inputs.order_sell_number">
         </div>
 
@@ -102,7 +103,8 @@
             id="codeProductCus"
             type="text"
             autocomplete="new-password"
-            class="form-control border border-gray-300 rounded px-3 py-2 w-full"
+            class="form-control w-full"
+            style="height: 38px !important"
             v-model="inputs.product_code"
             maxlength="255">
         </div>
@@ -112,7 +114,7 @@
           <select
             id="created_by"
             v-model="inputs.staff_in_charge"
-            class="form-select border border-gray-300 rounded px-3 py-2 w-full">
+            class="form-select w-full">
             <option v-for="option in optionsStaff" :key="option.value" :value="option.value">
               {{ option.text }}
             </option>

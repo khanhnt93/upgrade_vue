@@ -611,7 +611,7 @@ const router = createRouter({
       component: DebtList
     },
     {
-      path: '/debt/pay',
+      path: '/debt/pay/:id?',
       name: 'Thanh toán nợ phải thu',
       component: DebtPay
     },
@@ -627,7 +627,7 @@ const router = createRouter({
       component: PublicDebtList
     },
     {
-      path: '/public-debt/pay',
+      path: '/public-debt/pay/:id?',
       name: 'Thanh toán nợ phải trả',
       component: PublicDebtPay
     },

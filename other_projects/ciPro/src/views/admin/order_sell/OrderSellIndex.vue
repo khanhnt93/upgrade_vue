@@ -2402,7 +2402,7 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const { showToast: popToast } = useToast();
+const { popToast } = useToast();
 const { exportToExcel } = useExcelExport();
 
 // ============= STATE =============
@@ -3683,6 +3683,11 @@ const getTradeDetail = () => {
       .then((res) => {
         if (res != null && res.data != null && res.data.data != null) {
           Object.assign(trade, res.data.data);
+
+          // Convert date strings from API to Date objects for vue3-datepicker
+          if (trade.shipping_date) {
+            trade.shipping_date = new Date(trade.shipping_date)
+          }
 
           // Kiểm tra là loại báo giá nào, nếu là báo giá dự án thì handle lại ds sp:
           if (trade.type == 1) {

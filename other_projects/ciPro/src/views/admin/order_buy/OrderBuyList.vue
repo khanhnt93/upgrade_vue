@@ -582,7 +582,7 @@ const onScroll = (event) => {
 
 const prepareDateInput = () => {
   let dateNow = new Date()
-  inputs.to_date = dateNow
+  inputs.to_date = new Date(dateNow)
   inputs.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
 
   let currentYear = new Date().getFullYear()

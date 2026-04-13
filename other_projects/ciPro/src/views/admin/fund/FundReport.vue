@@ -150,7 +150,7 @@
         </button>
       </div>
 
-      <div class="flex justify-between items-center mb-4 clear-both">
+      <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{currencyFormat(totalRow)}}</span></div>
         <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 font-bold" @click="exportExcel()">
           Xuất Excel
