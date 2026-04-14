@@ -675,47 +675,53 @@
     </div>
     <div class="custom-line-height">
       <table style="width:100%; font-size: 16px">
-        <tr>
-          <td style="width:25%; border:none; padding-left:10px; text-align:right;"><u><b>Tên khách hàng:</b></u></td>
-          <td colspan="3" style="border:none; text-align:left;"><b>{{currentOrderSell.customer_name}}</b></td>
-        </tr>
-        <tr>
-          <td style="width:25%; border:none; padding-left:10px; text-align:right;">Địa chỉ giao hàng:</td>
-          <td colspan="3" style="border:none; text-align:left;">{{currentOrderSell.receiver_address}}</td>
-        </tr>
-        <tr>
-          <td style="width:25%; border:none; padding-left:10px; text-align:right;">Người nhận hàng:</td>
-          <td style="width:25%; border:none; text-align:left;">{{currentOrderSell.receiver_name}}</td>
-          <td style="width:25%; border:none; padding-left:10px; text-align:right;">Điện thoại:</td>
-          <td style="border:none; text-align:left;">{{currentOrderSell.receiver_phone}}</td>
-        </tr>
-        <tr>
-          <td style="width:25%; border:none; padding-left:10px; text-align:right;">Ghi chú về giao hàng:</td>
-          <td colspan="3" style="border:none; text-align:left;">{{currentOrderSell.shipping_note}}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td style="width:25%; border:none; padding-left:10px; text-align:right;"><u><b>Tên khách hàng:</b></u></td>
+            <td colspan="3" style="border:none; text-align:left;"><b>{{currentOrderSell.customer_name}}</b></td>
+          </tr>
+          <tr>
+            <td style="width:25%; border:none; padding-left:10px; text-align:right;">Địa chỉ giao hàng:</td>
+            <td colspan="3" style="border:none; text-align:left;">{{currentOrderSell.receiver_address}}</td>
+          </tr>
+          <tr>
+            <td style="width:25%; border:none; padding-left:10px; text-align:right;">Người nhận hàng:</td>
+            <td style="width:25%; border:none; text-align:left;">{{currentOrderSell.receiver_name}}</td>
+            <td style="width:25%; border:none; padding-left:10px; text-align:right;">Điện thoại:</td>
+            <td style="border:none; text-align:left;">{{currentOrderSell.receiver_phone}}</td>
+          </tr>
+          <tr>
+            <td style="width:25%; border:none; padding-left:10px; text-align:right;">Ghi chú về giao hàng:</td>
+            <td colspan="3" style="border:none; text-align:left;">{{currentOrderSell.shipping_note}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <br>
     <div class="print-table-border">
       <table style="width:100%; font-size: 16px" class="custom-line-height">
-        <tr style="background-color: #eeece1; text-align: center;">
-          <th>STT</th><th>MÃ SẢN PHẨM</th><th>MÔ TẢ SẢN PHẨM</th>
-          <th>HÃNG SX</th><th>ĐVT</th><th style="width:50px">SL</th><th>GHI CHÚ</th>
-        </tr>
-        <tr v-for="(prod, index) in currentOrderSell.products" :key="prod.product_id">
-          <td style="text-align:center;">{{index + 1}}</td>
-          <td>{{prod.product_code ? prod.product_code : prod.product_code_input}}</td>
-          <td>{{prod.product_name ? prod.product_name : prod.product_name_input}}</td>
-          <td style="text-align:center;">{{prod.brand_name ? prod.brand_name : prod.brand_name_input}}</td>
-          <td style="text-align:center;">{{prod.target_unit_name ? prod.target_unit_name : prod.unit_name ? prod.unit_name : prod.unit_name_input}}</td>
-          <td style="width:50px; text-align:center;">{{currencyFormat(prod.quantity)}}</td>
-          <td>{{prod.note}}</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:center;"><b>TỔNG CỘNG</b></td>
-          <td style="text-align:right;"><b>{{currentOrderSell.total_quantity}}</b></td>
-          <td></td>
-        </tr>
+        <thead>
+          <tr style="background-color: #eeece1; text-align: center;">
+            <th>STT</th><th>MÃ SẢN PHẨM</th><th>MÔ TẢ SẢN PHẨM</th>
+            <th>HÃNG SX</th><th>ĐVT</th><th style="width:50px">SL</th><th>GHI CHÚ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(prod, index) in currentOrderSell.products" :key="prod.product_id">
+            <td style="text-align:center;">{{index + 1}}</td>
+            <td>{{prod.product_code ? prod.product_code : prod.product_code_input}}</td>
+            <td>{{prod.product_name ? prod.product_name : prod.product_name_input}}</td>
+            <td style="text-align:center;">{{prod.brand_name ? prod.brand_name : prod.brand_name_input}}</td>
+            <td style="text-align:center;">{{prod.target_unit_name ? prod.target_unit_name : prod.unit_name ? prod.unit_name : prod.unit_name_input}}</td>
+            <td style="width:50px; text-align:center;">{{currencyFormat(prod.quantity)}}</td>
+            <td>{{prod.note}}</td>
+          </tr>
+          <tr>
+            <td colspan="5" style="text-align:center;"><b>TỔNG CỘNG</b></td>
+            <td style="text-align:right;"><b>{{currentOrderSell.total_quantity}}</b></td>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
       <div>
         <p style="font-size:16px;"><b>Chứng từ kèm theo:</b></p>
@@ -729,16 +735,18 @@
       </div>
       <br><br>
       <table style="width:100%; font-size:16px;">
-        <tr>
-          <td style="border:none; text-align:center;"><b>NGƯỜI NHẬN HÀNG</b></td>
-          <td style="border:none; text-align:center;"><b>NGƯỜI GIAO HÀNG</b></td>
-          <td style="border:none; text-align:center;"><b>NGƯỜI LẬP PHIẾU</b></td>
-        </tr>
-        <tr>
-          <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
-          <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
-          <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td style="border:none; text-align:center;"><b>NGƯỜI NHẬN HÀNG</b></td>
+            <td style="border:none; text-align:center;"><b>NGƯỜI GIAO HÀNG</b></td>
+            <td style="border:none; text-align:center;"><b>NGƯỜI LẬP PHIẾU</b></td>
+          </tr>
+          <tr>
+            <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
+            <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
+            <td style="border:none; text-align:center; color:#C0C0C0;">(Ký, họ tên)</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
