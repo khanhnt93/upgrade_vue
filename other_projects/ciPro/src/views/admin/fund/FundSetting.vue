@@ -39,7 +39,7 @@
         <div class="col-span-12 md:col-span-9">
           <select v-model="fundSetting.group_id"
                   :disabled="fundSetting.type != 1 && fundSetting.type != 0 && fundSetting.type != 2"
-                  class="form-select w-full rounded-md border-gray-300">
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400">
             <option v-for="opt in optionsGroup" :key="opt.value" :value="opt.value">{{opt.text}}</option>
           </select>
           <div v-if="errorGroup" class="text-red-500 text-sm mt-1">Vui lòng chọn nhóm</div>
@@ -52,7 +52,8 @@
         </div>
         <div class="col-span-12 md:col-span-9">
           <input type="text" v-model="fundSetting.name"
-                 class="form-input w-full rounded-md border-gray-300"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 autocomplete="new-password"
                  maxlength="255">
           <div v-if="errorName" class="text-red-500 text-sm mt-1">Vui lòng nhập tên</div>
         </div>
@@ -65,7 +66,8 @@
         <div class="col-span-12 md:col-span-9">
           <textarea v-model="fundSetting.description"
                     rows="2"
-                    class="form-textarea w-full rounded-md border-gray-300"></textarea>
+                    autocomplete="new-password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"></textarea>
         </div>
       </div>
 
@@ -76,7 +78,7 @@
         <div class="col-span-12 md:col-span-9">
           <input type="text" v-model="fundSetting.index_sort"
                  @keyup="integerOnly($event.target)"
-                 class="form-input w-full rounded-md border-gray-300"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                  maxlength="2">
         </div>
       </div>
@@ -223,8 +225,16 @@ const search = () => {
 }
 
 const edit = (index) => {
-  fundSetting.value = items.value[index]
-  changeType(fundSetting.value.type)
+  const item = items.value[index]
+  Object.assign(fundSetting.value, {
+    id: item.id,
+    type: item.type,
+    group_id: item.group_id,
+    name: item.name ?? '',
+    description: item.description ?? '',
+    index_sort: item.index_sort
+  })
+  changeType(item.type)
   btn_text.value = "Cập nhật"
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -253,6 +263,7 @@ const deleted = async (id, name) => {
 
 const resetValueSeting = () => {
   click.value = false
+  btn_text.value = "Thêm mới"
   fundSetting.value = {
     type: null,
     group_id: null,

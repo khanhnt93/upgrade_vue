@@ -53,13 +53,9 @@
 
             <div class="grid grid-cols-1 gap-4" v-show="showPartnerInfo">
               <div class="w-full space-y-2">
-                <div class="grid grid-cols-1 gap-4 form-row mt-2">
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>
-                      <span>Khách hàng</span>
-                    </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2">
+                  <label class="w-36 shrink-0 text-right text-sm mt-2">Khách hàng</label>
+                  <div class="flex-1">
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
                         <Multiselect
@@ -414,11 +410,9 @@
                   ><i class="fa fa-spinner fa-spin fa-3x"></i
                 ></span>
 
-                <div class="grid grid-cols-1 gap-4 form-row">
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>Sản phẩm<span class="error-sybol"></span> </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2">
+                  <label class="w-36 shrink-0 text-right text-sm mt-2">Sản phẩm<span class="error-sybol"></span></label>
+                  <div class="flex-1">
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
                         <Multiselect

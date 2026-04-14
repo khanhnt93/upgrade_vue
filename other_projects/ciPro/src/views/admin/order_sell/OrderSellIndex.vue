@@ -2540,7 +2540,7 @@ const optionsDistrict = ref([]);
 // Bank account
 const bankAccountOptions = ref([]);
 const bankAccountOptionStore = ref([]);
-const bankAccountSelected = ref({
+const bankAccountSelected = reactive({
   account_name: "",
   account_number: "",
   bank_name: "",
@@ -2673,6 +2673,13 @@ onMounted(() => {
 
   // Get store info
   getStoreDetail();
+
+  // Auto-save draft on page unload
+  document.addEventListener('beforeunload', checkUpdateDraft);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('beforeunload', checkUpdateDraft);
 });
 
 // ============= METHODS =============
@@ -2801,6 +2808,16 @@ const showModalSearchProduct = () => {
 const hideModalSearchProduct = () => {
   showModalProduct.value = false;
 };
+
+// Product object for add-product modal
+const product = reactive({
+  code: null,
+  name: null,
+  product_type_id: null,
+  product_group_id: null,
+  unit_id: null,
+  description: null,
+});
 
 const backProduct = () => {
   product.code = null;

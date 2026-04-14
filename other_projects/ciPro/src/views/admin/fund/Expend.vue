@@ -466,6 +466,15 @@ const getFundDetail = (fundHisId) => {
     fundApi.getFundHisDetail(fundHisId).then(res => {
       if(res != null && res.data != null && res.data.data != null){
         inputs.value = res.data.data
+        // Convert string dates from API to Date objects for vue3-datepicker
+        const parseLocalDate = (d) => {
+          if (!d) return new Date()
+          if (d instanceof Date) return d
+          const [y, m, day] = d.split('-').map(Number)
+          return new Date(y, m - 1, day)
+        }
+        inputs.value.date_input = parseLocalDate(inputs.value.date_input)
+        inputs.value.accounting_date = parseLocalDate(inputs.value.accounting_date)
         if(inputs.value.customer_id) {
           getCustomerById(inputs.value.customer_id)
         }
@@ -935,9 +944,12 @@ const changeSubType = (subType) => {
 
 const changeDateInput = () => {
   let dateNow = new Date()
-  let today = dateNow.toJSON().slice(0,10)
-  if(inputs.value.date_input != today && inputs.value.accounting_date == today) {
-    inputs.value.accounting_date = new Date(JSON.parse(JSON.stringify(inputs.value.date_input)))
+  let today = `${dateNow.getFullYear()}-${String(dateNow.getMonth()+1).padStart(2,'0')}-${String(dateNow.getDate()).padStart(2,'0')}`
+  let selectedStr = inputs.value.date_input instanceof Date
+    ? `${inputs.value.date_input.getFullYear()}-${String(inputs.value.date_input.getMonth()+1).padStart(2,'0')}-${String(inputs.value.date_input.getDate()).padStart(2,'0')}`
+    : inputs.value.date_input
+  if(selectedStr != today) {
+    inputs.value.accounting_date = new Date(inputs.value.date_input)
   }
 }
 
@@ -963,8 +975,9 @@ onMounted(() => {
   }
 
   let dateNow = new Date()
-  inputs.value.date_input = new Date(dateNow.toJSON().slice(0,10))
-  inputs.value.accounting_date = new Date(dateNow.toJSON().slice(0,10))
+  const today = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate())
+  inputs.value.date_input = new Date(today)
+  inputs.value.accounting_date = new Date(today)
 
   getOptionRelatedFund()
 })

@@ -158,8 +158,8 @@ const typeOptions = ref([
 ])
 
 const inputs = ref({
-  from_date: new Date('2000-01-01'),
-  to_date: new Date('2000-01-02'),
+  from_date: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0),
+  to_date: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 23, 59, 59),
   fund_type: null
 })
 const items = ref([])
@@ -180,16 +180,19 @@ const offset = ref(0)
 const totalRow = ref(0)
 
 const prepareDateInput = () => {
-  let dateNow = new Date()
-  inputs.value.to_date = new Date(dateNow.toJSON().slice(0,10))
-  inputs.value.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
-  let currentYear = new Date().getFullYear()
+  const dateNow = new Date()
+  const y = dateNow.getFullYear()
+  const m = dateNow.getMonth()
+  const d = dateNow.getDate()
+  inputs.value.to_date = new Date(y, m, d, 23, 59, 59)
+  inputs.value.from_date = new Date(y, m, d - 7, 0, 0, 0)
+  let currentYear = y
   year_input.value = currentYear
   yearOptions.value = []
   for (let i = currentYear; i > currentYear - 10; i--) {
     yearOptions.value.push({value: i, text: i})
   }
-  month_input.value = new Date().getMonth() + 1
+  month_input.value = dateNow.getMonth() + 1
 }
 
 const onScroll = (event) => {
@@ -323,6 +326,7 @@ const exportExcel = () => {
 }
 
 onMounted(() => {
+  prepareDateInput()
   prepareToSearch()
 })
 

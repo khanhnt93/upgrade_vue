@@ -369,7 +369,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4 mt-4">
         <div class="md:col-span-2">
           <label class="block text-gray-700">Ghi chú</label>
         </div>

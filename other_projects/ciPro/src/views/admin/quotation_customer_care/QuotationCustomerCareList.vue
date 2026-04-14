@@ -310,22 +310,22 @@
             </div>
           </div>
 
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div class="flex justify-end items-center gap-2 px-4 py-3 bg-gray-50">
+            <button
+              type="button"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
+              @click.prevent="hideModalChangeNote">
+              Quay lại
+            </button>
             <button
               v-show="!onChangeNote"
               type="button"
-              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               :disabled="onChangeNote"
               @click.prevent="confirmChangeNote">
               Xác nhận
             </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              @click.prevent="hideModalChangeNote">
-              Quay lại
-            </button>
-            <span v-show="onChangeNote" class="inline-block ml-3">
+            <span v-show="onChangeNote" class="inline-block">
               <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
@@ -361,22 +361,22 @@
             </div>
           </div>
 
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div class="flex justify-end items-center gap-2 px-4 py-3 bg-gray-50">
+            <button
+              type="button"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
+              @click.prevent="hideModalChangeProductGroupNote">
+              Quay lại
+            </button>
             <button
               v-show="!onChangeProductGroupNote"
               type="button"
-              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               :disabled="onChangeProductGroupNote"
               @click.prevent="confirmChangeProductGroupNote">
               Xác nhận
             </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              @click.prevent="hideModalChangeProductGroupNote">
-              Quay lại
-            </button>
-            <span v-show="onChangeProductGroupNote" class="inline-block ml-3">
+            <span v-show="onChangeProductGroupNote" class="inline-block">
               <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
@@ -422,22 +422,22 @@
             </div>
           </div>
 
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div class="flex justify-end items-center gap-2 px-4 py-3 bg-gray-50">
+            <button
+              type="button"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
+              @click.prevent="hideModalUpdateQuotationStatus">
+              Quay lại
+            </button>
             <button
               v-show="!onChangeStatus"
               type="button"
-              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               :disabled="onChangeStatus"
               @click.prevent="confirmChangeStatus">
               Xác nhận
             </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              @click.prevent="hideModalUpdateQuotationStatus">
-              Quay lại
-            </button>
-            <span v-show="onChangeStatus" class="inline-block ml-3">
+            <span v-show="onChangeStatus" class="inline-block">
               <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
@@ -478,22 +478,22 @@
             </div>
           </div>
 
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div class="flex justify-end items-center gap-2 px-4 py-3 bg-gray-50">
+            <button
+              type="button"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors"
+              @click.prevent="hideModalSettingQuotation">
+              Quay lại
+            </button>
             <button
               v-show="!onChangeSetting"
               type="button"
-              class="btn btn-sm btn-primary w-full inline-flex justify-center border border-transparent shadow-sm text-base sm:ml-3 sm:w-auto sm:text-sm"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               :disabled="onChangeSetting"
               @click.prevent="confirmChangeSettingQuotation">
               Lưu
             </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              @click.prevent="hideModalSettingQuotation">
-              Quay lại
-            </button>
-            <span v-show="onChangeSetting" class="inline-block ml-3">
+            <span v-show="onChangeSetting" class="inline-block">
               <i class="fa fa-spinner fa-spin fa-2x text-blue-500"></i>
             </span>
           </div>
@@ -596,7 +596,7 @@ const inputs = reactive({
   care_status: null,
   expire_status: null,
   from_date: new Date('2000-01-01'),
-  to_date: new Date('2000-01-02')
+  to_date: new Date()
 })
 
 // Data
@@ -662,7 +662,7 @@ const showModalSettingQuotationModal = ref(false)
 // Methods
 const prepareDateInput = () => {
   let dateNow = new Date()
-  inputs.to_date = dateNow
+  inputs.to_date = new Date()
   inputs.from_date = new Date(dateNow.setDate(dateNow.getDate() - 7))
   let currentYear = new Date().getFullYear()
   year_input.value = currentYear
