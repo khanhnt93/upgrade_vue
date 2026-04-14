@@ -117,7 +117,7 @@
             <div class="grid grid-cols-1 gap-4" v-show="showPartnerInfo">
               <div class="w-full">
                 <div
-                  class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row mt-2"
+                  class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row mt-2 mb-2"
                 >
                   <div class="w-full md:col-span-2 mt-2">
                     <label>
@@ -267,7 +267,7 @@
               v-show="showProductInfo"
             >
               <div class="w-full md:col-span-12">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4 form-row">
                   <div class="w-full md:col-span-2 mt-2">
                     <label>Sản phẩm<span class="error-sybol"></span> </label>
                   </div>
@@ -1160,12 +1160,11 @@
                 </div>
                 <div class="form-row">
                   <label> Thuế VAT </label>
-                  <div class="input-group">
+                  <div class="input-group flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="have_vat"
                       v-model="trade.have_vat"
-                      class="mr-2"
                       @change="calculateAmount('vat')"
                     />
                     <input
@@ -1173,7 +1172,8 @@
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control mr-2"
+                      class="form-control"
+                      style="width: 80px; flex: none;"
                       v-model="trade.vat_percent"
                       @change="calculateAmount"
                     />
@@ -1231,28 +1231,30 @@
                 </div>
                 <div class="form-row">
                   <label> Hình thức thanh toán </label>
-                  <select
-                    class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                    id="payment_method"
-                    v-model="trade.payment_method"
-                  >
-                    <option
-                      v-for="option in optionsPaymentMethod"
-                      :key="option.value"
-                      :value="option.value"
+                  <div class="select-wrapper">
+                    <select
+                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                      id="payment_method"
+                      v-model="trade.payment_method"
                     >
-                      {{ option.text }}
-                    </option>
-                  </select>
-                  <input
-                    v-show="trade.payment_method == null"
-                    id="payment_method_input"
-                    type="text"
-                    maxlength="255"
-                    autocomplete="new-password"
-                    class="form-control"
-                    v-model="trade.payment_method_input"
-                  />
+                      <option
+                        v-for="option in optionsPaymentMethod"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.text }}
+                      </option>
+                    </select>
+                    <input
+                      v-show="trade.payment_method == null"
+                      id="payment_method_input"
+                      type="text"
+                      maxlength="255"
+                      autocomplete="new-password"
+                      class="form-control"
+                      v-model="trade.payment_method_input"
+                    />
+                  </div>
                 </div>
                 <div class="form-row">
                   <label> Thỏa thuận vận chuyển </label>
@@ -1334,113 +1336,60 @@
             </div>
 
             <div v-show="showShippingInfo" class="mt-1">
-              <div>
-                <div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>
-                          <span>Tên người nhận hàng</span>
-                        </label>
-                      </div>
-                      <div class="w-full md:col-span-8">
-                        <input
-                          id="receiver_name"
-                          type="text"
-                          maxlength="100"
-                          autocomplete="new-password"
-                          class="form-control"
-                          v-model="trade.receiver_name"
-                          :disabled="saving"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>
-                          <span>SĐT nhận hàng</span>
-                        </label>
-                      </div>
-                      <div class="w-full md:col-span-8">
-                        <input
-                          id="receiver_phone"
-                          type="text"
-                          maxlength="14"
-                          autocomplete="new-password"
-                          class="form-control"
-                          v-model="trade.receiver_phone"
-                          :disabled="saving"
-                          @keyup="integerOnly($event.target)"
-                        />
-                      </div>
-                    </div>
-                  </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-row">
+                  <label>Tên người nhận hàng</label>
+                  <input
+                    id="receiver_name"
+                    type="text"
+                    maxlength="100"
+                    autocomplete="new-password"
+                    class="form-control"
+                    v-model="trade.receiver_name"
+                    :disabled="saving"
+                  />
                 </div>
-
-                <div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>
-                          <span>Địa chỉ nhận hàng</span>
-                        </label>
-                      </div>
-                      <div class="w-full md:col-span-8">
-                        <input
-                          id="receiver_address"
-                          type="text"
-                          maxlength="100"
-                          autocomplete="new-password"
-                          class="form-control"
-                          v-model="trade.receiver_address"
-                          :disabled="saving"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>
-                          <span>Ngày giao hàng dự kiến</span>
-                        </label>
-                      </div>
-                      <div class="w-full md:col-span-8">
-                        <datepicker
-                          v-model="trade.shipping_date"
-                          format="yyyy-MM-dd"
-                          input-class="datepicker-cus"
-                        ></datepicker>
-                      </div>
-                    </div>
-                  </div>
+                <div class="form-row">
+                  <label>SĐT nhận hàng</label>
+                  <input
+                    id="receiver_phone"
+                    type="text"
+                    maxlength="14"
+                    autocomplete="new-password"
+                    class="form-control"
+                    v-model="trade.receiver_phone"
+                    :disabled="saving"
+                    @keyup="integerOnly($event.target)"
+                  />
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>
-                      <span>Ghi chú khi giao hàng</span>
-                    </label>
-                  </div>
-                  <div class="w-full md:col-span-10">
-                    <textarea
-                      class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="shipping_note"
-                      style="width: 100%"
-                      rows="2"
-                      v-model="trade.shipping_note"
-                    ></textarea>
-                  </div>
+                <div class="form-row">
+                  <label>Địa chỉ nhận hàng</label>
+                  <input
+                    id="receiver_address"
+                    type="text"
+                    maxlength="100"
+                    autocomplete="new-password"
+                    class="form-control"
+                    v-model="trade.receiver_address"
+                    :disabled="saving"
+                  />
+                </div>
+                <div class="form-row">
+                  <label>Ngày giao hàng dự kiến</label>
+                  <datepicker
+                    v-model="trade.shipping_date"
+                    format="yyyy-MM-dd"
+                    input-class="datepicker-cus"
+                  ></datepicker>
+                </div>
+                <div class="form-row md:col-span-2">
+                  <label>Ghi chú khi giao hàng</label>
+                  <textarea
+                    class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
+                    id="shipping_note"
+                    rows="2"
+                    v-model="trade.shipping_note"
+                  ></textarea>
                 </div>
               </div>
             </div>
@@ -5387,10 +5336,132 @@ const confirmRepoKeep = () => {
 </script>
 
 <style lang="scss" scoped>
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
 .title-partner {
   border-radius: 5px 5px;
   padding: 5px;
   height: 30px;
+}
+
+.form-row:not(.grid) {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+
+  > label:first-child {
+    flex: 0 0 160px;
+    min-width: 160px;
+    margin-bottom: 0;
+  }
+
+  > input,
+  > select,
+  > textarea,
+  > .input-group,
+  > .select-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  > input,
+  > select {
+    height: 34px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    color: #111827;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    &:disabled,
+    &[readonly] {
+      background-color: #f3f4f6;
+      color: #6b7280;
+    }
+  }
+
+  > textarea {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    color: #111827;
+    width: 100%;
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  > .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input[type="text"],
+    input[type="number"] {
+      height: 34px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      min-width: 0;
+
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .form-control {
+      flex: 1;
+    }
+  }
+
+  > .select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    select,
+    input {
+      height: 34px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      width: 100%;
+    }
+  }
 }
 
 .project_bg {
