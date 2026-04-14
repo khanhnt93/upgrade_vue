@@ -84,30 +84,30 @@
         </div>
       </div>
 
-      <div class="table-cus">
-        <table class="table table-bordered table-striped fixed_header">
-          <thead>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border border-gray-300 text-sm">
+          <thead class="bg-gray-100">
             <tr>
-              <th style="width:5%" class="text-center">STT</th>
-              <th style="width:12%" class="text-center">Ngày phát sinh</th>
-              <th style="width:12%" class="text-center">Nhân viên</th>
-              <th style="width:14%" class="text-center">Mã ĐH bán</th>
-              <th style="width:14%" class="text-center">Ngày hoàn thành đơn</th>
-              <th style="width:14%" class="text-center">Mã phiếu chi</th>
-              <th style="width:12%" class="text-center">Số tiền</th>
-              <th style="width:17%" class="text-center">Nội dung chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:5%">STT</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:12%">Ngày phát sinh</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:12%">Nhân viên</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:14%">Mã ĐH bán</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:14%">Ngày hoàn thành đơn</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:14%">Mã phiếu chi</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:12%">Số tiền</th>
+              <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:17%">Nội dung chi</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in items" :key="index">
-              <td class="text-center">{{index + 1}}</td>
-              <td>{{item.accounting_date}}</td>
-              <td>{{item.staff_name}}</td>
-              <td>{{item.order_sell_number}}</td>
-              <td>{{item.finished_date}}</td>
-              <td>{{item.fund_number}}</td>
-              <td class="text-right">{{currencyFormat(item.amount)}}</td>
-              <td>{{item.description}}</td>
+            <tr v-for="(item, index) in items" :key="index" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-3 py-2 text-center">{{index + 1}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.accounting_date}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.staff_name}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.order_sell_number}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.finished_date}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.fund_number}}</td>
+              <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.amount)}}</td>
+              <td class="border border-gray-300 px-3 py-2">{{item.description}}</td>
             </tr>
           </tbody>
         </table>

@@ -67,14 +67,14 @@
       </div>
 
       <div :class="loadingCustomerReport ? 'bg-gray-200' : ''">
-        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Khách hàng</h5>
+        <h5 class="text-xl font-semibold text-orange-600 mb-4">Khách hàng</h5>
         <p>Tổng Số lượng khách hàng: {{currencyFormat(customer_report.total)}}</p>
         <p>Tổng số lượng khách hàng mới: {{currencyFormat(customer_report.total_new)}}</p>
         <p>Tổng số lượng khách hàng cũ: {{currencyFormat(customer_report.total_old)}}</p>
       </div>
 
       <div :class="loadingQuotationReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Báo cáo báo giá</h5>
+        <h5 class="text-xl font-semibold text-orange-600 mb-4">Báo cáo báo giá</h5>
       </div>
 
       <div :class="loadingQuotationReport ? 'bg-gray-200' : ''" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -95,23 +95,23 @@
       </div>
 
       <div :class="loadingQuotationDetailReport ? 'bg-gray-200' : ''" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Tổng giá trị báo giá (chưa VAT) theo nhóm sản phẩm</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:25%">Nhóm SP</th>
-                <th style="width:25%">Tổng giá trị BG</th>
-                <th style="width:25%">Thành công</th>
-                <th style="width:25%">Thất bại</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Nhóm SP</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Tổng giá trị BG</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thành công</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thất bại</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in quotation_detail_report.group_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.total)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_success)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in quotation_detail_report.group_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_success)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_fail)}}</td>
               </tr>
             </tbody>
           </table>
@@ -122,23 +122,23 @@
           </div>
         </div>
 
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Tổng giá trị báo giá (chưa VAT) theo loại sản phẩm</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:25%">Loại SP</th>
-                <th style="width:25%">Tổng giá trị BG</th>
-                <th style="width:25%">Thành công</th>
-                <th style="width:25%">Thất bại</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Loại SP</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Tổng giá trị BG</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thành công</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thất bại</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in quotation_detail_report.type_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.total)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_success)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in quotation_detail_report.type_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_success)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_fail)}}</td>
               </tr>
             </tbody>
           </table>
@@ -149,23 +149,23 @@
           </div>
         </div>
 
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Tổng giá trị báo giá (chưa VAT) theo hãng sản phẩm</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:25%">Hãng SP</th>
-                <th style="width:25%">Tổng giá trị BG</th>
-                <th style="width:25%">Thành công</th>
-                <th style="width:25%">Thất bại</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Hãng SP</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Tổng giá trị BG</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thành công</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:25%">Thất bại</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in quotation_detail_report.brand_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.total)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_success)}}</td>
-                <td class="text-right">{{currencyFormat(item.total_fail)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in quotation_detail_report.brand_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_success)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.total_fail)}}</td>
               </tr>
             </tbody>
           </table>
@@ -179,33 +179,33 @@
       </div>
 
       <div :class="loadingQuotationCareReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Chăm sóc báo giá</h5>
+        <h5 class="text-xl font-semibold text-orange-600 mb-4">Chăm sóc báo giá</h5>
         <p>Tỉ lệ chăm sóc khách hàng lần 1 đúng hạn: {{quotation_care_report.percent_care_1}}%</p>
         <p>Tỉ lệ chăm sóc khách hàng lần 2 đúng hạn: {{quotation_care_report.percent_care_2}}%</p>
       </div>
 
       <div :class="loadingRevenueProfitReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Doanh Thu</h5>
+        <h5 class="text-xl font-semibold text-orange-600 mb-4">Doanh Thu</h5>
         <p>Tổng doanh thu: {{currencyFormat(revenue_profit.revenue)}}</p>
         <p>Tổng lợi nhuận: {{currencyFormat(revenue_profit.profit)}}</p>
       </div>
 
       <div :class="loadingRevenueProfitReport ? 'bg-gray-200' : ''" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Doanh thu/lợi nhuận theo nhóm sp</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:40%">Nhóm sp</th>
-                <th style="width:30%">Doanh thu</th>
-                <th style="width:30%">Lợi nhuận</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:40%">Nhóm sp</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Doanh thu</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Lợi nhuận</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in revenue_profit_detail_report.group_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.revenue)}}</td>
-                <td class="text-right">{{currencyFormat(item.profit)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in revenue_profit_detail_report.group_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.revenue)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.profit)}}</td>
               </tr>
             </tbody>
           </table>
@@ -216,21 +216,21 @@
           </div>
         </div>
 
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Doanh thu/lợi nhuận theo loại sp</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:40%">Loại sp</th>
-                <th style="width:30%">Doanh thu</th>
-                <th style="width:30%">Lợi nhuận</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:40%">Loại sp</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Doanh thu</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Lợi nhuận</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in revenue_profit_detail_report.type_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.revenue)}}</td>
-                <td class="text-right">{{currencyFormat(item.profit)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in revenue_profit_detail_report.type_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.revenue)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.profit)}}</td>
               </tr>
             </tbody>
           </table>
@@ -241,21 +241,21 @@
           </div>
         </div>
 
-        <div class="table-cus" :style="{ height: max_table_height + 'px', overflowY: 'auto', overflowX: 'auto'}">
+        <div class="overflow-x-auto">
           <p>Doanh thu/lợi nhuận theo hãng sp</p>
-          <table class="table table-bordered table-striped fixed_header">
-            <thead>
+          <table class="min-w-full border-collapse border border-gray-300 text-sm">
+            <thead class="bg-gray-100">
               <tr>
-                <th style="width:40%">Hãng sp</th>
-                <th style="width:30%">Doanh thu</th>
-                <th style="width:30%">Lợi nhuận</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:40%">Hãng sp</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Doanh thu</th>
+                <th class="border border-gray-300 px-3 py-2 text-center font-medium" style="width:30%">Lợi nhuận</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in revenue_profit_detail_report.brand_products" :key="item.name">
-                <td>{{item.name}}</td>
-                <td class="text-right">{{currencyFormat(item.revenue)}}</td>
-                <td class="text-right">{{currencyFormat(item.profit)}}</td>
+              <tr class="hover:bg-gray-50" v-for="(item) in revenue_profit_detail_report.brand_products" :key="item.name">
+                <td class="border border-gray-300 px-3 py-2">{{item.name}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.revenue)}}</td>
+                <td class="border border-gray-300 px-3 py-2 text-right">{{currencyFormat(item.profit)}}</td>
               </tr>
             </tbody>
           </table>
@@ -268,7 +268,7 @@
       </div>
 
       <div :class="loadingRevenueProfitReport ? 'bg-gray-200' : ''" class="mt-3">
-        <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">Chi Phí bán hàng</h5>
+        <h5 class="text-xl font-semibold text-orange-600 mb-4">Chi Phí bán hàng</h5>
         <p>
           Tổng chi phí bán hàng: {{currencyFormat(expend.total)}}
           <button class="button-like-a btn-width-220" @click="goToExpendReport()">Xem chi tiết</button>
@@ -389,7 +389,6 @@ const revenue_profit_detail_report = ref({
 const expend = ref({
   total: 0
 })
-const max_table_height = ref(500)
 const show_more_item = 10
 
 const prepareDateInput = () => {
@@ -673,11 +672,6 @@ const currencyFormat = (num) => {
 }
 
 onMounted(() => {
-  let height = screen.height
-  if(height && height > 500) {
-    max_table_height.value = Math.round(height / 2)
-  }
-
   prepareDateInput()
   getOptionRelated()
   search()
