@@ -257,7 +257,7 @@
                     <button v-if="item.status > 0"
                             @click="openModalCreateBallot(item)"
                             class="btn btn-sm btn-primary text-xs">
-                      <i class="fa fa-plus"></i> Tạo phiếu
+                      Tạo phiếu
                     </button>
                   </div>
                 </td>
@@ -931,24 +931,26 @@ const prepareDateInput = () => {
 
 const getOptionsRelated = () => {
   loadingOptions.value = true
-  orderSellApi.getOptionRelated(userRole.value).then(res => {
+  let params = {}
+  if (userRole.value == 'staff') {
+    params.customer_by_staff = true
+  } else {
+    params.customer_by_admin = true
+    params.staffs = true
+  }
+
+  orderSellApi.getOptionForOrderSellList(params).then(res => {
     if (res != null && res.data != null && res.data.data != null) {
-      let optionRelated = res.data.data
+      customerOptions.value = res.data.data.customers
+      customerOptions.value.unshift({"id": null, "name": '-- Tất cả --'})
 
-      // Staff options
-      staffOptions.value = optionRelated.staffs
-
-      // Customer options
-      customerOptions.value = optionRelated.customers
-
-      // Year options
-      for (let i = 2020; i <= today_year.value + 1; i++) {
-        yearOptions.value.push({"value": i, "text": i.toString()})
-      }
-      year_input.value = today_year.value
+      staffOptions.value = res.data.data.staffs ?? []
+      staffOptions.value.unshift({"id": null, "name": '-- Tất cả --'})
     }
     loadingOptions.value = false
   }).catch(err => {
+    let errorMess = commonFunc.handleStaffError(err)
+    popToast('danger', errorMess)
     loadingOptions.value = false
   })
 }
