@@ -213,8 +213,8 @@
               </td>
               <td class="border border-gray-300 px-3 py-2 text-center">
                 <div class="flex gap-2 items-center whitespace-nowrap">
-                  <button v-if="!item.loan_id" @click="editFund(item)" class="btn btn-primary">Sửa</button>
-                  <button v-if="isUserRoot" @click="deleteFund(item.id, item.fund_number)" class="btn btn-danger">Xoá</button>
+                  <button v-if="!item.loan_id" @click="editFund(item)" class="btn btn-sm btn-primary text-xs">Sửa</button>
+                  <button v-if="isUserRoot" @click="deleteFund(item.id, item.fund_number)" class="btn btn-sm btn-danger text-xs">Xoá</button>
                 </div>
               </td>
             </tr>

@@ -179,7 +179,7 @@
                   <button
                     @click="goToIncome(item.id)"
                     title="Xoá nợ"
-                    class="btn btn-sm btn-danger text-sm"
+                    class="btn btn-sm btn-danger text-xs"
                   >
                     Xoá nợ
                   </button>

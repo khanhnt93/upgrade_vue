@@ -600,13 +600,11 @@
                   class="mt-2"
                   v-show="trade.type == 0 && trade.products.length > 0"
                 >
-                  <div class="w-full md:col-span-12">
-                    <div
-                      style="width: 100%; overflow-x: scroll"
-                      class="sub-table-cus"
-                    >
+                  <div class="w-full min-w-0">
+                    <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
+                        style="table-layout: auto; width: auto; min-width: 100%;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
@@ -623,7 +621,7 @@
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
-                          <col style="width: 50px" />
+                          <col style="width: 120px" />
                         </colgroup>
                         <thead>
                           <tr>
@@ -663,7 +661,7 @@
                             <th class="text-center font-weight-bold">
                               Ghi chú
                             </th>
-                            <th></th>
+                            <th class="width-150"></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -811,13 +809,11 @@
                   class="mt-2"
                   v-show="trade.type == 1 && projectProducts.length > 0"
                 >
-                  <div class="w-full md:col-span-12">
-                    <div
-                      style="width: 100%; overflow-x: scroll"
-                      class="sub-table-cus"
-                    >
+                  <div class="w-full min-w-0">
+                    <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
+                        style="table-layout: auto; width: auto; min-width: 100%;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
@@ -834,7 +830,7 @@
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
-                          <col style="width: 50px" />
+                          <col style="width: 160px" />
                         </colgroup>
                         <thead>
                           <tr>
@@ -874,7 +870,7 @@
                             <th class="text-center font-weight-bold">
                               Ghi chú
                             </th>
-                            <th></th>
+                            <th class="width-150"></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -5483,5 +5479,12 @@ label {
 
 .project_bg {
   background-color: #6a9ab0 !important;
+}
+
+.width-150 {
+  width: 150px;
+}
+.width-200 {
+  width: 200px;
 }
 </style>

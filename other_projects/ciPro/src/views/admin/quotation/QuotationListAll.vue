@@ -4,23 +4,23 @@
 
       <!-- Action Buttons Row -->
       <div class="flex justify-end items-center gap-2 mb-4">
-        <button
-          @click="goToAdd()"
-          class="btn btn-success">
-          Thêm BG
-        </button>
-
-        <button
-          @click="goToAddProject()"
-          class="btn btn-success">
-          Thêm BG dự án
-        </button>
 
         <button
           @click="showModalSettingQuotation()"
           class="px-4 py-2 bg-white border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors min-w-[120px]">
           Cài đặt
         </button>
+        <button
+          @click="goToAddProject()"
+          class="btn btn-success">
+          Thêm BG dự án
+        </button>
+        <button
+          @click="goToAdd()"
+          class="btn btn-success">
+          Thêm BG
+        </button>
+
       </div>
 
       <!-- Title -->
@@ -256,28 +256,30 @@
             <tr v-for="item in items" :key="item.id" :class="item.row_class" class="hover:bg-gray-50 border-b border-gray-200">
               <td class="px-2 py-2 text-sm text-gray-900">{{ item.stt }}</td>
               <td class="px-2 py-2 text-sm text-gray-900">
-                <a
-                  v-if="item.type === 0"
-                  :href="'/quotation-' + scope + '/detail/' + item.id"
-                  target="_blank"
-                  title="Chi tiết báo giá"
-                  class="text-blue-600 hover:text-blue-800 underline">
-                  {{ item.quotation_number }}
-                </a>
-                <a
-                  v-if="item.type === 1"
-                  :href="'/quotation-project-' + scope + '/detail/' + item.id"
-                  target="_blank"
-                  title="Chi tiết báo giá"
-                  class="text-blue-600 hover:text-blue-800 underline">
-                  {{ item.quotation_number }}
-                </a>
-                <button
-                  @click="showModalCopyQuotation(item)"
-                  title="Copy báo giá"
-                  class="ml-2 px-2 py-1 bg-white border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors text-xs">
-                  <i class="fa fa-copy"/>
-                </button>
+                <div class="flex items-center gap-1 flex-nowrap">
+                  <a
+                    v-if="item.type === 0"
+                    :href="'/quotation-' + scope + '/detail/' + item.id"
+                    target="_blank"
+                    title="Chi tiết báo giá"
+                    class="text-blue-600 hover:text-blue-800 underline">
+                    {{ item.quotation_number }}
+                  </a>
+                  <a
+                    v-if="item.type === 1"
+                    :href="'/quotation-project-' + scope + '/detail/' + item.id"
+                    target="_blank"
+                    title="Chi tiết báo giá"
+                    class="text-blue-600 hover:text-blue-800 underline">
+                    {{ item.quotation_number }}
+                  </a>
+                  <button
+                    @click="showModalCopyQuotation(item)"
+                    title="Copy báo giá"
+                    class="px-2 py-1 bg-white border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors text-xs shrink-0">
+                    <i class="fa fa-copy"/>
+                  </button>
+                </div>
               </td>
               <td class="px-2 py-2 text-sm text-gray-900">{{ item.staff_on_charge_name }}</td>
               <td class="px-2 py-2 text-sm text-gray-900">{{ item.customer_name }}</td>
@@ -292,7 +294,7 @@
                 <button
                   v-if="item.status === 0"
                   @click="showModalUpdateQuotationStatus(item)"
-                  class="btn btn-sm btn-primary ml-1">
+                  class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0">
                   Sửa
                 </button>
               </td>
@@ -301,19 +303,19 @@
                   <button
                     v-show="item.status === -1"
                     @click="goToUpdate(item.id, item.type)"
-                    class="px-3 py-1 bg-white border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors text-xs">
+                    class="btn btn-sm btn-primary text-xs">
                     Sửa
                   </button>
                   <button
                     v-show="item.status === -1 && userRole === 'admin'"
                     @click="deleteQuotation(item.id, item.customer_name)"
-                    class="px-3 py-1 bg-white border border-red-600 text-red-600 rounded hover:bg-red-50 transition-colors text-xs">
+                    class="btn btn-sm btn-danger text-xs">
                     Xóa
                   </button>
                   <button
                     v-show="item.status === 0"
                     @click="goToOrderSell(item.id, item.count_order_sell)"
-                    class="px-3 py-1 bg-white border border-blue-600 text-blue-600 rounded hover:bg-blue-50 transition-colors text-xs">
+                    class="btn btn-sm btn-success text-xs">
                     Tạo đơn hàng
                   </button>
                 </div>

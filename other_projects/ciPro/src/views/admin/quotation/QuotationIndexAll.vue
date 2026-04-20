@@ -278,17 +278,10 @@
 
             <div class="grid grid-cols-1 gap-4 mt-2" v-show="showProductInfo">
               <div class="w-full md:col-span-12">
-                <div
-                  class="grid grid-cols-1 gap-4 form-row mt-2"
-                  v-show="trade.type == 1"
-                >
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>
-                      <span>Dự án</span>
-                    </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
-                    <div class="input-group">
+                <div class="flex items-center gap-2 mt-2" v-show="trade.type == 1">
+                  <label class="w-36 shrink-0 text-right text-sm">Dự án</label>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-4">
                       <input
                         type="radio"
                         v-model="currentProduct.project_type"
@@ -297,85 +290,79 @@
                         @change="changeProjectType"
                         id="project_type_0"
                       />
-                      <label class="ml-4 mt-1" for="project_type_0"
-                        >Dự án mới</label
-                      >
+                      <label class="ml-1" for="project_type_0">Dự án mới</label>
                       <input
                         type="radio"
                         v-model="currentProduct.project_type"
                         name="project_type"
                         value="1"
-                        class="ml-5"
                         @change="changeProjectType"
                         id="project_type_1"
                       />
-                      <label class="ml-4 mt-1" for="project_type_1"
-                        >Dự án mẫu</label
-                      >
+                      <label class="ml-1" for="project_type_1">Dự án mẫu</label>
                     </div>
                   </div>
                 </div>
 
-                <div
-                  class="grid grid-cols-1 gap-4"
-                  v-show="trade.type == 1 && currentProduct.project_type == 0"
-                >
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>Tên dự án<span class="error-sybol"></span></label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-center gap-2 mt-2" v-show="trade.type == 1 && currentProduct.project_type == 0">
+                  <label class="w-36 shrink-0 text-right text-sm">Tên dự án<span class="error-sybol"></span></label>
+                  <div class="flex-1">
                     <input
                       id="project_name"
                       type="text"
                       maxlength="255"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.project_name"
                     />
                   </div>
                 </div>
 
                 <div
-                  class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2"
                   v-show="trade.type == 1 && currentProduct.project_type == 0"
                 >
-                  <div>
-                    <label>Hãng dự án</label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="project_brand_id"
-                      autocomplete="new-password"
-                      v-model="currentProduct.project_brand_id"
-                      placeholder="--Chọn hãng dự án--"
-                      @change="changeProjectBrand"
-                    >
-                      <option
-                        v-for="option in productBrandOptions"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Hãng dự án</label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="project_brand_id"
+                        autocomplete="new-password"
+                        v-model="currentProduct.project_brand_id"
+                        placeholder="--Chọn hãng dự án--"
+                        @change="changeProjectBrand"
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in productBrandOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
-                  <div>
-                    <label>Đơn vị dự án</label>
-                    <select
-                      class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                      id="project_unit_id"
-                      autocomplete="new-password"
-                      v-model="currentProduct.project_unit_id"
-                      placeholder="--Chọn Đơn vị dự án--"
-                      @change="changeProjectUnit"
-                    >
-                      <option
-                        v-for="option in unitOptions"
-                        :key="option.value"
-                        :value="option.value"
+                  <div class="flex items-center gap-2">
+                    <label class="w-36 shrink-0 text-right text-sm">Đơn vị dự án</label>
+                    <div class="flex-1">
+                      <select
+                        class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="project_unit_id"
+                        autocomplete="new-password"
+                        v-model="currentProduct.project_unit_id"
+                        placeholder="--Chọn Đơn vị dự án--"
+                        @change="changeProjectUnit"
                       >
-                        {{ option.text }}
-                      </option>
-                    </select>
+                        <option
+                          v-for="option in unitOptions"
+                          :key="option.value"
+                          :value="option.value"
+                        >
+                          {{ option.text }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -780,16 +767,14 @@
 
                 <!-- Báo giá thường thì dùng danh sách này-->
                 <div
-                  class="grid grid-cols-1 gap-4 mt-2"
+                  class="mt-2"
                   v-show="trade.type == 0 && trade.products.length > 0"
                 >
-                  <div class="w-full md:col-span-12">
-                    <div
-                      style="width: 100%; overflow-x: scroll"
-                      class="sub-table-cus"
-                    >
+                  <div class="w-full min-w-0">
+                    <div class="w-full overflow-x-auto sub-table-cus">
                       <table
-                        class="table table-bordered table-striped fixed_header"
+                        class="table table-bordered table-striped fixed_header min-w-max"
+                        style="table-layout: auto; width: auto; min-width: 100%;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
@@ -807,7 +792,7 @@
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
-                          <col style="width: 50px" />
+                          <col style="width: 150px" />
                         </colgroup>
                         <thead>
                           <tr>
@@ -852,7 +837,7 @@
                             <th class="text-center font-weight-bold">
                               Ghi chú
                             </th>
-                            <th class=""></th>
+                            <th class="width-150"></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1002,7 +987,7 @@
                                 @change="changeProductNote(index)"
                               />
                             </td>
-                            <td class="fitwidth-50">
+                            <td>
                               <button
                                 @click="deleteProduct(index, item.product_id, item.quantity, item.properties)"
                                 class="btn btn-sm btn-danger">
@@ -1018,16 +1003,14 @@
 
                 <!-- Báo giá dự án thì dùng danh sách này-->
                 <div
-                  class="grid grid-cols-1 gap-4 mt-2"
+                  class="mt-2"
                   v-show="trade.type == 1 && projectProducts.length > 0"
                 >
-                  <div class="w-full md:col-span-12">
-                    <div
-                      style="width: 100%; overflow-x: scroll"
-                      class="sub-table-cus"
-                    >
+                  <div class="w-full min-w-0">
+                    <div class="w-full overflow-x-auto sub-table-cus">
                       <table
-                        class="table table-bordered table-striped fixed_header"
+                        class="table table-bordered table-striped fixed_header min-w-max"
+                        style="table-layout: auto; width: auto; min-width: 100%;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
@@ -1045,7 +1028,7 @@
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
-                          <col style="width: 50px" />
+                          <col style="width: 150px" />
                         </colgroup>
                         <thead>
                           <tr>
@@ -1090,7 +1073,7 @@
                             <th class="text-center font-weight-bold">
                               Ghi chú
                             </th>
-                            <th class=""></th>
+                            <th class="width-150"></th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1348,7 +1331,7 @@
                                 "
                               />
                             </td>
-                            <td class="fitwidth-50">
+                            <td>
                               <div class="flex gap-2 items-center whitespace-nowrap">
                                 <button
                                   v-show="item.product_type == 0"
@@ -7156,5 +7139,9 @@ const addUpdateShippingAgreement = () => {
 
 .project_bg {
   background-color: #6a9ab0 !important;
+}
+
+.width-150 {
+  width: 150px;
 }
 </style>
