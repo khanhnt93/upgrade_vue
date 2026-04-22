@@ -155,7 +155,7 @@
           <input type="text" v-model="inputs.amount"
                  @keyup="integerPointAndCommaOnly($event.target)"
                  @change="changeAmount"
-                 class="form-input w-full rounded-md border-gray-300"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left font-semibold "
                  maxlength="14">
         </div>
       </div>
@@ -225,7 +225,7 @@
         <div class="col-span-12 md:col-span-9">
           <textarea v-model="inputs.description"
                     rows="2"
-                    class="form-textarea w-full rounded-md border-gray-300"></textarea>
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
         </div>
       </div>
 

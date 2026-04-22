@@ -2,14 +2,14 @@
   <div class="w-full mx-auto px-4">
     <div class="bg-white rounded-lg shadow p-6 mb-4">
       <div class="flex flex-wrap gap-2 justify-end mb-4">
-        <button class="btn btn-success" @click="goToAddAccountingSlip">
-          Thêm PKT
+        <button class="btn btn-success" @click="goToAddIncome">
+          Thêm khoản thu
         </button>
         <button class="btn btn-success" @click="goToAddExpend">
           Thêm khoản chi
         </button>
-        <button class="btn btn-success" @click="goToAddIncome">
-          Thêm khoản thu
+        <button class="btn btn-success" @click="goToAddAccountingSlip">
+          Thêm PKT
         </button>
       </div>
 

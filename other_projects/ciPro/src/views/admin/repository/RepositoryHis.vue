@@ -234,7 +234,7 @@
               <td class="px-4 py-2 text-sm border">{{currencyFormat(item.amount)}}</td>
               <td class="px-4 py-2 text-sm border">{{item.created_by_name}}</td>
               <td class="px-4 py-2 text-sm border">
-                <button v-if="isUserRoot" @click="deleted(item.id, item.repository_number)" class="btn btn-danger">Xoá</button>
+                <button v-if="isUserRoot" @click="deleted(item.id, item.repository_number)" class="btn btn-sm btn-danger text-xs">Xoá</button>
               </td>
             </tr>
           </tbody>

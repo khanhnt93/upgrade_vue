@@ -11,7 +11,7 @@
         </button>
         <button
           @click="goToAdd"
-          class="btn btn-success"
+          class="btn btn-primary"
         >
           Thêm mới từ ĐH bán
         </button>
@@ -246,7 +246,7 @@
                   </button>
                   <button
                     v-show="item.status < 3 && !loadingDetail"
-                    @click="handleProductExcel(item.id)"
+                    @click="handleProductExcel(item)"
                     class="btn btn-sm btn-primary text-xs"
                   >
                     In excel
@@ -359,45 +359,117 @@
 
     <!-- Modal Create Ballot -->
     <div v-if="showCreateBallotModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+      <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tạo phiếu liên quan</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tạo phiếu</h4>
           <hr class="mb-4">
 
-          <div class="space-y-3">
+          <div class="mb-2">
+            <label class="block text-sm font-medium">Số đơn hàng: {{ currentOrderBuy.order_buy_number }}</label>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium">Nhà cung cấp: {{ currentOrderBuy.supplier_name }}</label>
+          </div>
+          <hr class="mb-4">
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
             <button
+              v-show="currentOrderBuy.status == 0 || currentOrderBuy.status == 2"
               @click="goToRepoInput(currentOrderBuy.id)"
-              class="w-full btn btn-primary"
+              class="btn btn-primary"
             >
               Phiếu nhập kho
             </button>
             <button
+              v-show="currentOrderBuy.status >= 0"
+              @click="goToExpense(currentOrderBuy.id)"
+              class="btn btn-primary"
+            >
+              Phiếu Chi
+            </button>
+            <button
+              v-show="currentOrderBuy.status > 0 && currentOrderBuy.status <= 7"
               @click="goToProductBack(currentOrderBuy.id)"
-              class="w-full btn btn-orange"
+              class="btn btn-primary"
             >
               Phiếu trả hàng nhập
             </button>
+          </div>
+
+          <div class="mb-4">
             <button
-              @click="goToExpense(currentOrderBuy.id)"
-              class="w-full btn btn-danger"
-            >
-              Phiếu chi
-            </button>
-            <button
+              v-show="currentOrderBuy.status > 0 && currentOrderBuy.product_back_status > 0 && currentOrderBuy.status <= 7"
               @click="goToIncomeBack(currentOrderBuy.id)"
-              class="w-full btn btn-success"
+              class="btn btn-primary"
             >
-              Phiếu thu từ trả hàng
+              Phiếu thu do hủy đơn - Trả hàng
             </button>
           </div>
 
-          <div class="flex justify-center mt-4">
+          <div class="flex justify-start mt-4">
             <button
               @click="hideModalCreateBallot"
               class="btn btn-secondary w-32"
             >
-              Đóng
+              Quay lại
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal In Excel -->
+    <div v-if="showPrintExcelModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="relative mx-auto p-5 border w-11/12 max-h-[90vh] overflow-y-auto shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">In excel</h4>
+          <hr class="mb-4">
+
+          <div class="space-y-1 mb-4">
+            <div><label class="text-sm font-medium">Nhà cung cấp: {{ currentOrderBuy.supplier_name }}</label></div>
+            <div><label class="text-sm font-medium">Ngày đặt hàng: {{ currentOrderBuy.created_at }}</label></div>
+            <div><label class="text-sm font-medium">Thời gian GH dự kiến: {{ currentOrderBuy.shipping_date }}</label></div>
+            <div><label class="text-sm font-medium">Xuất hóa đơn: {{ currentOrderBuy.have_vat ? 'Có' : 'Không' }}</label></div>
+            <div><label class="text-sm font-medium">Phương thức thanh toán: {{ currentOrderBuy.payment_method }}</label></div>
+            <div><label class="text-sm font-medium">Tổng tiền gồm VAT: {{ currencyFormat(currentOrderBuy.total) }}</label></div>
+            <div><label class="text-sm font-medium">Số ĐH bán: {{ currentOrderBuy.order_sell_number }}</label></div>
+          </div>
+          <hr class="mb-4">
+
+          <div v-show="excel_one_items.length > 0" class="overflow-x-auto mb-4">
+            <table class="min-w-full border-collapse border border-gray-300 text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">STT</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Mã Hàng</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Tên Hàng</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Hãng</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">DVT</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">SL</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Đơn giá</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Thành tiền</th>
+                  <th class="border border-gray-300 px-2 py-2 text-center font-bold">Ghi Chú</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in excel_one_items" :key="index" class="hover:bg-gray-50">
+                  <td class="border border-gray-300 px-2 py-1 text-center">{{ index + 1 }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.product_code }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.product_name }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.product_brand }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.unit }}</td>
+                  <td class="border border-gray-300 px-2 py-1 text-right">{{ currencyFormat(item.quantity) }}</td>
+                  <td class="border border-gray-300 px-2 py-1 text-right">{{ currencyFormat(item.price_buy) }}</td>
+                  <td class="border border-gray-300 px-2 py-1 text-right">{{ currencyFormat(item.amount) }}</td>
+                  <td class="border border-gray-300 px-2 py-1">{{ item.note }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex justify-between mt-4">
+            <button @click="hideModalPrintExcel" class="btn btn-secondary w-32">Quay lại</button>
+            <button @click="downloadProductExcel" class="btn btn-success">In excel</button>
           </div>
         </div>
       </div>
@@ -577,6 +649,8 @@ const showUpdateNoteModal = ref(false)
 const showUpdateInvoiceNoteModal = ref(false)
 const showCreateBallotModal = ref(false)
 const showDetailPaymentModal = ref(false)
+const showPrintExcelModal = ref(false)
+const excel_one_items = ref([])
 
 // Methods
 const onScroll = (event) => {
@@ -722,39 +796,63 @@ const confirmChangeInvoiceNote = () => {
   })
 }
 
-const handleProductExcel = (orderBuyId) => {
-  if (orderBuyId) {
+const handleProductExcel = (item) => {
+  if (item && item.id) {
     loadingDetail.value = true
-    orderBuyApi.getOrderBuyDetail(orderBuyId).then(res => {
+    orderBuyApi.getOrderBuyDetail(item.id).then(res => {
       if (res != null && res.data != null && res.data.data != null) {
-        let excel_one_items = res.data.data.products || []
-
-        if (excel_one_items.length > 0) {
-          const excel_one_fields = {
-            'STT': 'stt',
-            'Mã SP': 'product_code',
-            'Tên SP': 'product_name',
-            'ĐVT': 'unit',
-            'SL': 'quantity',
-            'Giá': 'unit_price',
-            'Thành tiền': 'total_price'
-          }
-
-          downloadExcel({
-            data: excel_one_items,
-            fields: excel_one_fields,
-            worksheet: 'Chi tiết đơn hàng',
-            name: 'chi-tiet-don-hang-nhap.xls'
-          })
-        }
-        loadingDetail.value = false
+        currentOrderBuy.value = { ...item, ...res.data.data }
+        excel_one_items.value = res.data.data.products || []
+        showPrintExcelModal.value = true
       }
+      loadingDetail.value = false
     }).catch(err => {
       let errorMess = commonFunc.handleStaffError(err)
       popToast('danger', errorMess)
       loadingDetail.value = false
     })
   }
+}
+
+const hideModalPrintExcel = () => {
+  showPrintExcelModal.value = false
+}
+
+const downloadProductExcel = () => {
+  const orderBuy = currentOrderBuy.value
+  const products = excel_one_items.value
+
+  // Header rows
+  const headerRows = [
+    { 'STT': 'Nhà cung cấp: ', 'Mã Hàng': orderBuy.supplier_name, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Ngày đặt hàng: ', 'Mã Hàng': orderBuy.created_at, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Thời gian GH dự kiến: ', 'Mã Hàng': orderBuy.shipping_date, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Xuất hóa đơn: ', 'Mã Hàng': orderBuy.have_vat ? 'Có' : 'Không', 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Phương thức thanh toán: ', 'Mã Hàng': orderBuy.payment_method, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Tổng tiền gồm VAT: ', 'Mã Hàng': orderBuy.total, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'Số Đơn hàng bán: ', 'Mã Hàng': orderBuy.order_sell_number || '', 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': null, 'Mã Hàng': null, 'Tên Hàng': null, 'Hãng': null, 'DVT': null, 'SL': null, 'Đơn giá': null, 'Thành tiền': null, 'Ghi Chú': null },
+    { 'STT': 'STT', 'Mã Hàng': 'Mã Hàng', 'Tên Hàng': 'Tên Hàng', 'Hãng': 'Hãng', 'DVT': 'ĐVT', 'SL': 'SL', 'Đơn giá': 'Đơn giá', 'Thành tiền': 'Thành tiền', 'Ghi Chú': 'Ghi Chú' },
+  ]
+
+  // Product rows
+  const productRows = products.map((item, index) => ({
+    'STT': index + 1,
+    'Mã Hàng': item.product_code,
+    'Tên Hàng': item.product_name,
+    'Hãng': item.product_brand,
+    'DVT': item.unit,
+    'SL': item.quantity,
+    'Đơn giá': item.price_buy,
+    'Thành tiền': item.amount,
+    'Ghi Chú': item.note
+  }))
+
+  const exportData = [...headerRows, ...productRows]
+  const worksheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true })
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Đơn hàng nhập')
+  XLSX.writeFile(workbook, 'don_hang_nhap.xlsx')
 }
 
 const prepareToSearch = () => {
