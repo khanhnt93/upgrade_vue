@@ -5,7 +5,7 @@
         <button class="btn btn-success" @click="goToAddIncome">
           Thêm khoản thu
         </button>
-        <button class="btn btn-success" @click="goToAddExpend">
+        <button class="btn btn-primary" @click="goToAddExpend">
           Thêm khoản chi
         </button>
         <button class="btn btn-success" @click="goToAddAccountingSlip">
