@@ -511,7 +511,10 @@ const checkCreatedFromOrderBuy = () => {
   let url = location.href
   if(url.includes("repository-from-order-sell")) {
     let orderSellId = route.params.id
-    chooseOrderBuy(orderSellId, null)
+    if (orderSellId) {
+      orderSellSelect.value = { id: orderSellId }
+      changeOrderBuy()
+    }
   }
 }
 
@@ -569,7 +572,7 @@ const refreshRepositoryInfo = () => {
 
 const changeOrderBuy = () => {
   if(orderSellSelect.value && orderSellSelect.value.id) {
-    repositoryApi.getOrderSellDetailForRepoOutput(orderSellSelect.value.id).then(res => {
+    repositoryApi.getOrderSellDetailForRepoOutput({ code: null, id: orderSellSelect.value.id }).then(res => {
       if(res != null && res.data != null && res.data.data != null) {
         refreshRepositoryInfo()
 
@@ -580,14 +583,19 @@ const changeOrderBuy = () => {
 
         let products = orderSell.products
         for(let i in products) {
+          let qty = products[i].quantity || 0
+          let price = products[i].price_sell || 0
+          let amount = (products[i].amount != null)
+            ? Number(products[i].amount)
+            : Math.round(parseFloat(qty) * parseInt(price))
           let product = {
             "product_id": products[i].product_id,
             "product_code": products[i].product_code,
             "product_name": products[i].product_name,
             "unit_name": products[i].unit,
-            "quantity": currencyFormat(products[i].quantity),
-            "price": currencyFormat(products[i].price_sell),
-            "amount": products[i].amount
+            "quantity": currencyFormat(qty),
+            "price": currencyFormat(price),
+            "amount": amount
           }
           repository.products.push(product)
         }
@@ -662,7 +670,7 @@ const integerPointAndCommaOnly = (item) => {
 const calProductSubTotal = () => {
   repository.sub_total = 0
   for (let item of repository.products) {
-    repository.sub_total += item.amount
+    repository.sub_total += (Number(item.amount) || 0)
   }
 }
 
@@ -672,12 +680,13 @@ const deleteProduct = (index) => {
 }
 
 const currencyFormat = (num) => {
+  if(num == null || num === '') return ""
   let result = ""
   if(num == 0) {
     return "0"
   }
   num = (num + "").replaceAll(",", "")
-  if(num) {
+  if(num && num !== 'undefined' && num !== 'null') {
     result = num.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
   return result
@@ -750,18 +759,18 @@ const changeQuantity = (index) => {
     if(price_sell) {
       price_sell = (price_sell + "").replaceAll(",", "")
       let amount = Math.round(parseInt(price_sell) * parseFloat(quantity))
-      amount = currencyFormat(amount)
       repository.products[index].amount = amount
     } else {
-      repository.products[index].amount = null
+      repository.products[index].amount = 0
     }
 
     quantity = currencyFormat(quantity)
     document.getElementById("quantity_" + index).value = quantity
     repository.products[index].quantity = quantity
   } else {
-    repository.products[index].amount = null
+    repository.products[index].amount = 0
   }
+  calProductSubTotal()
 }
 
 const changePrice = (index) => {
@@ -773,18 +782,18 @@ const changePrice = (index) => {
     if(quantity) {
       quantity = (quantity + "").replaceAll(",", "")
       let amount = Math.round(parseInt(price_sell) * parseFloat(quantity))
-      amount = currencyFormat(amount)
       repository.products[index].amount = amount
     } else {
-      repository.products[index].amount = null
+      repository.products[index].amount = 0
     }
 
     price_sell = currencyFormat(price_sell)
     document.getElementById("price_" + index).value = price_sell
     repository.products[index].price = price_sell
   } else {
-    repository.products[index].amount = null
+    repository.products[index].amount = 0
   }
+  calProductSubTotal()
 }
 
 const changePriceInput = () => {

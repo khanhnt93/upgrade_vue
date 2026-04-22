@@ -179,7 +179,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item) in items" :key="item.id" :class="item.row_class">
+              <tr v-if="loading && !loadByScroll">
+                <td colspan="18" class="text-center py-8">
+                  <i class="fa fa-spinner fa-spin text-2xl text-blue-500"></i>
+                </td>
+              </tr>
+              <tr v-else v-for="(item) in items" :key="item.id" :class="item.row_class">
                 <td class="px-2 py-2 border">{{item.stt}}</td>
                 <td class="px-2 py-2 border">
                   <a :href="'/order-sell-' + scope + '/detail/' + item.id" target="_blank" title="Chi tiết đơn hàng"
@@ -218,12 +223,12 @@
                 <td class="px-2 py-2 border">
                   {{item.invoice_note}}
                   <br/>
-                  <button v-if="userRole == 'admin'" @click="showModalChangeInvoiceStatus(item)" class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0">Sửa</button>
+                  <button v-if="userRole == 'admin'" @click="showModalChangeInvoiceStatus(item)" class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0" title="Sửa"><i class="fa fa-pencil"></i></button>
                 </td>
                 <td class="px-2 py-2 border">{{item.product_back_status_str}}</td>
                 <td class="px-2 py-2 border">
                   {{item.accounting_note}}<br/>
-                  <button v-if="userRole == 'admin'" @click="showModalChangeAccountingNote(item)" class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0">Sửa</button>
+                  <button v-if="userRole == 'admin'" @click="showModalChangeAccountingNote(item)" class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0" title="Sửa"><i class="fa fa-pencil"></i></button>
                 </td>
                 <td class="px-2 py-2 border">
                   <div class="flex flex-col gap-1">
@@ -660,6 +665,7 @@
 
   <!-- Hidden print section for PHG -->
   <div hidden id="contentPrintPHG">
+    <img :src="'/static/img/project/print/quotation/header_' + authStore.user.storeId + '.png'" style="width: 100%"/>
     <div style="width:100%; height:35px;" class="tr-bg">
       <div style="color: #006699; font-size: 20px; float: left; width: 70%; text-align: center; margin-top: 10px;">
         <b>PHIẾU GIAO HÀNG</b>

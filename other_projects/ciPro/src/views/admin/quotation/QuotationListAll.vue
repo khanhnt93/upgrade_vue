@@ -294,8 +294,9 @@
                 <button
                   v-if="item.status === 0"
                   @click="showModalUpdateQuotationStatus(item)"
-                  class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0">
-                  Sửa
+                  class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                  title="Sửa">
+                  <i class="fa fa-pencil"></i>
                 </button>
               </td>
               <td class="px-2 py-2 text-sm text-gray-900">

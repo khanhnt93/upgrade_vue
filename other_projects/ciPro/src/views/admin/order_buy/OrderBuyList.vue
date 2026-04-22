@@ -201,8 +201,9 @@
                   <button
                     @click="showModalUpdateInvoiceNote(item)"
                     class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                    title="Sửa"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <span>{{ item.invoice_note }}</span>
                 </div>
@@ -213,8 +214,9 @@
                   <button
                     @click="showModalUpdateNote(item)"
                     class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                    title="Sửa"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <span>{{ item.note }}</span>
                 </div>

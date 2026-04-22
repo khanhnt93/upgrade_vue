@@ -222,8 +222,9 @@
                   v-if="item.status == 0"
                   @click="showModalUpdateQuotationStatus(item)"
                   class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs ml-1"
+                  title="Sửa"
                 >
-                  Sửa
+                  <i class="fa fa-pencil"></i>
                 </button>
                 <br v-if="item.status == 2">
                 <span v-if="item.status == 2">{{ item.updated_reason_falling_note_at + ': ' + item.reason_falling_note }}</span>
@@ -233,8 +234,9 @@
                   <button
                     @click="showModalUpdateNote(item, 1)"
                     class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                    title="Sửa"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <span>{{ item.note_1st ? item.updated_note_1st_at + ': ' + item.note_1st : item.note_1st }}</span>
                 </div>
@@ -244,8 +246,9 @@
                   <button
                     @click="showModalUpdateNote(item, 2)"
                     class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                    title="Sửa"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <span>{{ item.note_2st ? item.updated_note_2st_at + ': ' + item.note_2st : item.note_2st }}</span>
                 </div>
@@ -255,8 +258,9 @@
                   <button
                     @click="showModalUpdateProductGroupNote(item)"
                     class="px-2 py-0.5 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs shrink-0"
+                    title="Sửa"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <span>{{ item.product_group_note }}</span>
                 </div>

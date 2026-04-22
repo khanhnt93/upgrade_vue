@@ -770,28 +770,28 @@
                   class="mt-2"
                   v-show="trade.type == 0 && trade.products.length > 0"
                 >
-                  <div class="w-full min-w-0">
+                  <div class="w-full min-w-0 overflow-hidden">
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
-                        class="table table-bordered table-striped fixed_header min-w-max"
-                        style="table-layout: auto; width: auto; min-width: 100%;"
+                        class="table table-bordered table-striped fixed_header"
+                        style="table-layout: auto; width: auto; min-width: 2100px;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
                           <col style="width: 130px" />
                           <col style="width: 220px" />
                           <col style="width: 130px" />
+                          <col style="width: 160px" />
                           <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 100px" />
-                          <col style="width: 130px" />
+                          <col style="width: 160px" />
+                          <col style="width: 150px" />
+                          <col style="width: 150px" />
+                          <col style="width: 150px" />
+                          <col style="width: 160px" />
+                          <col style="width: 110px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
+                          <col style="width: 150px" />
                           <col style="width: 150px" />
                         </colgroup>
                         <thead>
@@ -1006,28 +1006,28 @@
                   class="mt-2"
                   v-show="trade.type == 1 && projectProducts.length > 0"
                 >
-                  <div class="w-full min-w-0">
+                  <div class="w-full min-w-0 overflow-hidden">
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
-                        class="table table-bordered table-striped fixed_header min-w-max"
-                        style="table-layout: auto; width: auto; min-width: 100%;"
+                        class="table table-bordered table-striped fixed_header"
+                        style="table-layout: auto; width: auto; min-width: 2100px;"
                       >
                         <colgroup>
                           <col style="width: 60px" />
                           <col style="width: 130px" />
                           <col style="width: 220px" />
                           <col style="width: 130px" />
+                          <col style="width: 160px" />
                           <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 100px" />
-                          <col style="width: 130px" />
+                          <col style="width: 160px" />
+                          <col style="width: 150px" />
+                          <col style="width: 150px" />
+                          <col style="width: 150px" />
+                          <col style="width: 160px" />
+                          <col style="width: 110px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
+                          <col style="width: 180px" />
                           <col style="width: 150px" />
                         </colgroup>
                         <thead>

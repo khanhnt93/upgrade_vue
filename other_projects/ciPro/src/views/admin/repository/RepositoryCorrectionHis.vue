@@ -547,7 +547,7 @@ const printPHG = () => {
   mywindow.document.write(' .tr-bg {background-color: #eeece1 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact;} ')
   mywindow.document.write(' .custom-line-height tr { line-height: 25px; } ')
 
-  mywindow.document.write('</style></head><body >')
+  mywindow.document.write('</base></head><body >')
   mywindow.document.write(document.getElementById('contentPrintPHG').innerHTML)
   mywindow.document.write('</body></html>')
 

@@ -26,31 +26,14 @@
 
       <div class="grid grid-cols-12 gap-4 mb-4">
         <div class="col-span-12 md:col-span-3">
-          <label class="block mb-2 font-medium">Loại chi<span class="text-red-500">*</span></label>
-        </div>
-        <div class="col-span-12 md:col-span-9">
-          <div class="flex gap-4">
-            <div class="flex items-center">
-              <input type="radio" v-model="inputs.sub_type" :value="0" class="mr-2"
-                     id="sub_type_0" @change="changeSubType('0')">
-              <label class="cursor-pointer" for="sub_type_0">Chi thường</label>
-            </div>
-            <div class="flex items-center">
-              <input type="radio" v-model="inputs.sub_type" :value="1" class="mr-2"
-                     id="sub_type_1" @change="changeSubType('1')">
-              <label class="cursor-pointer" for="sub_type_1">Chi trả hàng</label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-12 gap-4 mb-4">
-        <div class="col-span-12 md:col-span-3">
           <label class="block mb-2 font-medium">Khoản chi cho ĐH</label>
         </div>
         <div class="col-span-12 md:col-span-9">
           <label v-if="isEditFund">
-            {{inputs.order_buy_number ? inputs.order_buy_number : inputs.order_sell_number}}
+            {{inputs.order_sell_number ? inputs.order_sell_number : inputs.order_buy_number}}
+          </label>
+          <label v-if="inputs.loan_id">
+            Khoản vay: {{inputs.object_other_name}}
           </label>
 
           <div v-if="inputs.sub_type == 0 && !isEditFund" class="flex gap-2">
@@ -155,7 +138,7 @@
           <input type="text" v-model="inputs.amount"
                  @keyup="integerPointAndCommaOnly($event.target)"
                  @change="changeAmount"
-                 class="form-input w-full rounded-md border-gray-300"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left font-semibold text-lg"
                  maxlength="14">
         </div>
       </div>
@@ -224,7 +207,7 @@
         <div class="col-span-12 md:col-span-9">
           <textarea v-model="inputs.description"
                     rows="2"
-                    class="form-textarea w-full rounded-md border-gray-300"></textarea>
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
         </div>
       </div>
 
@@ -448,10 +431,11 @@ const orderBuySearch = ref({
 const showOrderBuyModal = ref(false)
 
 const isExpendFromOrderBuy = ref(false)
-const isProductBack = ref(false)
+const isMoneyBack = ref(false)
 const isExpendFromOrderSell = ref(false)
 const isEditFund = ref(false)
 const isDebtRelief = ref(false)
+const fundHisId = ref(null)
 
 const checkCreatedFromOrderBuy = () => {
   if(isExpendFromOrderBuy.value) {
@@ -460,10 +444,10 @@ const checkCreatedFromOrderBuy = () => {
   }
 }
 
-const getFundDetail = (fundHisId) => {
-  if(fundHisId) {
+const getFundDetail = (id) => {
+  if(id) {
     title_prefix.value = 'Cập Nhật'
-    fundApi.getFundHisDetail(fundHisId).then(res => {
+    fundApi.getFundHisDetail(id).then(res => {
       if(res != null && res.data != null && res.data.data != null){
         inputs.value = res.data.data
         // Convert string dates from API to Date objects for vue3-datepicker
@@ -539,7 +523,7 @@ const getOptionRelatedFund = () => {
       orderBuyOptions.value = options.order_buys
       checkCreatedFromOrderBuy()
 
-      if(isProductBack.value || isExpendFromOrderSell.value) {
+      if(isMoneyBack.value || isExpendFromOrderSell.value) {
         inputs.value.sub_type = 1
         inputs.value.object_type = 0
 
@@ -566,18 +550,39 @@ const getOptionRelatedFund = () => {
       expendTypeOptions.value = options.expend_income_types
       expendTypeOptionStore.value = options.expend_income_types
 
-      if(isExpendFromOrderSell.value && isDebtRelief.value) {
+      if(isExpendFromOrderSell.value) {
+        let expend_group_code = 'chi_phi_ban_hang'
+        if(isDebtRelief.value) {
+          expend_group_code = 'chi_phi_quan_ly_doanh_nghiep'
+        }
         for(let item of expend_groups) {
-          if(item.code == 'chi_khac') {
+          if(item.code == expend_group_code) {
             inputs.value.expend_income_group_id = item.id
             changeExpendGroup()
             break
           }
         }
-      } else {
-        if(inputs.value.expend_income_group_id) {
-          changeExpendGroup()
+      }
+
+      if(isMoneyBack.value) {
+        for(let item of expend_groups) {
+          if(item.code == 'chi_tien_do_khach_tra_hang') {
+            inputs.value.expend_income_group_id = item.id
+            changeExpendGroup()
+            if(expendTypeOptions.value.length > 0) {
+              inputs.value.expend_income_type_id = expendTypeOptions.value[0].value
+            }
+            break
+          }
         }
+      }
+
+      if(!isExpendFromOrderSell.value && !isMoneyBack.value && inputs.value.expend_income_group_id) {
+        changeExpendGroup()
+      }
+
+      if(isEditFund.value && fundHisId.value) {
+        getFundDetail(fundHisId.value)
       }
     }
     loadingOptions.value = false
@@ -792,7 +797,7 @@ const getSupplierById = (supplierId) => {
 
 const changeOrderBuy = () => {
   if(orderBuySelect.value && orderBuySelect.value.id) {
-    inputs.value.amount = currencyFormat(orderBuySelect.value.total_remaining)
+    inputs.value.amount = currencyFormat(orderBuySelect.value.amount_remaining)
     if(orderBuySelect.value.supplier_id) {
       getSupplierById(orderBuySelect.value.supplier_id)
     }
@@ -840,7 +845,7 @@ const chooseOrderBuy = (orderBuyId, supplierId) => {
       if(item.id == orderBuyId) {
         orderBuySelect.value = item
         if(!inputs.value.amount) {
-          inputs.value.amount = currencyFormat(orderBuySelect.value.total_remaining)
+          inputs.value.amount = currencyFormat(orderBuySelect.value.amount_remaining)
         }
         if(!supplierId && orderBuySelect.value.supplier_id) {
           getSupplierById(orderBuySelect.value.supplier_id)
@@ -909,7 +914,7 @@ const chooseOrderSell = (orderSellId, customerId) => {
       if(item.id == orderSellId) {
         orderSellSelect.value = item
         if(!inputs.value.amount) {
-          inputs.value.amount = currencyFormat(orderSellSelect.value.amount_remaining)
+          inputs.value.amount = currencyFormat(orderSellSelect.value.total_remaining)
         }
         if(!customerId && orderSellSelect.value.customer_id) {
           getCustomerById(orderSellSelect.value.customer_id)
@@ -926,7 +931,7 @@ const chooseOrderSell = (orderSellId, customerId) => {
 
 const changeOrderSell = () => {
   if(orderSellSelect.value && orderSellSelect.value.id) {
-    inputs.value.amount = currencyFormat(orderSellSelect.value.total)
+    inputs.value.amount = currencyFormat(orderSellSelect.value.total_remaining)
     if(orderSellSelect.value.customer_id) {
       getCustomerById(orderSellSelect.value.customer_id)
     }
@@ -957,8 +962,8 @@ onMounted(() => {
   let url = location.href
   if(url.includes("expend-from-order-buy")) {
     isExpendFromOrderBuy.value = true
-  } else if(url.includes("expend-from-product-back")){
-    isProductBack.value = true
+  } else if(url.includes("expend-from-money-back")){
+    isMoneyBack.value = true
   } else if(url.includes("expend-from-order-sell")) {
     isExpendFromOrderSell.value = true
     let isDebtReliefParam = route.query.isDebtRelief
@@ -967,10 +972,10 @@ onMounted(() => {
       isDebtRelief.value = true
     }
   } else if(url.includes("expend/")) {
-    let fundHisId = route.params.fundHisId
-    if(fundHisId) {
+    let id = route.params.fundHisId
+    if(id) {
       isEditFund.value = true
-      getFundDetail(fundHisId)
+      fundHisId.value = id
     }
   }
 
