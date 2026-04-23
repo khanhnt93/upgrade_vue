@@ -168,14 +168,14 @@
                     @click="edit(item.id)"
                     class="px-3 py-1 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors text-xs"
                   >
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <button
                     v-if="item.status == -1 || isRoot"
                     @click="deleted(item.id, item.customer_name)"
                     class="px-3 py-1 bg-white text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors text-xs"
                   >
-                    Xoá
+                    <i class="fa fa-trash"></i>
                   </button>
                   <button
                     v-if="item.status != 2"

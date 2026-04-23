@@ -124,11 +124,11 @@
                 <div v-if="item.is_type_can_edit" class="flex gap-2 justify-center">
                   <button @click="edit(index)"
                           class="btn btn-sm btn-primary">
-                    Sửa
+                    <i class="fa fa-pencil"></i>
                   </button>
                   <button @click="deleted(item.id, item.name)"
                           class="btn btn-sm btn-danger">
-                    Xoá
+                    <i class="fa fa-trash"></i>
                   </button>
                 </div>
               </td>

@@ -31,7 +31,7 @@
                 placeholder="--Chọn từ đơn hàng nhập--"
                 label="name"
                 track-by="name"
-                @input="changeOrderBuy"
+                @select="changeOrderBuy"
                 class="flex-1"
               />
               <button

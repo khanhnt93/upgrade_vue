@@ -29,13 +29,13 @@
                 :select-label="''"
                 :deselect-label="''"
                 placeholder="--Chọn từ đơn hàng nhập--"
-                label="name"
-                track-by="name"
-                @input="changeOrderBuy"
+                :custom-label="opt => [opt.order_sell_number, opt.receiver_name].filter(Boolean).join(' - ') || opt.name || ''"
+                track-by="id"
+                @select="changeOrderBuy"
                 class="flex-1"
               />
               <button
-                @click="showModalSearchOrderBuy"
+                @click="showModalSearchOrderBuy = true"
                 title="Tìm kiếm"
                 class="px-4 py-2 bg-white text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors"
               >
@@ -276,12 +276,12 @@
       </div>
     </div>
 
-    <!-- Modal tìm kiếm đơn hàng nhập -->
+    <!-- Modal tìm kiếm đơn hàng bán -->
     <div v-if="showModalSearchOrderBuy" class="fixed inset-0 z-50 overflow-y-auto">
       <div class="fixed inset-0 bg-black bg-opacity-50" @click="hideModalSearchOrderBuy"></div>
       <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full p-6">
-          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng nhập</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Tìm kiếm đơn hàng bán</h4>
           <hr class="mb-4">
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -434,7 +434,7 @@ const { popToast } = useToast()
 const title = ref("Thêm Mới Phiếu Xuất Kho")
 const repository = reactive({
   is_correction: false,
-  order_buy_id: null,
+  order_sell_id: null,
   customer_id: null,
   customer_name: null,
   customer_address: null,
@@ -482,7 +482,7 @@ const getOptionRelatedRepository = () => {
   loadingOptions.value = true
 
   let params = {
-    order_buys: true,
+    order_sells: true,
     customers: true,
     products: true
   }
@@ -493,7 +493,7 @@ const getOptionRelatedRepository = () => {
 
       customerOptions.value = options.customers
       productOptions.value = options.products
-      orderSellOptions.value = options.order_buys
+      orderSellOptions.value = options.order_sells
 
       if(!repository.is_correction) {
         checkCreatedFromOrderBuy()
@@ -511,19 +511,19 @@ const checkCreatedFromOrderBuy = () => {
   let url = location.href
   if(url.includes("repository-from-order-sell")) {
     let orderSellId = route.params.id
+    let code = route.query.code
     if (orderSellId) {
-      orderSellSelect.value = { id: orderSellId }
-      changeOrderBuy()
+      chooseOrderBuy(orderSellId, null, code)
     }
   }
 }
 
-const chooseOrderBuy = (orderSellId, customerId) => {
+const chooseOrderBuy = (orderSellId, customerId, code = null) => {
   if(orderSellId) {
     for(let item of orderSellOptions.value) {
       if(item.id == orderSellId) {
         orderSellSelect.value = item
-        changeOrderBuy()
+        changeOrderBuy(null, code)
         break
       }
     }
@@ -562,7 +562,7 @@ const getSupplierItemById = () => {
 
 const refreshRepositoryInfo = () => {
   repository.is_correction = false
-  repository.order_buy_id = null
+  repository.order_sell_id = null
   repository.customer_id = null
   repository.customer_name = null
   repository.customer_address = null
@@ -570,29 +570,31 @@ const refreshRepositoryInfo = () => {
   repository.sub_total = 0
 }
 
-const changeOrderBuy = () => {
-  if(orderSellSelect.value && orderSellSelect.value.id) {
-    repositoryApi.getOrderSellDetailForRepoOutput({ code: null, id: orderSellSelect.value.id }).then(res => {
+const changeOrderBuy = (selectedItem, code = null) => {
+  const selected = selectedItem || orderSellSelect.value
+  if(selected && selected.id) {
+    repositoryApi.getOrderSellDetailForRepoOutput({ code: code, id: selected.id }).then(res => {
       if(res != null && res.data != null && res.data.data != null) {
         refreshRepositoryInfo()
 
         let orderSell = res.data.data
-        repository.order_buy_id = orderSell.id
+        repository.order_sell_id = orderSell.id
         repository.customer_id = orderSell.customer_id
+        orderSellSelect.value = { id: orderSell.id, order_sell_number: orderSell.order_sell_number, receiver_name: orderSell.receiver_name }
         getSupplierItemById()
 
         let products = orderSell.products
         for(let i in products) {
           let qty = products[i].quantity || 0
           let price = products[i].price_sell || 0
-          let amount = (products[i].amount != null)
-            ? Number(products[i].amount)
+          let amount = products[i].amount_sell != null
+            ? products[i].amount_sell
             : Math.round(parseFloat(qty) * parseInt(price))
           let product = {
             "product_id": products[i].product_id,
             "product_code": products[i].product_code,
             "product_name": products[i].product_name,
-            "unit_name": products[i].unit,
+            "unit_name": products[i].unit_name,
             "quantity": currencyFormat(qty),
             "price": currencyFormat(price),
             "amount": amount
@@ -704,7 +706,7 @@ const searchOrderBuy = () => {
     "offset": 0
   }
 
-  fundApi.searchOrderBuy(params).then(res => {
+  fundApi.searchOrderSell(params).then(res => {
     if (res != null && res.data != null && res.data.data != null) {
       orderSellSearchItems.value = res.data.data
     } else {
@@ -719,6 +721,11 @@ const searchOrderBuy = () => {
 }
 
 const save = () => {
+  if(!repository.is_correction && !repository.customer_name) {
+    popToast('danger', 'Vui lòng nhập [Tên khách hàng]!')
+    return;
+  }
+
   if(repository.products.length == 0) {
     popToast('danger', 'Vui lòng chọn sản phẩm muốn xuất kho!')
     return;
@@ -813,7 +820,7 @@ const hideModalCreateBallot = () => {
 
 const confirmOutput = () => {
   let params = {
-    'order_buy_id': repository.order_buy_id,
+    'order_sell_id': repository.order_sell_id,
     'products': outputItems.value
   }
   repositoryApi.confirmOutput(params).then(res => {
