@@ -6973,7 +6973,7 @@ const cleanShippingAgreement = () => {
 };
 
 const editShippingAgreement = (index) => {
-  Object.assign(shippingAgreement, itemsShippingAgreement[index]);
+  Object.assign(shippingAgreement, itemsShippingAgreement.value[index]);
   btn_shipping_agreement_text.value = "Cập nhật";
 };
 
