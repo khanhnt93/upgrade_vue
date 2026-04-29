@@ -92,13 +92,15 @@
           Số kết quả: <span class="font-bold text-gray-800">{{ totalRow }}</span>
         </div>
         <div class="flex gap-2">
-          <button class="btn btn-success" @click="exportExcel()">
-              <i class="fa fa-file-excel-o"></i> Xuất Excel
-            </button>
+          <button 
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportExcel()">
+            Xuất Excel
+          </button>
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="btn btn-primary disabled:opacity-50 w-32"
+            class="btn-outline-primary"
           >
             Tìm Kiếm
           </button>

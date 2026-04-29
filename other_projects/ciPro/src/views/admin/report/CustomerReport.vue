@@ -123,7 +123,7 @@
 
       <div class="mt-4 mb-4 text-right">
         <button
-          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn-outline-primary disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="loading"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -142,9 +142,9 @@
         <div v-if="excel_items.length > 0">
           <button
             @click="exportToExcel"
-            class="btn btn-success"
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
           >
-            <i class="fa fa-file-excel-o"></i> Xuất Excel
+            Xuất Excel
           </button>
         </div>
       </div>

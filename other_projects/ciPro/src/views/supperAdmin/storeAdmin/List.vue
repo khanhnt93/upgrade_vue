@@ -78,7 +78,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="btn btn-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
+            class="btn-outline-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             Tìm Kiếm
           </button>

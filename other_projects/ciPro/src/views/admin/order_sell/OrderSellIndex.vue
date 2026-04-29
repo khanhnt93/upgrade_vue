@@ -15,7 +15,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
               <div class="w-full md:col-span-12">
                 <h3 class="text-xl font-semibold text-center text-orange-600 mb-4">
                   {{ prefix_title }} Đơn Hàng Bán
@@ -29,14 +29,10 @@
               ><i class="fa fa-spinner fa-spin fa-3x"></i
             ></span>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row mt-2">
-              <div class="w-full md:col-span-2 mt-2">
-                <label>
-                  <span>Từ báo giá</span>
-                </label>
-              </div>
-              <div class="w-full md:col-span-10">
-                <div class="flex gap-2 items-start">
+            <div class="flex items-start gap-2 mt-2">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2"><span>Từ báo giá</span></label>
+                  <div class="flex-1">
+                    <div class="flex gap-2 items-start">
                   <div class="flex-1">
                     <multiselect
                       v-model="quotationSelect"
@@ -59,15 +55,13 @@
                     <i class="fa fa-search"></i>
                   </button>
                 </div>
-              </div>
-            </div>
+                  </div>
+                </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row mt-2">
-              <div class="w-full md:col-span-2 mt-2">
-                <label> Xuất hóa đơn<span class="error-sybol"></span> </label>
-              </div>
-              <div class="w-full md:col-span-10">
-                <div class="input-group">
+            <div class="flex items-start gap-2 mt-2">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Xuất hóa đơn<span class="error-sybol"></span></label>
+                  <div class="flex-1">
+                    <div class="input-group">
                   <input
                     type="radio"
                     v-model="trade.issue_invoice"
@@ -89,8 +83,8 @@
                     >Không</label
                   >
                 </div>
-              </div>
-            </div>
+                  </div>
+                </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
               <div
@@ -116,15 +110,12 @@
 
             <div class="grid grid-cols-1 gap-4" v-show="showPartnerInfo">
               <div class="w-full">
-                <div
-                  class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row mt-2 mb-2"
-                >
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>
-                      <span>Khách hàng</span>
-                    </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2 mb-2">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">
+                    <span>Khách hàng</span>
+                  </label>
+                  <div class="flex-1">
+                    
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
                         <multiselect
@@ -162,8 +153,9 @@
                       >
                         <i class="fa fa-save"></i>
                       </button>
-                    </div>
+                    
                   </div>
+                </div>
                 </div>
 
                 <!-- Loading -->
@@ -172,69 +164,77 @@
                 ></span>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >Tên khách hàng<span class="error-sybol"></span
                     ></label>
-                    <input
+                    <div class="flex-1">
+                        <input
                       id="customer_name"
                       type="text"
                       maxlength="100"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.customer_name"
                       :disabled="saving"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >Mã số thuế<span
                         class="error-sybol"
                         v-show="trade.issue_invoice == 'true'"
                       ></span
                     ></label>
-                    <input
+                    <div class="flex-1">
+                        <input
                       id="customer_tax_code"
                       type="text"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.customer_tax_code"
                       @keyup="integerOnly($event.target)"
                       autocomplete="new-password"
                       maxlength="20"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >Địa chỉ khách hàng<span
                         class="error-sybol"
                         v-show="trade.issue_invoice == 'true'"
                       ></span
                     ></label>
-                    <input
+                    <div class="flex-1">
+                        <input
                       id="address"
                       type="text"
                       maxlength="100"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.customer_address"
                       :disabled="saving"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >Email nhận hoá đơn<span
                         class="error-sybol"
                         v-show="trade.issue_invoice == 'true'"
                       ></span
                     ></label>
-                    <input
+                    <div class="flex-1">
+                        <input
                       id="customer_email"
                       type="text"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.customer_email"
                       autocomplete="new-password"
                       maxlength="255"
                     />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -267,11 +267,9 @@
               v-show="showProductInfo"
             >
               <div class="w-full md:col-span-12">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4 form-row">
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>Sản phẩm<span class="error-sybol"></span> </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Sản phẩm<span class="error-sybol"></span></label>
+                  <div class="flex-1">
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
                         <multiselect
@@ -287,12 +285,12 @@
                         >
                         </multiselect>
                       </div>
-                      <button
+                      <!-- <button
                         class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
                         @click="showModalSearchProduct"
                       >
                         <i class="fa fa-search"></i>
-                      </button>
+                      </button> -->
                     </div>
 
                     <!-- Loading -->
@@ -363,14 +361,10 @@
                   </div>
                 </div>
 
-                <div
-                  class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                  v-show="currentProperties.length > 0"
-                >
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>Thuộc tính</label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2" v-show="currentProperties.length > 0">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Thuộc tính</label>
+                  <div class="flex-1">
+                    
                     <p v-for="item in currentProperties" :key="item.name">
                       <label :for="item.name"
                         >{{ item.name }}:
@@ -388,87 +382,100 @@
                         </span>
                       </label>
                     </p>
+                  
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="form-row">
-                    <label>Giá list</label>
-                    <input
+                  <div class="flex items-center gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Giá list</label>
+                    <div class="flex-1">
+                        <input
                       id="price_list"
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.price_list"
                       @change="calculateCurrentProduct('price_list')"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label>Chiết khấu từ NCC (%)</label>
-                    <input
+                  <div class="flex items-center gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Chiết khấu từ NCC (%)</label>
+                    <div class="flex-1">
+                        <input
                       id="discount"
                       type="text"
                       maxlength="5"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.discount"
                       @change="calculateCurrentProduct('discount')"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label>Giá gốc<span class="error-sybol"></span></label>
-                    <input
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Giá gốc<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                        <input
                       id="price"
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.price"
                       @change="calculateCurrentProduct('price')"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label>% Lợi nhuận mong muốn</label>
-                    <input
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">% Lợi nhuận mong muốn</label>
+                    <div class="flex-1">
+                        <input
                       id="discount_sale"
                       type="text"
                       maxlength="5"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.discount_sale"
                       @change="calculateCurrentProduct('discount_sale')"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label>Lợi nhuận/sản phẩm</label>
-                    <input
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Lợi nhuận/sản phẩm</label>
+                    <div class="flex-1">
+                        <input
                       id="profit_on_item"
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.profit_on_item"
                       @change="calculateCurrentProduct('profit_on_item')"
                     />
+                    </div>
                   </div>
-                  <div class="form-row">
-                    <label>Giá bán<span class="error-sybol"></span></label>
-                    <input
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Giá bán<span class="error-sybol"></span></label>
+                    <div class="flex-1">
+                        <input
                       id="price_sell"
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.price_sell"
                       @change="calculateCurrentProduct('price_sell')"
                     />
+                    </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >SL trong kho
                       {{
                         root_unit.name
@@ -483,77 +490,67 @@
                       type="text"
                       maxlength="100"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.quantity_repo"
                       readonly
                     />
                   </div>
-                  <div class="form-row">
-                    <label
+                  <div class="flex items-center gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm"
                       >SL bán {{ handleUnitName()
                       }}<span class="error-sybol"></span
                     ></label>
-                    <input
+                    <div class="flex-1">
+                        <input
                       id="quantity"
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="currentProduct.quantity"
                       @keyup="integerPointAndCommaOnly($event.target)"
                       @change="calculateCurrentProduct('quantity')"
                     />
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>Thành tiền</label>
-                      </div>
-                      <div class="w-full md:col-span-8 mt-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex items-center gap-2 mt-2">
+                      <label class="w-50 shrink-0 text-right text-sm mt-2">Thành tiền</label>
+                      <div class="flex-1">
                         <input
                           id="amount_sell"
                           type="text"
                           maxlength="14"
                           autocomplete="new-password"
-                          class="form-control"
+                          class="form-control w-full"
                           v-model="currentProduct.amount_sell"
                           readonly
                         />
                       </div>
-                    </div>
                   </div>
-                  <div class="w-full md:col-span-6">
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-                    >
-                      <div class="w-full md:col-span-4 mt-2">
-                        <label>Lợi nhuận tổng</label>
-                      </div>
-                      <div class="w-full md:col-span-8 mt-2">
+                  
+                  <div class="flex items-center gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Lợi nhuận tổng</label>
+                      <div class="flex-1">
                         <input
                           id="profit"
                           type="text"
                           maxlength="14"
                           autocomplete="new-password"
-                          class="form-control"
+                          class="form-control w-full"
                           v-model="currentProduct.profit"
                           readonly
                         />
                       </div>
-                    </div>
                   </div>
+
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label> Ghi chú </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                <div class="flex items-start gap-2 mt-2">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Ghi chú</label>
+                  <div class="flex-1">
                     <textarea
                       class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
                       id="note"
@@ -577,11 +574,11 @@
 
                 <div v-show="trade.products.length > 0" class="mt-2">
                   <div class="w-full md:col-span-9">
-                    <h5>Danh sách sản phẩm</h5>
+                    <h5 class="text-center">Danh sách sản phẩm</h5>
                   </div>
                   <div class="w-full md:col-span-3 text-right">
                     <button
-                      class="btn btn-success"
+                      class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
                       @click="
                         exportToExcel(
                           products_excel,
@@ -590,105 +587,84 @@
                         )
                       "
                     >
-                      <i class="fa fa-file-excel-o"></i> Xuất Excel
+                      Xuất Excel
                     </button>
                   </div>
                 </div>
 
                 <!-- Báo giá thường thì dùng danh sách này-->
-                <div
-                  class="mt-2"
-                  v-show="trade.type == 0 && trade.products.length > 0"
-                >
-                  <div class="w-full min-w-0">
+                <div class="mt-2" v-show="trade.type == 0 && trade.products.length > 0">
+                  <div class="w-full min-w-0 overflow-hidden">
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
-                        style="table-layout: auto; width: auto; min-width: 100%;"
+                        style="table-layout: auto; width: auto; min-width: 2100px;"
                       >
                         <colgroup>
-                          <col style="width: 60px" />
+                          <col style="width: 40px" />
                           <col style="width: 130px" />
-                          <col style="width: 220px" />
+                          <col style="width: 250px" />
                           <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 100px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
+                          <col style="width: 160px" />
                           <col style="width: 120px" />
+                          <col style="width: 160px" />
+                          <col style="width: 120px" />
+                          <col style="width: 160px" />
+                          <col style="width: 160px" />
+                          <col style="width: 120px" />
+                          <col style="width: 130px" />
+                          <col style="width: 130px" />
+                          <col style="width: 130px" />
+                          <col style="width: 40px" />
                         </colgroup>
                         <thead>
                           <tr>
                             <th class="text-center font-weight-bold">STT</th>
                             <th class="text-center font-weight-bold">Mã SP</th>
                             <th class="text-center font-weight-bold">Tên SP</th>
-                            <th class="text-center font-weight-bold">
-                              Hãng SP
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá List
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              CK từ NCC
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % lợi nhuận mong muốn
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận/sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá bán
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Số lượng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Thành tiền
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận tổng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Ghi chú
-                            </th>
-                            <th class="width-150"></th>
+                            <th class="text-center font-weight-bold">Hãng SP</th>
+                            <th class="text-center font-weight-bold">Giá List</th>
+                            <th class="text-center font-weight-bold">CK từ NCC</th>
+                            <th class="text-center font-weight-bold">Giá gốc</th>
+                            <th class="text-center font-weight-bold">% lợi nhuận mong muốn</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận/sản phẩm</th>
+                            <th class="text-center font-weight-bold">Giá bán</th>
+                            <th class="text-center font-weight-bold">Số lượng</th>
+                            <th class="text-center font-weight-bold">Thành tiền</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận tổng</th>
+                            <th class="text-center font-weight-bold">Ghi chú</th>
+                            <th class="width-40"></th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="(item, index) in trade.products">
-                            <td>{{ index + 1 }}</td>
-                            <td>
+                          <tr
+                            v-for="(item, index) in trade.products"
+                            :key="'product_' + item.index + '_' + (item.product_id || item.product_code_input || index)"
+                          >
+                            <td class="fitwidth-40 text-center">{{ item.index }}</td>
+                            <td class="fitwidth-130">
                               {{
                                 item.product_code
                                   ? item.product_code
                                   : item.product_code_input
                               }}
                             </td>
-                            <td>
+                          
+                            <td class="fitwidth-250">
                               {{
                                 item.product_name
                                   ? item.product_name
                                   : item.product_name_input
                               }}
                             </td>
-                            <td>
+                            <td class="fitwidth-130">
                               {{
                                 item.brand_name
                                   ? item.brand_name
                                   : item.brand_name_input
                               }}
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-160 text-right">
                               <!--                        {{currencyFormat(item.price_list)}}-->
                               <input
                                 :id="'price_list_' + index"
@@ -701,7 +677,7 @@
                                 @change="changeProductItem('price_list', index)"
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-120 text-right">
                               <!--                        {{item.discount}}%-->
                               <input
                                 :id="'discount_' + index"
@@ -714,7 +690,7 @@
                                 @change="changeProductItem('discount', index)"
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-160 text-right">
                               <!--                        {{currencyFormat(item.price)}}-->
                               <input
                                 :id="'price_' + index"
@@ -727,7 +703,7 @@
                                 @change="changeProductItem('price', index)"
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-120 text-right">
                               <!--                        {{item.discount_sale}}%-->
                               <input
                                 :id="'discount_sale_' + index"
@@ -742,7 +718,7 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-160 text-right">
                               <!--                        {{currencyFormat(item.profit_on_item)}}-->
                               <input
                                 :id="'profit_on_item_' + index"
@@ -757,7 +733,7 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-160 text-right">
                               <!--                        {{currencyFormat(item.price_sell)}}-->
                               <input
                                 :id="'price_sell_' + index"
@@ -770,7 +746,7 @@
                                 @change="changeProductItem('price_sell', index)"
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-120 text-right">
                               <!--                        {{currencyFormat(item.quantity)}}-->
                               <input
                                 :id="'quantity_' + index"
@@ -783,16 +759,16 @@
                                 @change="changeProductItem('quantity', index)"
                               />
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-130 text-right">
                               {{ currencyFormat(item.amount_sell) }}
                             </td>
-                            <td class="text-right">
+                            <td class="fitwidth-130 text-right">
                               {{ currencyFormat(item.profit) }}
                             </td>
-                            <td class="text-right">{{ item.note }}</td>
-                            <td>
+                            <td class="fitwidth-130 text-right">{{ item.note }}</td>
+                            <td class="fitwidth-40">
                               <button
-                                @click="deleteProduct(index, 1, '', item.product_id, item.quantity, item.properties)"
+                                @click="deleteProduct(item.index, 1, '', item.product_id, item.quantity, item.properties)"
                                 class="btn btn-sm btn-danger">
                                 Xoá
                               </button>
@@ -809,86 +785,68 @@
                   class="mt-2"
                   v-show="trade.type == 1 && projectProducts.length > 0"
                 >
-                  <div class="w-full min-w-0">
+                  <div class="w-full min-w-0 overflow-hidden">
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
-                        style="table-layout: auto; width: auto; min-width: 100%;"
+                        style="table-layout: auto; width: auto; min-width: 2100px;"
                       >
                         <colgroup>
-                          <col style="width: 60px" />
+                          <col style="width: 40px" />
                           <col style="width: 130px" />
                           <col style="width: 220px" />
                           <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 80px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
+                          <col style="width: 160px" />
+                          <col style="width: 120px" />
+                          <col style="width: 160px" />
+                          <col style="width: 120px" />
+                          <col style="width: 160px" />
+                          <col style="width: 160px" />
                           <col style="width: 100px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 130px" />
-                          <col style="width: 160px" />
+                          <col style="width: 40px" />
                         </colgroup>
                         <thead>
                           <tr>
                             <th class="text-center font-weight-bold">STT</th>
                             <th class="text-center font-weight-bold">Mã SP</th>
                             <th class="text-center font-weight-bold">Tên SP</th>
-                            <th class="text-center font-weight-bold">
-                              Hãng SP
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá List
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              CK từ NCC
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % lợi nhuận mong muốn
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận/sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá bán
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Số lượng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Thành tiền
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận tổng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Ghi chú
-                            </th>
-                            <th class="width-150"></th>
+                            <th class="text-center font-weight-bold">Hãng SP</th>
+                            <th class="text-center font-weight-bold">Giá List</th>
+                            <th class="text-center font-weight-bold">CK từ NCC</th>
+                            <th class="text-center font-weight-bold">Giá gốc</th>
+                            <th class="text-center font-weight-bold">% lợi nhuận mong muốn</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận/sản phẩm</th>
+                            <th class="text-center font-weight-bold">Giá bán</th>
+                            <th class="text-center font-weight-bold">Số lượng</th>
+                            <th class="text-center font-weight-bold">Thành tiền</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận tổng</th>
+                            <th class="text-center font-weight-bold">Ghi chú</th>
+                            <th class="width-40"></th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
                             v-for="(item, index) in projectProducts"
+                            :key="'project_' + item.project_index + '_' + (item.product_id || item.product_name || index)"
                             :class="item.product_type == 0 ? 'project_bg' : ''"
                           >
-                            <td>
+                          <!-- <col style="width: 40px" /> -->
+                            <td class="fitwidth-40 text-center">
                               {{ item.project_index }}
                             </td>
-                            <td>
+                            <!-- <col style="width: 130px" /> -->
+                            <td class="fitwidth-130">
                               <span v-show="item.product_type == 1">{{
                                 item.product_code
                                   ? item.product_code
                                   : item.product_code_input
                               }}</span>
                             </td>
-                            <td>
+                            <!-- <col style="width: 220px" /> -->
+                            <td class="fitwidth-220">
                               <span v-show="item.product_type == 1">
                                 {{
                                   item.product_name
@@ -900,7 +858,8 @@
                                 <b>{{ item.product_name }}</b>
                               </span>
                             </td>
-                            <td>
+                            <!-- <col style="width: 130px" /> -->
+                            <td class="fitwidth-130">
                               <span v-show="item.product_type == 1">
                                 {{
                                   item.brand_name
@@ -912,7 +871,8 @@
                                 {{ item.project_brand_name }}
                               </span>
                             </td>
-                            <td class="text-right">
+                            <!-- <col style="width: 160px" /> -->
+                            <td class="fitwidth-160 text-right">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'price_list_project_' + index"
@@ -932,7 +892,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                            <!-- <col style="width: 120px" /> -->
+                            <td class="fitwidth-120 text-right">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'discount_project_' + index"
@@ -952,7 +913,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                            <!-- <col style="width: 160px" /> -->
+                            <td class="fitwidth-160 text-right">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'price_project_' + index"
@@ -972,7 +934,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 120px" /> -->
+                            <td class="fitwidth-120 text-right">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'discount_sale_project_' + index"
@@ -992,7 +955,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 160px" /> -->
+                            <td class="fitwidth-160 text-right">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'profit_on_item_project_' + index"
@@ -1012,7 +976,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 160px" /> -->
+                            <td class="fitwidth-160 text-right">
                               <span v-show="item.product_type == 0"
                                 ><b>{{
                                   currencyFormat(item.project_price)
@@ -1037,7 +1002,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 100px" /> -->
+                            <td class="fitwidth-100 text-right">
                               <span v-show="item.product_type == 0"
                                 ><b>{{ item.project_quantity }}</b></span
                               >
@@ -1059,8 +1025,8 @@
                                 "
                               />
                             </td>
-
-                            <td class="text-right">
+                          <!-- <col style="width: 130px" /> -->
+                            <td class="fitwidth-130 text-right">
                               <span v-show="item.product_type == 0"
                                 ><b>{{
                                   currencyFormat(item.project_amount)
@@ -1070,17 +1036,20 @@
                                 currencyFormat(item.amount_sell)
                               }}</span>
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 130px" /> -->
+                            <td class="fitwidth-130 text-right">
                               <span v-show="item.product_type == 1">{{
                                 currencyFormat(item.profit)
                               }}</span>
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width: 130px" /> -->
+                            <td class="fitwidth-130 text-right">
                               {{ item.note }}
                             </td>
-                            <td>
+                          <!-- <col style="width: 40px" /> -->
+                            <td class="fitwidth-40 text-center">
                               <button
-                                @click="deleteProduct(index, item.product_type, item.product_name, item.product_id, item.quantity, item.properties, item.project_index, item.index)"
+                                @click="deleteProduct(item.index, item.product_type, item.product_name, item.product_id, item.quantity, item.properties)"
                                 class="btn btn-sm btn-danger">
                                 Xoá
                               </button>
@@ -1118,45 +1087,52 @@
 
             <div class="mt-2" v-show="showPaymentInfo">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="form-row">
-                  <label> Tổng tiền sản phẩm </label>
-                  <input
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Tổng tiền sản phẩm </label>
+                    <div class="flex-1">
+                        <input
                     id="sub_total"
                     type="text"
                     maxlength="100"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.sub_total"
                     readonly
                   />
-                </div>
-                <div class="form-row">
-                  <label> Chi phí thêm </label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Chi phí thêm </label>
+                    <div class="flex-1">
+                        <input
                     id="extra_fee"
                     type="text"
                     maxlength="14"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.extra_fee"
                     @change="calculateAmount"
                   />
-                </div>
-                <div class="form-row">
-                  <label> Số tiền giảm </label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Số tiền giảm </label>
+                    <div class="flex-1">
+                        <input
                     id="fixed_discount"
                     type="text"
                     maxlength="14"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.fixed_discount"
                     @change="calculateAmount"
                   />
-                </div>
-                <div class="form-row">
-                  <label> Thuế VAT </label>
-                  <div class="input-group flex items-center gap-2">
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Thuế VAT </label>
+                    <div class="flex-1">
+                        <div class="input-group flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="have_vat"
@@ -1168,7 +1144,7 @@
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       style="width: 80px; flex: none;"
                       v-model="trade.vat_percent"
                       @change="calculateAmount"
@@ -1178,39 +1154,45 @@
                       type="text"
                       maxlength="14"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.vat_value"
                       @change="calculateAmount"
                     />
                   </div>
-                </div>
-                <div class="form-row">
-                  <label> Thành tiền<span class="error-sybol"></span> </label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Thành tiền<span class="error-sybol"></span> </label>
+                    <div class="flex-1">
+                        <input
                     id="amount"
                     type="text"
                     maxlength="14"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.total"
                     readonly
                   />
-                </div>
-                <div class="form-row">
-                  <label> Lợi nhuận </label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Lợi nhuận </label>
+                    <div class="flex-1">
+                        <input
                     id="trade_profit"
                     type="text"
                     maxlength="14"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.profit"
                     readonly
                   />
-                </div>
-                <div class="form-row">
-                  <label> Tài khoản nhận thanh toán </label>
-                  <select
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Tài khoản nhận thanh toán </label>
+                    <div class="flex-1">
+                        <select
                     class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
                     id="bank_account_id"
                     v-model="trade.bank_account_id"
@@ -1224,10 +1206,12 @@
                       {{ option.text }}
                     </option>
                   </select>
-                </div>
-                <div class="form-row">
-                  <label> Hình thức thanh toán </label>
-                  <div class="select-wrapper">
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Hình thức thanh toán </label>
+                    <div class="flex-1">
+                        <div class="select-wrapper">
                     <select
                       class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
                       id="payment_method"
@@ -1247,40 +1231,48 @@
                       type="text"
                       maxlength="255"
                       autocomplete="new-password"
-                      class="form-control"
+                      class="form-control w-full"
                       v-model="trade.payment_method_input"
                     />
                   </div>
-                </div>
-                <div class="form-row">
-                  <label> Thỏa thuận vận chuyển </label>
-                  <select
-                    class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
-                    id="shipping_agreement"
-                    v-model="trade.shipping_agreement"
-                  >
-                    <option
-                      v-for="option in optionsShippingAgreement"
-                      :key="option.value"
-                      :value="option.value"
-                    >
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Thỏa thuận vận chuyển </label>
+                    <div class="flex-1">
+                        <select
+                          class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
+                          id="shipping_agreement"
+                          v-model="trade.shipping_agreement"
+                        >
+                          <option
+                            v-for="option in optionsShippingAgreement"
+                            :key="option.value"
+                            :value="option.value"
+                          >
                       {{ option.text }}
                     </option>
                   </select>
-                </div>
-                <div class="form-row">
-                  <label> Phí giao hàng </label>
-                  <input
-                    id="shipping_fee"
-                    type="text"
-                    maxlength="14"
-                    autocomplete="new-password"
-                    v-model="trade.shipping_fee"
-                    @change="changeCurrencyField('shipping_fee')"
-                  />
-                </div>
-                <div class="form-row" v-if="userRole == 'admin'">
-                  <label> Nhân viên phụ trách </label>
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Phí giao hàng </label>
+                    <div class="flex-1">
+                        <input
+                          id="shipping_fee"
+                          class="form-control w-full"
+                          type="text"
+                          maxlength="14"
+                          autocomplete="new-password"
+                          v-model="trade.shipping_fee"
+                          @change="changeCurrencyField('shipping_fee')"
+                        />
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2" v-if="userRole == 'admin'">
+                  <label class="w-50 shrink-0 text-right text-sm"> Nhân viên phụ trách </label>
+                  <div class="flex-1">
+                    
                   <select
                     class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
                     id="staff_in_charge"
@@ -1295,17 +1287,20 @@
                       {{ option.text }}
                     </option>
                   </select>
+                
+                  </div>
                 </div>
-                <div class="form-row">
-                  <label> Ghi chú </label>
-                  <textarea
-                    class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
-                    id="description"
-                    style="width: 100%"
-                    rows="2"
-                    v-model="trade.description"
-                  ></textarea>
-                </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm"> Ghi chú </label>
+                    <div class="flex-1">
+                        <textarea
+                          class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
+                          id="description"
+                          rows="1"
+                          v-model="trade.description"
+                        ></textarea>
+                    </div>
+                  </div>
               </div>
             </div>
 
@@ -1333,61 +1328,77 @@
 
             <div v-show="showShippingInfo" class="mt-1">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="form-row">
-                  <label>Tên người nhận hàng</label>
-                  <input
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Tên người nhận hàng</label>
+                    <div class="flex-1">
+                        <input
                     id="receiver_name"
                     type="text"
                     maxlength="100"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.receiver_name"
                     :disabled="saving"
                   />
-                </div>
-                <div class="form-row">
-                  <label>SĐT nhận hàng</label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">SĐT nhận hàng</label>
+                    <div class="flex-1">
+                        <input
                     id="receiver_phone"
                     type="text"
                     maxlength="14"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.receiver_phone"
                     :disabled="saving"
                     @keyup="integerOnly($event.target)"
                   />
-                </div>
-                <div class="form-row">
-                  <label>Địa chỉ nhận hàng</label>
-                  <input
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Địa chỉ nhận hàng</label>
+                    <div class="flex-1">
+                        <input
                     id="receiver_address"
                     type="text"
                     maxlength="100"
                     autocomplete="new-password"
-                    class="form-control"
+                    class="form-control w-full"
                     v-model="trade.receiver_address"
                     :disabled="saving"
                   />
-                </div>
-                <div class="form-row">
-                  <label>Ngày giao hàng dự kiến</label>
-                  <datepicker
+                    </div>
+                  </div>
+                <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Ngày giao hàng dự kiến</label>
+                    <div class="flex-1">
+                        <datepicker
                     v-model="trade.shipping_date"
                     format="yyyy-MM-dd"
                     input-class="datepicker-cus"
                   ></datepicker>
-                </div>
-                <div class="form-row md:col-span-2">
-                  <label>Ghi chú khi giao hàng</label>
-                  <textarea
-                    class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
-                    id="shipping_note"
-                    rows="2"
-                    v-model="trade.shipping_note"
-                  ></textarea>
-                </div>
+                    </div>
+                  </div>
+
+                  
+
               </div>
+
+              <div class="flex items-start gap-2 mt-2">
+                    <label class="w-50 shrink-0 text-right text-sm mt-2">Ghi chú khi giao hàng</label>
+                    <div class="flex-1">
+                      <textarea
+                        class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
+                        id="note"
+                        style="width: 100%"
+                        rows="1"
+                        v-model="trade.shipping_note"
+                      ></textarea>
+                    </div>
+                  </div>
+                  
             </div>
 
             <div class="mt-2">
@@ -1400,7 +1411,7 @@
                 </button>
                 <button
                   v-show="trade.products.length > 0"
-                  class="btn btn-success float-right mt-1"
+                  class="float-right px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
                   @click="
                     exportToExcel(
                       products_excel,
@@ -1409,7 +1420,7 @@
                     )
                   "
                 >
-                  <i class="fa fa-file-excel-o"></i> Xuất Excel
+                  Xuất Excel
                 </button>
               </div>
             </div>
@@ -1418,7 +1429,8 @@
               <div class="w-full md:col-span-12 text-center">
                 <button
                   v-show="!saving"
-                  class="px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50"
+                  class="btn-sm border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-colors
+         disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-500 disabled:text-gray-500 disabled:bg-gray-100"
                   style="height: 50px; width: 240px"
                   @click="save"
                   :disabled="saving || !trade.id"
@@ -1454,28 +1466,36 @@
         </div>
         <hr />
 
-        <div>
+        <div class="grid grid-cols-1">
           <div class="w-full md:col-span-6">
-            <label> Mã báo giá </label>
-            <input
-              id="quatationNumber"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="quotationSearch.quotation_number"
-              maxlength="15"
-            />
+            <div class="w-full md:col-span-3 mt-2">
+              <label> Mã báo giá </label>
+            </div>
+            <div class="w-full" md="9">
+              <input
+                id="quatationNumber"
+                type="text"
+                autocomplete="new-password"
+                class="form-control"
+                v-model="quotationSearch.quotation_number"
+                maxlength="15"
+              />
+            </div>
           </div>
           <div class="w-full md:col-span-6">
-            <label> Tên khách hàng </label>
-            <input
-              id="customerName"
-              type="text"
-              autocomplete="new-password"
-              class="form-control"
-              v-model="quotationSearch.customer_name"
-              maxlength="255"
-            />
+            <div class="w-full md:col-span-3 mt-2">
+              <label> Tên khách hàng </label>
+            </div>
+              <div class="w-full" md="9">
+                <input
+                  id="customerName"
+                  type="text"
+                  autocomplete="new-password"
+                  class="form-control"
+                  v-model="quotationSearch.customer_name"
+                  maxlength="255"
+                />
+              </div>
           </div>
         </div>
 
@@ -1489,7 +1509,7 @@
             </button>
 
             <button
-              class="btn btn-primary"
+              class="btn-outline-primary"
               :disabled="onSearchQuotation"
               @click.prevent="searchQuotation"
             >
@@ -1498,7 +1518,7 @@
           </div>
         </div>
 
-        <div class="mt-2">
+        <div class="mt-4">
           <div>
             <table
               class="min-w-full border-collapse border border-gray-300"
@@ -1564,7 +1584,7 @@
         </div>
         <hr />
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-2 mt-2">
             <label>Hãng sản phẩm</label>
             <select
@@ -1647,7 +1667,7 @@
             </button>
 
             <button
-              class="btn btn-primary"
+              class="btn-outline-primary"
               :disabled="onSearchProduct"
               @click.prevent="searchProduct"
               v-show="!onSearchProduct"
@@ -1705,7 +1725,7 @@
     <!--Modal tìm kiếm khách hàng -->
     <div
       v-if="showModalSearchCustomerModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-10"
       id="modal-search-customer"
     >
       <div
@@ -1713,7 +1733,7 @@
       >
         <div>
           <div class="w-full md:col-span-12">
-            <h3 class="modal-title text-center text-success">
+            <h3 class="modal-title text-center text-success text-header">
               Tìm kiếm khách hàng
             </h3>
           </div>
@@ -1747,16 +1767,16 @@
         </div>
 
         <div class="mt-2">
-          <div cols="12">
+          <div cols="12" class="w-full text-center">
             <button
-              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 float-left btn-width-120"
+              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 btn-width-120"
               @click.prevent="hideModalSearchCustomer"
             >
-              Quay lại
+              Đóng
             </button>
 
             <button
-              class="btn btn-primary"
+              class="ml-2 px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 btn-width-120"
               :disabled="onSearchCustomer"
               @click.prevent="searchCustomer"
             >
@@ -1783,7 +1803,7 @@
               </thead>
               <tbody>
                 <tr v-for="(item, index) in customerSearchItems" :key="index">
-                  <td
+                  <td class="border border-gray-300 px-4 py-2"
                     v-for="field in customerSearchFields.filter(
                       (f) => f.key !== 'action',
                     )"
@@ -1827,7 +1847,7 @@
         </div>
         <hr />
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Loại khách hàng</label>
           </div>
@@ -1851,7 +1871,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Tên<span class="error-sybol"></span> </label>
           </div>
@@ -1867,7 +1887,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Mã khách hàng<span class="error-sybol"></span> </label>
           </div>
@@ -1885,7 +1905,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Số Điện Thoại</label>
           </div>
@@ -1903,7 +1923,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Email</label>
           </div>
@@ -1919,7 +1939,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label
               >Mã số thuế<span
@@ -1941,14 +1961,9 @@
           </div>
         </div>
 
-        <div
-          class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-          v-show="customer.type == 1"
-        >
-          <div class="w-full md:col-span-3 mt-2">
-            <label>Phân loại</label>
-          </div>
-          <div class="w-full md:col-span-9">
+        <div class="flex items-start gap-2 mt-2" v-show="customer.type == 1">
+          <label class="w-50 shrink-0 text-right text-sm mt-2">Phân loại</label>
+          <div class="flex-1">
             <select
               class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
               v-model="customer.company_type"
@@ -1964,7 +1979,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Giới Tính</label>
           </div>
@@ -1984,7 +1999,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Ngày Tháng Năm Sinh</label>
           </div>
@@ -1998,7 +2013,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Tỉnh/ Thành Phố</label>
           </div>
@@ -2020,7 +2035,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Quận/Huyện</label>
           </div>
@@ -2042,7 +2057,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Địa chỉ</label>
           </div>
@@ -2058,7 +2073,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>
               <span>Tên người liên hệ</span>
@@ -2076,7 +2091,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>
               <span>Sđt người liên hệ</span>
@@ -2095,7 +2110,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 ">
           <div class="w-full md:col-span-3 mt-2">
             <label>Email người liên hệ</label>
           </div>
@@ -2111,14 +2126,9 @@
           </div>
         </div>
 
-        <div
-          class="grid grid-cols-1 md:grid-cols-12 gap-4 form-row"
-          v-show="userRole == 'admin'"
-        >
-          <div class="w-full md:col-span-3 mt-2">
-            <label>Nhân viên phụ trách</label>
-          </div>
-          <div class="w-full md:col-span-9">
+        <div class="flex items-start gap-2 mt-2" v-show="userRole == 'admin'">
+          <label class="w-50 shrink-0 text-right text-sm mt-2">Nhân viên phụ trách</label>
+          <div class="flex-1">
             <select
               class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
               id="created_by_2"
@@ -2244,16 +2254,16 @@
             <table
               class="min-w-full border-collapse border border-gray-300"
             >
-              <thead>
+              <thead class="bg-gray-100">
                 <tr>
-                  <th v-for="field in repo_product_fields" :key="field.key">
+                  <th class="border border-gray-300 px-2 py-2 w-12" v-for="field in repo_product_fields" :key="field.key">
                     {{ field.label }}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(item, index) in repo_products" :key="index">
-                  <td v-for="field in repo_product_fields" :key="field.key">
+                  <td class="border border-gray-300 px-3 py-2" v-for="field in repo_product_fields" :key="field.key">
                     {{ item[field.key] }}
                   </td>
                 </tr>
@@ -5171,15 +5181,12 @@ const deleteProduct = (
   product_id,
   quantity,
   properties,
-  project_index = 0,
 ) => {
-  ind = ind - parseInt(project_index);
-
   // Remove item
   if (product_type == 0) {
     deleteProductByProjectName(project_name);
   } else {
-    trade.products.splice(parseInt(ind), 1); // Xoá sp
+    trade.products.splice(parseInt(ind) - 1, 1); // Xoá sp (ind là 1-based từ item.index)
   }
 
   // Check remove all product
@@ -5210,6 +5217,11 @@ const deleteProduct = (
   updateQuantityRepo(product_id, quantity, properties, "delete");
 
   handleProductExcel();
+
+  // Nếu là báo giá dự án, cần handle lại danh sách sản phẩm
+  if (trade.type == 1) {
+    handleListProduct();
+  }
 };
 
 const deleteTrade = (trade_id) => {
@@ -5370,16 +5382,14 @@ label {
   margin-bottom: 0.6rem;
 
   > label:first-child {
-    flex: 0 0 160px;
-    min-width: 160px;
+    flex: 0 0 180px;
+    min-width: 180px;
+    text-align: right;
     margin-bottom: 0;
+    white-space: nowrap;
   }
 
-  > input,
-  > select,
-  > textarea,
-  > .input-group,
-  > .select-wrapper {
+  > :not(label:first-child) {
     flex: 1;
     min-width: 0;
   }
@@ -5487,4 +5497,5 @@ label {
 .width-200 {
   width: 200px;
 }
+.w-50 { width: 180px !important; min-width: 180px !important; white-space: nowrap; }
 </style>

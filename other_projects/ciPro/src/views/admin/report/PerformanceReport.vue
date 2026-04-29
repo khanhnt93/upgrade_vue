@@ -59,7 +59,7 @@
 
       <div class="mt-4 mb-4 text-right">
         <button
-          class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn-outline-primary disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="onSearch"
           @click.prevent="search">
           Tìm Kiếm

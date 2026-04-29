@@ -89,7 +89,7 @@
         <button
           @click="prepareToSearch"
           :disabled="onSearch"
-          class="btn btn-primary"
+          class="btn-outline-primary"
         >
           Tìm Kiếm
         </button>
@@ -100,8 +100,8 @@
         <div class="text-sm">
           Số kết quả: <span class="text-blue-600 font-semibold">{{totalRow}}</span>
         </div>
-        <button class="btn btn-success" @click="exportExcel()">
-          <i class="fa fa-file-excel-o"></i> Xuất Excel
+        <button class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold" @click="exportExcel()">
+          Xuất Excel
         </button>
       </div>
 

@@ -81,7 +81,7 @@
       </div>
 
       <div class="mb-4">
-        <button class="btn btn-primary" :disabled="onSearch" @click.prevent="prepareToSearch">
+        <button class="btn-outline-primary" :disabled="onSearch" @click.prevent="prepareToSearch">
           Tìm Kiếm
         </button>
       </div>
@@ -91,8 +91,10 @@
           Số kết quả: <b>{{totalRow}}</b>
         </div>
         <div class="text-right" v-if="isUserRoot && excel_items.length > 0">
-          <button class="btn btn-default text-header" @click="exportExcel()">
-            <b>Xuất Excel</b>
+          <button 
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportExcel()">
+            Xuất Excel
           </button>
         </div>
       </div>

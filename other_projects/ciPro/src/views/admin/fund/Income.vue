@@ -63,7 +63,7 @@
               track-by="name"
               class="flex-1"
               @input="changeOrderSell" />
-            <button class="btn btn-primary"
+            <button class="btn-outline-primary"
                     title="Tìm kiếm"
                     @click="showModalSearchOrderSell">
               <i class="fa fa-search"></i>
@@ -80,7 +80,7 @@
               track-by="name"
               class="flex-1"
               @input="changeOrderBuy" />
-            <button class="btn btn-primary"
+            <button class="btn-outline-primary"
                     title="Tìm kiếm"
                     @click="showModalSearchOrderBuy">
               <i class="fa fa-search"></i>
@@ -269,7 +269,7 @@
                   @click.prevent="hideModalSearchOrderSell">
             Quay lại
           </button>
-          <button class="btn btn-primary"
+          <button class="btn-outline-primary"
                   :disabled="onSearchOrderSell"
                   @click.prevent="searchOrderSell">
             Tìm Kiếm
@@ -336,7 +336,7 @@
                   @click.prevent="hideModalSearchOrderBuy">
             Quay lại
           </button>
-          <button class="btn btn-primary"
+          <button class="btn-outline-primary"
                   :disabled="onSearchOrderBuy"
                   @click.prevent="searchOrderBuy">
             Tìm Kiếm

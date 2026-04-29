@@ -55,7 +55,7 @@
         <button
           @click.prevent="prepareToSearch"
           :disabled="onSearch"
-          class="btn btn-primary w-32 disabled:opacity-50 disabled:cursor-not-allowed">
+          class="btn-outline-primary disabled:opacity-50 disabled:cursor-not-allowed">
           Tìm Kiếm
         </button>
       </div>

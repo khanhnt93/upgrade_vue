@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow p-6">
       <div class="mb-4">
         <button
-          class="btn btn-success w-32"
+          class="btn btn-success w-32 float-right"
           @click="gotoAdd()">
           Thêm mới
         </button>
@@ -30,7 +30,7 @@
               <td class="px-4 py-3 whitespace-nowrap border">{{ item.code }}</td>
               <td class="px-4 py-3 whitespace-nowrap border">{{ item.name }}</td>
               <td class="px-4 py-3 whitespace-nowrap border actions-cell">
-                <div class="flex space-x-2">
+                <div class="flex space-x-2 justify-center">
                   <button
                     @click="edit(item.id)"
                     title="Edit"

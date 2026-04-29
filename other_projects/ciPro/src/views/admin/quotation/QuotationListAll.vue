@@ -12,12 +12,12 @@
         </button>
         <button
           @click="goToAddProject()"
-          class="btn btn-success">
+          class="px-4 py-2 bg-white border border-orange-600 text-orange-600 rounded hover:bg-orange-50 transition-colors min-w-[120px]">
           Thêm BG dự án
         </button>
         <button
           @click="goToAdd()"
-          class="btn btn-success">
+          class="px-4 py-2 bg-white border border-green-600 text-green-600 rounded hover:bg-green-50 transition-colors min-w-[120px]">
           Thêm BG
         </button>
 
@@ -214,9 +214,10 @@
         <button
           @click.prevent="prepareToSearch"
           :disabled="onSearch"
-          class="btn btn-primary">
+          class="btn-outline-primary">
           Tìm Kiếm
         </button>
+
       </div>
 
       <!-- Results Info and Export -->
@@ -226,9 +227,9 @@
         </div>
         <div v-if="excel_items.length > 0">
           <button
-            @click="exportToExcel"
-            class="btn btn-success">
-            <i class="fa fa-file-excel-o"></i> Xuất Excel
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportToExcel">
+            Xuất Excel
           </button>
         </div>
       </div>
@@ -254,8 +255,8 @@
           </thead>
           <tbody>
             <tr v-for="item in items" :key="item.id" :class="item.row_class" class="hover:bg-gray-50 border-b border-gray-200">
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.stt }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900">
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.stt }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border">
                 <div class="flex items-center gap-1 flex-nowrap">
                   <a
                     v-if="item.type === 0"
@@ -281,15 +282,15 @@
                   </button>
                 </div>
               </td>
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.staff_on_charge_name }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.customer_name }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.contact_person_name }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.contact_person_phone }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900 text-right">{{ currencyFormat(item.sub_total) }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900 text-right">{{ currencyFormat(item.total) }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900 text-right">{{ currencyFormat(item.profit) }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900">{{ item.created_at }}</td>
-              <td class="px-2 py-2 text-sm text-gray-900" :class="item.item_class">
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.staff_on_charge_name }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.customer_name }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.contact_person_name }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.contact_person_phone }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 text-right border">{{ currencyFormat(item.sub_total) }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 text-right border">{{ currencyFormat(item.total) }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 text-right border">{{ currencyFormat(item.profit) }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border">{{ item.created_at }}</td>
+              <td class="px-2 py-2 text-sm text-gray-900 border" :class="item.item_class">
                 {{ item.status_str }}
                 <button
                   v-if="item.status === 0"
@@ -299,7 +300,7 @@
                   <i class="fa fa-pencil"></i>
                 </button>
               </td>
-              <td class="px-2 py-2 text-sm text-gray-900">
+              <td class="px-2 py-2 text-sm text-gray-900 border">
                 <div class="flex flex-wrap gap-2">
                   <button
                     v-show="item.status === -1"

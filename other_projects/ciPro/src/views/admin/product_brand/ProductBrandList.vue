@@ -11,7 +11,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">Danh Sách Hãng Sản Phẩm</h4>
+        <h4 class="text-2xl font-semibold text-center mb-4 text-header">Danh Sách Hãng Sản Phẩm</h4>
         <hr class="mb-6">
 
         <div class="overflow-x-auto">
@@ -44,7 +44,7 @@
                   {{ item.description }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border">
-                  <div class="flex space-x-2">
+                  <div class="flex space-x-2 justify-center">
                     <button
                       @click="edit(item.id)"
                       class="text-blue-600 hover:text-blue-900"

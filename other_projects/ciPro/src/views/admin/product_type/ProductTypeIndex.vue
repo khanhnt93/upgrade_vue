@@ -2,7 +2,7 @@
   <div class="w-full px-4 py-6">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
-        <div class="flex justify-between mb-4">
+        <!-- <div class="flex justify-between mb-4">
           <button
             @click="back"
             class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors min-w-[120px]"
@@ -16,7 +16,7 @@
           >
             Lưu
           </button>
-        </div>
+        </div> -->
 
         <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}}Loại Sản Phẩm</h4>
         <hr class="mb-6">
@@ -87,6 +87,24 @@
               </div>
             </div>
           </div>
+
+          <div class="flex justify-center gap-[5px] mt-6 pb-6">
+            <button
+              class="btn btn-outline-secondary w-[120px] px-4 py-2"
+              @click="back"
+            >
+              Quay lại
+            </button>
+
+            <button
+              class="btn btn-outline-success w-[120px] px-4 py-2"
+              @click="save"
+              :disabled="saving"
+            >
+              Lưu
+            </button>
+          </div>
+          
         </div>
       </div>
     </div>

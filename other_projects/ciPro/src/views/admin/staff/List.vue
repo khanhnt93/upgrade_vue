@@ -13,14 +13,16 @@
       <hr class="my-4">
 
       <!-- Search Filters -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
           <label class="block mb-2">Tên</label>
-          <input id="name" v-model="inputs.name" type="text" maxlength="100" autocomplete="new-password" class="form-control w-full">
+          <input id="name" v-model="inputs.name" type="text" maxlength="100" 
+          autocomplete="new-password" class="form-control w-full">
         </div>
         <div>
           <label class="block mb-2">Số Điện Thoại</label>
-          <input id="phone" v-model="inputs.phone" type="text" maxlength="20" autocomplete="new-password" class="form-control w-full" @keyup="integerOnly($event.target)">
+          <input id="phone" v-model="inputs.phone" type="text" maxlength="20" 
+          autocomplete="new-password" class="form-control w-full" @keyup="integerOnly($event.target)">
         </div>
         <div>
           <label class="block mb-2">Quyền</label>
@@ -28,15 +30,16 @@
             <option v-for="option in roleOptions" :key="option.value" :value="option.value">{{ option.text }}</option>
           </select>
         </div>
-        <div>
-          <label class="block mb-2 text-white">Xem</label>
-          <button class="btn btn-primary" :disabled="onSearch" @click.prevent="prepareToSearch">
-            Tìm Kiếm
-          </button>
-        </div>
+      </div>
+      <div class="mb-4">
+        <button class="btn-outline-primary float-right" :disabled="onSearch" @click.prevent="prepareToSearch">
+          Tìm Kiếm
+        </button>
       </div>
 
-      <div class="mb-4">Số kết quả: {{totalRow}}</div>
+      <div class="flex justify-between items-center mb-4 clear-both pt-2">
+        <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
+      </div>
 
       <!-- Table -->
       <div class="overflow-x-auto">
@@ -59,7 +62,7 @@
               <td class="px-4 py-3 whitespace-nowrap border">{{ item.role_name }}</td>
               <td class="px-4 py-3 whitespace-nowrap border">{{ item.created_at }}</td>
               <td class="px-4 py-3 whitespace-nowrap border actions-cell">
-                <div class="flex space-x-2">
+                <div class="flex space-x-2 justify-center">
                   <button @click="edit(item.id)" title="Edit" class="text-blue-600 hover:text-blue-900">
                     <i class="fa fa-edit" />
                   </button>

@@ -84,8 +84,10 @@
 
       <div class="border border-gray-300 border-t-0 p-4 rounded-b-md">
         <div class="text-right mb-2">
-          <button class="btn btn-success" @click="exportExcel()">
-            <i class="fa fa-file-excel-o"></i> Xuất Excel
+          <button 
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportExcel()">
+            Xuất Excel
           </button>
         </div>
 

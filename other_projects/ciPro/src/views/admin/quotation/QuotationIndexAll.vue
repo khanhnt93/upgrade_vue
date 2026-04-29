@@ -54,7 +54,7 @@
             <div class="grid grid-cols-1 gap-4" v-show="showPartnerInfo">
               <div class="w-full space-y-2">
                 <div class="flex items-start gap-2 mt-2">
-                  <label class="w-36 shrink-0 text-right text-sm mt-2">Khách hàng</label>
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Khách hàng</label>
                   <div class="flex-1">
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
@@ -106,7 +106,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Tên khách hàng<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Tên khách hàng<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="customer_name"
@@ -120,7 +120,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Tên người liên hệ<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Tên người liên hệ<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="contact_person_name"
@@ -137,7 +137,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">SĐT khách hàng</label>
+                    <label class="w-50 shrink-0 text-right text-sm">SĐT khách hàng</label>
                     <div class="flex-1">
                       <input
                         id="customer_phone"
@@ -152,7 +152,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Sđt người liên hệ<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Sđt người liên hệ<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="contact_person_phone"
@@ -170,7 +170,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Địa chỉ khách hàng</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Địa chỉ khách hàng</label>
                     <div class="flex-1">
                       <input
                         id="address"
@@ -184,7 +184,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Loại CTY<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Loại CTY<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -204,7 +204,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Email K.H</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Email K.H</label>
                     <div class="flex-1">
                       <input
                         id="customer_email"
@@ -218,7 +218,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Tình trạng K.H<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Tình trạng K.H<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -279,7 +279,7 @@
             <div class="grid grid-cols-1 gap-4 mt-2" v-show="showProductInfo">
               <div class="w-full md:col-span-12">
                 <div class="flex items-center gap-2 mt-2" v-show="trade.type == 1">
-                  <label class="w-36 shrink-0 text-right text-sm">Dự án</label>
+                  <label class="w-50 shrink-0 text-right text-sm">Dự án</label>
                   <div class="flex-1">
                     <div class="flex items-center gap-4">
                       <input
@@ -305,7 +305,7 @@
                 </div>
 
                 <div class="flex items-center gap-2 mt-2" v-show="trade.type == 1 && currentProduct.project_type == 0">
-                  <label class="w-36 shrink-0 text-right text-sm">Tên dự án<span class="error-sybol"></span></label>
+                  <label class="w-50 shrink-0 text-right text-sm">Tên dự án<span class="error-sybol"></span></label>
                   <div class="flex-1">
                     <input
                       id="project_name"
@@ -323,7 +323,7 @@
                   v-show="trade.type == 1 && currentProduct.project_type == 0"
                 >
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Hãng dự án</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Hãng dự án</label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -344,7 +344,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Đơn vị dự án</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Đơn vị dự án</label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -366,16 +366,17 @@
                   </div>
                 </div>
 
-                <div
+                <div class="flex items-start gap-2 mt-2" v-show="trade.type == 1 && currentProduct.project_type == 1">
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Dự án mẫu<span class="error-sybol"></span></label>
+                  <div class="flex-1">
+                    <div class="flex gap-2 items-start">
+                      <div class="flex-1">
+
+                <!-- <div
                   class="grid grid-cols-1 gap-4"
                   v-show="trade.type == 1 && currentProduct.project_type == 1"
                 >
-                  <div class="w-full md:col-span-2 mt-2">
-                    <label>
-                      <span>Dự án mẫu</span>
-                    </label>
-                  </div>
-                  <div class="w-full md:col-span-10 mt-2">
+                  <div class="w-full md:col-span-10 mt-2"> -->
                     <Multiselect
                       v-model="projectSelect"
                       :options="projectOptions"
@@ -390,6 +391,8 @@
                       @select="changeProject"
                     >
                     </Multiselect>
+                    </div>
+                    </div>
                   </div>
                 </div>
                 <!-- Loading -->
@@ -398,7 +401,7 @@
                 ></span>
 
                 <div class="flex items-start gap-2 mt-2">
-                  <label class="w-36 shrink-0 text-right text-sm mt-2">Sản phẩm<span class="error-sybol"></span></label>
+                  <label class="w-50 shrink-0 text-right text-sm mt-2">Sản phẩm<span class="error-sybol"></span></label>
                   <div class="flex-1">
                     <div class="flex gap-2 items-start">
                       <div class="flex-1">
@@ -417,12 +420,13 @@
                         >
                         </Multiselect>
                       </div>
-                      <button
+                      <!-- Tạm thời che lại -->
+                      <!-- <button
                         class="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
                         @click="openModalSearchProduct"
                       >
                         <i class="fa fa-search"></i>
-                      </button>
+                      </button> -->
                     </div>
 
                     <!-- Loading -->
@@ -523,7 +527,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Giá list</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Giá list</label>
                     <div class="flex-1">
                       <input
                         id="price_list"
@@ -537,7 +541,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Chiết khấu từ NCC (%)</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Chiết khấu từ NCC (%)</label>
                     <div class="flex-1">
                       <input
                         id="discount"
@@ -554,7 +558,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Giá gốc<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Giá gốc<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="price"
@@ -568,7 +572,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">% Lợi nhuận theo giá list</label>
+                    <label class="w-50 shrink-0 text-right text-sm">% Lợi nhuận theo giá list</label>
                     <div class="flex-1">
                       <input
                         id="discount_sale"
@@ -585,7 +589,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">% Lợi nhuận theo giá gốc</label>
+                    <label class="w-50 shrink-0 text-right text-sm">% Lợi nhuận theo giá gốc</label>
                     <div class="flex-1">
                       <input
                         id="discount_original_price"
@@ -599,7 +603,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận/sản phẩm</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Lợi nhuận/sản phẩm</label>
                     <div class="flex-1">
                       <input
                         id="profit_on_item"
@@ -616,7 +620,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Giá bán<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Giá bán<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="price_sell"
@@ -630,7 +634,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">SL trong kho
+                    <label class="w-50 shrink-0 text-right text-sm">SL trong kho
                       {{
                         root_unit.name
                           ? "(ĐV: " + root_unit.name + ")"
@@ -654,7 +658,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">SL báo giá {{ handleUnitName() }}<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">SL báo giá {{ handleUnitName() }}<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="quantity"
@@ -668,7 +672,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Thành tiền</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Thành tiền</label>
                     <div class="flex-1">
                       <input
                         id="amount_sell"
@@ -685,7 +689,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận tổng</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Lợi nhuận tổng</label>
                     <div class="flex-1">
                       <input
                         id="profit"
@@ -699,7 +703,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Ghi chú</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Ghi chú</label>
                     <div class="flex-1">
                       <input
                         id="note"
@@ -732,7 +736,7 @@
                   </div>
                   <div class="w-full md:col-span-3 text-right">
                     <button
-                      class="btn btn-success"
+                      class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
                       @click="
                         exportToExcel(
                           products_excel,
@@ -741,7 +745,7 @@
                         )
                       "
                     >
-                      <i class="fa fa-file-excel-o"></i> Xuất Excel
+                      Xuất Excel
                     </button>
                   </div>
                 </div>
@@ -766,10 +770,7 @@
                 </div>
 
                 <!-- Báo giá thường thì dùng danh sách này-->
-                <div
-                  class="mt-2"
-                  v-show="trade.type == 0 && trade.products.length > 0"
-                >
+                <div class="mt-2" v-show="trade.type == 0 && trade.products.length > 0">
                   <div class="w-full min-w-0 overflow-hidden">
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
@@ -792,61 +793,35 @@
                           <col style="width: 130px" />
                           <col style="width: 130px" />
                           <col style="width: 150px" />
-                          <col style="width: 150px" />
+                          <col style="width: 60px" />
                         </colgroup>
                         <thead>
                           <tr>
                             <th class="text-center font-weight-bold">STT</th>
                             <th class="text-center font-weight-bold">Mã SP</th>
-                            <th class="text-center font-weight-bold">
-                              Sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Hãng SP
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá List
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % CK từ NCC
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % Lợi nhuận theo giá list
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % Lợi nhuận theo giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận/sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá bán
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Số lượng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Thành tiền
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận tổng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Ghi chú
-                            </th>
-                            <th class="width-150"></th>
+                            <th class="text-center font-weight-bold">Sản phẩm</th>
+                            <th class="text-center font-weight-bold">Hãng SP</th>
+                            <th class="text-center font-weight-bold">Giá List</th>
+                            <th class="text-center font-weight-bold">% CK từ NCC</th>
+                            <th class="text-center font-weight-bold">Giá gốc</th>
+                            <th class="text-center font-weight-bold">% Lợi nhuận theo giá list</th>
+                            <th class="text-center font-weight-bold">% Lợi nhuận theo giá gốc</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận/sản phẩm</th>
+                            <th class="text-center font-weight-bold">Giá bán</th>
+                            <th class="text-center font-weight-bold">Số lượng</th>
+                            <th class="text-center font-weight-bold">Thành tiền</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận tổng</th>
+                            <th class="text-center font-weight-bold">Ghi chú</th>
+                            <th class="width-60"></th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
                             v-for="(item, index) in trade.products"
-                            :key="index"
+                            :key="'product_' + item.index + '_' + (item.product_id || item.product_code_input || index)"
                           >
                             <td class="fitwidth-50">
-                              {{ index + 1 }}
+                              {{ item.index }}
                               <i
                                 class="fa fa-long-arrow-up"
                                 @click="upProductIndex(item.index)"
@@ -989,7 +964,7 @@
                             </td>
                             <td>
                               <button
-                                @click="deleteProduct(index, item.product_id, item.quantity, item.properties)"
+                                @click="deleteProduct(item.index, item.product_id, item.quantity, item.properties)"
                                 class="btn btn-sm btn-danger">
                                 Xoá
                               </button>
@@ -1010,81 +985,56 @@
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
-                        style="table-layout: auto; width: auto; min-width: 2100px;"
+                        style="table-layout: fixed; width: 2200px;" 
                       >
                         <colgroup>
-                          <col style="width: 60px" />
-                          <col style="width: 130px" />
-                          <col style="width: 220px" />
-                          <col style="width: 130px" />
-                          <col style="width: 160px" />
-                          <col style="width: 130px" />
-                          <col style="width: 160px" />
-                          <col style="width: 150px" />
-                          <col style="width: 150px" />
-                          <col style="width: 150px" />
-                          <col style="width: 160px" />
-                          <col style="width: 110px" />
-                          <col style="width: 130px" />
-                          <col style="width: 130px" />
-                          <col style="width: 180px" />
-                          <col style="width: 150px" />
+                          <col style="width:60px">
+                          <col style="width:130px">
+                          <col style="width:220px">
+                          <col style="width:130px">
+                          <col style="width:160px">
+                          <col style="width:120px">
+                          <col style="width:160px">
+                          <col style="width:120px">
+                          <col style="width:120px">
+                          <col style="width:160px">
+                          <col style="width:160px">
+                          <col style="width:100px">
+                          <col style="width:130px">
+                          <col style="width:130px">
+                          <col style="width:130px">
+                          <col style="width:100px">
                         </colgroup>
                         <thead>
                           <tr>
                             <th class="text-center font-weight-bold">STT</th>
                             <th class="text-center font-weight-bold">Mã SP</th>
-                            <th class="text-center font-weight-bold">
-                              Sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Hãng SP
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá List
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % CK từ NCC
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % Lợi nhuận theo giá list
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              % Lợi nhuận theo giá gốc
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận/sản phẩm
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Giá bán
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Số lượng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Thành tiền
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Lợi nhuận tổng
-                            </th>
-                            <th class="text-center font-weight-bold">
-                              Ghi chú
-                            </th>
-                            <th class="width-150"></th>
+                            <th class="text-center font-weight-bold">Sản phẩm</th>
+                            <th class="text-center font-weight-bold">Hãng SP</th>
+                            <th class="text-center font-weight-bold">Giá List</th>
+                            <th class="text-center font-weight-bold">% CK từ NCC</th>
+                            <th class="text-center font-weight-bold">Giá gốc</th>
+                            <th class="text-center font-weight-bold">% Lợi nhuận theo giá list</th>
+                            <th class="text-center font-weight-bold">% Lợi nhuận theo giá gốc</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận/sản phẩm</th>
+                            <th class="text-center font-weight-bold">Giá bán</th>
+                            <th class="text-center font-weight-bold">Số lượng</th>
+                            <th class="text-center font-weight-bold">Thành tiền</th>
+                            <th class="text-center font-weight-bold">Lợi nhuận tổng</th>
+                            <th class="text-center font-weight-bold">Ghi chú</th>
+                            <th class="width-100"></th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
                             v-for="(item, index) in projectProducts"
-                            :key="index"
+                            :key="'project_' + item.project_index + '_' + (item.product_id || item.product_name || index)"
                             v-bind:class="
                               item.product_type == 0 ? 'project_bg' : ''
                             "
                           >
-                            <td class="fitwidth-50">
+                          <!-- <col style="width:60px"> -->
+                            <td class="fitwidth-60">
                               {{ item.project_index }}
                               <i
                                 v-show="item.product_type == 1"
@@ -1092,14 +1042,16 @@
                                 @click="upProductIndex(item.index, true)"
                               />
                             </td>
-                            <td class="fitwidth-250">
+                          <!-- <col style="width:130px"> -->
+                            <td class="fitwidth-130" style="word-break: break-word; white-space: normal; min-width: 250px;">
                               <span v-show="item.product_type == 1">{{
                                 item.product_code
                                   ? item.product_code
                                   : item.product_code_input
                               }}</span>
                             </td>
-                            <td class="fitwidth-250">
+                          <!-- <col style="width:220px"> -->
+                            <td class="fitwidth-220" style="word-break: break-word; white-space: normal; min-width: 250px;">
                               <span v-show="item.product_type == 1">{{
                                 item.product_name
                                   ? item.product_name
@@ -1118,7 +1070,8 @@
                                 "
                               />
                             </td>
-                            <td class="fitwidth-50">
+                          <!-- <col style="width:130px"> -->
+                            <td class="fitwidth-130">
                               <span v-show="item.product_type == 1">
                                 {{
                                   item.brand_name
@@ -1130,7 +1083,8 @@
                                 {{ item.project_brand_name }}
                               </span>
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:160px"> -->
+                            <td class="text-right fitwidth-160">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'price_list_project_' + index"
@@ -1149,7 +1103,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:120px"> -->
+                            <td class="text-right fitwidth-120">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'discount_project_' + index"
@@ -1168,7 +1123,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:160px"> -->
+                            <td class="text-right fitwidth-160">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'price_project_' + index"
@@ -1187,7 +1143,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:120px"> -->
+                            <td class="text-right fitwidth-120">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'discount_sale_project_' + index"
@@ -1206,7 +1163,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:120px"> -->
+                            <td class="text-right fitwidth-120">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'discount_original_price_project_' + index"
@@ -1225,7 +1183,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:160px"> -->
+                            <td class="text-right fitwidth-160">
                               <input
                                 v-show="item.product_type == 1"
                                 :id="'profit_on_item_project_' + index"
@@ -1244,7 +1203,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:160px"> -->
+                            <td class="text-right fitwidth-160">
                               <span v-show="item.product_type == 0"
                                 ><b>{{
                                   currencyFormat(item.project_price)
@@ -1268,7 +1228,8 @@
                                 "
                               />
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:100px"> -->
+                            <td class="text-right fitwidth-100">
                               <input
                                 v-show="item.product_type == 0"
                                 :id="'project_quantity_' + index"
@@ -1297,8 +1258,8 @@
                                 "
                               />
                             </td>
-
-                            <td class="text-right">
+                          <!-- <col style="width:130px"> -->
+                            <td class="text-right fitwidth-130">
                               <span v-show="item.product_type == 0"
                                 ><b>{{
                                   currencyFormat(item.project_amount)
@@ -1308,12 +1269,14 @@
                                 currencyFormat(item.amount_sell)
                               }}</span>
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:130px"> -->
+                            <td class="text-right fitwidth-130">
                               <span v-show="item.product_type == 1">{{
                                 currencyFormat(item.profit)
                               }}</span>
                             </td>
-                            <td class="text-right">
+                          <!-- <col style="width:130px"> -->
+                            <td class="text-right fitwidth-130">
                               <!--{{item.note}}-->
                               <input
                                 v-show="item.product_type == 1"
@@ -1331,21 +1294,27 @@
                                 "
                               />
                             </td>
-                            <td>
-                              <div class="flex gap-2 items-center whitespace-nowrap">
+                          <!-- <col style="width:100px"> -->
+                            <td style="width: 100px; min-width: 100px; padding: 5px !important;">
+                              <div style="display: flex; gap: 4px; justify-content: center; align-items: center; width: 100%;">
                                 <button
                                   v-show="item.product_type == 0"
                                   @click="editProject(item.product_name)"
-                                  class="btn btn-sm btn-primary">
+                                  class="btn btn-xs btn-primary"
+                                  style="padding: 2px 8px; font-size: 11px; flex-shrink: 0;"
+                                >
                                   Sửa
                                 </button>
                                 <button
                                   @click="deleteProductOfProject(item.index, item.product_type, item.product_name, item.product_id, item.quantity, item.properties)"
-                                  class="btn btn-sm btn-danger">
+                                  class="btn btn-xs btn-danger"
+                                  style="padding: 2px 8px; font-size: 11px; flex-shrink: 0;"
+                                >
                                   Xoá
                                 </button>
                               </div>
                             </td>
+
                           </tr>
                         </tbody>
                       </table>
@@ -1418,7 +1387,7 @@
               <div class="w-full space-y-2">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Tổng tiền sản phẩm</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Tổng tiền sản phẩm</label>
                     <div class="flex-1">
                       <input
                         id="sub_total"
@@ -1431,15 +1400,16 @@
                       />
                     </div>
                   </div>
-                  <div class="flex items-start gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm mt-2">Chi phí thêm</label>
-                    <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <label class="w-50 shrink-0 text-right text-sm">Chi phí thêm</label>
+                    
+                    <div class="flex flex-1 gap-2">
                       <input
                         id="extra_fee"
                         type="text"
                         maxlength="14"
                         autocomplete="new-password"
-                        class="form-control w-full"
+                        class="form-control w-1/2" 
                         v-model="trade.extra_fee"
                         placeholder="Số tiền"
                         @change="calculateAmount"
@@ -1449,7 +1419,7 @@
                         type="text"
                         maxlength="255"
                         autocomplete="new-password"
-                        class="form-control w-full mt-2"
+                        class="form-control flex-1" 
                         placeholder="Ghi chú cho chi phí thêm"
                         v-model="trade.note_extra_fee"
                       />
@@ -1459,7 +1429,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Số tiền giảm</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Số tiền giảm</label>
                     <div class="flex-1">
                       <input
                         id="fixed_discount"
@@ -1473,7 +1443,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Thuế VAT</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Thuế VAT</label>
                     <div class="flex-1 flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -1505,7 +1475,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Thành tiền<span class="error-sybol"></span></label>
+                    <label class="w-50 shrink-0 text-right text-sm">Thành tiền<span class="error-sybol"></span></label>
                     <div class="flex-1">
                       <input
                         id="amount"
@@ -1519,7 +1489,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Lợi nhuận</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Lợi nhuận</label>
                     <div class="flex-1">
                       <input
                         id="trade_profit"
@@ -1536,7 +1506,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Tài khoản nhận thanh toán</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Tài khoản nhận thanh toán</label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -1555,7 +1525,7 @@
                     </div>
                   </div>
                   <div class="flex items-start gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm mt-2">Hình thức thanh toán</label>
+                    <label class="w-50 shrink-0 text-right text-sm mt-2">Hình thức thanh toán</label>
                     <div class="flex-1 flex gap-2 items-start">
                       <div class="flex-1">
                         <select
@@ -1593,7 +1563,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-start gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm mt-2">Thỏa thuận vận chuyển</label>
+                    <label class="w-50 shrink-0 text-right text-sm mt-2">Thỏa thuận vận chuyển</label>
                     <div class="flex-1 flex gap-2 items-start">
                       <div class="flex-1">
                         <select
@@ -1619,7 +1589,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Phí giao hàng</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Phí giao hàng</label>
                     <div class="flex-1">
                       <input
                         id="shipping_fee"
@@ -1636,7 +1606,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Hiệu lực báo giá (ngày)</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Hiệu lực báo giá (ngày)</label>
                     <div class="flex-1">
                       <input
                         id="quotation_expiry_date"
@@ -1649,8 +1619,8 @@
                       />
                     </div>
                   </div>
-                  <div class="flex items-center gap-2" v-if="userRole.value == 'admin'">
-                    <label class="w-36 shrink-0 text-right text-sm">Nhân viên phụ trách</label>
+                  <div class="flex items-center gap-2" v-if="userRole == 'admin'">
+                    <label class="w-50 shrink-0 text-right text-sm">Nhân viên phụ trách</label>
                     <div class="flex-1">
                       <select
                         class="form-select w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -1672,7 +1642,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Thời gian giao hàng</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Thời gian giao hàng</label>
                     <div class="flex-1">
                       <input
                         id="shipping_date"
@@ -1685,7 +1655,7 @@
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Bảo hành</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Bảo hành</label>
                     <div class="flex-1">
                       <input
                         id="guarantee"
@@ -1701,7 +1671,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex items-center gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm">Giấy tờ kèm theo</label>
+                    <label class="w-50 shrink-0 text-right text-sm">Giấy tờ kèm theo</label>
                     <div class="flex-1">
                       <input
                         id="attach_doc"
@@ -1714,7 +1684,7 @@
                     </div>
                   </div>
                   <div class="flex items-start gap-2">
-                    <label class="w-36 shrink-0 text-right text-sm mt-2">Ghi chú</label>
+                    <label class="w-50 shrink-0 text-right text-sm mt-2">Ghi chú</label>
                     <div class="flex-1">
                       <textarea
                         class="form-textarea w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -1752,7 +1722,8 @@
               <div class="w-full md:col-span-12 text-center">
                 <button
                   v-show="!saving"
-                  class="btn-outline-success btn-sm"
+                  class="btn-sm border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition-colors
+         disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-500 disabled:text-gray-500 disabled:bg-gray-100"
                   style="height: 50px; width: 240px"
                   @click="save"
                   :disabled="saving || !trade.id"
@@ -1791,10 +1762,10 @@
           <div class="w-full" cols="12">
             <button
               v-show="!exportingExcel"
-              class="btn btn-success float-left btn-width-120 btn-sm"
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
               @click="exportExcel('excel')"
             >
-              <i class="fa fa-file-excel-o"></i> Xuất Excel
+              Xuất Excel
             </button>
 
             <button
@@ -2077,9 +2048,9 @@
               <tr
                 v-if="trade.type == 0"
                 v-for="(item, index) in trade.products"
-                :key="index"
+                :key="'preview_' + item.index + '_' + (item.product_id || item.product_code_input || index)"
               >
-                <td class="print-text-center">{{ index + 1 }}</td>
+                <td class="print-text-center">{{ item.index }}</td>
                 <td>
                   {{
                     item.product_code
@@ -2119,7 +2090,7 @@
               <tr
                 v-if="trade.type == 1"
                 v-for="(item, index) in projectProducts"
-                :key="index"
+                :key="'preview_project_' + item.project_index + '_' + (item.product_id || item.product_name || index)"
                 :class="item.product_type == 0 ? 'project_name' : ''"
               >
                 <td class="print-text-center">{{ item.project_index }}</td>
@@ -2482,14 +2453,14 @@
     <!--Modal tìm kiếm sản phẩm -->
     <div
       v-if="showModalSearchProduct"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-10"
     >
       <div
         class="bg-white rounded-lg shadow-xl p-6 w-full max-w-7xl max-h-[90vh] overflow-y-auto"
       >
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h4 class="modal-title text-center text-success text-header ">
               Tìm kiếm sản phẩm
             </h4>
           </div>
@@ -2568,30 +2539,30 @@
         </div>
 
         <div class="grid grid-cols-1 gap-4 mt-2">
-          <div class="w-full" cols="12">
+          <div class="w-full text-center" cols="12">
             <button
-              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 float-left btn-width-120"
+              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 btn-width-120"
               @click.prevent="hideModalSearchProduct"
             >
               Quay lại
             </button>
 
             <button
-              class="btn btn-primary"
+              class="ml-2 px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-gray-50 btn-width-120"
               :disabled="onSearchProduct"
               @click.prevent="searchProduct"
               v-show="!onSearchProduct"
             >
               Tìm Kiếm
             </button>
-            <span class="loading-more float-right" v-show="onSearchProduct"
-              ><i class="fa fa-spinner fa-spin fa-3x"></i
-            ></span>
           </div>
         </div>
 
         <div class="grid grid-cols-1 gap-4 mt-2">
           <div class="w-full">
+            <span class="loading-more" v-show="onSearchProduct"
+              ><i class="fa fa-spinner fa-spin fa-3x"></i
+            ></span>
             <table
               class="min-w-full border-collapse border border-gray-300"
             >
@@ -2643,14 +2614,14 @@
     <!--Modal tìm kiếm khách hàng -->
     <div
       v-if="showModalSearchCustomer"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-10"
     >
       <div
         class="bg-white rounded-lg shadow-xl p-6 w-full max-w-7xl max-h-[90vh] overflow-y-auto"
       >
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h4 class="modal-title text-center text-success text-header">
               Tìm kiếm khách hàng
             </h4>
           </div>
@@ -2684,16 +2655,16 @@
         </div>
 
         <div class="grid grid-cols-1 gap-4 mt-2">
-          <div class="w-full" cols="12">
+          <div class="w-full text-center" cols="12">
             <button
-              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 float-left btn-width-120"
+              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-50 btn-width-120"
               @click.prevent="hideModalSearchCustomer"
             >
               Quay lại
             </button>
 
             <button
-              class="btn btn-primary"
+              class="ml-2 px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50 btn-width-120"
               :disabled="onSearchCustomer"
               @click.prevent="searchCustomer"
             >
@@ -3033,7 +3004,7 @@
 
         <div
           class="grid grid-cols-1 gap-4 form-row"
-          v-show="userRole.value == 'admin'"
+          v-show="userRole == 'admin'"
         >
           <div class="w-full md:col-span-3 mt-2">
             <label>Nhân viên phụ trách</label>
@@ -3057,7 +3028,7 @@
             </button>
             <button
               v-show="!savingCustomer"
-              class="btn-outline-success float-right btn-width-120 btn-sm"
+              class="px-4 py-2 btn-outline-success border rounded float-right btn-width-120 btn-sm"
               @click="saveCustomer"
               :disabled="savingCustomer"
             >
@@ -3074,22 +3045,22 @@
     <!--Modal QL hình thức thanh toán -->
     <div
       v-if="showModalPaymentMethod"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-10"
     >
       <div
         class="bg-white rounded-lg shadow-xl p-6 w-full max-w-7xl max-h-[90vh] overflow-y-auto"
       >
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h4 class="modal-title text-center text-success text-header">
               QL Hình Thức Thanh Toán
             </h4>
           </div>
         </div>
         <hr />
 
-        <div class="grid grid-cols-1 gap-4 form-row">
-          <div class="w-full md:col-span-3 mt-2">
+        <div class="grid grid-cols-1 gap-2 form-row">
+          <div class="w-full md:col-span-3">
             <label>Hình thức thanh toán<span class="error-sybol"></span></label>
           </div>
           <div class="w-full" md="9">
@@ -3104,11 +3075,11 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 form-row">
-          <div class="w-full md:col-span-3 mt-2">
+        <div class="grid grid-cols-1 gap-2 form-row">
+          <div class="w-full md:col-span-3">
             <label>Số ngày công nợ<span class="error-sybol"></span></label>
           </div>
-          <div class="w-full md:col-span-9 mt-2">
+          <div class="w-full md:col-span-9">
             <input
               id="payment_method_debt_date_number"
               type="text"
@@ -3121,8 +3092,8 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 form-row">
-          <div class="w-full md:col-span-3 mt-2">
+        <div class="grid grid-cols-1 gap-2 form-row">
+          <div class="w-full md:col-span-3">
             <label>Thứ tự xuất hiện<span class="error-sybol"></span></label>
           </div>
           <div class="w-full mt-2" md="9">
@@ -3142,22 +3113,19 @@
           <div class="w-full md:col-span-12 text-center">
             <button
               v-show="!savingPaymentMethod"
-              class="btn-outline-secondary btn-width-120 text-center btn-sm"
+              class="px-4 py-2 border rounded float-left btn-width-120 text-center btn-outline-secondary btn-sm"
               @click.prevent="hideModalPaymentMethod"
             >
               Đóng
             </button>
             <button
               v-show="!savingPaymentMethod"
-              class="btn-outline-primary btn-width-120 text-center btn-sm"
+              class="ml-2 btn-outline-primary btn-width-120 text-center btn-sm"
               :disabled="savingPaymentMethod"
               @click.prevent="addUpdatePaymentMethod"
             >
               <span>{{ btn_payment_method_text }}</span>
             </button>
-            <span class="loading-more" v-show="savingPaymentMethod"
-              ><i class="fa fa-spinner fa-spin fa-3x"></i
-            ></span>
           </div>
         </div>
 
@@ -3169,6 +3137,9 @@
 
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full">
+            <span class="loading-more" v-show="savingPaymentMethod"
+              ><i class="fa fa-spinner fa-spin fa-3x"></i
+            ></span>
             <table
               class="min-w-full border-collapse border border-gray-300"
             >
@@ -3189,15 +3160,15 @@
                   :key="index"
                   class="hover:bg-gray-50"
                 >
-                  <td class="px-6 py-4 whitespace-nowrap">{{ item.index }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">{{ item.index }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
                     {{ item.payment_method }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
                     {{ item.debt_date_number }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex gap-2 items-center whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                    <div class="flex gap-2 items-center whitespace-nowrap text-center justify-center">
                       <button
                         @click="editPaymentMethod(index)"
                         class="btn btn-primary">
@@ -3227,21 +3198,21 @@
     <!--Modal QL Thỏa thuận vận chuyển -->
     <div
       v-if="showModalShippingAgreement"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-10"
     >
       <div
         class="bg-white rounded-lg shadow-xl p-6 w-full max-w-7xl max-h-[90vh] overflow-y-auto"
       >
         <div class="grid grid-cols-1 gap-4">
           <div class="w-full md:col-span-12">
-            <h4 class="modal-title text-center text-success">
+            <h4 class="modal-title text-center text-success text-header">
               QL Thỏa Thuận Vận Chuyển
             </h4>
           </div>
         </div>
         <hr />
 
-        <div class="grid grid-cols-1 gap-4 form-row">
+        <div class="grid grid-cols-1">
           <div class="w-full md:col-span-3 mt-2">
             <label
               >Thỏa thuận vận chuyển<span class="error-sybol"></span
@@ -3259,7 +3230,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 form-row">
+        <div class="grid grid-cols-1">
           <div class="w-full md:col-span-3 mt-2">
             <label>Thứ tự xuất hiện<span class="error-sybol"></span></label>
           </div>
@@ -3280,14 +3251,14 @@
           <div class="w-full md:col-span-12 text-center">
             <button
               v-show="!savingShippingAgreement"
-              class="btn-width-120 text-center btn-outline-secondary btn-sm"
+              class="px-4 py-2 border rounded float-left btn-width-120 text-center btn-outline-secondary btn-sm"
               @click.prevent="hideModalShippingAgreement"
             >
               Đóng
             </button>
             <button
               v-show="!savingShippingAgreement"
-              class="btn-width-120 text-center btn-outline-primary btn-sm"
+              class="ml-2 btn-width-120 text-center btn-outline-primary btn-sm"
               :disabled="savingShippingAgreement"
               @click.prevent="addUpdateShippingAgreement"
             >
@@ -3327,12 +3298,12 @@
                   :key="index"
                   class="hover:bg-gray-50"
                 >
-                  <td class="px-6 py-4 whitespace-nowrap">{{ item.index }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">{{ item.index }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
                     {{ item.shipping_agreement }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex gap-2 items-center whitespace-nowrap">
+                  <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                    <div class="flex gap-2 items-center whitespace-nowrap text-center justify-center">
                       <button
                         @click="editShippingAgreement(index)"
                         class="btn btn-primary">
@@ -3765,7 +3736,7 @@ const customerSearch = reactive({
   name: null,
 });
 
-const paymentMethod = reactive({
+const paymentMethod = ref({
   id: null,
   payment_method: null,
   debt_date_number: 0,
@@ -4114,19 +4085,21 @@ const hideModalSearchProduct = () => {
 };
 
 const getProductItemById = (id) => {
-  for (let i in productOptions) {
-    if (productOptions[i].id == id) {
-      return productOptions[i];
-    }
-  }
-  return {};
+  // Nếu không có id truyền vào, trả về object rỗng ngay lập tức
+  if (!id) return {};
+
+  // Tìm kiếm trong mảng (Lưu ý dùng .value nếu productOptions là ref)
+  const product = productOptions.value.find(item => String(item.id) === String(id));
+
+  // Trả về product tìm thấy, hoặc object rỗng nếu không thấy
+  return product || {};
 };
 
 /**
  * Search
  */
 const searchProduct = () => {
-  if (onSearchProduct) {
+  if (onSearchProduct.value) {
     return;
   }
   productSearchItems.value = [];
@@ -4155,7 +4128,7 @@ const searchProduct = () => {
     .searchProductByStaff(params)
     .then((res) => {
       if (res != null && res.data != null && res.data.data != null) {
-        productSearchItems.value = res.data.data.products;
+        productSearchItems.value = res.data.data;
       } else {
         productSearchItems.value = [];
       }
@@ -4253,15 +4226,15 @@ const updateCustomerInfo = () => {
     customer_company_type_id: trade.customer_company_type_id,
     contact_person_name: trade.contact_person_name,
     contact_person_phone: trade.contact_person_phone,
-    code: currentCustomer.code,
+    code: currentCustomer.value.code,
     tax_code: trade.customer_tax_code,
   };
   customerApi.updateCustomerFromQuotation(params).then((res) => {
     if (res != null && res.data != null) {
       popToast("success", "Cập nhật thông tin khách hàng thành công!");
 
-      if (customerSelect && customerSelect.id) {
-        customerSelect.name = JSON.parse(JSON.stringify(trade.customer_name));
+      if (customerSelect.value && customerSelect.value.id) {
+        customerSelect.value.name = JSON.parse(JSON.stringify(trade.customer_name));
       }
 
       getCustomerOptions();
@@ -4293,23 +4266,22 @@ const saveCustomer = () => {
           popToast("success", "Thêm khách hàng thành công!");
 
           let customer_id = res.data.data;
-          let customer = JSON.parse(JSON.stringify(customer));
+          let customer_parsed = JSON.parse(JSON.stringify(customer));
 
-          currentCustomer.value = JSON.parse(JSON.stringify(customer));
-          currentCustomer.id = customer_id;
+          currentCustomer.value = JSON.parse(JSON.stringify(customer_parsed));
+          currentCustomer.value.id = customer_id;
 
-          // customerOptionStore.unshift({id: customer_id, name: customer.name})
           customerSelect.value = { id: customer_id, name: customer.name };
 
           trade.customer_id = customer_id;
-          trade.customer_name = customer.name;
-          trade.customer_phone = customer.phone_number;
-          trade.customer_address = customer.address;
-          trade.customer_email = customer.email;
-          trade.customer_tax_code = customer.tax_code;
-          trade.customer_company_type_id = customer.company_type;
-          trade.contact_person_name = customer.contact_person_name;
-          trade.contact_person_phone = customer.contact_person_phone;
+          trade.customer_name = customer_parsed.name;
+          trade.customer_phone = customer_parsed.phone_number;
+          trade.customer_address = customer_parsed.address;
+          trade.customer_email = customer_parsed.email;
+          trade.customer_tax_code = customer_parsed.tax_code;
+          trade.customer_company_type_id = customer_parsed.company_type;
+          trade.contact_person_name = customer_parsed.contact_person_name;
+          trade.contact_person_phone = customer_parsed.contact_person_phone;
           trade.customer_status = 1;
 
           getCustomerOptions();
@@ -4336,7 +4308,7 @@ const hideModalSearchCustomer = () => {
  * Search
  */
 const searchCustomer = () => {
-  if (onSearchCustomer) {
+  if (onSearchCustomer.value) {
     return;
   }
   customerSearchItems.value = [];
@@ -4384,13 +4356,25 @@ const chooseCustomer = (id) => {
   showModalSearchCustomer.value = false;
 };
 
+// const getCustomerItemById = (id) => {
+//   if (id) {
+//     for (let i in customerOptionStore) {
+//       if (customerOptionStore.value[i].id == id) {
+//         customerSelect.value = customerOptionStore.value[i];
+//       }
+//     }
+//   }
+// };
+
 const getCustomerItemById = (id) => {
-  if (id) {
-    for (let i in customerOptionStore) {
-      if (customerOptionStore[i].id == id) {
-        customerSelect.value = customerOptionStore[i];
-      }
-    }
+  // Kiểm tra nếu id không có giá trị (null, undefined, 0) thì thoát sớm
+  if (!id) return;
+
+  // Sử dụng .find để tìm phần tử nhanh hơn
+  const foundItem = customerOptionStore.value.find(item => String(item.id) === String(id));
+
+  if (foundItem) {
+    customerSelect.value = foundItem;
   }
 };
 
@@ -4941,18 +4925,18 @@ const calculateProductProject = (product) => {
 };
 
 /**
- *  Event change customer
+ *  Event change customer`
  */
 const changeProject = () => {
-  if (projectSelect && projectSelect.id) {
+  if (projectSelect.value && projectSelect.value.id) {
     // Call api: get project detail
     loadProjectDetail.value = true;
     quotationApi
-      .getProjectDetail(projectSelect.id)
+      .getProjectDetail(projectSelect.value.id)
       .then((res) => {
         if (res != null && res.data != null && res.data.data != null) {
           let products = res.data.data;
-          currentProduct.project_name = projectSelect.name;
+          currentProduct.project_name = projectSelect.value.name;
 
           // let product_index = trade.products.length + 1
           for (let product of products) {
@@ -4969,10 +4953,10 @@ const changeProject = () => {
             product.properties = []; // TODO: hiện tại ciPro ko dùng tới properties
             product.index = trade.products.length + 1; //product_index
 
-            product.project_brand_id = projectSelect.brand_id;
-            product.project_brand_name = projectSelect.brand_name;
-            product.project_unit_id = projectSelect.unit_id;
-            product.project_unit_name = projectSelect.unit_name;
+            product.project_brand_id = projectSelect.value.brand_id;
+            product.project_brand_name = projectSelect.value.brand_name;
+            product.project_unit_id = projectSelect.value.unit_id;
+            product.project_unit_name = projectSelect.value.unit_name;
 
             product.target_unit_id = null;
             product.target_unit_name = null;
@@ -6595,7 +6579,7 @@ const editProject = (project_name) => {
 };
 
 const deleteProduct = (ind, product_id, quantity, properties) => {
-  trade.products.splice(parseInt(ind), 1); // Xoá sp
+  trade.products.splice(parseInt(ind) - 1, 1); // Xoá sp (ind là 1-based từ item.index)
 
   // Check remove all product
   if (trade.products.length == 0) {
@@ -6680,8 +6664,11 @@ const deleteProductOfProject = (
 
 const upProductIndex = (index, is_project = false) => {
   if (index > 1) {
-    trade.products[index - 1].index = trade.products[index - 1].index - 1;
-    trade.products[index - 2].index = trade.products[index - 1].index + 1;
+    // Lưu giá trị cũ trước khi swap để tránh race condition
+    const currentIndex = trade.products[index - 1].index;
+    const prevIndex = trade.products[index - 2].index;
+    trade.products[index - 1].index = prevIndex;
+    trade.products[index - 2].index = currentIndex;
 
     trade.products.sort(function (a, b) {
       return a.index - b.index;
@@ -6849,7 +6836,8 @@ const chooseUnit = () => {
 };
 
 const editPaymentMethod = (index) => {
-  Object.assign(paymentMethod, itemsPaymentMethod[index]);
+  // Hoạt động hoàn hảo với ref
+  paymentMethod.value = { ...itemsPaymentMethod.value[index] };
   btn_payment_method_text.value = "Cập nhật";
 };
 
@@ -6914,30 +6902,30 @@ const deletedPaymentMethod = (id, name) => {
 };
 
 const cleanPaymentMethod = () => {
-  paymentMethod.id = null;
-  paymentMethod.payment_method = null;
-  paymentMethod.debt_date_number = 0;
-  paymentMethod.index = null;
+  paymentMethod.value.id = null;
+  paymentMethod.value.payment_method = null;
+  paymentMethod.value.debt_date_number = 0;
+  paymentMethod.value.index = null;
   btn_payment_method_text.value = "Thêm mới";
 };
 
 const addUpdatePaymentMethod = () => {
-  if (!paymentMethod.payment_method) {
+  if (!paymentMethod.value.payment_method) {
     popToast("danger", "Vui lòng nhập [Hình thức thanh toán]");
     return;
   }
-  paymentMethod.payment_method = paymentMethod.payment_method.trim();
-  if (!paymentMethod.debt_date_number) {
-    paymentMethod.debt_date_number = 0;
+  paymentMethod.value.payment_method = paymentMethod.value.payment_method.trim();
+  if (!paymentMethod.value.debt_date_number) {
+    paymentMethod.value.debt_date_number = 0;
   }
 
   savingPaymentMethod.value = true;
 
-  let id = paymentMethod.id;
+  let id = paymentMethod.value.id;
   if (id) {
     // Edit
     paymentMethodApi
-      .editPaymentMethod(paymentMethod)
+      .editPaymentMethod(paymentMethod.value)
       .then((res) => {
         if (res != null && res.data != null && res.data.data != null) {
           let data = res.data.data;
@@ -6959,7 +6947,7 @@ const addUpdatePaymentMethod = () => {
   } else {
     // Add
     paymentMethodApi
-      .addPaymentMethod(paymentMethod)
+      .addPaymentMethod(paymentMethod.value)
       .then((res) => {
         if (res != null && res.data != null && res.data.data != null) {
           let data = res.data.data;
@@ -7143,5 +7131,11 @@ const addUpdateShippingAgreement = () => {
 
 .width-150 {
   width: 150px;
+}
+
+.w-50 {
+  width: 180px !important;
+  min-width: 180px !important;
+  white-space: nowrap;
 }
 </style>

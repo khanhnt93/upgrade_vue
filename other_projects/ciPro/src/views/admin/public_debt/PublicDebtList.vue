@@ -113,13 +113,15 @@
             Số kết quả: <span class="font-bold text-blue-600">{{ totalRow }}</span>
           </div>
           <div class="flex space-x-4">
-            <button class="btn btn-success" @click="exportExcel()">
-              <i class="fa fa-file-excel-o"></i> Xuất Excel
+            <button 
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+              @click="exportExcel()">
+              Xuất Excel
             </button>
             <button
               @click="prepareToSearch"
               :disabled="onSearch"
-              class="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              class="btn-outline-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Tìm Kiếm
             </button>

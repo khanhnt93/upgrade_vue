@@ -17,7 +17,7 @@
           </button>
         </div>
 
-        <h4 class="text-2xl font-semibold text-center mb-4">Danh Sách Sản Phẩm</h4>
+        <h4 class="text-2xl font-semibold text-center mb-4 text-header">Danh Sách Sản Phẩm</h4>
         <hr class="mb-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
@@ -91,7 +91,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="btn btn-primary"
+            class="btn-outline-primary"
           >
             Tìm Kiếm
           </button>
@@ -102,8 +102,10 @@
             Số kết quả: {{totalRow}}
           </div>
           <div v-if="excel_items.length > 0">
-            <button class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-colors cursor-pointer inline-block" @click="exportExcel()">
-              <b>Xuất Excel</b>
+            <button 
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold" 
+              @click="exportExcel()">
+              Xuất Excel
             </button>
           </div>
         </div>
@@ -162,7 +164,7 @@
                   {{ formatCurrency(item.price_sell) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium border">
-                  <div class="flex space-x-2">
+                  <div class="flex space-x-2 justify-center">
                     <button
                       @click="edit(item.id)"
                       class="text-blue-600 hover:text-blue-900"

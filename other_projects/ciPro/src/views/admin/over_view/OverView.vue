@@ -22,35 +22,32 @@
 
           <!-- Statistics Cards -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Total Quotations -->
-            <div class="bg-[rgb(229,249,255)] border-2 border-blue-500 rounded-lg p-6 text-center">
-              <h5 class="mb-4">Tổng Số Báo Giá</h5>
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 text-center shadow-sm">
+              <h5 class="mb-4 font-semibold text-blue-800">Tổng Số Báo Giá</h5>
               <div class="flex items-center justify-center">
                 <i class="fa fa-clipboard text-[#78B7D0]" style="font-size:55px;width:20%;"></i>
                 <div class="text-center" style="width: 75%">
-                  <b class="text-4xl">{{ formatCurrency(totalQuotationNumber) }}</b>
+                  <b class="text-4xl text-blue-900">{{ formatCurrency(totalQuotationNumber) }}</b>
                 </div>
               </div>
             </div>
 
-            <!-- Total Orders -->
-            <div class="bg-[rgb(255,237,229)] border-2 border-blue-500 rounded-lg p-6 text-center">
-              <h5 class="mb-4">Tổng Số Đơn Hàng bán</h5>
+            <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-6 text-center shadow-sm">
+              <h5 class="mb-4 font-semibold text-orange-800">Tổng Số Đơn Hàng bán</h5>
               <div class="flex items-center justify-center">
                 <i class="fa fa-shopping-cart text-[#FFDBB5]" style="font-size:60px;width:20%;"></i>
                 <div class="text-center" style="width: 75%">
-                  <b class="text-4xl">{{ formatCurrency(totalOrderSellNumber) }}</b>
+                  <b class="text-4xl text-orange-900">{{ formatCurrency(totalOrderSellNumber) }}</b>
                 </div>
               </div>
             </div>
 
-            <!-- Completed Orders -->
-            <div class="bg-[rgb(234,229,255)] border-2 border-blue-500 rounded-lg p-6 text-center">
-              <h5 class="mb-4">Tổng Số Đơn Hoàn Thành</h5>
+            <div class="bg-emerald-50 border-2 border-emerald-400 rounded-lg p-6 text-center shadow-sm">
+              <h5 class="mb-4 font-semibold text-emerald-800">Tổng Số Đơn Hoàn Thành</h5>
               <div class="flex items-center justify-center">
-                <i class="fa fa-check text-[#C8A1E0]" style="font-size:60px;width:20%;"></i>
+                <i class="fa fa-check-circle text-emerald-500" style="font-size:60px;width:20%;"></i>
                 <div class="text-center" style="width: 75%">
-                  <b class="text-4xl">{{ formatCurrency(totalOrderSellFinishNumber) }}</b>
+                  <b class="text-4xl text-emerald-900">{{ formatCurrency(totalOrderSellFinishNumber) }}</b>
                 </div>
               </div>
             </div>
@@ -81,16 +78,16 @@
               <!-- Inventory Stats -->
               <div class="space-y-4">
                 <!-- Product Count -->
-                <div class="border-2 border-blue-500 rounded-lg p-4 text-center">
-                  <div class="text-blue-600 font-semibold border-b-2 border-blue-500 pb-2 mb-4">
+                <div class="border-2 border-blue-300 rounded-lg p-4 text-center">
+                  <div class="text-blue-600 font-semibold border-b-2 border-blue-200 pb-2 mb-4">
                     Số lượng SP tồn kho
                   </div>
                   <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ formatCurrency(repo.number_of_product) }}</h5>
                 </div>
 
                 <!-- Inventory Value -->
-                <div class="border-2 border-red-500 rounded-lg p-4 text-center">
-                  <div class="text-red-600 font-semibold border-b-2 border-red-500 pb-2 mb-4">
+                <div class="border-2 border-red-300 rounded-lg p-4 text-center">
+                  <div class="text-red-600 font-semibold border-b-2 border-red-200 pb-2 mb-4">
                     Giá trị hàng tồn kho
                   </div>
                   <h5 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ formatCurrency(repo.total_price_buy) }}đ</h5>
@@ -130,8 +127,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Receivable Debt -->
-              <div class="border-2 border-green-500 rounded-lg p-4 text-center">
-                <div class="text-green-600 font-semibold border-b-2 border-green-500 pb-2 mb-4">
+              <div class="border-2 border-green-300 rounded-lg p-4 text-center">
+                <div class="text-green-600 font-semibold border-b-2 border-green-200 pb-2 mb-4">
                   Công nợ (Nợ cần thu hồi)
                 </div>
                 <div>
@@ -144,8 +141,8 @@
               </div>
 
               <!-- Payable Debt -->
-              <div class="border-2 border-red-500 rounded-lg p-4 text-center">
-                <div class="text-red-600 font-semibold border-b-2 border-red-500 pb-2 mb-4">
+              <div class="border-2 border-red-300 rounded-lg p-4 text-center">
+                <div class="text-red-600 font-semibold border-b-2 border-red-200 pb-2 mb-4">
                   Nợ công (Nợ phải trả)
                 </div>
                 <div>

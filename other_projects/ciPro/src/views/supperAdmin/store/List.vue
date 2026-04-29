@@ -71,7 +71,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="btn btn-primary"
+            class="btn-outline-primary"
           >
             Tìm Kiếm
           </button>

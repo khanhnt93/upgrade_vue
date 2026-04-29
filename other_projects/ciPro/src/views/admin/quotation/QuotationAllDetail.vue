@@ -90,11 +90,10 @@
         </div>
 
         <div class="flex justify-end mb-2">
-          <button
-            @click="exportToExcel"
-            class="btn btn-success"
-          >
-            <i class="fa fa-file-excel-o"></i> Xuất Excel
+          <button 
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportToExcel">
+            Xuất Excel
           </button>
         </div>
 
@@ -619,9 +618,9 @@
             <div class="flex justify-between">
               <button
                 v-show="!exportingExcel"
-                class="btn btn-primary w-32"
+                class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
                 @click="exportExcel('excel')">
-                <i class="fa fa-file-excel-o"></i> Xuất Excel
+                Xuất Excel
               </button>
 
               <button

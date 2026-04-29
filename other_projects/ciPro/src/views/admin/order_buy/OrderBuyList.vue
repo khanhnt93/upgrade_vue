@@ -137,7 +137,7 @@
         <div class="md:col-span-2 flex items-end">
           <button
             @click="prepareToSearch"
-            class="w-full btn btn-primary"
+            class="w-full btn-outline-primary"
           >
             Tìm kiếm
           </button>
@@ -146,11 +146,10 @@
 
       <!-- Excel Export Button -->
       <div class="flex justify-end mb-4">
-        <button
-          @click="exportToExcel"
-          class="btn btn-success"
-        >
-          <i class="fa fa-file-excel-o"></i> Xuất Excel
+        <button 
+          class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+          @click="exportExcel()">
+          Xuất Excel
         </button>
       </div>
 
@@ -1062,7 +1061,7 @@ const hideModalDetailPayment = () => {
   showDetailPaymentModal.value = false
 }
 
-const exportToExcel = () => {
+const exportExcel = () => {
   // Prepare data with field mappings
   const exportData = excel_items.value.map((item, index) => ({
     'STT': index + 1,

@@ -26,7 +26,7 @@
       </div>
 
       <div class="mb-4">
-        <button class="btn btn-primary" :disabled="onSearch" @click="prepareToSearch">
+        <button class="btn-outline-primary" :disabled="onSearch" @click="prepareToSearch">
           Tìm Kiếm
         </button>
       </div>
@@ -36,9 +36,11 @@
           Số kết quả: {{items.length}}
         </div>
         <div class="text-right">
-          <button class="btn btn-success" @click="exportExcel()">
-              <i class="fa fa-file-excel-o"></i> Xuất Excel
-            </button>
+          <button 
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+            @click="exportExcel()">
+            Xuất Excel
+          </button>
         </div>
       </div>
 

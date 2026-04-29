@@ -2,7 +2,7 @@
   <div class="w-full px-4 py-6">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
-        <div class="flex justify-between mb-4">
+        <!-- <div class="flex justify-between mb-4">
           <button
             @click="back"
             class="px-4 py-2 bg-white text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors min-w-[120px]"
@@ -16,7 +16,7 @@
           >
             Lưu
           </button>
-        </div>
+        </div> -->
 
         <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{prefix_text}} Sản Phẩm</h4>
         <hr class="mb-6">
@@ -89,7 +89,7 @@
 
           <div class="flex items-start">
             <label class="w-1/4 pt-2 text-sm font-medium text-gray-700">
-              Mã sản phẩm
+              Mã sản phẩm <span class="text-red-500">*</span>
             </label>
             <div class="w-3/4">
               <input
@@ -99,7 +99,11 @@
                 autocomplete="new-password"
                 v-model="product.code"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+                :class="{ 'border-red-500': errorCode }"
+                >
+              <div v-if="errorCode" class="text-red-500 text-sm mt-1">
+                Vui lòng nhập mã sản phẩm
+              </div>
             </div>
           </div>
 
@@ -259,13 +263,31 @@
               <div class="text-center">
                 <button
                   @click="addResources"
-                  class="btn btn-success"
+                  class="btn btn-primary"
                 >
                   Thêm nguyên liệu
                 </button>
               </div>
             </div>
           </div>
+
+          <div class="flex justify-center gap-[5px] mt-6 pb-6">
+            <button
+              class="btn btn-outline-secondary w-[120px] px-4 py-2"
+              @click="back"
+            >
+              Quay lại
+            </button>
+
+            <button
+              class="btn btn-outline-success w-[120px] px-4 py-2"
+              @click="save"
+              :disabled="saving"
+            >
+              Lưu
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -321,6 +343,10 @@ const errorName = computed(() => {
   return checkInfo(product.name)
 })
 
+const errorCode = computed(() => {
+  return checkInfo(product.code)
+})
+
 const errorProductType = computed(() => {
   return checkInfo(product.product_type_id)
 })
@@ -339,7 +365,7 @@ const checkInfo = (info) => {
 }
 
 const checkValidate = () => {
-  return !(errorName.value || errorProductType.value || errorProductGroup.value || errorUnit.value)
+  return !(errorCode.value || errorName.value || errorProductType.value || errorProductGroup.value || errorUnit.value)
 }
 
 const getProductOptions = () => {

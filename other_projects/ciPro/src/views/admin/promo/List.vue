@@ -58,7 +58,7 @@
 
         <div class="flex justify-end mb-4">
           <button
-            class="btn btn-primary"
+            class="btn-outline-primary"
             :disabled="onSearch"
             @click="prepareToSearch">
             Tìm Kiếm

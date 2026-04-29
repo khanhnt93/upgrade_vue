@@ -87,17 +87,17 @@
 
         <div>
           <label class="block mb-2 font-medium">Số phiếu</label>
-          <input type="text" v-model="inputs.fund_number" class="form-input w-full rounded-md border-gray-300" maxlength="20">
+          <input type="text" v-model="inputs.fund_number" class="form-input w-full px-3 py-2 border rounded-md border border-gray-300" maxlength="20">
         </div>
 
         <div>
           <label class="block mb-2 font-medium">Diễn giải</label>
-          <input type="text" v-model="inputs.description" class="form-input w-full rounded-md border-gray-300" maxlength="255">
+          <input type="text" v-model="inputs.description" class="form-input w-full px-3 py-2 border rounded-md border border-gray-300" maxlength="255">
         </div>
 
         <div>
           <label class="block mb-2 font-medium">Số tiền thu-chi</label>
-          <input type="text" v-model="inputs.amount" class="form-input w-full rounded-md border-gray-300" maxlength="20">
+          <input type="text" v-model="inputs.amount" class="form-input w-full px-3 py-2 border rounded-md border border-gray-300" maxlength="20">
         </div>
       </div>
 
@@ -143,7 +143,7 @@
 
       <div class="mb-4">
         <button
-          class="btn btn-primary float-right"
+          class="btn-outline-primary float-right"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -152,8 +152,10 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{currencyFormat(totalRow)}}</span></div>
-        <button class="btn btn-success" @click="exportExcel()">
-          <i class="fa fa-file-excel-o"></i> Xuất Excel
+        <button 
+          class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+          @click="exportExcel()">
+          Xuất Excel
         </button>
       </div>
 

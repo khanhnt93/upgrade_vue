@@ -132,7 +132,7 @@
           <button
             @click="prepareToSearch"
             :disabled="onSearch"
-            class="btn btn-primary w-32 disabled:opacity-50"
+            class="btn-outline-primary disabled:opacity-50"
           >
             Tìm Kiếm
           </button>
@@ -146,9 +146,9 @@
           <div v-if="excel_items.length > 0">
             <button
               @click="exportToExcel"
-              class="btn btn-success"
+              class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
             >
-              <i class="fa fa-file-excel-o"></i> Xuất Excel
+             Xuất Excel
             </button>
           </div>
         </div>
@@ -437,17 +437,19 @@
     <div v-if="showConfirmOrderModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="hideModalConfirmOrderSell">
       <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">Xác Nhận Đơn Hàng</h4>
+          <h4 class="text-xl font-semibold text-center text-orange-600 mb-4 text-header">Xác Nhận Đơn Hàng</h4>
           <hr class="mb-4">
 
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Ghi chú</label>
-            <textarea
-              v-model="currentOrderSell.accounting_note"
-              rows="3"
-              maxlength="500"
-              class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </textarea>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="w-full md:col-span-12">
+              <label>Số đơn hàng: {{currentOrderSell.order_sell_number}} </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="w-full md:col-span-12">
+              <label>Tên khách hàng: {{currentOrderSell.customer_name}} </label>
+            </div>
           </div>
 
           <div v-if="product_manual_inputs.length > 0" class="mb-4">
@@ -559,7 +561,7 @@
             </div>
           </div>
 
-          <div class="flex justify-end gap-2">
+          <div class="flex justify-center text-center gap-2">
             <button @click="hideModalConfirmOrderSell"
                     class="btn btn-danger">
               Đóng
@@ -1475,10 +1477,22 @@ const printPHG = () => {
 const showModalConfirmOrderSell = (order_sell) => {
   currentOrderSell.value = JSON.parse(JSON.stringify(order_sell))
   confirmingOrderSell.value = true
+  currentProductManualInput.value = {}
 
   orderSellApi.checkProductManualInput(order_sell.id).then(res => {
     if (res != null && res.data != null && res.data.data != null) {
       product_manual_inputs.value = res.data.data
+      if(product_manual_inputs.value.length > 0) {
+        currentProductManualInput.value = product_manual_inputs.value[0]
+
+        currentProductManualInput.value.product_code = currentProductManualInput.value.product_code_input
+        currentProductManualInput.value.product_name = currentProductManualInput.value.product_name_input
+        currentProductManualInput.value.brand_id = currentProductManualInput.value.brand_id_input
+        currentProductManualInput.value.brand_name = currentProductManualInput.value.brand_name_input
+        currentProductManualInput.value.unit_id = currentProductManualInput.value.unit_id_input
+        currentProductManualInput.value.unit_name = currentProductManualInput.value.unit_name_input
+      }
+
       confirmingOrderSell.value = false
       showConfirmOrderModal.value = true
     }

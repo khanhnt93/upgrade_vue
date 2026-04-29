@@ -392,11 +392,11 @@
           style="width: 120px">
           Lưu nháp
         </button>
-        <button
+        <button 
           v-if="excel_one_items.length > 0"
-          @click="exportExcel"
-          class="btn btn-success">
-          <i class="fa fa-file-excel-o"></i> Xuất Excel
+          class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
+          @click="exportExcel()">
+          Xuất Excel
         </button>
       </div>
 

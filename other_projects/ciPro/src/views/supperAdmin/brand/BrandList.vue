@@ -22,7 +22,7 @@
       </div>
 
       <div class="mb-4">
-        <button class="btn btn-primary" :disabled="onSearch" @click="prepareToSearch">
+        <button class="btn-outline-primary" :disabled="onSearch" @click="prepareToSearch">
           Tìm Kiếm
         </button>
       </div>

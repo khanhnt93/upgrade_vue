@@ -157,7 +157,7 @@
       <!-- Search Button -->
       <div class="flex justify-end mt-4">
         <button
-          class="btn btn-primary w-32"
+          class="btn-outline-primary"
           :disabled="onSearch"
           @click.prevent="prepareToSearch">
           Tìm Kiếm
@@ -172,9 +172,9 @@
         <div v-if="userRole == 'admin' && excel_items.length > 0">
           <button
             @click="exportToExcel"
-            class="btn btn-success"
+            class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
           >
-            <i class="fa fa-file-excel-o"></i> Xuất Excel
+            Xuất Excel
           </button>
         </div>
       </div>

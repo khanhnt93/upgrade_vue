@@ -2,7 +2,7 @@
   <div class="w-full">
     <div class="bg-white rounded-lg shadow">
       <div class="p-6">
-        <div class="flex justify-between mb-4">
+        <!-- <div class="flex justify-between mb-4">
           <button
             class="border border-gray-400 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded w-32"
             @click="back">
@@ -14,7 +14,7 @@
             :disabled="saving">
             Lưu
           </button>
-        </div>
+        </div> -->
 
         <div class="text-center mb-4">
           <h4 class="text-xl font-semibold text-center text-orange-600 mb-4">{{ prefix_title }} Tài Khoản Ngân Hàng</h4>
@@ -108,6 +108,24 @@
             </div>
           </div>
         </div>
+
+        <div class="flex justify-center gap-[5px] mt-6 pb-6">
+          <button
+            class="btn btn-outline-secondary w-[120px] px-4 py-2"
+            @click="back"
+          >
+            Quay lại
+          </button>
+
+          <button
+            class="btn btn-outline-success w-[120px] px-4 py-2"
+            @click="save"
+            :disabled="saving"
+          >
+            Lưu
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

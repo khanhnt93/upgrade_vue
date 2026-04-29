@@ -319,7 +319,7 @@
             <button
               @click.prevent="searchOrderBuy"
               :disabled="onSearchOrderBuy"
-              class="btn btn-primary"
+              class="btn-outline-primary"
             >
               Tìm Kiếm
             </button>
