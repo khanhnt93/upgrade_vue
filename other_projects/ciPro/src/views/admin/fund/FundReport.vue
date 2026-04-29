@@ -152,7 +152,7 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{currencyFormat(totalRow)}}</span></div>
-        <button 
+        <button
           class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
           @click="exportExcel()">
           Xuất Excel
@@ -590,8 +590,8 @@ const search = () => {
 
   onSearch.value = true
 
-  let fromDate = inputs.value.from_date
-  let toDate = inputs.value.to_date
+  let fromDate = formatDateLocal(inputs.value.from_date)
+  let toDate = formatDateLocal(inputs.value.to_date)
 
   if(time_option.value == 2) {
     fromDate = year_input.value + '-' + month_input.value + '-01'
@@ -625,7 +625,7 @@ const search = () => {
     "fund_number": inputs.value.fund_number,
     "amount": inputs.value.amount,
     "description": inputs.value.description,
-    "accounting_date": inputs.value.accounting_date,
+    "accounting_date": inputs.value.accounting_date ? formatDateLocal(inputs.value.accounting_date) : null,
     "limit": pageLimit.value,
     "offset": offset.value
   }
@@ -747,6 +747,14 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
 })
+
+function formatDateLocal(date) {
+  if (!(date instanceof Date)) return date
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 </script>
 
 <style scoped>

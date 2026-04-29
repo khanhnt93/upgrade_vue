@@ -603,7 +603,7 @@ export default {
 
         // Handle error
         let errorMess = commonFunc.handleStaffError(err)
-        this.makeToast('danger', "Upload hình thất bại!!!", errorMess)
+        this.popToast('danger', errorMess)
       })
     },
 

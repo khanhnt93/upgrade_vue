@@ -710,8 +710,13 @@ const save = () => {
   inputs.value.amount = amount
 
   saving.value = true
+  const submitData = {
+    ...inputs.value,
+    date_input: formatDateLocal(inputs.value.date_input),
+    accounting_date: formatDateLocal(inputs.value.accounting_date)
+  }
   if(inputs.value.id) {
-    fundApi.updateExpend(inputs.value).then(res => {
+    fundApi.updateExpend(submitData).then(res => {
       saving.value = false
       if(res != null && res.data != null){
         if (res.data.status == 200) {
@@ -724,7 +729,7 @@ const save = () => {
       popToast('danger', errorMess)
     })
   } else {
-    fundApi.addExpend(inputs.value).then(res => {
+    fundApi.addExpend(submitData).then(res => {
       saving.value = false
       if(res != null && res.data != null){
         if (res.data.status == 200) {
@@ -758,6 +763,14 @@ const currencyFormat = (num) => {
     result = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
   return result
+}
+
+function formatDateLocal(date) {
+  if (!(date instanceof Date)) return date
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 const changeAmount = () => {
@@ -948,12 +961,10 @@ const changeSubType = (subType) => {
 }
 
 const changeDateInput = () => {
-  let dateNow = new Date()
-  let today = `${dateNow.getFullYear()}-${String(dateNow.getMonth()+1).padStart(2,'0')}-${String(dateNow.getDate()).padStart(2,'0')}`
-  let selectedStr = inputs.value.date_input instanceof Date
-    ? `${inputs.value.date_input.getFullYear()}-${String(inputs.value.date_input.getMonth()+1).padStart(2,'0')}-${String(inputs.value.date_input.getDate()).padStart(2,'0')}`
-    : inputs.value.date_input
-  if(selectedStr != today) {
+  const today = formatDateLocal(new Date())
+  const selectedStr = formatDateLocal(inputs.value.date_input)
+  const accountingStr = formatDateLocal(inputs.value.accounting_date)
+  if(selectedStr != today && accountingStr == today) {
     inputs.value.accounting_date = new Date(inputs.value.date_input)
   }
 }

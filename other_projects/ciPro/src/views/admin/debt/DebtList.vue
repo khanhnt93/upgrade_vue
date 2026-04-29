@@ -92,7 +92,7 @@
           Số kết quả: <span class="font-bold text-gray-800">{{ totalRow }}</span>
         </div>
         <div class="flex gap-2">
-          <button 
+          <button
             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
             @click="exportExcel()">
             Xuất Excel
@@ -367,7 +367,7 @@ const getOptions = async () => {
     })
     .catch((error) => {
       loadingOptions.value = false
-      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      popToast('danger', commonFunc.handleStaffError(error))
     })
 }
 
@@ -438,7 +438,7 @@ const search = async () => {
     .catch((error) => {
       loading.value = false
       onSearch.value = false
-      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      popToast('danger', commonFunc.handleStaffError(error))
     })
 }
 
@@ -487,21 +487,21 @@ const getExcelItem = async (params) => {
       }
     })
     .catch((error) => {
-      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      popToast('danger', commonFunc.handleStaffError(error))
     })
 }
 
 const showModalOverPayment = () => {
   if (!currentCustomer.value) {
-    popToast('Lỗi', 'Vui lòng chọn [Khách hàng] cụ thể sau đó click "Tìm kiếm" để sử dụng chức năng "Cấn trừ công nợ"', 'error')
+    popToast('danger', 'Vui lòng chọn [Khách hàng] cụ thể sau đó click "Tìm kiếm" để sử dụng chức năng "Cấn trừ công nợ"')
     return
   }
   if (currentCustomer.value != customerSelect.value.value) {
-    popToast('Lỗi', 'Vui lòng chọn [Khách hàng] cụ thể sau đó click "Tìm kiếm" để sử dụng chức năng "Cấn trừ công nợ"', 'error')
+    popToast('danger', 'Vui lòng chọn [Khách hàng] cụ thể sau đó click "Tìm kiếm" để sử dụng chức năng "Cấn trừ công nợ"')
     return
   }
   if (sum_total_over_payment.value == 0) {
-    popToast('Lỗi', 'Không có dư nợ để cấn trừ', 'error')
+    popToast('danger', 'Không có dư nợ để cấn trừ')
     return
   }
   showOverPaymentModal.value = true
@@ -513,7 +513,7 @@ const hideModalOverPayment = () => {
 
 const payOverPayment = async () => {
   if (payForDebts.value.length == 0) {
-    popToast('Lỗi', 'Vui lòng lựa chọn đơn hàng bạn muốn cấn trừ', 'error')
+    popToast('danger', 'Vui lòng lựa chọn đơn hàng bạn muốn cấn trừ')
     return
   }
 
@@ -546,7 +546,7 @@ const payOverPayment = async () => {
     })
     .catch((error) => {
       payingOverPayment.value = false
-      popToast('Lỗi', commonFunc.getErrorMessage(error), 'error')
+      popToast('danger', commonFunc.handleStaffError(error))
     })
 }
 

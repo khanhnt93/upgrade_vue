@@ -294,7 +294,7 @@ const confirmPayment = async () => {
   saving.value = true
   try {
     debt.debt_list = debt_list
-    const res = await debtApi.payDebtFast(debt)
+    const res = await debtApi.payDebtFast({ ...debt, date_input: formatDateLocal(debt.date_input) })
     if (res?.data) {
       popToast('success', 'Thanh toán thành công')
 

@@ -303,6 +303,14 @@ const prepareToSearch = () => {
   search()
 }
 
+const formatDateLocal = (date) => {
+  if (!(date instanceof Date)) return date
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 const search = () => {
   if(loading.value) {
     return
@@ -310,8 +318,8 @@ const search = () => {
 
   loading.value = true
 
-  let fromDate = inputs.value.from_date
-  let toDate = inputs.value.to_date
+  let fromDate = formatDateLocal(inputs.value.from_date)
+  let toDate = formatDateLocal(inputs.value.to_date)
 
   if(time_option.value == 2) {
     fromDate = year_input.value + '-' + month_input.value + '-01'

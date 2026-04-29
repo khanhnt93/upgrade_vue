@@ -54,7 +54,7 @@
 
       <div class="flex justify-between items-center mb-4 clear-both pt-2">
         <div>Số kết quả: <span class="font-bold text-gray-700">{{totalRow}}</span></div>
-        <button 
+        <button
           class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 text-header font-semibold"
           @click="exportExcel()">
           Xuất Excel
@@ -225,8 +225,8 @@ const search = () => {
   if (loading.value) { return }
   loading.value = true
 
-  let fromDate = inputs.value.from_date
-  let toDate = inputs.value.to_date
+  let fromDate = formatDateLocal(inputs.value.from_date)
+  let toDate = formatDateLocal(inputs.value.to_date)
 
   if(time_option.value == 2) {
     fromDate = year_input.value + '-' + month_input.value + '-01'
@@ -327,7 +327,16 @@ const exportExcel = () => {
   XLSX.writeFile(wb, 'Lịch Sử Sửa Phiếu Thu-Chi.xls', { bookType: 'xls' })
 }
 
+function formatDateLocal(date) {
+  if (!(date instanceof Date)) return date
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 onMounted(() => {
+  window.addEventListener('scroll', onScroll)
   prepareDateInput()
   prepareToSearch()
 })

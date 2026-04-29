@@ -369,7 +369,7 @@ function save(is_draft) {
       saving.value = false
       if (res != null && res.data != null) {
         if (res.data.status == 200) {
-          router.push("/loan-in")
+          router.push("/loan-out")
         }
       }
     }).catch(err => {

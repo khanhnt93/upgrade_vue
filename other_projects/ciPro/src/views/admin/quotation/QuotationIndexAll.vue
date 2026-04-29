@@ -985,7 +985,7 @@
                     <div class="w-full overflow-x-auto sub-table-cus">
                       <table
                         class="table table-bordered table-striped fixed_header"
-                        style="table-layout: fixed; width: 2200px;" 
+                        style="table-layout: fixed; width: 2200px;"
                       >
                         <colgroup>
                           <col style="width:60px">
@@ -1402,14 +1402,14 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <label class="w-50 shrink-0 text-right text-sm">Chi phí thêm</label>
-                    
+
                     <div class="flex flex-1 gap-2">
                       <input
                         id="extra_fee"
                         type="text"
                         maxlength="14"
                         autocomplete="new-password"
-                        class="form-control w-1/2" 
+                        class="form-control w-1/2"
                         v-model="trade.extra_fee"
                         placeholder="Số tiền"
                         @change="calculateAmount"
@@ -1419,7 +1419,7 @@
                         type="text"
                         maxlength="255"
                         autocomplete="new-password"
-                        class="form-control flex-1" 
+                        class="form-control flex-1"
                         placeholder="Ghi chú cho chi phí thêm"
                         v-model="trade.note_extra_fee"
                       />
@@ -3346,6 +3346,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useToast } from "@/composables/useToast";
 import { useExcelExport } from "@/composables/useExcelExport";
+import { useConfirm } from "@/composables/useConfirm";
 import productApi from "@/api/product";
 import quotationApi from "@/api/quotation";
 import superAdminAPI from "@/api/superAdmin";
@@ -3375,6 +3376,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 const { popToast } = useToast();
 const { exportToExcel } = useExcelExport();
+const { confirmDialog } = useConfirm();
 
 // Data - Refs
 const prefix_title = ref("Thêm Mới");
@@ -4331,7 +4333,7 @@ const searchCustomer = () => {
       if (res != null && res.data != null && res.data.data != null) {
         customerSearchItems.value = res.data.data.customers;
 
-        if (customerSearchItems.length == 0) {
+        if (customerSearchItems.value.length == 0) {
           popToast("danger", "Không có khách hàng nào được tìm thấy");
         }
       } else {
@@ -4994,7 +4996,7 @@ const changeProject = () => {
 
 const changeProjectType = () => {
   if (currentProduct.project_type == 0) {
-    projectSelect.value = projectOptions[0];
+    projectSelect.value = projectOptions.value[0];
   } else {
     currentProduct.project_name = null;
     currentProduct.project_brand_id = null;
@@ -5059,7 +5061,7 @@ const refreshCurrentProduct = () => {
   currentProduct.conversion_value = null;
   currentProduct.quantity_root = null;
 
-  productSelect.value = productOptions[0];
+  productSelect.value = productOptions.value[0];
 };
 
 const refreshTradeInfo = () => {
@@ -5101,7 +5103,7 @@ const refreshTradeInfo = () => {
     guarantee: "Mới 100% bảo hành theo nhà Sản Xuất",
     attach_doc: null
   });
-  if (url.includes("quotation-project")) {
+  if (location.href.includes("quotation-project")) {
     trade.type = 1; // Báo giá dự án
     trade.guarantee = "1 năm"; // Báo giá dự án
     trade.quotation_expiry_date = 7;
@@ -5205,9 +5207,9 @@ const calculateProductAmountByBrand = () => {
 
 const getCurrentBankAccountType = () => {
   if (trade.bank_account_id) {
-    for (let i in bankAccountOptionStore) {
-      if (bankAccountOptionStore[i].id == trade.bank_account_id) {
-        return bankAccountOptionStore[i].type;
+    for (let i in bankAccountOptionStore.value) {
+      if (bankAccountOptionStore.value[i].id == trade.bank_account_id) {
+        return bankAccountOptionStore.value[i].type;
       }
     }
   }
@@ -5221,11 +5223,11 @@ const handleBankAccount = () => {
     if (currentBankAccountType != 1) {
       trade.bank_account_id = null;
       let firstItemId = null;
-      for (let i in bankAccountOptionStore) {
-        if (bankAccountOptionStore[i].type == 1) {
-          firstItemId = bankAccountOptionStore[i].id;
-          if (bankAccountOptionStore[i].is_default) {
-            trade.bank_account_id = bankAccountOptionStore[i].id;
+      for (let i in bankAccountOptionStore.value) {
+        if (bankAccountOptionStore.value[i].type == 1) {
+          firstItemId = bankAccountOptionStore.value[i].id;
+          if (bankAccountOptionStore.value[i].is_default) {
+            trade.bank_account_id = bankAccountOptionStore.value[i].id;
           }
         }
       }
@@ -5237,11 +5239,11 @@ const handleBankAccount = () => {
     if (currentBankAccountType != 0) {
       trade.bank_account_id = null;
       let firstItemId = null;
-      for (let i in bankAccountOptionStore) {
-        if (bankAccountOptionStore[i].type == 0) {
-          firstItemId = bankAccountOptionStore[i].id;
-          if (bankAccountOptionStore[i].is_default) {
-            trade.bank_account_id = bankAccountOptionStore[i].id;
+      for (let i in bankAccountOptionStore.value) {
+        if (bankAccountOptionStore.value[i].type == 0) {
+          firstItemId = bankAccountOptionStore.value[i].id;
+          if (bankAccountOptionStore.value[i].is_default) {
+            trade.bank_account_id = bankAccountOptionStore.value[i].id;
           }
         }
       }
@@ -5250,8 +5252,8 @@ const handleBankAccount = () => {
       }
     }
   }
-  if (!trade.bank_account_id && bankAccountOptionStore.length) {
-    trade.bank_account_id = bankAccountOptionStore[0].id;
+  if (!trade.bank_account_id && bankAccountOptionStore.value.length) {
+    trade.bank_account_id = bankAccountOptionStore.value[0].id;
   }
   changeBankAccount();
 };
@@ -5594,12 +5596,12 @@ const saveDraft = () => {
 
 const changeStaffInChange = () => {
   if (trade.staff_in_charge) {
-    for (let i in optionsStaffStore) {
-      if (optionsStaffStore[i].id == trade.staff_in_charge) {
-        trade.staff_in_charge_name = optionsStaffStore[i].name;
-        trade.staff_in_charge_phone = optionsStaffStore[i].phone_number;
-        trade.staff_in_charge_email = optionsStaffStore[i].email;
-        trade.staff_in_charge_position = optionsStaffStore[i].position;
+    for (let i in optionsStaffStore.value) {
+      if (optionsStaffStore.value[i].id == trade.staff_in_charge) {
+        trade.staff_in_charge_name = optionsStaffStore.value[i].name;
+        trade.staff_in_charge_phone = optionsStaffStore.value[i].phone_number;
+        trade.staff_in_charge_email = optionsStaffStore.value[i].email;
+        trade.staff_in_charge_position = optionsStaffStore.value[i].position;
       }
     }
   } else {
@@ -6489,19 +6491,19 @@ const changeProductItem = (
 
 const changeBankAccount = () => {
   if (trade.bank_account_id) {
-    for (let i in bankAccountOptionStore) {
-      if (bankAccountOptionStore[i].id == trade.bank_account_id) {
-        bankAccountSelected.account_name =
-          bankAccountOptionStore[i].account_name;
-        bankAccountSelected.account_number =
-          bankAccountOptionStore[i].account_number;
-        bankAccountSelected.bank_name = bankAccountOptionStore[i].bank_name;
+    for (let i in bankAccountOptionStore.value) {
+      if (bankAccountOptionStore.value[i].id == trade.bank_account_id) {
+        bankAccountSelected.value.account_name =
+          bankAccountOptionStore.value[i].account_name;
+        bankAccountSelected.value.account_number =
+          bankAccountOptionStore.value[i].account_number;
+        bankAccountSelected.value.bank_name = bankAccountOptionStore.value[i].bank_name;
       }
     }
   } else {
-    bankAccountSelected.account_name = "";
-    bankAccountSelected.account_number = "";
-    bankAccountSelected.bank_name = "";
+    bankAccountSelected.value.account_name = "";
+    bankAccountSelected.value.account_number = "";
+    bankAccountSelected.value.bank_name = "";
   }
 };
 
@@ -6844,7 +6846,7 @@ const editPaymentMethod = (index) => {
 const handleListOptionPaymentMethod = (items) => {
   optionsPaymentMethod.value = [{ value: null, text: "Khác" }];
   for (let item of items) {
-    optionsPaymentMethod.push({
+    optionsPaymentMethod.value.push({
       value: item.payment_method,
       text: item.payment_method,
     });
@@ -6873,13 +6875,7 @@ const getListPaymentMethod = () => {
 
 const deletedPaymentMethod = (id, name) => {
   if (id && name) {
-    confirm("Xóa [" + name + "]. Bạn có chắc không?", {
-      title: false,
-      buttonSize: "sm",
-      centered: true,
-      size: "sm",
-      footerClass: "p-2",
-    }).then((res) => {
+    confirmDialog("Xóa [" + name + "]. Bạn có chắc không?").then((res) => {
       if (res) {
         paymentMethodApi
           .deletePaymentMethod(id)
@@ -6997,7 +6993,7 @@ const handleUnitName = () => {
 const handleListOptionShippingAgreement = (items) => {
   optionsShippingAgreement.value = [{ value: null, text: "" }];
   for (let item of items) {
-    optionsShippingAgreement.push({
+    optionsShippingAgreement.value.push({
       value: item.shipping_agreement,
       text: item.shipping_agreement,
     });
@@ -7026,13 +7022,7 @@ const getListShippingAgreement = () => {
 
 const deletedShippingAgreement = (id, name) => {
   if (id && name) {
-    confirm("Xóa [" + name + "]. Bạn có chắc không?", {
-      title: false,
-      buttonSize: "sm",
-      centered: true,
-      size: "sm",
-      footerClass: "p-2",
-    }).then((res) => {
+    confirmDialog("Xóa [" + name + "]. Bạn có chắc không?").then((res) => {
       if (res) {
         shippingAgreementApi
           .deleteShippingAgreement(id)

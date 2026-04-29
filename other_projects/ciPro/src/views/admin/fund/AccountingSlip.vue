@@ -346,7 +346,12 @@ const save = () => {
   }
 
   saving.value = true
-  fundApi.addAccountingSlip(inputs.value).then(res => {
+  const submitData = {
+    ...inputs.value,
+    date_input: formatDateLocal(inputs.value.date_input),
+    accounting_date: formatDateLocal(inputs.value.accounting_date)
+  }
+  fundApi.addAccountingSlip(submitData).then(res => {
     saving.value = false
     if(res != null && res.data != null){
       if (res.data.status == 200) {
@@ -386,11 +391,20 @@ const changeAmount = () => {
   inputs.value.amount = currencyFormat(amount)
 }
 
+function formatDateLocal(date) {
+  if (!(date instanceof Date)) return date
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 const changeDateInput = () => {
-  let dateNow = new Date()
-  let today = dateNow.toJSON().slice(0,10)
-  if(inputs.value.date_input != today && inputs.value.accounting_date == today) {
-    inputs.value.accounting_date = new Date(JSON.parse(JSON.stringify(inputs.value.date_input)))
+  const today = formatDateLocal(new Date())
+  const date_input_str = formatDateLocal(inputs.value.date_input)
+  const accounting_date_str = formatDateLocal(inputs.value.accounting_date)
+  if(date_input_str != today && accounting_date_str == today) {
+    inputs.value.accounting_date = new Date(inputs.value.date_input)
   }
 }
 
